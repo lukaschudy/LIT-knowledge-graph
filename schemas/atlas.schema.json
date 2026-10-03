@@ -51,6 +51,8 @@
         "retrieved_at": {"$ref": "#/$defs/date"},
         "kind": {"enum": ["database", "paper", "registry", "organization", "fixture"]},
         "synthetic": {"type": "boolean"},
+        "version": {"$ref": "#/$defs/nonempty"},
+        "status": {"enum": ["active", "superseded", "retracted"]},
         "license": {"$ref": "#/$defs/nonempty"}
       },
       "additionalProperties": false
@@ -61,12 +63,17 @@
       "properties": {
         "id": {"$ref": "#/$defs/nonempty"},
         "subject": {"$ref": "#/$defs/nonempty"},
-        "predicate": {"enum": ["HAS_VARIANT", "AFFECTS", "HAS_EFFECT", "INVOLVES", "HAS_PHENOTYPE", "REPRESENTS", "MAINTAINS", "RELEVANT_TO", "STUDIES", "AFFILIATED_WITH", "USED_IN", "AUTHORED", "FUNDS", "CONTRAINDICATED_FOR", "IS_A", "SAME_AS"]},
+        "predicate": {"enum": ["MEASURES", "HAS_VARIANT", "AFFECTS", "HAS_EFFECT", "INVOLVES", "HAS_PHENOTYPE", "REPRESENTS", "MAINTAINS", "RELEVANT_TO", "STUDIES", "AFFILIATED_WITH", "USED_IN", "AUTHORED", "FUNDS", "CONTRAINDICATED_FOR", "IS_A", "SAME_AS"]},
         "object": {"$ref": "#/$defs/nonempty"},
         "assertion_type": {"enum": ["reported", "inferred"]},
         "context": {
           "type": "object",
           "properties": {
+            "mechanism_step": {"type": "string"},
+            "readout": {"type": "string"},
+            "access_status": {"type": "string"},
+            "contact_url": {"type": "string"},
+            "action_type": {"type": "string"},
             "effect": {"enum": ["loss_of_function", "gain_of_function", "unknown"]},
             "species": {"type": "string"},
             "tissue": {"type": "string"},
@@ -92,6 +99,7 @@
         "locator": {"$ref": "#/$defs/nonempty"},
         "excerpt": {"$ref": "#/$defs/nonempty"},
         "stance": {"enum": ["supports", "contradicts"]},
+        "source_version": {"$ref": "#/$defs/nonempty"},
         "review_status": {"enum": ["unreviewed", "machine_checked", "human_reviewed"]}
       },
       "additionalProperties": false

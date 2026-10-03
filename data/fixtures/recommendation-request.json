@@ -1,0 +1,8 @@
+{
+  "disease_id": "demo:anchor",
+  "mechanism_id": "demo:transport",
+  "mechanism_step": "vesicle-fusion",
+  "readout": "fusion-events",
+  "species": "human",
+  "tissue": "fibroblast"
+}

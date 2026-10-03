@@ -1,0 +1,30 @@
+{
+  "claims": [
+    {
+      "id": "demo:assay-gap-new-capability",
+      "subject": "demo:assay-gap",
+      "predicate": "MEASURES",
+      "object": "demo:transport",
+      "assertion_type": "reported",
+      "context": {
+        "mechanism_step": "vesicle-fusion",
+        "readout": "fusion-events",
+        "species": "human",
+        "tissue": "fibroblast"
+      },
+      "extraction_confidence": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "demo:assay-gap-new-capability-evidence",
+      "claim_id": "demo:assay-gap-new-capability",
+      "source_id": "demo:source-protocols",
+      "source_version": "fixture-v1",
+      "locator": "Fictional follow-up paragraph",
+      "excerpt": "FICTIONAL: The assay measures fusion events at vesicle fusion in human fibroblasts.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    }
+  ]
+}

@@ -21,6 +21,7 @@ PREDICATE_ENDPOINTS: dict[str, tuple[set[str], set[str]]] = {
     "REPRESENTS": ({"Organization"}, {"Disease"}),
     "MAINTAINS": ({"Organization"}, {"Asset"}),
     "RELEVANT_TO": ({"Asset"}, {"Disease"}),
+    "MEASURES": ({"Asset"}, {"Mechanism"}),
     "STUDIES": ({"Person", "Study"}, {"Disease", "Mechanism"}),
     "AFFILIATED_WITH": ({"Person"}, {"Organization"}),
     "USED_IN": ({"Asset"}, {"Study"}),
@@ -178,6 +179,10 @@ def _validate_bundle(bundle: Any) -> list[str]:
             err(path + ".kind", f"unknown source kind {source.get('kind')!r}")
         if not isinstance(source.get("synthetic"), bool):
             err(path + ".synthetic", "must be a boolean")
+        if "version" in source and (not isinstance(source["version"], str) or not source["version"].strip()):
+            err(path + ".version", "must be a nonempty source snapshot identifier")
+        if "status" in source and (not isinstance(source["status"], str) or source["status"] not in {"active", "superseded", "retracted"}):
+            err(path + ".status", "must be active, superseded or retracted")
         if source.get("synthetic") is True:
             if source.get("kind") != "fixture":
                 err(path, "synthetic sources must have kind 'fixture'")
@@ -223,7 +228,8 @@ def _validate_bundle(bundle: Any) -> list[str]:
                 err(path + ".context.effect", f"unknown effect {context['effect']!r}")
             if "negated" in context and not isinstance(context["negated"], bool):
                 err(path + ".context.negated", "must be a boolean")
-            for qualifier in ("species", "tissue", "stage", "onset", "frequency", "evidence_code"):
+            for qualifier in ("species", "tissue", "stage", "onset", "frequency", "evidence_code",
+                              "mechanism_step", "readout", "access_status", "contact_url", "action_type"):
                 if qualifier in context and not isinstance(context[qualifier], str):
                     err(path + ".context." + qualifier, "must be a string")
         if "extraction_confidence" not in claim:
@@ -249,6 +255,8 @@ def _validate_bundle(bundle: Any) -> list[str]:
             err(path + ".stance", "must be 'supports' or 'contradicts'")
         if not isinstance(evidence.get("review_status"), str) or evidence["review_status"] not in REVIEW_STATUSES:
             err(path + ".review_status", f"unknown review status {evidence.get('review_status')!r}")
+        if "source_version" in evidence and (not isinstance(evidence["source_version"], str) or not evidence["source_version"].strip()):
+            err(path + ".source_version", "must be a nonempty reviewed source snapshot identifier")
         if evidence.get("stance") == "supports" and isinstance(claim_id, str):
             supporting.add(claim_id)
     for claim_id, claim in rows_by_name["claims"].items():

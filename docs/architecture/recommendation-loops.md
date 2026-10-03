@@ -1,10 +1,10 @@
-# Proposed evidence and recommendation loops
+# Evidence and recommendation loops
 
-Planning snapshot: 3 October 2026. This document records the intended architecture, not completed integrations or measured performance. The repository includes a runnable atlas, a synthetic acceptance fixture and a separately curated [GRIN demo](../grin-demo.md). See the [atlas architecture](atlas.md) for the implemented evidence boundary; live TopK/Astra integration and the full loops below remain proposed.
+Updated 4 October 2026. The [action-specific decision engine](decision-engine.md) now implements assay-reuse gates, cited recommendations, one bounded follow-up interface, preference ordering and explicit snapshot reassessment, with a synthetic demo and CLI/HTTP entry points. Live TopK/Astra integration, scientific review UI, background maintenance and comparative evaluation remain proposed. The separately curated [GRIN demo](../grin-demo.md) and legacy neighbour explorer remain available.
 
 ## Product outcome
 
-Help a patient-group leader move from a variant-specific research question to an evidence-backed opportunity, a relevant asset or partner, and a concrete next step. The initial scope is GRIN2A/GRIN2B variants with published evidence of reduced NMDA receptor function; uncertain and incompatible cases must remain visible. See the [cluster plan](../grin-cluster-plan.md).
+Help a patient-group leader move from a specific research question to an evidence-backed opportunity, a relevant asset or partner, and a concrete next step. The selected next scope is EPG5 / Vici syndrome, with WDR45 / BPAN and AP4B1 / SPG47 as candidate comparators after extraction and coverage review. The first action is assay reuse: measure a specified defect while preserving differences in biological step, readout and model context. The [GRIN cluster plan](../grin-cluster-plan.md) documents the earlier scope, not the new default. See the [critical review and implementation contract](decision-engine.md).
 
 The challenge's action requirements include mechanistic overlap, assessment of shared registries/study designs/models/biomarkers, and overlapping research networks. A recommendation should identify what might be reusable, why, who maintains it, access conditions, the questions still unresolved, and the next research milestone. It is not an individualized treatment recommendation or proof that an asset transfers between populations.
 
@@ -42,7 +42,9 @@ Recommendation types:
 - Explore a collaboration supported by relevant work and a verified professional contact route.
 - Resolve a specific missing link through a literature check, expert question or proposed experiment requiring review.
 
-Apply hard compatibility gates before ranking. Distinguish **ready for discussion**, **needs clarification**, and **not supported**. Rank eligible actions by explicit reasons: scientific fit, evidence quality, practical feasibility and contribution to the selected milestone. Do not present a heuristic score as a clinical probability.
+Apply hard compatibility gates before ranking. Distinguish **ready for discussion**, **needs clarification**, and **not supported**. The implemented assay engine uses step/readout/model compatibility, versioned human review, maintainer/access and action-specific exclusions. It orders by status, unresolved gates and user preference; citation counts and model confidence do not boost rank. Broader utility ranking remains to be evaluated. Do not present an ordinal ordering as a clinical probability.
+
+The deterministic engine owns eligibility. A future model can propose and explain candidates, but cannot approve its own extraction. New live evidence stays unreviewed; a candidate may remain unresolved after follow-up. Reviewed offline evidence can already justify a feasibility discussion.
 
 ### 3. User and expert feedback
 
@@ -50,7 +52,7 @@ Recommendation → user constraint, correction or reported outcome → distingui
 
 ### 4. Evidence maintenance
 
-Changed source → affected claims and dependent recommendations → re-extraction/review → updated graph and search records → cache invalidation → retain, downgrade or withdraw affected recommendations. This is planned background work, not a currently implemented watcher or automatic notification service.
+Changed source → affected claims and dependent recommendations → re-extraction/review → updated graph and search records → cache invalidation → retain, downgrade or withdraw affected recommendations. Explicit whole-snapshot change detection and reassessment are implemented, including newly added counterevidence. Selective invalidation, background watching and automatic notification remain planned.
 
 ### 5. Evaluation and improvement
 

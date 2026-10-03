@@ -11,6 +11,7 @@ from typing import Any
 from urllib.parse import parse_qs, urlsplit
 
 from .reasoning import AtlasReasoner
+from .recommendations import RecommendationEngine, ResearchRequest
 
 
 WEB_DIR = Path(__file__).with_name("web")
@@ -63,6 +64,7 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> Thre
     bundle = store.bundle()
     stats = store.stats()
     reasoner = AtlasReasoner(bundle)
+    recommendations = RecommendationEngine(bundle)
     nodes = _index_by_id(bundle, "nodes")
     claims = _index_by_id(bundle, "claims")
     evidence = _index_by_id(bundle, "evidence")
@@ -132,6 +134,18 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> Thre
             return value or None
 
         def _api(self, path: str, query: dict[str, list[str]]) -> None:
+            if path == "/api/recommend":
+                fields = ("disease_id", "mechanism_id", "mechanism_step", "readout", "species", "tissue")
+                if set(query) - {*fields, "stage"} or not set(fields) <= set(query) or any(self._one(query, field) is None for field in query):
+                    self._error(400, "invalid_request", "Supply exactly one value for each field: " + ", ".join(fields))
+                    return
+                try:
+                    result = recommendations.run(ResearchRequest(**{field: self._one(query, field) for field in query}))
+                except ValueError as exc:
+                    self._error(400, "invalid_request", str(exc))
+                    return
+                self._json(200, result)
+                return
             if path == "/api/health":
                 self._json(200, {"status": "ok", "synthetic": bool(bundle["dataset"]["synthetic"]), "dataset": bundle["dataset"]})
                 return

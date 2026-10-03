@@ -8,6 +8,7 @@ import sys
 from atlas.store import GraphStore
 from atlas.model import ValidationError, validate_bundle
 from atlas.reasoning import AtlasReasoner
+from atlas.recommendations import RecommendationEngine, ResearchRequest, SearchBudget
 from atlas.export import to_jsonld, to_cytoscape
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -28,7 +29,7 @@ def main(argv=None):
     sub = parser.add_subparsers(dest='command', required=True)
     p = sub.add_parser('validate', help='Validate a normalized bundle without changing a database')
     p.add_argument('bundle')
-    for name in ('demo','ingest','stats','search','explore','export','serve'):
+    for name in ('demo','ingest','stats','search','explore','recommend','reassess','export','serve'):
         p = sub.add_parser(name)
         p.add_argument('--db', default=str(DEFAULT_DB))
         if name in ('demo','ingest'):
@@ -36,6 +37,13 @@ def main(argv=None):
         if name == 'ingest': p.add_argument('bundle')
         if name == 'search': p.add_argument('query')
         if name == 'explore': p.add_argument('disease')
+        if name in ('recommend', 'reassess'):
+            p.add_argument('input', help='Research request JSON, or a previous result for reassess')
+            p.add_argument('--output')
+        if name == 'recommend':
+            p.add_argument('--max-candidates', type=int, default=40)
+            p.add_argument('--max-followup-queries', type=int, default=3)
+            p.add_argument('--followup-proposals', help='Offline retriever response JSON; new evidence remains unreviewed')
         if name == 'export':
             p.add_argument('--format', choices=('json','jsonld','cytoscape'), default='json')
             p.add_argument('--output')
@@ -84,6 +92,23 @@ def main(argv=None):
             elif args.command == 'stats': dump(store.stats())
             elif args.command == 'search': dump(store.search(args.query))
             elif args.command == 'explore': dump(AtlasReasoner(store.bundle()).explore(args.disease))
+            elif args.command in ('recommend', 'reassess'):
+                engine = RecommendationEngine(store.bundle())
+                data = json.loads(Path(args.input).read_text(encoding='utf-8'))
+                if args.command == 'reassess':
+                    result = engine.reassess(data)
+                else:
+                    retriever = None
+                    if args.followup_proposals:
+                        proposals = json.loads(Path(args.followup_proposals).read_text(encoding='utf-8'))
+                        class FileRetriever:
+                            def retrieve(self, questions, *, max_claims):
+                                return proposals
+                        retriever = FileRetriever()
+                    result = engine.run(ResearchRequest.from_dict(data), retriever=retriever,
+                        budget=SearchBudget(max_candidates=args.max_candidates,
+                                            max_followup_queries=args.max_followup_queries))
+                dump(result, args.output)
             elif args.command == 'export':
                 bundle = store.bundle()
                 dump({'json':lambda b:b,'jsonld':to_jsonld,'cytoscape':to_cytoscape}[args.format](bundle),args.output)
