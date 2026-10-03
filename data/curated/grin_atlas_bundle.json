@@ -675,6 +675,64 @@
                 "wt_control": "15 ± 0.5%; n=47"
               }
             ],
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          },
+          {
+            "source_id": "xie2023",
+            "evidence_location": "Tables 2–4, GRIN2B-S541R row; WT 1a/2B comparator in GluN2B section of Table 2 and WT 2B in Table 3.",
+            "assay": "Two-electrode voltage clamp in Xenopus oocytes; whole-cell patch clamp in HEK cells; MTSEA open-probability assay; beta-lactamase surface-expression assay.",
+            "model": "Recombinant GluN1/GluN2B receptor expression in heterologous systems; source-specific WT controls.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "9.1 [7.2, 11]",
+                "unit": "µM; 95% CI",
+                "n": 16,
+                "wt_control": "1.3 [1.2, 1.4] µM; n=68"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "1.0 [0.71, 1.4]",
+                "unit": "µM; 95% CI",
+                "n": 17,
+                "wt_control": "0.34 [0.31, 0.37] µM; n=68"
+              },
+              {
+                "name": "Mg2+ IC50",
+                "variant": "18 [15, 22]",
+                "unit": "µM; 95% CI",
+                "n": 12,
+                "wt_control": "27 [23, 32] µM; n=57"
+              },
+              {
+                "name": "weighted deactivation time constant (τw)",
+                "variant": "142 ± 24",
+                "unit": "ms",
+                "n": 8,
+                "wt_control": "1061 ± 91 ms; n=16"
+              },
+              {
+                "name": "peak current density",
+                "variant": "3.6 ± 1.7",
+                "unit": "pA/pF",
+                "n": 8,
+                "wt_control": "19 ± 3.6 pA/pF; n=16"
+              },
+              {
+                "name": "channel open probability (MTSEA method)",
+                "variant": "0.014 ± 0.001",
+                "unit": "unitless",
+                "n": 20,
+                "wt_control": "0.026 ± 0.001; n=45"
+              },
+              {
+                "name": "surface/total receptor ratio",
+                "variant": "111 ± 3.2",
+                "unit": "% of WT",
+                "n": 9,
+                "wt_control": "100% of WT; n=87"
+              }
+            ],
             "predicted_charge_transfer": {
               "synaptic_ratio_vs_WT": 0.03,
               "non_synaptic_ratio_vs_WT": 0.004,
@@ -1703,7 +1761,7 @@
         "species": "human recombinant receptor subunits",
         "tissue": "heterologous expression systems",
         "stage": "in vitro receptor characterization",
-        "assay_details": "Two-electrode voltage clamp pharmacology and proton-sensitivity assay.; Recombinant GluN1/GluN2B NMDARs expressed in Xenopus laevis oocytes.",
+        "assay_details": "Two-electrode voltage clamp pharmacology and proton-sensitivity assay.; Recombinant GluN1/GluN2B NMDARs expressed in Xenopus laevis oocytes.; Two-electrode voltage clamp in Xenopus oocytes; whole-cell patch clamp in HEK cells; MTSEA open-probability assay; beta-lactamase surface-expression assay.; Recombinant GluN1/GluN2B receptor expression in heterologous systems; source-specific WT controls.",
         "expert_review": "pending; machine_checked indicates source transcription only",
         "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
       },
@@ -2268,6 +2326,15 @@
     },
     {
       "id": "evidence:025",
+      "claim_id": "claim:018",
+      "source_id": "paper:xie2023",
+      "locator": "Tables 2–4, GRIN2B-S541R row; WT 1a/2B comparator in GluN2B section of Table 2 and WT 2B in Table 3.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 9.1 [7.2, 11] µM; 95% CI (n=16); WT 1.3 [1.2, 1.4] µM; n=68; glycine EC50 = 1.0 [0.71, 1.4] µM; 95% CI (n=17); WT 0.34 [0.31, 0.37] µM; n=68; Mg2+ IC50 = 18 [15, 22] µM; 95% CI (n=12); WT 27 [23, 32] µM; n=57; weighted deactivation time constant (τw) = 142 ± 24 ms (n=8); WT 1061 ± 91 ms; n=16; peak current density = 3.6 ± 1.7 pA/pF (n=8); WT 19 ± 3.6 pA/pF; n=16; channel open probability (MTSEA method) = 0.014 ± 0.001 unitless (n=20); WT 0.026 ± 0.001; n=45; surface/total receptor ratio = 111 ± 3.2 % of WT (n=9); WT 100% of WT; n=87",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:026",
       "claim_id": "claim:019",
       "source_id": "paper:xie2023",
       "locator": "Xie 2023 Table 1, row 18; source citations [10, 26] in that paper.",
@@ -2276,7 +2343,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:026",
+      "id": "evidence:027",
       "claim_id": "claim:020",
       "source_id": "paper:xie2023",
       "locator": "Tables 2–4, GRIN2B-P553T row.",
@@ -2285,7 +2352,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:027",
+      "id": "evidence:028",
       "claim_id": "claim:021",
       "source_id": "paper:myers2023",
       "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
@@ -2294,7 +2361,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:028",
+      "id": "evidence:029",
       "claim_id": "claim:021",
       "source_id": "paper:xie2023",
       "locator": "Tables 2–4, GRIN2B-P553T row.",
@@ -2303,7 +2370,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:029",
+      "id": "evidence:030",
       "claim_id": "claim:022",
       "source_id": "paper:xie2023",
       "locator": "Xie 2023 Table 1, row 12; variant source listed as This study.",
@@ -2312,7 +2379,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:030",
+      "id": "evidence:031",
       "claim_id": "claim:023",
       "source_id": "paper:xie2023",
       "locator": "Tables 2–4, GRIN2B-S541G row.",
@@ -2321,7 +2388,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:031",
+      "id": "evidence:032",
       "claim_id": "claim:024",
       "source_id": "paper:myers2023",
       "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
@@ -2330,7 +2397,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:032",
+      "id": "evidence:033",
       "claim_id": "claim:024",
       "source_id": "paper:xie2023",
       "locator": "Tables 2–4, GRIN2B-S541G row.",
@@ -2339,7 +2406,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:033",
+      "id": "evidence:034",
       "claim_id": "claim:025",
       "source_id": "paper:xu2024",
       "locator": "Xu 2024 Table 1, row 40; Platzer 2017 clinical table also reports severe ID, seizures, MCD, and CVI.",
@@ -2348,7 +2415,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:034",
+      "id": "evidence:035",
       "claim_id": "claim:026",
       "source_id": "paper:xu2024",
       "locator": "Tables 2–3, GluN2B-A639V row; Figure 5 summarizes classification criteria.",
@@ -2357,7 +2424,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:035",
+      "id": "evidence:036",
       "claim_id": "claim:027",
       "source_id": "paper:xu2024",
       "locator": "Figure 5/Table 3 summary; charge-transfer ratios 7.9 and 6.2 of WT.",
@@ -2366,7 +2433,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:036",
+      "id": "evidence:037",
       "claim_id": "claim:027",
       "source_id": "paper:xu2024",
       "locator": "Tables 2–3, GluN2B-A639V row; Figure 5 summarizes classification criteria.",
@@ -2375,7 +2442,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:037",
+      "id": "evidence:038",
       "claim_id": "claim:027",
       "source_id": "paper:han2022",
       "locator": "Results, 'GRIN Variants Selected for Rescue Pharmacology in Triheteromeric NMDARs'; Supplemental Table S2; Table 1.",
@@ -2384,7 +2451,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:038",
+      "id": "evidence:039",
       "claim_id": "claim:028",
       "source_id": "paper:swanger2016",
       "locator": "Swanger 2016 Table 2 lists ID; Chen 2020 Table 1 includes ID and epilepsy/seizures.",
@@ -2393,7 +2460,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:039",
+      "id": "evidence:040",
       "claim_id": "claim:029",
       "source_id": "paper:swanger2016",
       "locator": "Table 2, GRIN2B-p.Arg540His row; Table 3, same variant row.",
@@ -2402,7 +2469,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:040",
+      "id": "evidence:041",
       "claim_id": "claim:030",
       "source_id": "paper:myers2023",
       "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
@@ -2411,7 +2478,7 @@
       "review_status": "unreviewed"
     },
     {
-      "id": "evidence:041",
+      "id": "evidence:042",
       "claim_id": "claim:030",
       "source_id": "paper:swanger2016",
       "locator": "Table 2, GRIN2B-p.Arg540His row; Table 3, same variant row.",
@@ -2420,7 +2487,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:042",
+      "id": "evidence:043",
       "claim_id": "claim:031",
       "source_id": "resource-source:grin-registry",
       "locator": "Study goals 1–4 and FAQs 4",
@@ -2429,7 +2496,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:043",
+      "id": "evidence:044",
       "claim_id": "claim:032",
       "source_id": "resource-source:grin-registry",
       "locator": "Study goals 1–4 and FAQs 4",
@@ -2438,7 +2505,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:044",
+      "id": "evidence:045",
       "claim_id": "claim:033",
       "source_id": "resource-source:grin-registry",
       "locator": "Study goals 1–4 and FAQs 4",
@@ -2447,7 +2514,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:045",
+      "id": "evidence:046",
       "claim_id": "claim:034",
       "source_id": "resource-source:grin-registry",
       "locator": "Study goals 1–4 and FAQs 4",
@@ -2456,7 +2523,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:046",
+      "id": "evidence:047",
       "claim_id": "claim:035",
       "source_id": "resource-source:cferv-functional-assays",
       "locator": "For Clinicians and Research Scientists; Request Analysis",
@@ -2465,7 +2532,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:047",
+      "id": "evidence:048",
       "claim_id": "claim:036",
       "source_id": "resource-source:cferv-functional-assays",
       "locator": "For Clinicians and Research Scientists; Request Analysis",
@@ -2474,7 +2541,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:048",
+      "id": "evidence:049",
       "claim_id": "claim:037",
       "source_id": "resource-source:cferv-functional-assays",
       "locator": "For Clinicians and Research Scientists; Request Analysis",
@@ -2483,7 +2550,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:049",
+      "id": "evidence:050",
       "claim_id": "claim:038",
       "source_id": "resource-source:combinedbrain-grin2b-samples",
       "locator": "Patient Tissue",
@@ -2492,7 +2559,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:050",
+      "id": "evidence:051",
       "claim_id": "claim:039",
       "source_id": "resource-source:combinedbrain-grin2b-samples",
       "locator": "Patient Tissue",
@@ -2501,7 +2568,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:051",
+      "id": "evidence:052",
       "claim_id": "claim:040",
       "source_id": "resource-source:grin-ipsc-organoid-program",
       "locator": "Disease Modeling Using 3-D Organoids Derived from Human Induced Pluripotent Stem Cells",
@@ -2510,7 +2577,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:052",
+      "id": "evidence:053",
       "claim_id": "claim:041",
       "source_id": "resource-source:grin-ipsc-organoid-program",
       "locator": "Disease Modeling Using 3-D Organoids Derived from Human Induced Pluripotent Stem Cells",
@@ -2519,7 +2586,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:053",
+      "id": "evidence:054",
       "claim_id": "claim:042",
       "source_id": "resource-source:grin-ipsc-organoid-program",
       "locator": "Disease Modeling Using 3-D Organoids Derived from Human Induced Pluripotent Stem Cells",
@@ -2528,7 +2595,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:054",
+      "id": "evidence:055",
       "claim_id": "claim:043",
       "source_id": "resource-source:grin-crossgene-outcome-methods",
       "locator": "Abstract: methods and cohort",
@@ -2537,7 +2604,7 @@
       "review_status": "machine_checked"
     },
     {
-      "id": "evidence:055",
+      "id": "evidence:056",
       "claim_id": "claim:044",
       "source_id": "resource-source:grin-crossgene-outcome-methods",
       "locator": "Abstract: methods and cohort",

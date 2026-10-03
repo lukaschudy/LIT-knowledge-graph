@@ -1,0 +1,416 @@
+{
+  "schema_version": "grin-identity-v1",
+  "source": "data/processed/harvest/grin_reference/clinvar_variant_summary.jsonl.gz",
+  "policy": "Candidate names must match gene and protein exactly. Transcript is unresolved in curated primary-source records; never auto-merge a DNA allele on protein name alone. ClinVar clinical significance is not functional evidence.",
+  "records": [
+    {
+      "curated_variant_id": "GRIN2A:c.1447G>A:p.Gly483Arg",
+      "reported_gene": "GRIN2A",
+      "reported_protein": "p.Gly483Arg",
+      "reported_cdna": "c.1447G>A",
+      "source_transcript": null,
+      "status": "candidate_match_transcript_unresolved",
+      "automatic_merge_allowed": false,
+      "candidates": [
+        {
+          "variation_id": "812185",
+          "name": "NM_001134407.3(GRIN2A):c.1447G>A (p.Gly483Arg)",
+          "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/812185/",
+          "reported_cdna_matches": true,
+          "assemblies": [
+            {
+              "Assembly": "GRCh37",
+              "ChromosomeAccession": "NC_000016.9",
+              "Start": "9934843",
+              "Stop": "9934843",
+              "PositionVCF": "9934843",
+              "ReferenceAlleleVCF": "C",
+              "AlternateAlleleVCF": "T"
+            },
+            {
+              "Assembly": "GRCh38",
+              "ChromosomeAccession": "NC_000016.10",
+              "Start": "9840986",
+              "Stop": "9840986",
+              "PositionVCF": "9840986",
+              "ReferenceAlleleVCF": "C",
+              "AlternateAlleleVCF": "T"
+            }
+          ],
+          "reference_rows": [
+            2358,
+            2359
+          ]
+        }
+      ]
+    },
+    {
+      "curated_variant_id": "GRIN2A:c.2146G>A:p.Ala716Thr",
+      "reported_gene": "GRIN2A",
+      "reported_protein": "p.Ala716Thr",
+      "reported_cdna": "c.2146G>A",
+      "source_transcript": null,
+      "status": "candidate_match_transcript_unresolved",
+      "automatic_merge_allowed": false,
+      "candidates": [
+        {
+          "variation_id": "205656",
+          "name": "NM_001134407.3(GRIN2A):c.2146G>A (p.Ala716Thr)",
+          "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/205656/",
+          "reported_cdna_matches": true,
+          "assemblies": [
+            {
+              "Assembly": "GRCh37",
+              "ChromosomeAccession": "NC_000016.9",
+              "Start": "9916143",
+              "Stop": "9916143",
+              "PositionVCF": "9916143",
+              "ReferenceAlleleVCF": "C",
+              "AlternateAlleleVCF": "T"
+            },
+            {
+              "Assembly": "GRCh38",
+              "ChromosomeAccession": "NC_000016.10",
+              "Start": "9822286",
+              "Stop": "9822286",
+              "PositionVCF": "9822286",
+              "ReferenceAlleleVCF": "C",
+              "AlternateAlleleVCF": "T"
+            }
+          ],
+          "reference_rows": [
+            391,
+            392
+          ]
+        }
+      ]
+    },
+    {
+      "curated_variant_id": "GRIN2A:c.2191G>A:p.Asp731Asn",
+      "reported_gene": "GRIN2A",
+      "reported_protein": "p.Asp731Asn",
+      "reported_cdna": "c.2191G>A",
+      "source_transcript": null,
+      "status": "candidate_match_transcript_unresolved",
+      "automatic_merge_allowed": false,
+      "candidates": [
+        {
+          "variation_id": "205657",
+          "name": "NM_001134407.3(GRIN2A):c.2191G>A (p.Asp731Asn)",
+          "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/205657/",
+          "reported_cdna_matches": true,
+          "assemblies": [
+            {
+              "Assembly": "GRCh37",
+              "ChromosomeAccession": "NC_000016.9",
+              "Start": "9892299",
+              "Stop": "9892299",
+              "PositionVCF": "9892299",
+              "ReferenceAlleleVCF": "C",
+              "AlternateAlleleVCF": "T"
+            },
+            {
+              "Assembly": "GRCh38",
+              "ChromosomeAccession": "NC_000016.10",
+              "Start": "9798442",
+              "Stop": "9798442",
+              "PositionVCF": "9798442",
+              "ReferenceAlleleVCF": "C",
+              "AlternateAlleleVCF": "T"
+            }
+          ],
+          "reference_rows": [
+            389,
+            390
+          ]
+        }
+      ]
+    },
+    {
+      "curated_variant_id": "GRIN2B:c.1238A>G:p.Glu413Gly",
+      "reported_gene": "GRIN2B",
+      "reported_protein": "p.Glu413Gly",
+      "reported_cdna": "c.1238A>G",
+      "source_transcript": null,
+      "status": "candidate_match_transcript_unresolved",
+      "automatic_merge_allowed": false,
+      "candidates": [
+        {
+          "variation_id": "143189",
+          "name": "NM_000834.5(GRIN2B):c.1238A>G (p.Glu413Gly)",
+          "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/143189/",
+          "reported_cdna_matches": true,
+          "assemblies": [
+            {
+              "Assembly": "GRCh37",
+              "ChromosomeAccession": "NC_000012.11",
+              "Start": "13769479",
+              "Stop": "13769479",
+              "PositionVCF": "13769479",
+              "ReferenceAlleleVCF": "T",
+              "AlternateAlleleVCF": "C"
+            },
+            {
+              "Assembly": "GRCh38",
+              "ChromosomeAccession": "NC_000012.12",
+              "Start": "13616545",
+              "Stop": "13616545",
+              "PositionVCF": "13616545",
+              "ReferenceAlleleVCF": "T",
+              "AlternateAlleleVCF": "C"
+            }
+          ],
+          "reference_rows": [
+            219,
+            220
+          ]
+        }
+      ]
+    },
+    {
+      "curated_variant_id": "GRIN2B:c.1382G>T:p.Cys461Phe",
+      "reported_gene": "GRIN2B",
+      "reported_protein": "p.Cys461Phe",
+      "reported_cdna": "c.1382G>T",
+      "source_transcript": null,
+      "status": "candidate_match_transcript_unresolved",
+      "automatic_merge_allowed": false,
+      "candidates": [
+        {
+          "variation_id": "916598",
+          "name": "NM_000834.5(GRIN2B):c.1382G>T (p.Cys461Phe)",
+          "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/916598/",
+          "reported_cdna_matches": true,
+          "assemblies": [
+            {
+              "Assembly": "GRCh37",
+              "ChromosomeAccession": "NC_000012.11",
+              "Start": "13768545",
+              "Stop": "13768545",
+              "PositionVCF": "13768545",
+              "ReferenceAlleleVCF": "C",
+              "AlternateAlleleVCF": "A"
+            },
+            {
+              "Assembly": "GRCh38",
+              "ChromosomeAccession": "NC_000012.12",
+              "Start": "13615611",
+              "Stop": "13615611",
+              "PositionVCF": "13615611",
+              "ReferenceAlleleVCF": "C",
+              "AlternateAlleleVCF": "A"
+            }
+          ],
+          "reference_rows": [
+            2780,
+            2781
+          ]
+        }
+      ]
+    },
+    {
+      "curated_variant_id": "GRIN2B:c.1623C>G:p.Ser541Arg",
+      "reported_gene": "GRIN2B",
+      "reported_protein": "p.Ser541Arg",
+      "reported_cdna": "c.1623C>G",
+      "source_transcript": "NM_000834.5",
+      "status": "candidate_match_transcript_unresolved",
+      "automatic_merge_allowed": false,
+      "candidates": [
+        {
+          "variation_id": "916601",
+          "name": "NM_000834.5(GRIN2B):c.1623C>G (p.Ser541Arg)",
+          "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/916601/",
+          "reported_cdna_matches": true,
+          "assemblies": [
+            {
+              "Assembly": "GRCh37",
+              "ChromosomeAccession": "NC_000012.11",
+              "Start": "13768079",
+              "Stop": "13768079",
+              "PositionVCF": "13768079",
+              "ReferenceAlleleVCF": "G",
+              "AlternateAlleleVCF": "C"
+            },
+            {
+              "Assembly": "GRCh38",
+              "ChromosomeAccession": "NC_000012.12",
+              "Start": "13615145",
+              "Stop": "13615145",
+              "PositionVCF": "13615145",
+              "ReferenceAlleleVCF": "G",
+              "AlternateAlleleVCF": "C"
+            }
+          ],
+          "reference_rows": [
+            2774,
+            2775
+          ]
+        },
+        {
+          "variation_id": "2118872",
+          "name": "NM_000834.5(GRIN2B):c.1623C>A (p.Ser541Arg)",
+          "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/2118872/",
+          "reported_cdna_matches": false,
+          "assemblies": [
+            {
+              "Assembly": "GRCh37",
+              "ChromosomeAccession": "NC_000012.11",
+              "Start": "13768079",
+              "Stop": "13768079",
+              "PositionVCF": "13768079",
+              "ReferenceAlleleVCF": "G",
+              "AlternateAlleleVCF": "T"
+            },
+            {
+              "Assembly": "GRCh38",
+              "ChromosomeAccession": "NC_000012.12",
+              "Start": "13615145",
+              "Stop": "13615145",
+              "PositionVCF": "13615145",
+              "ReferenceAlleleVCF": "G",
+              "AlternateAlleleVCF": "T"
+            }
+          ],
+          "reference_rows": [
+            5756,
+            5757
+          ]
+        }
+      ]
+    },
+    {
+      "curated_variant_id": "GRIN2B:c.1657C>A:p.Pro553Thr",
+      "reported_gene": "GRIN2B",
+      "reported_protein": "p.Pro553Thr",
+      "reported_cdna": "c.1657C>A",
+      "source_transcript": null,
+      "status": "no_match_in_acquired_summary",
+      "automatic_merge_allowed": false,
+      "candidates": []
+    },
+    {
+      "curated_variant_id": "GRIN2B:protein:p.Ser541Gly",
+      "reported_gene": "GRIN2B",
+      "reported_protein": "p.Ser541Gly",
+      "reported_cdna": "c.1621A>C",
+      "source_transcript": null,
+      "status": "source_notation_conflict",
+      "automatic_merge_allowed": false,
+      "candidates": [
+        {
+          "variation_id": "1708206",
+          "name": "NM_000834.5(GRIN2B):c.1621A>G (p.Ser541Gly)",
+          "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/1708206/",
+          "reported_cdna_matches": false,
+          "assemblies": [
+            {
+              "Assembly": "GRCh37",
+              "ChromosomeAccession": "NC_000012.11",
+              "Start": "13768081",
+              "Stop": "13768081",
+              "PositionVCF": "13768081",
+              "ReferenceAlleleVCF": "T",
+              "AlternateAlleleVCF": "C"
+            },
+            {
+              "Assembly": "GRCh38",
+              "ChromosomeAccession": "NC_000012.12",
+              "Start": "13615147",
+              "Stop": "13615147",
+              "PositionVCF": "13615147",
+              "ReferenceAlleleVCF": "T",
+              "AlternateAlleleVCF": "C"
+            }
+          ],
+          "reference_rows": [
+            4994,
+            4995
+          ]
+        }
+      ]
+    },
+    {
+      "curated_variant_id": "GRIN2B:c.1916C>T:p.Ala639Val",
+      "reported_gene": "GRIN2B",
+      "reported_protein": "p.Ala639Val",
+      "reported_cdna": "c.1916C>T",
+      "source_transcript": null,
+      "status": "candidate_match_transcript_unresolved",
+      "automatic_merge_allowed": false,
+      "candidates": [
+        {
+          "variation_id": "208749",
+          "name": "NM_000834.5(GRIN2B):c.1916C>T (p.Ala639Val)",
+          "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/208749/",
+          "reported_cdna_matches": true,
+          "assemblies": [
+            {
+              "Assembly": "GRCh37",
+              "ChromosomeAccession": "NC_000012.11",
+              "Start": "13761631",
+              "Stop": "13761631",
+              "PositionVCF": "13761631",
+              "ReferenceAlleleVCF": "G",
+              "AlternateAlleleVCF": "A"
+            },
+            {
+              "Assembly": "GRCh38",
+              "ChromosomeAccession": "NC_000012.12",
+              "Start": "13608697",
+              "Stop": "13608697",
+              "PositionVCF": "13608697",
+              "ReferenceAlleleVCF": "G",
+              "AlternateAlleleVCF": "A"
+            }
+          ],
+          "reference_rows": [
+            427,
+            428
+          ]
+        }
+      ]
+    },
+    {
+      "curated_variant_id": "GRIN2B:c.1619G>A:p.Arg540His",
+      "reported_gene": "GRIN2B",
+      "reported_protein": "p.Arg540His",
+      "reported_cdna": "c.1619G>A",
+      "source_transcript": null,
+      "status": "candidate_match_transcript_unresolved",
+      "automatic_merge_allowed": false,
+      "candidates": [
+        {
+          "variation_id": "162087",
+          "name": "NM_000834.5(GRIN2B):c.1619G>A (p.Arg540His)",
+          "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/162087/",
+          "reported_cdna_matches": true,
+          "assemblies": [
+            {
+              "Assembly": "GRCh37",
+              "ChromosomeAccession": "NC_000012.11",
+              "Start": "13768083",
+              "Stop": "13768083",
+              "PositionVCF": "13768083",
+              "ReferenceAlleleVCF": "C",
+              "AlternateAlleleVCF": "T"
+            },
+            {
+              "Assembly": "GRCh38",
+              "ChromosomeAccession": "NC_000012.12",
+              "Start": "13615149",
+              "Stop": "13615149",
+              "PositionVCF": "13615149",
+              "ReferenceAlleleVCF": "C",
+              "AlternateAlleleVCF": "T"
+            }
+          ],
+          "reference_rows": [
+            245,
+            246
+          ]
+        }
+      ]
+    }
+  ]
+}

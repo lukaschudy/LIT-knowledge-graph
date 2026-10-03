@@ -531,6 +531,64 @@
               "wt_control": "15 ± 0.5%; n=47"
             }
           ],
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        },
+        {
+          "source_id": "xie2023",
+          "evidence_location": "Tables 2–4, GRIN2B-S541R row; WT 1a/2B comparator in GluN2B section of Table 2 and WT 2B in Table 3.",
+          "assay": "Two-electrode voltage clamp in Xenopus oocytes; whole-cell patch clamp in HEK cells; MTSEA open-probability assay; beta-lactamase surface-expression assay.",
+          "model": "Recombinant GluN1/GluN2B receptor expression in heterologous systems; source-specific WT controls.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "9.1 [7.2, 11]",
+              "unit": "µM; 95% CI",
+              "n": 16,
+              "wt_control": "1.3 [1.2, 1.4] µM; n=68"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "1.0 [0.71, 1.4]",
+              "unit": "µM; 95% CI",
+              "n": 17,
+              "wt_control": "0.34 [0.31, 0.37] µM; n=68"
+            },
+            {
+              "name": "Mg2+ IC50",
+              "variant": "18 [15, 22]",
+              "unit": "µM; 95% CI",
+              "n": 12,
+              "wt_control": "27 [23, 32] µM; n=57"
+            },
+            {
+              "name": "weighted deactivation time constant (τw)",
+              "variant": "142 ± 24",
+              "unit": "ms",
+              "n": 8,
+              "wt_control": "1061 ± 91 ms; n=16"
+            },
+            {
+              "name": "peak current density",
+              "variant": "3.6 ± 1.7",
+              "unit": "pA/pF",
+              "n": 8,
+              "wt_control": "19 ± 3.6 pA/pF; n=16"
+            },
+            {
+              "name": "channel open probability (MTSEA method)",
+              "variant": "0.014 ± 0.001",
+              "unit": "unitless",
+              "n": 20,
+              "wt_control": "0.026 ± 0.001; n=45"
+            },
+            {
+              "name": "surface/total receptor ratio",
+              "variant": "111 ± 3.2",
+              "unit": "% of WT",
+              "n": 9,
+              "wt_control": "100% of WT; n=87"
+            }
+          ],
           "predicted_charge_transfer": {
             "synaptic_ratio_vs_WT": 0.03,
             "non_synaptic_ratio_vs_WT": 0.004,

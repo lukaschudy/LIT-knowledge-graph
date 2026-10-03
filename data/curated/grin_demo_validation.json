@@ -1,0 +1,17 @@
+{
+  "bundle_sha256": "9847550f41712e5fe0fcb6c5d9af0fe63587ef62d35114959ea316b046524716",
+  "dataset_id": "grin-reduced-function-2026-10-03",
+  "candidate_states": {
+    "cohort:grin2a:core_likely_reduced": "supported_lead",
+    "cohort:grin2b:provisional_possible_reduced": "needs_review",
+    "cohort:grin2b:unresolved_control": "needs_review",
+    "cohort:grin2b:opposing_control": "rejected"
+  },
+  "supported_assets": [
+    "asset:grin-registry",
+    "asset:cferv-functional-assays"
+  ],
+  "expert_review": "pending",
+  "clinical_use": "not validated",
+  "browser_journey": "Search GRIN2B → selected Likely LoF cohort → GRIN2A connection → primary evidence → registry access conditions; manually exercised through browser automation."
+}
