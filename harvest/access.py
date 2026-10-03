@@ -11,7 +11,7 @@ GAPS={
 }
 MAP={
  'S01':['omim'],'S02':['clinvar'],'S03':['hpo'],'S04':['pubmed','europe_pmc_diseases','grin_literature'],
- 'S05':['pmc'],'S06':['clinicaltrials_gov'],'S07':['nih_reporter'],'S08':['nord'],'S09':['global_genes'],
+ 'S05':['pmc_grin_oa'],'S06':['clinicaltrials_gov'],'S07':['nih_reporter'],'S08':['nord'],'S09':['global_genes'],
  'S10':['orphadata','orphanet_expert_resources'],'S11':['grin_resources'],'S12':['eurordis'],
  'S13':['genetic_alliance_uk'],'S14':['genetic_alliance_us'],'S15':['mondo'],'S16':['grin_resources'],
  'S17':['mgi'],'S18':['rareconnect'],'S19':['europe_pmc_preprints'],'S20':['europe_pmc_preprints'],'S21':['raresource'],
