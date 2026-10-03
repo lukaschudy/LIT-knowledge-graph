@@ -1,0 +1,128 @@
+{
+  "source": "hpo",
+  "created_at": "2026-10-03T21:45:43.587707+00:00",
+  "artifacts": {
+    "hp-base.obo": {
+      "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/hp-base.obo",
+      "final_url": "https://release-assets.githubusercontent.com/github-production-release-asset/41063438/0fe2c184-8a79-443f-9d1b-69c3cb9de40d?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-03T22%3A38%3A29Z&rscd=attachment%3B+filename%3Dhp-base.obo&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-03T21%3A38%3A15Z&ske=2026-10-03T22%3A38%3A29Z&sks=b&skv=2018-11-09&sig=QSYxMLJ%2FInr2Pov6xIWHwHbPt36iaupq9M983yJoAHI%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MTA2NTc0MiwibmJmIjoxNzkxMDYzOTQyLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.Afy12-oi7tU0d1d3XGqK0s2pVz25zc-PX1VoognYOpk&response-content-disposition=attachment%3B+filename%3Dhp-base.obo&response-content-type=application%2Foctet-stream",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/hpo/hp-base.obo",
+      "bytes": 11424063,
+      "sha256": "8cf51771f19a1168871ef3ded0da86c51e4c9630068da726ece7eb61406a2418",
+      "retrieved_at": "2026-10-03T21:45:43.587543+00:00",
+      "license": "HPO terms of use: attribution, version/date display, preserve content and embedded logical relations",
+      "version": "v2026-09-01",
+      "http_status": 200,
+      "content_type": "application/octet-stream",
+      "last_modified": "Wed, 02 Sep 2026 20:59:29 GMT",
+      "etag": "\"0x8DF093514EFC4CF\""
+    },
+    "phenotype.hpoa": {
+      "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/phenotype.hpoa",
+      "final_url": "https://release-assets.githubusercontent.com/github-production-release-asset/41063438/30a413da-5d1f-4476-b219-03dc6507f153?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-03T22%3A41%3A44Z&rscd=attachment%3B+filename%3Dphenotype.hpoa&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-03T21%3A41%3A29Z&ske=2026-10-03T22%3A41%3A44Z&sks=b&skv=2018-11-09&sig=oW5FithRnEKRPpaK0ri9o26MlnWHvIoIduSJMIMeCG4%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MTA2NTc0MywibmJmIjoxNzkxMDYzOTQzLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.L4KCOM9CrOawD1qm4HWdPVZ8R8kj7AXBddYR92v-lqw&response-content-disposition=attachment%3B+filename%3Dphenotype.hpoa&response-content-type=application%2Foctet-stream",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/hpo/phenotype.hpoa",
+      "bytes": 35816037,
+      "sha256": "e89aa39c8f97bf5a52c5d160f9250a603681d630ade8ec2679d84ac5aece1f72",
+      "retrieved_at": "2026-10-03T21:45:47.438786+00:00",
+      "license": "HPO terms of use: attribution, version/date display, preserve content and embedded logical relations",
+      "version": "v2026-09-01",
+      "http_status": 200,
+      "content_type": "application/octet-stream",
+      "last_modified": "Wed, 02 Sep 2026 21:12:10 GMT",
+      "etag": "\"0x8DF0936DA47C46B\""
+    },
+    "genes_to_phenotype.txt": {
+      "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/genes_to_phenotype.txt",
+      "final_url": "https://release-assets.githubusercontent.com/github-production-release-asset/41063438/ba097af0-1912-439e-86ed-81ef2303a1e3?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-03T22%3A31%3A19Z&rscd=attachment%3B+filename%3Dgenes_to_phenotype.txt&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-03T21%3A31%3A03Z&ske=2026-10-03T22%3A31%3A19Z&sks=b&skv=2018-11-09&sig=qWrV%2FxZI%2Fg2qx6ytinTiQcmihcnGjMyIguO9jglhPoM%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MTA2NTc0NywibmJmIjoxNzkxMDYzOTQ3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.mk9QldH4dJLrIzII_tSNfMVQZhFDwC9Wq0IrJ7X2gDs&response-content-disposition=attachment%3B+filename%3Dgenes_to_phenotype.txt&response-content-type=application%2Foctet-stream",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/hpo/genes_to_phenotype.txt",
+      "bytes": 20821704,
+      "sha256": "507a17bff9c49e6329fbd88b1f91734fa7e9fdea5c06304044c0892eb6ab248c",
+      "retrieved_at": "2026-10-03T21:45:49.387845+00:00",
+      "license": "HPO terms of use: attribution, version/date display, preserve content and embedded logical relations",
+      "version": "v2026-09-01",
+      "http_status": 200,
+      "content_type": "application/octet-stream",
+      "last_modified": "Wed, 02 Sep 2026 21:09:45 GMT",
+      "etag": "\"0x8DF093683A471FF\""
+    },
+    "genes_to_disease.txt": {
+      "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/genes_to_disease.txt",
+      "final_url": "https://release-assets.githubusercontent.com/github-production-release-asset/41063438/77d67254-2cad-462f-95ca-4fdd1bf70621?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-03T22%3A43%3A16Z&rscd=attachment%3B+filename%3Dgenes_to_disease.txt&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-03T21%3A42%3A21Z&ske=2026-10-03T22%3A43%3A16Z&sks=b&skv=2018-11-09&sig=U931VwgoyK30ePoDq077%2FXpyYRQ%2B5WSgwxn%2BCYI1sRY%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MTA2NDI0OSwibmJmIjoxNzkxMDYzOTQ5LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.A_JLe5VxFWetMMO81c3bBZP8vV8pPXsovfdvxU5eKdk&response-content-disposition=attachment%3B+filename%3Dgenes_to_disease.txt&response-content-type=application%2Foctet-stream",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/hpo/genes_to_disease.txt",
+      "bytes": 1492039,
+      "sha256": "7937a1b92779dc8614e39ace623b443c7c71dd15e4de11d5e52b14e331ab5978",
+      "retrieved_at": "2026-10-03T21:45:49.692176+00:00",
+      "license": "HPO terms of use: attribution, version/date display, preserve content and embedded logical relations",
+      "version": "v2026-09-01",
+      "http_status": 200,
+      "content_type": "application/octet-stream",
+      "last_modified": "Wed, 02 Sep 2026 21:07:56 GMT",
+      "etag": "\"0x8DF093642FC6BFF\""
+    }
+  },
+  "datasets": {
+    "ontology_terms": {
+      "path": "data/processed/harvest/hpo/ontology_terms.jsonl.gz",
+      "records": 20483,
+      "bytes": 2221217,
+      "sha256": "0c25f93dbb3588a7cb965bb8234983b3aeaff9e28f22f95f74b8f71180ddf8b5",
+      "input_paths": [
+        "data/raw/harvest/hpo/hp-base.obo"
+      ],
+      "description": "All OBO stanzas from pinned HPO hp-base.obo; all tags and repeated values retained.",
+      "created_at": "2026-10-03T21:51:02.663208+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "disease_phenotype_annotations": {
+      "path": "data/processed/harvest/hpo/disease_phenotype_annotations.jsonl.gz",
+      "records": 286651,
+      "bytes": 3377398,
+      "sha256": "593602d766008d40bda72594601e3527e4b319c03398d844da3b9f4fd17e2cb4",
+      "input_paths": [
+        "data/raw/harvest/hpo/phenotype.hpoa"
+      ],
+      "description": "All HPOA assertion columns retained, including NOT qualifiers, evidence, references, onset and frequency.",
+      "created_at": "2026-10-03T21:51:04.887028+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "genes_to_phenotype": {
+      "path": "data/processed/harvest/hpo/genes_to_phenotype.jsonl.gz",
+      "records": 333983,
+      "bytes": 5538589,
+      "sha256": "4a6f31a5b1ccded1e79f77d0524b6535295ee7c18f432bb5be2257aff9999362",
+      "input_paths": [
+        "data/raw/harvest/hpo/genes_to_phenotype.txt"
+      ],
+      "description": "All rows/columns from official HPO genes_to_phenotype summary.",
+      "created_at": "2026-10-03T21:51:07.068600+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "genes_to_disease": {
+      "path": "data/processed/harvest/hpo/genes_to_disease.jsonl.gz",
+      "records": 16099,
+      "bytes": 226336,
+      "sha256": "ce8a6aa63a0dd62ce7551796ea9782c3656f3c7165dc24d0570c94ee2859b56c",
+      "input_paths": [
+        "data/raw/harvest/hpo/genes_to_disease.txt"
+      ],
+      "description": "All rows/columns from official HPO genes_to_disease summary.",
+      "created_at": "2026-10-03T21:51:07.172268+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "updated_at": "2026-10-03T21:51:07.172491+00:00",
+  "scope": "Complete pinned HPO OBO ontology, disease annotations, genes_to_phenotype and genes_to_disease files.",
+  "version": "v2026-09-01"
+}

@@ -1,0 +1,69 @@
+{
+  "source": "clinvar",
+  "created_at": "2026-10-03T21:52:18.013694+00:00",
+  "artifacts": {
+    "variant_summary.txt.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz",
+      "final_url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/clinvar/variant_summary.txt.gz",
+      "bytes": 450727547,
+      "sha256": "a6a58df4d9049c9187a79a8fb4e70f1f3b5550e1708c6c74b7be0b268f5032da",
+      "retrieved_at": "2026-10-03T21:52:18.013586+00:00",
+      "license": "NCBI ClinVar public data; retain attribution and third-party rights where applicable",
+      "version": "current FTP snapshot (retrieval date in manifest)",
+      "http_status": 206,
+      "content_type": "application/x-gzip",
+      "last_modified": "Tue, 29 Sep 2026 02:10:09 GMT",
+      "etag": null
+    },
+    "gene_condition_source_id": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/gene_condition_source_id",
+      "final_url": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/gene_condition_source_id",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/clinvar/gene_condition_source_id",
+      "bytes": 1256057,
+      "sha256": "2adec39b1c0311c8430dc5c72504a4de66b73eab2ed17a09ca2fdf0c25f2dbef",
+      "retrieved_at": "2026-10-03T21:56:10.910099+00:00",
+      "license": "NCBI ClinVar public data; retain attribution and third-party rights where applicable",
+      "version": "current FTP snapshot (retrieval date in manifest)",
+      "http_status": 200,
+      "content_type": null,
+      "last_modified": "Sat, 03 Oct 2026 14:17:26 GMT",
+      "etag": null
+    }
+  },
+  "datasets": {
+    "variant_summary": {
+      "path": "data/processed/harvest/clinvar/variant_summary.jsonl.gz",
+      "records": 9223698,
+      "bytes": 620698294,
+      "sha256": "8a89fa7c261c03e60284d88c24898d01196dee080f706f01cefa5a82398ab400",
+      "input_paths": [
+        "data/raw/harvest/clinvar/variant_summary.txt.gz"
+      ],
+      "description": "Complete current FTP summary file, every column and row preserved verbatim. variant_summary represents all ClinVar variants with genomic locations but is summary-level only; it is not comprehensive assertion XML.",
+      "created_at": "2026-10-03T21:56:10.169575+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "gene_condition_source_id": {
+      "path": "data/processed/harvest/clinvar/gene_condition_source_id.jsonl.gz",
+      "records": 13493,
+      "bytes": 432879,
+      "sha256": "aa84c93bbd0d151eacc579d8d883546526f32352be610270bc498ea044b6187d",
+      "input_paths": [
+        "data/raw/harvest/clinvar/gene_condition_source_id"
+      ],
+      "description": "Complete current daily gene-condition source-ID cross-reference file; every column and row preserved.",
+      "created_at": "2026-10-03T21:56:11.058076+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "updated_at": "2026-10-03T21:56:11.058314+00:00",
+  "scope": "Complete variant_summary TSV (genome-located variants, summary metadata only) and gene_condition_source_id TSV. Comprehensive VCV/RCV/SCV assertion XML and variants without genomic location are excluded."
+}
