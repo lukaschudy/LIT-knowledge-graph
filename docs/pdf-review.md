@@ -34,7 +34,7 @@ Each row must have a corresponding numbered section in the extraction guide. Pub
 | S11 | Verified patient-group / patient-org websites | 4, 5 | Communities, registries, assets and contacts |
 | S12 | EURORDIS | 5 | Patient-group directory |
 | S13 | Rare Disease UK | 5 | UK community network |
-| S14 | Genetic Alliance | 5 | Ambiguous US/UK name; resolve both, avoid conflation |
+| S14 | Genetic Alliance | 5 | PDF hyperlink identifies US organization; do not conflate with Genetic Alliance UK |
 | S15 | MONDO | 5 | Disease identifiers, synonyms and mappings |
 | S16 | Press releases | 5 | Asset/program announcements, requiring corroboration |
 | S17 | Jackson Laboratory | 5 | Experimental models and model availability |
@@ -44,6 +44,12 @@ Each row must have a corresponding numbered section in the extraction guide. Pub
 | S21 | RARe-SOURCE | 2 | Integrated NIH resource and comparison/reference source |
 
 The brief also mentions unnamed registries, natural-history studies, models, biomarkers, conference talks, clinical observations, RFAs, investors/funders, and patient contributions. These are data/asset classes, not uniquely identifiable providers. The additional-source plan addresses them. OpenAI, Buffalo Initiative, Hack-Nation and NIH as umbrella institutions are contextual names; their names alone do not imply a biomedical dataset to ingest. OpenAI is also a suggested processing tool.
+
+## Embedded links and figures
+
+The 18 unique page/URL pairs extracted from the PDF are preserved in [pdf-links.json](../data/source/pdf-links.json). They resolve Genetic Alliance to `https://geneticalliance.org/` (US), rather than the similarly named UK organization. PMC has no separate embedded link, but is explicitly named in the text and remains a separate extraction source. Websites and press releases have no single provider URL.
+
+The page 4 diagrams were also visually reviewed. They explicitly separate different effects of the same gene (loss versus gain of function) and illustrate connecting different genes only when mechanism/phenotype evidence supports it. The illustrative graph interface introduces no additional named data providers.
 
 ## Scope of this research task
 
