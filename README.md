@@ -1,5 +1,7 @@
 # LIT rare-disease knowledge graph
 
+**Current data and search:** the completed accessible harvest contains 21,746,825 normalized records across 40 collections; see the [coverage report](docs/harvest-coverage.md) for scope and remaining access gaps. The real GRIN pilot now has a [TopK search integration](docs/topk-search.md) for traceable evidence passages and existing graph connections. Its focused index is separate from the full harvest. The architecture diagrams below describe the wider planned system, including literature claim extraction that is not yet implemented.
+
 > **Runnable graph skeleton:** See [ATLAS.md](ATLAS.md) for the local explorer, schema, ingestion boundary, commands, tests and research-backed architecture. The bundled demo is explicitly synthetic.
 
 
