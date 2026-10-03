@@ -2,12 +2,14 @@
 
 A dependency-free Python 3.11+ knowledge-graph core and local explorer for the AI Atlas rare-disease challenge. Run these commands from the repository checkout.
 
+For the connected source → extraction → review → recommendation → editable brief workflow, run `python3 -m atlas research` and see the [research workspace guide](docs/research-workspace.md). It defaults to a small real neuro evidence slice. The commands below describe the separate legacy explorer and fictional acceptance fixture.
+
 ```bash
 python3 -m atlas demo
 python3 -m atlas serve
 ```
 
-Open **http://127.0.0.1:8765** for the full-screen artwork cover. Select the Atlas logo or visit **http://127.0.0.1:8765/explore** to use the research explorer. Search **Aurora** or its alias **AS-demo** to inspect the complete research route. Search **Delta** for the honest-gap case. All bundled biomedical statements, people, organizations and assets are explicitly fictional software fixtures.
+Open **http://127.0.0.1:8765** for the full-screen artwork cover. Select the Atlas logo or visit **http://127.0.0.1:8765/explore** to use the research explorer. Search **Aurora** or its alias **AS-demo** to inspect the complete research route. Search **Delta** for the honest-gap case. The `demo` command's biomedical statements, people, organizations and assets are explicitly fictional software fixtures.
 
 If `data/atlas.sqlite` already exists, `demo` stops to protect its contents. Use a separate database (`--db /tmp/atlas-demo.sqlite`) or explicitly replace the existing dataset (`demo --replace`). `serve`, `search`, `explore`, `stats` and `export` accept the same `--db` option.
 

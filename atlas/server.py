@@ -1,10 +1,11 @@
-"""Read-only HTTP server for the local synthetic research atlas."""
+"""Local atlas explorer and opt-in writable research workspace HTTP server."""
 
 from __future__ import annotations
 
 import json
 import mimetypes
 import threading
+import secrets
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
@@ -16,6 +17,9 @@ from .recommendations import RecommendationEngine, ResearchRequest
 
 WEB_DIR = Path(__file__).with_name("web")
 _ASSETS = {
+    "/research": ("research.html", "text/html; charset=utf-8"),
+    "/research.js": ("research.js", "text/javascript; charset=utf-8"),
+    "/research.css": ("research.css", "text/css; charset=utf-8"),
     "/": ("index.html", "text/html; charset=utf-8"),
     "/index.html": ("index.html", "text/html; charset=utf-8"),
     "/explore": ("explore.html", "text/html; charset=utf-8"),
@@ -54,13 +58,15 @@ def _references(row: dict[str, Any], *keys: str) -> list[str]:
     return list(dict.fromkeys(result))
 
 
-def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> ThreadingHTTPServer:
+def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None) -> ThreadingHTTPServer:
     """Create a testable threaded server around a startup snapshot of ``store``.
 
     The store and reasoner are only touched on this calling thread. Requests are
     served from the immutable bundle snapshot, which also keeps SQLite-backed
     stores safe from cross-thread connection use.
     """
+    if workspace is not None and host not in ("127.0.0.1", "localhost"):
+        raise ValueError("The writable research workspace binds to loopback only; multi-user hosting requires authentication.")
     bundle = store.bundle()
     stats = store.stats()
     reasoner = AtlasReasoner(bundle)
@@ -102,6 +108,8 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> Thre
 
         def do_GET(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
             try:
+                if workspace is not None and not self._local_request():
+                    return
                 parsed = urlsplit(self.path)
                 path = parsed.path
                 query = parse_qs(parsed.query, keep_blank_values=True)
@@ -117,7 +125,7 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> Thre
                 self._error(500, "internal_error", "The atlas could not complete that request.")
 
         def _asset(self, path: str) -> None:
-            filename, content_type = _ASSETS[path]
+            filename, content_type = _ASSETS["/research" if workspace is not None and path in ("/", "/index.html") else path]
             asset = WEB_DIR / filename
             try:
                 body = asset.read_bytes()
@@ -134,6 +142,21 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> Thre
             return value or None
 
         def _api(self, path: str, query: dict[str, list[str]]) -> None:
+            if path.startswith("/api/research/"):
+                if workspace is None:
+                    self._error(404, "workspace_unavailable", "Start `python -m atlas research` to open a research workspace.")
+                    return
+                from .workflow import WorkflowError
+                try:
+                    if path == "/api/research/state":
+                        self._json(200, workspace.state())
+                    elif path.startswith("/api/research/jobs/"):
+                        self._json(200, workspace.job(path.removeprefix("/api/research/jobs/")))
+                    else:
+                        self._error(404, "api_not_found", "Unknown research endpoint.")
+                except WorkflowError as exc:
+                    self._error(exc.status, exc.code, str(exc))
+                return
             if path == "/api/recommend":
                 fields = ("disease_id", "mechanism_id", "mechanism_step", "readout", "species", "tissue")
                 if set(query) - {*fields, "stage"} or not set(fields) <= set(query) or any(self._one(query, field) is None for field in query):
@@ -211,8 +234,62 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> Thre
                 return
             self._error(404, "api_not_found", "That atlas endpoint does not exist.")
 
+        def _local_request(self) -> bool:
+            port = self.server.server_address[1]
+            authorities = {f"127.0.0.1:{port}", f"localhost:{port}"}
+            authority = self.headers.get("Host", "")
+            origin = self.headers.get("Origin")
+            if authority not in authorities or (origin is not None and origin != "http://" + authority):
+                self._error(403, "invalid_origin", "Research requests must originate from this local workspace.")
+                return False
+            return True
+
         def do_POST(self) -> None:  # noqa: N802
-            self._error(405, "method_not_allowed", "This atlas is read-only.")
+            if workspace is None:
+                self._error(405, "method_not_allowed", "This atlas is read-only.")
+                return
+            if not self._local_request():
+                return
+            if not secrets.compare_digest(self.headers.get("X-Atlas-Token", ""), workspace.token):
+                self._error(403, "invalid_token", "Reload the research workspace before applying changes.")
+                return
+            from .workflow import WorkflowError
+            try:
+                if self.headers.get("Content-Type", "").split(";")[0] != "application/json":
+                    raise WorkflowError("Use application/json for research requests.", status=415)
+                if self.headers.get("Transfer-Encoding"):
+                    raise WorkflowError("Chunked request bodies are not supported.")
+                size = int(self.headers.get("Content-Length", "0"))
+                if not 0 < size <= 100000:
+                    raise WorkflowError("Request body must contain 1–100,000 bytes.", status=413)
+                body = json.loads(self.rfile.read(size))
+                if not isinstance(body, dict):
+                    raise WorkflowError("Request body must be a JSON object.")
+                path = urlsplit(self.path).path
+                if path == "/api/research/extract":
+                    self._json(202, workspace.start_job("extract", **body))
+                elif path == "/api/research/explain":
+                    self._json(202, workspace.start_job("explain", **body))
+                elif path == "/api/research/investigate":
+                    self._json(202, workspace.start_job("investigate", **body))
+                elif path == "/api/research/review":
+                    self._json(200, workspace.review(**body))
+                elif path == "/api/research/analyze":
+                    self._json(200, workspace.analyze(**body))
+                elif path == "/api/research/brief":
+                    self._json(200, workspace.save_brief(**body))
+                elif path == "/api/research/brief/reset":
+                    self._json(200, workspace.reset_brief(**body))
+                else:
+                    self._error(404, "api_not_found", "Unknown research endpoint.")
+            except WorkflowError as exc:
+                self._error(exc.status, exc.code, str(exc))
+            except (ValueError, TypeError, KeyError):
+                self._error(400, "invalid_request", "Malformed or incomplete research request.")
+            except (BrokenPipeError, ConnectionResetError):
+                return
+            except Exception:
+                self._error(500, "workspace_error", "The action could not be saved. Reload the workspace to check its current state.")
 
         def do_PUT(self) -> None:  # noqa: N802
             self._error(405, "method_not_allowed", "This atlas is read-only.")
@@ -223,9 +300,9 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> Thre
     return ThreadingHTTPServer((host, port), AtlasHandler)
 
 
-def serve(store: Any, host: str = "127.0.0.1", port: int = 8765) -> None:
+def serve(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None) -> None:
     """Run the atlas server until interrupted."""
-    server = create_server(store, host, port)
+    server = create_server(store, host, port, workspace=workspace)
     try:
         server.serve_forever()
     finally:

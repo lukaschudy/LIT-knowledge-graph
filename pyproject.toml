@@ -9,6 +9,9 @@ description = "Evidence-first knowledge graph skeleton for shared rare-disease r
 requires-python = ">=3.11"
 dependencies = []
 
+[project.optional-dependencies]
+topk = ["topk-sdk>=0.15,<0.16"]
+
 [tool.setuptools.packages.find]
 include = ["atlas*"]
 

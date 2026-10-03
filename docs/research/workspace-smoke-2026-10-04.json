@@ -1,0 +1,163 @@
+{
+  "scope": "Development smoke verification on a selected real literature slice; not a scientific-quality or comparative-performance evaluation.",
+  "local_date": "2026-10-04",
+  "timezone": "Europe/London",
+  "sources": [
+    {
+      "source_id": "wdr45-bpan-2023",
+      "version": "241d300a8c6d1622d6a6edc2b63093c960311b4d2d762d111db13d1e6c340edf",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10515824/"
+    },
+    {
+      "source_id": "ap4b1-atg9a-2024",
+      "version": "77a97b4be31a34fefe345f631aa43b3eb5ba4db1ccf677240b7b72ec7c6896e8",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10794252/"
+    },
+    {
+      "source_id": "ap4b1-fibroblast-2021",
+      "version": "5c5014a71e31d7742f5e3ff4d590f9934dbe721dfec223c183d9e8d86448f447",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8557665/"
+    },
+    {
+      "source_id": "epg5-vici-fusion-2018",
+      "version": "c2a801ac46b71b7e004b9c243d3ddb7e356c08a21c47f5f9c59741e9494e8c9a",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5471274/"
+    }
+  ],
+  "earlier_development_attempts": [
+    {
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "duration_ms": 56776,
+      "result": "Rejected by local bundle validation before typed-endpoint extraction prompt correction."
+    },
+    {
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "duration_ms": 10896,
+      "result": "Standalone extraction succeeded; three unreviewed claims."
+    }
+  ],
+  "http_model_runs": [
+    {
+      "timestamp": "2026-10-03T23:43:27.574000+00:00",
+      "kind": "extract",
+      "status": "completed",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "mode": "live",
+      "duration_ms": 21017,
+      "usage": null,
+      "source_id": "wdr45-bpan-2023",
+      "new_claims": 3,
+      "gap_gates": [],
+      "phase": "development before searchable-gap refinement"
+    },
+    {
+      "timestamp": "2026-10-03T23:43:53.498622+00:00",
+      "kind": "explain",
+      "status": "completed",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "mode": "live",
+      "duration_ms": 24908,
+      "usage": null,
+      "source_id": null,
+      "new_claims": 0,
+      "gap_gates": [],
+      "phase": "development before searchable-gap refinement"
+    },
+    {
+      "timestamp": "2026-10-03T23:47:43.790870+00:00",
+      "kind": "investigate",
+      "status": "completed",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "mode": "live",
+      "duration_ms": 19275,
+      "usage": null,
+      "source_id": "epg5-vici-fusion-2018",
+      "new_claims": 3,
+      "gap_gates": [
+        "anchor",
+        "capability_evidence",
+        "mechanism_step"
+      ],
+      "phase": "development before searchable-gap refinement"
+    },
+    {
+      "timestamp": "2026-10-03T23:48:13.899567+00:00",
+      "kind": "explain",
+      "status": "completed",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "mode": "live",
+      "duration_ms": 29340,
+      "usage": null,
+      "source_id": null,
+      "new_claims": 0,
+      "gap_gates": [],
+      "phase": "development before searchable-gap refinement"
+    },
+    {
+      "timestamp": "2026-10-03T23:50:11.083921+00:00",
+      "kind": "investigate",
+      "status": "completed",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "mode": "live",
+      "duration_ms": 3672,
+      "usage": null,
+      "source_id": "epg5-vici-fusion-2018",
+      "new_claims": 0,
+      "gap_gates": [
+        "maintainer_evidence",
+        "maintainer_evidence",
+        "maintainer_evidence"
+      ],
+      "phase": "final searchable-gap policy"
+    },
+    {
+      "timestamp": "2026-10-03T23:50:39.105771+00:00",
+      "kind": "explain",
+      "status": "completed",
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "mode": "live",
+      "duration_ms": 27684,
+      "usage": null,
+      "source_id": null,
+      "new_claims": 0,
+      "gap_gates": [],
+      "phase": "final searchable-gap policy"
+    }
+  ],
+  "final_state": {
+    "policy_version": "assay-reuse-v2",
+    "loaded_documents": 4,
+    "claims": 15,
+    "reviewed_real_claims": 0,
+    "candidate_statuses": {
+      "asset:vici-tandem-lc3": "needs_clarification",
+      "asset:ap4-atg9a-hci": "needs_clarification",
+      "asset:bpan-lc3-hci": "needs_clarification"
+    },
+    "brief_ai_draft": true,
+    "brief_stale": false
+  },
+  "automated_checks": {
+    "application_tests_passed": 115,
+    "harvest_tests_passed": 51,
+    "source_guide": "pass",
+    "browser": "Chromium desktop 1440px and mobile390px; no page errors or horizontal overflow; citations opened. Draft save/reload and unsaved-edit preservation checked separately.",
+    "topk": "11 mocked adapter tests plus installed topk-sdk0.15.0 schema/query/client construction. No live TopK request: credentials unavailable.",
+    "openai_responses": "Adapter tested with mocks. Live model calls used signed-in Codex CLI.",
+    "human_review": "Approval/ready/rejection transitions verified on fictional fixture only."
+  },
+  "limitations": [
+    "No real scientific reviews were recorded.",
+    "The final follow-up found no maintainer/access evidence and added zero claims.",
+    "Usage and cost were unavailable from the CLI adapter; individual timings are not general latency estimates.",
+    "No evidence of a 10x outcome or superiority to competing products."
+  ]
+}

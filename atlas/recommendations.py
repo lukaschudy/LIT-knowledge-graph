@@ -15,7 +15,7 @@ from urllib.parse import urlsplit
 
 from .model import require_valid_bundle
 
-POLICY_VERSION = "assay-reuse-v1"
+POLICY_VERSION = "assay-reuse-v2"
 COLLECTIONS = ("nodes", "sources", "claims", "evidence", "coverage")
 QUALIFIERS = ("mechanism_step", "readout", "species", "tissue")
 STATUS_ORDER = {"ready_for_discussion": 0, "needs_clarification": 1, "not_supported": 2}
@@ -99,9 +99,9 @@ class EvidenceRetriever(Protocol):
         ...
 
 
-def gate(code: str, state: str, reason: str, claim_ids=()) -> dict:
+def gate(code: str, state: str, reason: str, claim_ids=(), *, researchable: bool = True) -> dict:
     return {"code": code, "state": state, "reason": reason,
-            "claim_ids": sorted(set(claim_ids))}
+            "claim_ids": sorted(set(claim_ids)), "researchable": researchable}
 
 
 def _route_key(gates: list[dict]) -> tuple:
@@ -203,7 +203,8 @@ class RecommendationEngine:
                   "disputed": "Supporting and opposing evidence require reconciliation.",
                   "unknown": "Current, source-versioned human review is missing."}[state]
         return gate(code, {"supported": "pass", "refuted": "block"}.get(state, "unknown"),
-                    reason, assessment["claim_ids"])
+                    reason, assessment["claim_ids"],
+                    researchable=state != "unknown")
 
     def _anchor(self, request: ResearchRequest) -> dict:
         claims = [c for c in self.outgoing[request.disease_id, "INVOLVES"]
@@ -235,7 +236,8 @@ class RecommendationEngine:
                 actual = claim["context"].get(qualifier)
                 wanted = getattr(request, qualifier)
                 if proof["state"] != "pass":
-                    checks.append(gate(qualifier, "unknown", "Capability evidence needs resolution before comparing context.", proof["claim_ids"]))
+                    checks.append(gate(qualifier, "unknown", "Capability evidence needs resolution before comparing context.", proof["claim_ids"],
+                                       researchable=proof.get("researchable", True)))
                 elif not wanted or not isinstance(actual, str) or not actual.strip():
                     checks.append(gate(qualifier, "unknown", f"The assay's {qualifier} is undocumented.", proof["claim_ids"]))
                 else:
@@ -269,9 +271,11 @@ class RecommendationEngine:
                 state = "unknown"
             checks = [proof,
                       gate("access", state, "Conflicting availability reports require reconciliation." if conflicting_access else
-                           f"Documented access: {access or 'unknown'}; on-request access is not approval.", proof["claim_ids"]),
+                           f"Documented access: {access or 'unknown'}; on-request access is not approval.", proof["claim_ids"],
+                           researchable=proof.get("researchable", True)),
                       gate("contact", "pass" if reviewed and _url(contact) else "unknown",
-                           "A source-backed professional contact route is required.", proof["claim_ids"])]
+                           "A source-backed professional contact route is required.", proof["claim_ids"],
+                           researchable=proof.get("researchable", True))]
             routes.append({"organization_id": claim["subject"], "contact_url": contact if reviewed and _url(contact) else None,
                            "access_status": access if reviewed else "unknown", "gates": checks})
         if not routes:
@@ -385,13 +389,18 @@ class RecommendationEngine:
                 continue  # Searching cannot overcome a documented hard mismatch.
             for check in record["gates"]:
                 key = (None if check["code"] == "anchor" else record["asset_id"], check["code"])
-                if check["state"] != "unknown" or key in seen:
+                if check["state"] != "unknown" or not check.get("researchable", True) or key in seen:
                     continue
                 seen.add(key)
                 questions.append({"asset_id": key[0], "gate": check["code"],
                                   "request": result["request"], "claim_ids": check["claim_ids"],
                                   "question": check["reason"], "seek": ["supporting evidence", "opposing evidence"],
                                   "decision_effect": "May resolve this gate after source validation and scientific review."})
+        priority = {"maintainer_evidence": 0, "access": 0, "contact": 0,
+                    "mechanism_step": 1, "readout": 1, "species": 1, "tissue": 1, "stage": 1,
+                    "anchor": 2, "capability_evidence": 3}
+        questions.sort(key=lambda q: (priority.get(q["gate"], 4),
+                                      q["asset_id"] or "", q["gate"]))
         return questions[:limit]
 
     def _merge_proposals(self, delta: dict, max_claims: int) -> tuple[dict, dict]:

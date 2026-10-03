@@ -88,7 +88,27 @@ class RecommendationTests(unittest.TestCase):
         self.bundle['evidence'] = [e for e in self.bundle['evidence'] if e['claim_id'] != 'demo:assay-fit-owner']
         result = record(self.assess())
         self.assertEqual(result['status'], 'needs_clarification')
-        self.assertIsNone(result['partner'])
+
+    def test_followup_skips_review_only_and_dependent_capability_questions(self):
+        for suffix in ('anchor-step', 'assay-fit-capability'):
+            evidence(self.bundle, suffix)['review_status'] = 'machine_checked'
+        result = self.assess()
+        fit = record(result)
+        self.assertFalse(next(g for g in fit['gates'] if g['code'] == 'anchor')['researchable'])
+        self.assertFalse(next(g for g in fit['gates'] if g['code'] == 'readout')['researchable'])
+        questions = RecommendationEngine._questions(result, 10)
+        self.assertFalse(any(q['asset_id'] == 'demo:assay-fit' for q in questions))
+        # The separate assay still has a genuinely undocumented tissue field.
+        self.assertIn(('demo:assay-gap', 'tissue'), [(q['asset_id'], q['gate']) for q in questions])
+
+    def test_followup_prioritizes_missing_access_and_context_facts(self):
+        self.bundle['claims'] = [c for c in self.bundle['claims'] if c['id'] != 'demo:assay-fit-owner']
+        self.bundle['evidence'] = [e for e in self.bundle['evidence'] if e['claim_id'] != 'demo:assay-fit-owner']
+        result = self.assess()
+        questions = RecommendationEngine._questions(result, 3)
+        self.assertEqual(questions[0]['gate'], 'maintainer_evidence')
+        self.assertIn(('demo:assay-gap', 'tissue'), [(q['asset_id'], q['gate']) for q in questions])
+        self.assertIsNone(record(result)['partner'])
 
     def test_scoped_anchor_and_assay_stage_cannot_be_generalized_silently(self):
         claim(self.bundle, 'anchor-step')['context']['species'] = 'mouse'

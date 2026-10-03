@@ -1,0 +1,12 @@
+{
+  "disease_id": "disease:vici",
+  "mechanism_id": "mechanism:autophagy",
+  "mechanism_step": "autophagosome–lysosome fusion",
+  "readout": "mRFP-GFP-LC3 tandem reporter fluorescence; RFP/GFP Pearson colocalization",
+  "species": "Homo sapiens",
+  "tissue": "EPG5-knockout HeLa cells",
+  "stage": "",
+  "preferred_asset_ids": [
+    "asset:vici-tandem-lc3"
+  ]
+}

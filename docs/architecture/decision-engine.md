@@ -1,6 +1,6 @@
 # Action-specific recommendation engine
 
-Implemented 4 October 2026 in [`atlas/recommendations.py`](../../atlas/recommendations.py). The first action is **assess an assay for reuse**. This is a deterministic evidence assessment core with a bounded retrieval interface, a local demo, CLI and read-only HTTP endpoint. Live TopK/model connectors and the frontend recommendation panel are not implemented here.
+Implemented 4 October 2026 in [`atlas/recommendations.py`](../../atlas/recommendations.py). The first action is **assess an assay for reuse**. The deterministic assessment core has a four-case fictional acceptance demo and CLI, plus a separate local research workspace with a review UI, source-snapshot persistence, local lexical or optional TopK retrieval, and explicit model actions. TopK selection and a separate indexing command are implemented, but have not been verified against a live account. See the [workspace guide](../research-workspace.md) for the run instructions and limits.
 
 ## Critical review: what changed and why
 
@@ -25,7 +25,7 @@ The agreed research neighborhood is **EPG5 / Vici syndrome**, with **WDR45 / BPA
 
 The first deliverable is one reviewable answer to: “Which existing methods could help measure the EPG5 defect, and what would need adaptation or validation?” A suitable assay, an evidenced maintainer/contact, limitations and a proposed feasibility discussion are the minimum useful outcome. Missing data must be surfaced rather than filled with invented biology.
 
-The bundled acceptance dataset uses **entirely fictional diseases, protocols and simulated review states**. It does not claim that evidence for the new real scope has been extracted or reviewed. The older curated GRIN demo remains a separate dataset.
+The four-case bundled acceptance fixture uses **entirely fictional diseases, protocols and simulated review states**. Separately, the local research workspace defaults to a selected set of real literature snapshots; its data slice is not complete and its extracted claims remain unreviewed until a user reviews them. The older curated GRIN demo remains a separate dataset.
 
 ## Decision flow
 
@@ -40,7 +40,7 @@ flowchart TD
     Gap --> Search[One bounded search for decisive evidence]
     Search --> Pending[Validate additive proposals; keep unreviewed]
     Pending --> Gates
-    Pending --> Review[Offline scientific review]
+    Pending --> Review[Human scientific review]
     Review --> Refresh[New source-qualified snapshot]
     Refresh --> Gates
 ```
@@ -108,17 +108,17 @@ python3 -m atlas reassess /tmp/atlas-recommendations.json \
 
 This returns new assessments and a change list; it does not mutate the saved result. `RecommendationEngine.is_current(result)` detects evidence/policy changes, including newly added counterevidence. A removed or truncated candidate is labeled `not_in_current_candidate_set`, not asserted scientifically false.
 
-For frontend integration:
+For the legacy read-only recommendation API:
 
 ```bash
 python3 -m atlas serve --db /tmp/atlas-recommendation-demo.sqlite
 ```
 
-`GET /api/recommend` takes `disease_id`, `mechanism_id`, `mechanism_step`, `readout`, `species`, `tissue` and optional `stage` as URL-encoded query parameters. It is read-only, uses the server's startup snapshot, and does not perform paid network/model calls. Restart the server after ingestion to serve a new snapshot. Existing browser screens are not yet wired to this endpoint.
+`GET /api/recommend` takes `disease_id`, `mechanism_id`, `mechanism_step`, `readout`, `species`, `tissue` and optional `stage` as URL-encoded query parameters. It is read-only, uses the server's startup snapshot, and does not perform paid network/model calls. Restart the server after ingestion to serve a new snapshot. The user-facing end-to-end source review workflow is documented separately; it uses `/api/research/*` routes and a loopback-only writable workspace.
 
 ## Bounded follow-up and speed
 
-`EvidenceRetriever.retrieve(questions, max_claims=...)` is the adapter boundary for future TopK retrieval plus grounded extraction. It returns an additive delta of nodes, sources, claims and evidence. Existing identifiers cannot be replaced, references must validate, quotas are enforced, and every returned evidence row is reset to unreviewed. Source revisions/retractions must use the offline update path; accepting arbitrary live source replacements would let a connector silently change prior evidence.
+`EvidenceRetriever.retrieve(questions, max_claims=...)` is the deterministic engine's adapter boundary for additive proposed records. It rejects identifier replacement, validates references and quotas, and resets returned evidence to unreviewed. In the current workspace, local lexical or optional TopK search is restricted to the supplied corpus; a bounded follow-up extracts from one selected local source snapshot. TopK hits are checked against their local source text, and a TopK failure never falls back under a local-search label. Source revisions/retractions must use the offline update path; accepting arbitrary live source replacements would let a connector silently change prior evidence.
 
 Defaults: 40 candidates per assessment (maximum 100), at most 3 follow-up questions (maximum 5), one follow-up call/round, and 30 new claims (maximum 100), with corresponding node/source/evidence limits. The response discloses candidates omitted by the cap. Shortlisting is deterministic, not a guarantee that the best possible asset was included.
 
@@ -133,7 +133,7 @@ These are **work quotas, not a wall-clock guarantee**. A future network adapter 
 This is a development acceptance suite, not held-out biomedical evaluation. Next integration work:
 
 1. Finish source extraction and coverage assessment for the selected real scope; normalize identifiers and curate the measurement/access evidence with qualified review.
-2. Implement live TopK passage retrieval and grounded model extraction behind the adapter. Retrieval relevance and model judgments must remain separate from scientific eligibility.
-3. Add the recommendation/evidence panel and a review queue. Add authenticated review records before a multi-user production workflow.
+2. Verify the optional TopK adapter against a live account. Keep remote indexing a separate user-invoked operation and retrieval relevance separate from scientific eligibility.
+3. Add authenticated, qualified review records before treating local attestations as a multi-user review workflow.
 4. Benchmark against search, RAG and graph-assisted retrieval on held-out tasks with qualified reviewers. Measure acceptable proposals, unsupported assertions, abstentions, correction person-hours, total cost and latency. Demonstrate an advantage rather than assuming one.
 5. Extend action types to model reuse and collaborator discovery with their own gates. Add selective invalidation/background maintenance only after evidence dependencies and new-negative detection are measured.

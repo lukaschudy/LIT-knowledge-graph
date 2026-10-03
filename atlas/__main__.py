@@ -29,6 +29,19 @@ def main(argv=None):
     sub = parser.add_subparsers(dest='command', required=True)
     p = sub.add_parser('validate', help='Validate a normalized bundle without changing a database')
     p.add_argument('bundle')
+    p = sub.add_parser('research', help='Run the complete local neuro research workspace')
+    p.add_argument('--bundle', default=str(ROOT / 'data/curated/neuro_bundle.json'))
+    p.add_argument('--documents', default=str(ROOT / 'data/curated/neuro_documents.json'))
+    p.add_argument('--request', default=str(ROOT / 'data/curated/neuro_request.json'))
+    p.add_argument('--workspace', default=str(ROOT / 'data/research/session.json'))
+    p.add_argument('--provider', choices=('auto', 'openai', 'codex'), default='auto')
+    p.add_argument('--model')
+    p.add_argument('--model-timeout', type=int, default=120)
+    p.add_argument('--retrieval', choices=('local', 'topk'), default='local')
+    p.add_argument('--host', choices=('127.0.0.1', 'localhost'), default='127.0.0.1')
+    p.add_argument('--port', type=int, default=8767)
+    p = sub.add_parser('index-research', help='Explicitly upload the loaded source slice to the configured TopK semantic collection')
+    p.add_argument('--documents', default=str(ROOT / 'data/curated/neuro_documents.json'))
     for name in ('demo','ingest','stats','search','explore','recommend','reassess','export','serve'):
         p = sub.add_parser(name)
         p.add_argument('--db', default=str(DEFAULT_DB))
@@ -59,6 +72,29 @@ def main(argv=None):
     p.add_argument('--output', required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command == 'index-research':
+            from atlas.retrieval import TopKRetriever, TopKError
+            documents = json.loads(Path(args.documents).read_text(encoding='utf-8'))
+            try:
+                dump(TopKRetriever(documents).index_documents())
+            except TopKError as exc:
+                print(f'Atlas error: {exc}', file=sys.stderr)
+                return 1
+            return 0
+        if args.command == 'research':
+            from atlas.ai import ModelClient
+            from atlas.workflow import ResearchWorkspace
+            from atlas.server import serve
+            bundle = json.loads(Path(args.bundle).read_text(encoding='utf-8'))
+            documents = json.loads(Path(args.documents).read_text(encoding='utf-8'))
+            request = json.loads(Path(args.request).read_text(encoding='utf-8'))
+            workspace = ResearchWorkspace(bundle, documents, request, path=args.workspace,
+                client=ModelClient(args.provider, args.model, args.model_timeout), retrieval=args.retrieval)
+            with GraphStore() as store:
+                store.load_bundle(workspace._active_bundle())
+                print(f'Research workspace: http://{args.host}:{args.port}/research', flush=True)
+                serve(store, args.host, args.port, workspace=workspace)
+            return 0
         if args.command == 'validate':
             bundle = json.loads(Path(args.bundle).read_text(encoding='utf-8'))
             errors = validate_bundle(bundle)

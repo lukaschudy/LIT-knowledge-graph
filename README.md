@@ -1,11 +1,13 @@
 # LIT rare-disease knowledge graph
 
-> **Runnable graph skeleton:** See [ATLAS.md](ATLAS.md) for the local explorer, schema, ingestion boundary, commands, tests and research-backed architecture. The bundled demo is explicitly synthetic.
+> **Start the research workspace:** run `python3 -m atlas research --workspace /tmp/atlas-vici-session.json` and open <http://127.0.0.1:8767/research>. It follows a bounded question through loaded sources, model-assisted extraction, explicit human review, assay-reuse gates and a cited working brief. See the [local workspace guide](docs/research-workspace.md) for providers, data scope and limitations.
 
 
-Research and extraction planning for the **AI Atlas for the World’s Rare Diseases** challenge.
+Research and extraction planning for the **AI Atlas for the World’s Rare Diseases** challenge. The interactive workspace defaults to a small curated slice of real EPG5/Vici and assay literature. Synthetic acceptance and visual demos are explicitly fictional; the earlier curated GRIN evidence slice is retained separately.
 
-**New: [action-specific recommendation engine](docs/architecture/decision-engine.md).** Run an assay-reuse request through biological-step, readout, model-context, evidence, access and exclusion checks. It returns cited next steps, unresolved gaps or rejection, with bounded follow-up and source-change reassessment. The demo is fictional; live TopK/model connectors and the recommendation UI remain to be integrated. The selected next research scope is EPG5 / Vici syndrome with WDR45 / BPAN and AP4B1 / SPG47 as candidate comparators, subject to extracted evidence.
+**Current workflow:** the local server and research UI use the deterministic assay-reuse decision engine and local lexical search by default, with optional TopK search. AI extraction, cited AI brief drafting and one bounded follow-up source pass are available through explicit user actions when the Codex CLI or OpenAI API provider is configured. Model-extracted claims remain unreviewed until a person records a review. Search relevance and generated text do not establish scientific validity.
+
+Optional TopK selection and the explicit `index-research` command are implemented, but have not been verified against a live TopK account. Indexing is a separate remote write that may incur provider charges; the default local workspace does not create or populate an index. See the [decision-engine guide](docs/architecture/decision-engine.md) for its deterministic four-case fictional acceptance example and the [local workspace guide](docs/research-workspace.md) for setup and the current research loop. The selected research scope is EPG5 / Vici syndrome with WDR45 / BPAN and AP4B1 / SPG47 as candidate comparators, subject to evidence review.
 
 The original six-page PDF is [`Knowledge graph`](Knowledge%20graph) (its filename has no extension). Its text is preserved in [`data/source/challenge-brief.txt`](data/source/challenge-brief.txt).
 
@@ -13,7 +15,7 @@ The original six-page PDF is [`Knowledge graph`](Knowledge%20graph) (its filenam
 
 The challenge asks for a journey from diagnosis to a justified connection, reusable asset, partner and practical next step. Read the architecture in three stages: **prepare evidence → find opportunities → recommend an action**. Feedback, source updates and evaluation keep those stages useful over time.
 
-These diagrams describe the overall architecture. The [decision core, critical review and runnable demo](docs/architecture/decision-engine.md) are implemented; the full connected pipeline is not yet implemented.
+These diagrams describe the target architecture. The live local slice described above has a research UI, a deterministic decision core, local retrieval, optional TopK retrieval and explicit remote indexing, plus optional model actions. Live TopK account behavior and comparative scientific evaluation remain unverified.
 
 ### 1. Prepare the evidence once
 
@@ -45,7 +47,7 @@ flowchart LR
 
 ### 3. Check the opportunity and recommend a next step
 
-Astra is intended to propose and explain research actions from retrieved evidence. The implemented decision engine checks source-qualified scientific fit, access and contradictions before an action can become ready for discussion. If a missing fact could change the decision, request one bounded follow-up round; new extracted evidence stays unreviewed. Return a cited next step with its partner and unresolved blockers.
+Astra proposes source-grounded claims and drafts cited explanations. The deterministic decision engine checks source-qualified scientific fit, access and contradictions before an action can become ready for discussion. If a searchable missing fact could change the decision, request one bounded follow-up round; new extracted evidence stays unreviewed. Return a cited next step with its partner and unresolved blockers.
 
 ```mermaid
 flowchart TD
@@ -116,7 +118,7 @@ Download the interactive files and open them in a browser; GitHub displays their
 - [Proposed recommendation loops and model architecture](docs/architecture/recommendation-loops.md)
 - [Implemented decision engine, critical review and assay-reuse demo](docs/architecture/decision-engine.md)
 
-This repository documents how to acquire and model the sources. The runnable skeleton includes a synthetic acceptance graph and an offline HPOA converter; it does not yet contain a populated biomedical graph or production ingestion connectors. Access and reuse conditions vary by provider; evidence and unresolved dependencies are recorded per source.
+This repository documents how to acquire and model the sources. It includes a selected curated biomedical source slice, a synthetic acceptance graph and an offline HPOA converter; it does not contain a comprehensive graph across rare diseases or production-wide ingestion connectors. Access and reuse conditions vary by provider; evidence and unresolved dependencies are recorded per source.
 
 ## Reproduce the PDF extraction
 
