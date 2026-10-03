@@ -1,0 +1,957 @@
+{
+  "schema_version": "grin-functional-evidence-v1",
+  "curated_at": "2026-10-03",
+  "scope": "Selected GRIN2A/GRIN2B variants for an expert-reviewable NMDAR reduced-function research cluster. This is a selected evidence set, not a complete variant catalog or clinical classification.",
+  "selection_rule": "Core requires a reported Likely LoF integrated category and primary measured receptor evidence with WT comparator. Possible LoF remains provisional. Opposing and unresolved controls remain separate. Pathogenicity alone does not qualify.",
+  "review_status": "machine_curated_expert_review_pending",
+  "sources": [
+    {
+      "source_id": "swanger2016",
+      "title": "Mechanistic Insight into NMDA Receptor Dysregulation by Rare Variants in the GluN2A and GluN2B Agonist Binding Domains",
+      "pmid": "27839871",
+      "pmcid": "PMC5142120",
+      "doi": "10.1016/j.ajhg.2016.10.002",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5142120/",
+      "role": "Primary functional study; Tables 2–3 and supplementary clinical/variant tables."
+    },
+    {
+      "source_id": "platzer2017",
+      "title": "GRIN2B encephalopathy: novel findings on phenotype, variant clustering, functional consequences and treatment aspects",
+      "pmid": "28377535",
+      "pmcid": "PMC5656050",
+      "doi": "10.1136/jmedgenet-2016-104509",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5656050/",
+      "role": "Primary GRIN2B clinical and functional study; Tables 2–3."
+    },
+    {
+      "source_id": "chen2020",
+      "title": "Positive allosteric modulators that target NMDA receptors rectify loss-of-function GRIN variants associated with neurological and neuropsychiatric disorders",
+      "pmid": "32712275",
+      "pmcid": "PMC7554152",
+      "doi": "10.1016/j.neuropharm.2020.108247",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7554152/",
+      "role": "Secondary variant/phenotype and prior-study synthesis; Table 1 used only to cross-check phenotype labels and cited studies, not as the source of the functional assay values below."
+    },
+    {
+      "source_id": "myers2023",
+      "title": "Classification of missense variants in the N-methyl-d-aspartate receptor GRIN gene family as gain- or loss-of-function",
+      "pmid": "37369021",
+      "pmcid": "PMC10508039",
+      "doi": "10.1093/hmg/ddad104",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10508039/",
+      "role": "Primary multi-assay functional classification framework and GRIN2B patient-variant analyses; classifications are the authors’ integrated calls, not pathogenicity assertions."
+    },
+    {
+      "source_id": "xie2023",
+      "title": "Functional effects of disease-associated variants reveal that the S1-M1 linker of the NMDA receptor critically controls channel opening",
+      "pmid": "37000222",
+      "pmcid": "PMC10641759",
+      "doi": "10.1007/s00018-023-04705-y",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10641759/",
+      "role": "Primary pre-M1 functional study; Tables 1–4 include clinical/variant information, assays and modeled charge-transfer ratios."
+    },
+    {
+      "source_id": "xu2024",
+      "title": "De novo GRIN variants in M3 helix associated with neurological disorders control channel gating of NMDA receptor",
+      "pmid": "38538865",
+      "pmcid": "PMC10973091",
+      "doi": "10.1007/s00018-023-05069-z",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10973091/",
+      "role": "Primary M3 functional study; Tables 1–3 and figures. Assays use diheteromeric GluN1/GluN2 receptors."
+    },
+    {
+      "source_id": "han2022",
+      "title": "Opportunities for Precision Treatment of GRIN2A and GRIN2B Gain-of-Function Variants in Triheteromeric N-Methyl-D-Aspartate Receptors",
+      "pmid": "35110392",
+      "pmcid": "PMC11046977",
+      "doi": "10.1124/jpet.121.001000",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11046977/",
+      "role": "Primary pharmacology in engineered triheteromeric receptors; context evidence for GRIN2B-A639V. It tests antagonist response and glutamate/glycine potency, not a complete triheteromeric LoF/GoF charge-transfer classification."
+    }
+  ],
+  "variants": [
+    {
+      "variant_id": "GRIN2A:c.1447G>A:p.Gly483Arg",
+      "gene": "GRIN2A",
+      "transcript_accession": null,
+      "reported_cdna": "c.1447G>A",
+      "reported_protein": "p.Gly483Arg",
+      "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+      "demo_role": "reduced_function_lead",
+      "strict_reduced_function_inclusion": true,
+      "clinical_association": {
+        "reported_features": [
+          "epilepsy/seizures",
+          "developmental delay",
+          "intellectual disability",
+          "dysphasia"
+        ],
+        "evidence_location": "Chen 2020 Table 1, row 6; original disease-linked studies listed there include Lesca 2013, Swanger 2016, and Addis 2017.",
+        "source_ids": [
+          "chen2020",
+          "swanger2016"
+        ],
+        "note": "Clinical features are reported patient associations in the cited literature; functional assay data do not establish clinical severity."
+      },
+      "functional_evidence": [
+        {
+          "source_id": "swanger2016",
+          "evidence_location": "Table 2, GRIN2A-p.Gly483Arg row; Table 3, same variant row.",
+          "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+          "model": "Recombinant human GluN1/GluN2A receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "54 ± 6.3",
+              "unit": "µM",
+              "n": 10,
+              "wt_control": "3.4 ± 0.11 µM; n=51"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "1.5 ± 0.12",
+              "unit": "µM",
+              "n": 16,
+              "wt_control": "1.2 ± 0.05 µM; n=76"
+            },
+            {
+              "name": "weighted deactivation time constant (τw)",
+              "variant": "20 ± 3.0",
+              "unit": "ms",
+              "n": 10,
+              "wt_control": "56 ± 3.6 ms; n=47"
+            },
+            {
+              "name": "peak current density",
+              "variant": "30 ± 11",
+              "unit": "pA/pF",
+              "n": 10,
+              "wt_control": "136 ± 19 pA/pF; n=41"
+            }
+          ],
+          "predicted_charge_transfer": {
+            "synaptic_ratio_vs_WT": 0.085,
+            "non_synaptic_ratio_vs_WT": 0.016,
+            "evidence_location": "Swanger 2016 Table 3; ratios are author-calculated from measured receptor properties.",
+            "source_id": "swanger2016"
+          },
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        }
+      ],
+      "integrated_function": {
+        "source_classification": "Likely LoF",
+        "source_id": "myers2023",
+        "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+        "cluster_interpretation": "included_as_likely_LoF",
+        "why": "Large reduction in glutamate potency, deactivation/current measurements and both predicted charge-transfer ratios; independently listed as Likely LoF by the multi-assay framework."
+      },
+      "context_caveats": [
+        "Recombinant diheteromeric receptor assay; not a neuronal or patient-level measurement.",
+        "Synaptic and non-synaptic charge transfer are modeled ratios, not direct in vivo measurements.",
+        "Developmental features are summarized in Chen 2020 Table 1 from earlier clinical reports; individual diagnosis and causal clinical classification require independent review before cohort enrollment."
+      ],
+      "cohort_tier": "core_likely_reduced"
+    },
+    {
+      "variant_id": "GRIN2A:c.2146G>A:p.Ala716Thr",
+      "gene": "GRIN2A",
+      "transcript_accession": null,
+      "reported_cdna": "c.2146G>A",
+      "reported_protein": "p.Ala716Thr",
+      "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+      "demo_role": "reduced_function_lead",
+      "strict_reduced_function_inclusion": true,
+      "clinical_association": {
+        "reported_features": [
+          "epilepsy/seizures",
+          "developmental delay",
+          "verbal dyspraxia",
+          "hypotonia"
+        ],
+        "evidence_location": "Chen 2020 Table 1, row 12; cites Lesca 2013, Fainberg 2016, and Swanger 2016.",
+        "source_ids": [
+          "chen2020",
+          "swanger2016"
+        ]
+      },
+      "functional_evidence": [
+        {
+          "source_id": "swanger2016",
+          "evidence_location": "Table 2, GRIN2A-p.Ala716Thr row; Table 3, same variant row.",
+          "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+          "model": "Recombinant human GluN1/GluN2A receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "20 ± 1.9",
+              "unit": "µM",
+              "n": 10,
+              "wt_control": "3.4 ± 0.11 µM; n=51"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "1.3 ± 0.09",
+              "unit": "µM",
+              "n": 11,
+              "wt_control": "1.2 ± 0.05 µM; n=76"
+            },
+            {
+              "name": "weighted deactivation time constant (τw)",
+              "variant": "32 ± 3.6",
+              "unit": "ms",
+              "n": 13,
+              "wt_control": "56 ± 3.6 ms; n=47"
+            },
+            {
+              "name": "peak current density",
+              "variant": "63 ± 15",
+              "unit": "pA/pF",
+              "n": 14,
+              "wt_control": "136 ± 19 pA/pF; n=41"
+            }
+          ],
+          "predicted_charge_transfer": {
+            "synaptic_ratio_vs_WT": 0.08,
+            "non_synaptic_ratio_vs_WT": 0.02,
+            "evidence_location": "Swanger 2016 Table 3; author-calculated ratios.",
+            "source_id": "swanger2016"
+          },
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        }
+      ],
+      "integrated_function": {
+        "source_classification": "Likely LoF",
+        "source_id": "myers2023",
+        "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+        "cluster_interpretation": "included_as_likely_LoF",
+        "why": "Reduced agonist potency and current-related measures plus both charge-transfer ratios below 0.1 of WT; listed as Likely LoF in the multi-assay classification."
+      },
+      "context_caveats": [
+        "Recombinant diheteromeric receptor assay; not a neuronal or patient-level measurement.",
+        "Charge-transfer values are modeled ratios.",
+        "Developmental features are summarized in Chen 2020 Table 1 from earlier clinical reports; individual diagnosis and causal clinical classification require independent review before cohort enrollment."
+      ],
+      "cohort_tier": "core_likely_reduced"
+    },
+    {
+      "variant_id": "GRIN2A:c.2191G>A:p.Asp731Asn",
+      "gene": "GRIN2A",
+      "transcript_accession": null,
+      "reported_cdna": "c.2191G>A",
+      "reported_protein": "p.Asp731Asn",
+      "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+      "demo_role": "reduced_function_lead",
+      "strict_reduced_function_inclusion": true,
+      "clinical_association": {
+        "reported_features": [
+          "epilepsy/seizures",
+          "intellectual disability",
+          "developmental delay",
+          "verbal dyspraxia"
+        ],
+        "evidence_location": "Chen 2020 Table 1, row 14; cites Lesca 2013, Swanger 2016, Addis 2017, and Gao 2017.",
+        "source_ids": [
+          "chen2020",
+          "swanger2016"
+        ]
+      },
+      "functional_evidence": [
+        {
+          "source_id": "swanger2016",
+          "evidence_location": "Table 2, GRIN2A-p.Asp731Asn row; Table 3, same variant row.",
+          "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+          "model": "Recombinant human GluN1/GluN2A receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "6,418 ± 278",
+              "unit": "µM",
+              "n": 7,
+              "wt_control": "3.4 ± 0.11 µM; n=51"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "1.5 ± 0.26",
+              "unit": "µM",
+              "n": 10,
+              "wt_control": "1.2 ± 0.05 µM; n=76"
+            },
+            {
+              "name": "weighted deactivation time constant (τw)",
+              "variant": null,
+              "unit": "ms",
+              "n": null,
+              "wt_control": "56 ± 3.6 ms; n=47",
+              "note": "Not measured because current amplitude was too small."
+            },
+            {
+              "name": "peak current density",
+              "variant": "0.22 ± 0.16",
+              "unit": "pA/pF",
+              "n": 5,
+              "wt_control": "136 ± 19 pA/pF; n=41"
+            }
+          ],
+          "predicted_charge_transfer": {
+            "synaptic_ratio_vs_WT": 0.013,
+            "non_synaptic_ratio_vs_WT": 5.1e-05,
+            "evidence_location": "Swanger 2016 Table 3; author-calculated ratios.",
+            "source_id": "swanger2016"
+          },
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        }
+      ],
+      "integrated_function": {
+        "source_classification": "Likely LoF",
+        "source_id": "myers2023",
+        "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+        "cluster_interpretation": "included_as_likely_LoF",
+        "why": "Extremely reduced glutamate potency and peak current; author-calculated charge-transfer ratios are far below WT. Classification appears in the 2023 integrated list."
+      },
+      "context_caveats": [
+        "τw was not determinable at the low response amplitude.",
+        "Recombinant diheteromeric receptor assay; charge transfer is modeled, not directly measured in vivo.",
+        "Developmental features are summarized in Chen 2020 Table 1 from earlier clinical reports; individual diagnosis and causal clinical classification require independent review before cohort enrollment."
+      ],
+      "cohort_tier": "core_likely_reduced"
+    },
+    {
+      "variant_id": "GRIN2B:c.1238A>G:p.Glu413Gly",
+      "gene": "GRIN2B",
+      "transcript_accession": null,
+      "reported_cdna": "c.1238A>G",
+      "reported_protein": "p.Glu413Gly",
+      "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+      "demo_role": "reduced_function_lead",
+      "strict_reduced_function_inclusion": true,
+      "clinical_association": {
+        "reported_features": [
+          "intellectual disability",
+          "developmental delay",
+          "hypotonia"
+        ],
+        "evidence_location": "Chen 2020 Table 1, row 17; prior studies listed there include Adams 2014, Swanger 2016, Wells 2018, and Bell 2018.",
+        "source_ids": [
+          "chen2020",
+          "swanger2016"
+        ]
+      },
+      "functional_evidence": [
+        {
+          "source_id": "swanger2016",
+          "evidence_location": "Table 2, GRIN2B-p.Glu413Gly row; Table 3, same variant row.",
+          "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+          "model": "Recombinant human GluN1/GluN2B receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "79 ± 5.3",
+              "unit": "µM",
+              "n": 12,
+              "wt_control": "1.5 ± 0.07 µM; n=57"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "0.32 ± 0.02",
+              "unit": "µM",
+              "n": 8,
+              "wt_control": "0.38 ± 0.03 µM; n=47"
+            },
+            {
+              "name": "weighted deactivation time constant (τw)",
+              "variant": "20 ± 1.3",
+              "unit": "ms",
+              "n": 9,
+              "wt_control": "570 ± 23 ms; n=35"
+            },
+            {
+              "name": "peak current density",
+              "variant": "3.3 ± 1.3",
+              "unit": "pA/pF",
+              "n": 8,
+              "wt_control": "41 ± 5.0 pA/pF; n=31"
+            }
+          ],
+          "predicted_charge_transfer": {
+            "synaptic_ratio_vs_WT": 0.0034,
+            "non_synaptic_ratio_vs_WT": 0.002,
+            "evidence_location": "Swanger 2016 Table 3; author-calculated ratios.",
+            "source_id": "swanger2016"
+          },
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        }
+      ],
+      "integrated_function": {
+        "source_classification": "Likely LoF",
+        "source_id": "myers2023",
+        "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+        "cluster_interpretation": "included_as_likely_LoF",
+        "why": "Large loss of glutamate potency, weighted deactivation, and peak current; both modeled charge-transfer ratios are <0.004 of WT and Myers et al. classify it Likely LoF."
+      },
+      "context_caveats": [
+        "Recombinant diheteromeric receptor assay; not a neuronal or patient-level measurement.",
+        "Charge transfer is an author-calculated model output based on in vitro parameters."
+      ],
+      "cohort_tier": "core_likely_reduced"
+    },
+    {
+      "variant_id": "GRIN2B:c.1382G>T:p.Cys461Phe",
+      "gene": "GRIN2B",
+      "transcript_accession": null,
+      "reported_cdna": "c.1382G>T",
+      "reported_protein": "p.Cys461Phe",
+      "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+      "demo_role": "reduced_function_lead",
+      "strict_reduced_function_inclusion": false,
+      "clinical_association": {
+        "reported_features": [
+          "epilepsy/seizures",
+          "intellectual disability",
+          "autism spectrum disorder"
+        ],
+        "evidence_location": "Chen 2020 Table 1, row 20; cites Swanger 2016, Fedele 2018, and Allen 2014.",
+        "source_ids": [
+          "chen2020",
+          "swanger2016"
+        ]
+      },
+      "functional_evidence": [
+        {
+          "source_id": "swanger2016",
+          "evidence_location": "Table 2, GRIN2B-p.Cys461Phe row; Table 3, same variant row.",
+          "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+          "model": "Recombinant human GluN1/GluN2B receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "169 ± 9.0",
+              "unit": "µM",
+              "n": 14,
+              "wt_control": "1.5 ± 0.07 µM; n=57"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "0.15 ± 0.007",
+              "unit": "µM",
+              "n": 8,
+              "wt_control": "0.38 ± 0.03 µM; n=47"
+            },
+            {
+              "name": "weighted deactivation time constant (τw)",
+              "variant": "28 ± 1.8",
+              "unit": "ms",
+              "n": 6,
+              "wt_control": "570 ± 23 ms; n=35"
+            },
+            {
+              "name": "peak current density",
+              "variant": "4.2 ± 1.0",
+              "unit": "pA/pF",
+              "n": 6,
+              "wt_control": "41 ± 5.0 pA/pF; n=31"
+            }
+          ],
+          "predicted_charge_transfer": {
+            "synaptic_ratio_vs_WT": 0.005,
+            "non_synaptic_ratio_vs_WT": 0.001,
+            "evidence_location": "Swanger 2016 Table 3; author-calculated ratios.",
+            "source_id": "swanger2016"
+          },
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        }
+      ],
+      "integrated_function": {
+        "source_classification": "Possible LoF",
+        "source_id": "myers2023",
+        "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+        "cluster_interpretation": "provisional_only; excluded_from_core_cluster_pending_expert_review",
+        "why": "Both modeled charge-transfer ratios are strongly reduced; the 2023 multi-assay framework retains the lower-confidence Possible LoF label rather than upgrading it."
+      },
+      "context_caveats": [
+        "The final class is Possible LoF, not Likely LoF.",
+        "Recombinant diheteromeric receptor assay; charge transfer is modeled."
+      ],
+      "cohort_tier": "provisional_possible_reduced"
+    },
+    {
+      "variant_id": "GRIN2B:c.1623C>G:p.Ser541Arg",
+      "gene": "GRIN2B",
+      "transcript_accession": "NM_000834.5",
+      "reported_cdna": "c.1623C>G",
+      "reported_protein": "p.Ser541Arg",
+      "transcript_note": "RefSeq transcript NM_000834.5 is named on the NCBI ClinVar Variation 916601 record; functional-study tables report c.1623C>G/p.Ser541Arg without an accession.",
+      "demo_role": "reduced_function_lead",
+      "strict_reduced_function_inclusion": true,
+      "clinical_association": {
+        "reported_features": [
+          "severe intellectual disability",
+          "autism spectrum disorder",
+          "generalized seizures",
+          "dystonic movement disorder"
+        ],
+        "inheritance": "de novo",
+        "evidence_location": "Platzer 2017 Table 2, c.1623C>G row.",
+        "source_ids": [
+          "platzer2017"
+        ]
+      },
+      "functional_evidence": [
+        {
+          "source_id": "platzer2017",
+          "evidence_location": "Table 3, S541R row.",
+          "assay": "Two-electrode voltage clamp pharmacology and proton-sensitivity assay.",
+          "model": "Recombinant GluN1/GluN2B NMDARs expressed in Xenopus laevis oocytes.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "10 ± 1.7",
+              "unit": "µM",
+              "n": 10,
+              "wt_control": "1.5 ± 0.08 µM; n=44"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "1.0 ± 0.15",
+              "unit": "µM",
+              "n": 9,
+              "wt_control": "0.35 ± 0.02 µM; n=41"
+            },
+            {
+              "name": "Mg2+ IC50",
+              "variant": "18 ± 1.8",
+              "unit": "µM",
+              "n": 9,
+              "wt_control": "25 ± 2.7 µM; n=33"
+            },
+            {
+              "name": "current at pH 6.8 / pH 7.6",
+              "variant": "17 ± 0.4",
+              "unit": "%",
+              "n": 13,
+              "wt_control": "15 ± 0.5%; n=47"
+            }
+          ],
+          "predicted_charge_transfer": {
+            "synaptic_ratio_vs_WT": 0.03,
+            "non_synaptic_ratio_vs_WT": 0.004,
+            "evidence_location": "Xie 2023 Table 4; author-calculated relative charge transfer, using WT=1.",
+            "source_id": "xie2023"
+          },
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        }
+      ],
+      "integrated_function": {
+        "source_classification": "Likely LoF",
+        "source_id": "myers2023",
+        "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+        "cluster_interpretation": "included_as_likely_LoF",
+        "why": "The original study reports markedly decreased glutamate and glycine potency; the later integrated classification lists Likely LoF and the later charge-transfer estimate is 0.03/0.004 of WT."
+      },
+      "context_caveats": [
+        "Measured pharmacology comes from the 2017 diheteromeric assay; 2023 charge transfer is a model estimate.",
+        "The same residue substitution to glycine (S541G) has an opposing functional direction in a separate study; do not group by residue alone."
+      ],
+      "cohort_tier": "core_likely_reduced"
+    },
+    {
+      "variant_id": "GRIN2B:c.1657C>A:p.Pro553Thr",
+      "gene": "GRIN2B",
+      "transcript_accession": null,
+      "reported_cdna": "c.1657C>A",
+      "reported_protein": "p.Pro553Thr",
+      "transcript_note": "The cited functional table does not name a transcript accession; notation is transcribed as published.",
+      "demo_role": "reduced_function_lead",
+      "strict_reduced_function_inclusion": true,
+      "clinical_association": {
+        "reported_features": [
+          "developmental delay",
+          "Rett-like syndrome",
+          "epilepsy"
+        ],
+        "evidence_location": "Xie 2023 Table 1, row 18; source citations [10, 26] in that paper.",
+        "source_ids": [
+          "xie2023"
+        ]
+      },
+      "functional_evidence": [
+        {
+          "source_id": "xie2023",
+          "evidence_location": "Tables 2–4, GRIN2B-P553T row.",
+          "assay": "Agonist concentration-response, channel pharmacology, whole-cell voltage clamp, MTSEA-derived open probability, and surface-expression assay.",
+          "model": "Recombinant GluN1/GluN2B receptors in Xenopus laevis oocytes and HEK cells; see paper methods for assay-specific setup.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "2.5 [1.9, 3.3]",
+              "unit": "µM; 95% CI",
+              "n": 11,
+              "wt_control": "1.3 [1.2, 1.4] µM; n=68"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "1.1 [0.89, 1.3]",
+              "unit": "µM; 95% CI",
+              "n": 14,
+              "wt_control": "0.34 [0.31, 0.37] µM; n=68"
+            },
+            {
+              "name": "weighted deactivation time constant (τw)",
+              "variant": "198 ± 39",
+              "unit": "ms",
+              "n": 5,
+              "wt_control": "1061 ± 91 ms; n=16"
+            },
+            {
+              "name": "peak current density",
+              "variant": "1.2 ± 0.5",
+              "unit": "pA/pF",
+              "n": 6,
+              "wt_control": "19 ± 3.6 pA/pF; n=16"
+            },
+            {
+              "name": "channel open probability (MTSEA method)",
+              "variant": "0.026 ± 0.001",
+              "unit": "unitless",
+              "n": 22,
+              "wt_control": "0.026 ± 0.001; n=45"
+            },
+            {
+              "name": "surface/total receptor ratio",
+              "variant": "121 ± 3.1",
+              "unit": "% of WT",
+              "n": 15,
+              "wt_control": "100% of WT; n=87"
+            }
+          ],
+          "predicted_charge_transfer": {
+            "synaptic_ratio_vs_WT": 0.11,
+            "non_synaptic_ratio_vs_WT": 0.29,
+            "evidence_location": "Xie 2023 Table 4; author-calculated ratios.",
+            "source_id": "xie2023"
+          },
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        }
+      ],
+      "integrated_function": {
+        "source_classification": "Likely LoF",
+        "source_id": "myers2023",
+        "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+        "cluster_interpretation": "included_as_likely_LoF",
+        "why": "Multiple measured parameters and both modeled charge-transfer ratios are reduced; the 2023 integrated classification lists Likely LoF."
+      },
+      "context_caveats": [
+        "Phenotype and prior source citations are those summarized in the 2023 paper; detailed case-level validation remains to be done.",
+        "Recombinant assays and computed charge-transfer estimates do not predict an individual's clinical course."
+      ],
+      "cohort_tier": "core_likely_reduced"
+    },
+    {
+      "variant_id": "GRIN2B:protein:p.Ser541Gly",
+      "gene": "GRIN2B",
+      "transcript_accession": null,
+      "reported_cdna": "c.1621A>C",
+      "reported_protein": "p.Ser541Gly",
+      "transcript_note": "The cited functional table does not name a transcript accession; notation is transcribed as published.",
+      "demo_role": "opposing_function_control_gain_of_function",
+      "strict_reduced_function_inclusion": false,
+      "clinical_association": {
+        "reported_features": [
+          "epilepsy",
+          "developmental delay",
+          "intellectual disability",
+          "movement disorder",
+          "autism spectrum disorder"
+        ],
+        "evidence_location": "Xie 2023 Table 1, row 12; variant source listed as This study.",
+        "source_ids": [
+          "xie2023"
+        ]
+      },
+      "functional_evidence": [
+        {
+          "source_id": "xie2023",
+          "evidence_location": "Tables 2–4, GRIN2B-S541G row.",
+          "assay": "Agonist concentration-response, channel pharmacology, whole-cell voltage clamp, MTSEA-derived open probability, and surface-expression assay.",
+          "model": "Recombinant GluN1/GluN2B receptors in Xenopus laevis oocytes and HEK cells; assay-specific setup is described in paper methods.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "0.30 [0.24, 0.38]",
+              "unit": "µM; 95% CI",
+              "n": 11,
+              "wt_control": "1.3 [1.2, 1.4] µM; n=68"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "0.071 [0.053, 0.095]",
+              "unit": "µM; 95% CI",
+              "n": 14,
+              "wt_control": "0.34 [0.31, 0.37] µM; n=68"
+            },
+            {
+              "name": "Mg2+ IC50",
+              "variant": "30 [20, 44]",
+              "unit": "µM; 95% CI",
+              "n": 12,
+              "wt_control": "27 [23, 32] µM; n=57"
+            },
+            {
+              "name": "weighted deactivation time constant (τw)",
+              "variant": "2460 ± 362",
+              "unit": "ms",
+              "n": 7,
+              "wt_control": "1061 ± 91 ms; n=16"
+            },
+            {
+              "name": "peak current density",
+              "variant": "3.7 ± 1.7",
+              "unit": "pA/pF",
+              "n": 7,
+              "wt_control": "19 ± 3.6 pA/pF; n=16"
+            },
+            {
+              "name": "channel open probability (MTSEA method)",
+              "variant": "0.045 ± 0.001",
+              "unit": "unitless",
+              "n": 21,
+              "wt_control": "0.026 ± 0.001; n=45"
+            },
+            {
+              "name": "surface/total receptor ratio",
+              "variant": "60 ± 24",
+              "unit": "% of WT",
+              "n": 3,
+              "wt_control": "100% of WT; n=87"
+            }
+          ],
+          "predicted_charge_transfer": {
+            "synaptic_ratio_vs_WT": 1.8,
+            "non_synaptic_ratio_vs_WT": 4.4,
+            "evidence_location": "Xie 2023 Table 4; author-calculated ratios.",
+            "source_id": "xie2023"
+          },
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        }
+      ],
+      "integrated_function": {
+        "source_classification": "Possible GoF",
+        "source_id": "myers2023",
+        "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+        "cluster_interpretation": "exclude_from_reduced_function_cluster; retain_as_opposing_effect_control",
+        "why": "Same-residue substitution as S541R but the source reports increased agonist potency and predicted charge transfer above WT; Myers et al. classify S541G as Possible GoF."
+      },
+      "context_caveats": [
+        "This is a same-residue, different-substitution counterexample; the result demonstrates why residue-level grouping is insufficient.",
+        "Functional classification is not a clinical pathogenicity classification.",
+        "Xie 2023 Table 1 prints c.1621A>C for p.Ser541Gly. ClinVar VCV001708206 lists NM_000834.5:c.1621A>G (p.Ser541Gly). Preserve the source notation; link protein-level assay evidence only. Do not merge these DNA alleles automatically."
+      ],
+      "cohort_tier": "opposing_control",
+      "identity_status": "publication_cdna_protein_discrepancy",
+      "identity_note": "Xie 2023 Table 1 prints c.1621A>C for p.Ser541Gly. ClinVar VCV001708206 lists NM_000834.5:c.1621A>G (p.Ser541Gly). Preserve the source notation; link protein-level assay evidence only. Do not merge these DNA alleles automatically."
+    },
+    {
+      "variant_id": "GRIN2B:c.1916C>T:p.Ala639Val",
+      "gene": "GRIN2B",
+      "transcript_accession": null,
+      "reported_cdna": "c.1916C>T",
+      "reported_protein": "p.Ala639Val",
+      "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+      "demo_role": "opposing_function_control_gain_of_function",
+      "strict_reduced_function_inclusion": false,
+      "clinical_association": {
+        "reported_features": [
+          "epilepsy",
+          "intellectual disability",
+          "malformation of cortical development",
+          "cortical visual impairment"
+        ],
+        "inheritance": "de novo",
+        "evidence_location": "Xu 2024 Table 1, row 40; Platzer 2017 clinical table also reports severe ID, seizures, MCD, and CVI.",
+        "source_ids": [
+          "xu2024",
+          "platzer2017"
+        ]
+      },
+      "functional_evidence": [
+        {
+          "source_id": "xu2024",
+          "evidence_location": "Tables 2–3, GluN2B-A639V row; Figure 5 summarizes classification criteria.",
+          "assay": "Agonist and Mg2+ concentration-response, pH sensitivity, surface expression, channel open probability, deactivation and current amplitude.",
+          "model": "Recombinant GluN1/GluN2B diheteromeric NMDARs expressed in Xenopus laevis oocytes and HEK cells.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "0.28 [0.21, 0.36]",
+              "unit": "µM; 95% CI",
+              "n": 12,
+              "wt_control": "1.2 [1.1, 1.2] µM; n=66"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "0.065 [0.050, 0.086]",
+              "unit": "µM; 95% CI",
+              "n": 12,
+              "wt_control": "0.39 [0.35, 0.44] µM; n=62"
+            },
+            {
+              "name": "Mg2+ IC50",
+              "variant": "14 [12, 16]",
+              "unit": "µM; 95% CI",
+              "n": 12,
+              "wt_control": "22 [20, 25] µM; n=59"
+            },
+            {
+              "name": "weighted deactivation time constant (τw)",
+              "variant": "7954 ± 1726",
+              "unit": "ms",
+              "n": 5,
+              "wt_control": "524 ± 23 ms; n=26"
+            },
+            {
+              "name": "peak current density",
+              "variant": "7.2 ± 2.0",
+              "unit": "pA/pF",
+              "n": 5,
+              "wt_control": "55 ± 9.7 pA/pF; n=26"
+            },
+            {
+              "name": "channel open probability (MTSEA method)",
+              "variant": "0.72 ± 0.05",
+              "unit": "unitless",
+              "n": 11,
+              "wt_control": "0.033 ± 0.002; n=84"
+            },
+            {
+              "name": "surface/total receptor ratio",
+              "variant": "0.13 ± 0.07",
+              "unit": "relative to WT",
+              "n": 4,
+              "wt_control": "1.0 relative to WT"
+            }
+          ],
+          "predicted_charge_transfer": {
+            "synaptic_ratio_vs_WT": 7.9,
+            "non_synaptic_ratio_vs_WT": 6.2,
+            "evidence_location": "Xu 2024 Figure 5/Table 3 summary; author-calculated ratios.",
+            "source_id": "xu2024"
+          },
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        },
+        {
+          "source_id": "han2022",
+          "evidence_location": "Results, 'GRIN Variants Selected for Rescue Pharmacology in Triheteromeric NMDARs'; Supplemental Table S2; Table 1.",
+          "assay": "Glutamate and glycine potency in diheteromeric receptors; channel-blocker response in engineered GluN1/GluN2A/GluN2B triheteromeric receptors.",
+          "model": "Xenopus laevis oocytes; triheteromeric stoichiometry enforced with coiled-coil/ER-retention constructs and altered GluN2B C-terminus.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50, variant diheteromer",
+              "variant": "0.28 [0.21, 0.37]",
+              "unit": "µM; 95% CI",
+              "n": null,
+              "wt_control": "1.0 [0.90, 1.2] µM; 95% CI"
+            },
+            {
+              "name": "glycine EC50, variant diheteromer",
+              "variant": "0.07 [0.05, 0.09]",
+              "unit": "µM; 95% CI",
+              "n": null,
+              "wt_control": "0.33 [0.26, 0.41] µM; 95% CI"
+            }
+          ],
+          "triheteromeric_context": "Variant-containing receptors were tested for inhibitor response; this is not a full multi-assay or synaptic charge-transfer LoF/GoF classification.",
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        }
+      ],
+      "integrated_function": {
+        "source_classification": "Gain-of-function in the tested receptor assay",
+        "source_id": "xu2024",
+        "evidence_location": "Figure 5/Table 3 summary; charge-transfer ratios 7.9 and 6.2 of WT.",
+        "cluster_interpretation": "exclude_from_reduced_function_cluster; retain_as_opposing_effect_control",
+        "why": "Both author-calculated charge-transfer ratios and several functional parameters are above WT in the tested diheteromeric assay. A separate engineered-triheteromeric study also reports enhanced agonist potency, but tests pharmacological inhibitor response rather than complete net function."
+      },
+      "context_caveats": [
+        "The reduced surface-expression ratio coexists with increased gating, potency and modeled charge transfer; do not interpret one parameter alone as net LoF.",
+        "Triheteromeric receptor results depend on engineered stoichiometry and construct context; no neuronal or clinical effect is established."
+      ],
+      "cohort_tier": "opposing_control"
+    },
+    {
+      "variant_id": "GRIN2B:c.1619G>A:p.Arg540His",
+      "gene": "GRIN2B",
+      "transcript_accession": null,
+      "reported_cdna": "c.1619G>A",
+      "reported_protein": "p.Arg540His",
+      "transcript_note": "The cited functional table does not name a transcript accession; notation is transcribed as published.",
+      "demo_role": "unresolved_function_control",
+      "strict_reduced_function_inclusion": false,
+      "clinical_association": {
+        "reported_features": [
+          "intellectual disability",
+          "epilepsy"
+        ],
+        "evidence_location": "Swanger 2016 Table 2 lists ID; Chen 2020 Table 1 includes ID and epilepsy/seizures.",
+        "source_ids": [
+          "swanger2016",
+          "chen2020"
+        ]
+      },
+      "functional_evidence": [
+        {
+          "source_id": "swanger2016",
+          "evidence_location": "Table 2, GRIN2B-p.Arg540His row; Table 3, same variant row.",
+          "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+          "model": "Recombinant human GluN1/GluN2B receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+          "measured_parameters": [
+            {
+              "name": "glutamate EC50",
+              "variant": "0.64 ± 0.07",
+              "unit": "µM",
+              "n": 19,
+              "wt_control": "1.5 ± 0.07 µM; n=57"
+            },
+            {
+              "name": "glycine EC50",
+              "variant": "0.25 ± 0.02",
+              "unit": "µM",
+              "n": 16,
+              "wt_control": "0.38 ± 0.03 µM; n=47"
+            },
+            {
+              "name": "weighted deactivation time constant (τw)",
+              "variant": "1,157 ± 130",
+              "unit": "ms",
+              "n": 7,
+              "wt_control": "570 ± 23 ms; n=35"
+            },
+            {
+              "name": "peak current density",
+              "variant": "35 ± 12",
+              "unit": "pA/pF",
+              "n": 7,
+              "wt_control": "41 ± 5.0 pA/pF; n=31"
+            }
+          ],
+          "predicted_charge_transfer": {
+            "synaptic_ratio_vs_WT": 1.0,
+            "non_synaptic_ratio_vs_WT": 1.2,
+            "evidence_location": "Swanger 2016 Table 3; author-calculated ratios.",
+            "source_id": "swanger2016"
+          },
+          "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+        }
+      ],
+      "integrated_function": {
+        "source_classification": "No Effect or Indeterminant; exact subtype not specified in the paper's grouped statement",
+        "source_id": "myers2023",
+        "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+        "cluster_interpretation": "unresolved; do not use as a reduced-function lead",
+        "why": "Some measured properties differ from WT, but modeled charge transfer is near WT and the later paper does not state an exact subcategory for this variant in that sentence."
+      },
+      "context_caveats": [
+        "Retain as a functional uncertainty example, not as evidence for inclusion in a reduced-function group.",
+        "This source illustrates that individual parameter shifts do not by themselves establish net receptor loss."
+      ],
+      "cohort_tier": "unresolved_control"
+    }
+  ]
+}

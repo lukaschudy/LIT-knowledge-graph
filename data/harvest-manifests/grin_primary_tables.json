@@ -1,0 +1,29 @@
+{
+  "source": "grin_primary_tables",
+  "created_at": "2026-10-03T22:17:25.025993+00:00",
+  "artifacts": {},
+  "datasets": {
+    "table_rows": {
+      "path": "data/processed/harvest/grin_primary_tables/table_rows.jsonl.gz",
+      "records": 687,
+      "bytes": 25848,
+      "sha256": "b98de0028e850ecc6dee2930d6f42af0a09f97f67406ce3f3fdfbab70546a7f8",
+      "input_paths": [
+        "data/raw/harvest/grin_primary_pages/PMC5142120.html",
+        "data/raw/harvest/grin_primary_pages/PMC5656050.html",
+        "data/raw/harvest/grin_primary_pages/PMC7554152.html",
+        "data/raw/harvest/grin_primary_pages/PMC10508039.html",
+        "data/raw/harvest/grin_primary_pages/PMC10641759.html",
+        "data/raw/harvest/grin_primary_pages/PMC10973091.html",
+        "data/raw/harvest/grin_primary_pages/PMC11046977.html"
+      ],
+      "description": "All HTML table cells of seven selected primary papers; includes headers/footers and preserves source table boundaries. Not automatic scientific interpretation.",
+      "created_at": "2026-10-03T22:17:25.026208+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete_for_scope",
+  "updated_at": "2026-10-03T22:17:25.026448+00:00",
+  "scope": "Tables present in selected seven primary article HTML pages; supplemental files not included here"
+}

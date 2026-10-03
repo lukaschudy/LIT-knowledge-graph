@@ -1,0 +1,2596 @@
+{
+  "schema_version": "1.0",
+  "dataset": {
+    "id": "grin-reduced-function-2026-10-03",
+    "title": "GRIN research connections — published variant evidence",
+    "description": "Selected GRIN2A/GRIN2B research cohorts: six Likely LoF variants, one provisional Possible LoF case and three controls. Real source facts; expert interpretation pending. Research planning only.",
+    "synthetic": false,
+    "created_at": "2026-10-03",
+    "curation_notes": [
+      "Machine-checked source transcription is not expert scientific review.",
+      "The existing GRIN connection and registry are acknowledged; the contribution is source-traceable research preparation.",
+      "No treatments, trial eligibility or access permissions are inferred.",
+      "S541G has a source cDNA/protein discrepancy and remains protein-level control evidence."
+    ]
+  },
+  "nodes": [
+    {
+      "id": "publication:swanger2016",
+      "type": "Publication",
+      "label": "Mechanistic Insight into NMDA Receptor Dysregulation by Rare Variants in the GluN2A and GluN2B Agonist Binding Domains",
+      "aliases": [],
+      "properties": {
+        "doi": "10.1016/j.ajhg.2016.10.002",
+        "pmid": "27839871",
+        "pmcid": "PMC5142120"
+      }
+    },
+    {
+      "id": "publication:platzer2017",
+      "type": "Publication",
+      "label": "GRIN2B encephalopathy: novel findings on phenotype, variant clustering, functional consequences and treatment aspects",
+      "aliases": [],
+      "properties": {
+        "doi": "10.1136/jmedgenet-2016-104509",
+        "pmid": "28377535",
+        "pmcid": "PMC5656050"
+      }
+    },
+    {
+      "id": "publication:chen2020",
+      "type": "Publication",
+      "label": "Positive allosteric modulators that target NMDA receptors rectify loss-of-function GRIN variants associated with neurological and neuropsychiatric disorders",
+      "aliases": [],
+      "properties": {
+        "doi": "10.1016/j.neuropharm.2020.108247",
+        "pmid": "32712275",
+        "pmcid": "PMC7554152"
+      }
+    },
+    {
+      "id": "publication:myers2023",
+      "type": "Publication",
+      "label": "Classification of missense variants in the N-methyl-d-aspartate receptor GRIN gene family as gain- or loss-of-function",
+      "aliases": [],
+      "properties": {
+        "doi": "10.1093/hmg/ddad104",
+        "pmid": "37369021",
+        "pmcid": "PMC10508039"
+      }
+    },
+    {
+      "id": "publication:xie2023",
+      "type": "Publication",
+      "label": "Functional effects of disease-associated variants reveal that the S1-M1 linker of the NMDA receptor critically controls channel opening",
+      "aliases": [],
+      "properties": {
+        "doi": "10.1007/s00018-023-04705-y",
+        "pmid": "37000222",
+        "pmcid": "PMC10641759"
+      }
+    },
+    {
+      "id": "publication:xu2024",
+      "type": "Publication",
+      "label": "De novo GRIN variants in M3 helix associated with neurological disorders control channel gating of NMDA receptor",
+      "aliases": [],
+      "properties": {
+        "doi": "10.1007/s00018-023-05069-z",
+        "pmid": "38538865",
+        "pmcid": "PMC10973091"
+      }
+    },
+    {
+      "id": "publication:han2022",
+      "type": "Publication",
+      "label": "Opportunities for Precision Treatment of GRIN2A and GRIN2B Gain-of-Function Variants in Triheteromeric N-Methyl-D-Aspartate Receptors",
+      "aliases": [],
+      "properties": {
+        "doi": "10.1124/jpet.121.001000",
+        "pmid": "35110392",
+        "pmcid": "PMC11046977"
+      }
+    },
+    {
+      "id": "mechanism:nmda-receptor-signaling",
+      "type": "Mechanism",
+      "label": "NMDA receptor signaling",
+      "aliases": [],
+      "properties": {
+        "description": "Direction is variant-specific and carried on evidence claims. Shared direction is a research connection, not clinical equivalence."
+      }
+    },
+    {
+      "id": "cohort:grin2a:core_likely_reduced",
+      "type": "Disease",
+      "label": "GRIN2A-related neurodevelopmental disorder — selected Likely LoF variants",
+      "aliases": [
+        "GRIN2A"
+      ],
+      "properties": {
+        "gene": "GRIN2A",
+        "entity_scope": "selected_variant_research_cohort",
+        "cohort_tier": "core_likely_reduced",
+        "description": "Membership is limited to explicitly selected variants; it is not a claim about every person with this diagnosis.",
+        "expert_review": "pending"
+      }
+    },
+    {
+      "id": "gene:GRIN2A",
+      "type": "Gene",
+      "label": "GRIN2A",
+      "aliases": [
+        "GluN2A"
+      ],
+      "properties": {
+        "hgnc_id": "HGNC:4585"
+      }
+    },
+    {
+      "id": "variant:grin2a-c-1447g-a-p-gly483arg",
+      "type": "Variant",
+      "label": "GRIN2A p.Gly483Arg",
+      "aliases": [
+        "p.Gly483Arg"
+      ],
+      "properties": {
+        "variant_id": "GRIN2A:c.1447G>A:p.Gly483Arg",
+        "gene": "GRIN2A",
+        "transcript_accession": null,
+        "reported_cdna": "c.1447G>A",
+        "reported_protein": "p.Gly483Arg",
+        "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+        "demo_role": "reduced_function_lead",
+        "strict_reduced_function_inclusion": true,
+        "clinical_association": {
+          "reported_features": [
+            "epilepsy/seizures",
+            "developmental delay",
+            "intellectual disability",
+            "dysphasia"
+          ],
+          "evidence_location": "Chen 2020 Table 1, row 6; original disease-linked studies listed there include Lesca 2013, Swanger 2016, and Addis 2017.",
+          "source_ids": [
+            "chen2020",
+            "swanger2016"
+          ],
+          "note": "Clinical features are reported patient associations in the cited literature; functional assay data do not establish clinical severity."
+        },
+        "functional_evidence": [
+          {
+            "source_id": "swanger2016",
+            "evidence_location": "Table 2, GRIN2A-p.Gly483Arg row; Table 3, same variant row.",
+            "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+            "model": "Recombinant human GluN1/GluN2A receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "54 ± 6.3",
+                "unit": "µM",
+                "n": 10,
+                "wt_control": "3.4 ± 0.11 µM; n=51"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "1.5 ± 0.12",
+                "unit": "µM",
+                "n": 16,
+                "wt_control": "1.2 ± 0.05 µM; n=76"
+              },
+              {
+                "name": "weighted deactivation time constant (τw)",
+                "variant": "20 ± 3.0",
+                "unit": "ms",
+                "n": 10,
+                "wt_control": "56 ± 3.6 ms; n=47"
+              },
+              {
+                "name": "peak current density",
+                "variant": "30 ± 11",
+                "unit": "pA/pF",
+                "n": 10,
+                "wt_control": "136 ± 19 pA/pF; n=41"
+              }
+            ],
+            "predicted_charge_transfer": {
+              "synaptic_ratio_vs_WT": 0.085,
+              "non_synaptic_ratio_vs_WT": 0.016,
+              "evidence_location": "Swanger 2016 Table 3; ratios are author-calculated from measured receptor properties.",
+              "source_id": "swanger2016"
+            },
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          }
+        ],
+        "integrated_function": {
+          "source_classification": "Likely LoF",
+          "source_id": "myers2023",
+          "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+          "cluster_interpretation": "included_as_likely_LoF",
+          "why": "Large reduction in glutamate potency, deactivation/current measurements and both predicted charge-transfer ratios; independently listed as Likely LoF by the multi-assay framework."
+        },
+        "context_caveats": [
+          "Recombinant diheteromeric receptor assay; not a neuronal or patient-level measurement.",
+          "Synaptic and non-synaptic charge transfer are modeled ratios, not direct in vivo measurements.",
+          "Developmental features are summarized in Chen 2020 Table 1 from earlier clinical reports; individual diagnosis and causal clinical classification require independent review before cohort enrollment."
+        ],
+        "cohort_tier": "core_likely_reduced"
+      }
+    },
+    {
+      "id": "variant:grin2a-c-2146g-a-p-ala716thr",
+      "type": "Variant",
+      "label": "GRIN2A p.Ala716Thr",
+      "aliases": [
+        "p.Ala716Thr"
+      ],
+      "properties": {
+        "variant_id": "GRIN2A:c.2146G>A:p.Ala716Thr",
+        "gene": "GRIN2A",
+        "transcript_accession": null,
+        "reported_cdna": "c.2146G>A",
+        "reported_protein": "p.Ala716Thr",
+        "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+        "demo_role": "reduced_function_lead",
+        "strict_reduced_function_inclusion": true,
+        "clinical_association": {
+          "reported_features": [
+            "epilepsy/seizures",
+            "developmental delay",
+            "verbal dyspraxia",
+            "hypotonia"
+          ],
+          "evidence_location": "Chen 2020 Table 1, row 12; cites Lesca 2013, Fainberg 2016, and Swanger 2016.",
+          "source_ids": [
+            "chen2020",
+            "swanger2016"
+          ]
+        },
+        "functional_evidence": [
+          {
+            "source_id": "swanger2016",
+            "evidence_location": "Table 2, GRIN2A-p.Ala716Thr row; Table 3, same variant row.",
+            "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+            "model": "Recombinant human GluN1/GluN2A receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "20 ± 1.9",
+                "unit": "µM",
+                "n": 10,
+                "wt_control": "3.4 ± 0.11 µM; n=51"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "1.3 ± 0.09",
+                "unit": "µM",
+                "n": 11,
+                "wt_control": "1.2 ± 0.05 µM; n=76"
+              },
+              {
+                "name": "weighted deactivation time constant (τw)",
+                "variant": "32 ± 3.6",
+                "unit": "ms",
+                "n": 13,
+                "wt_control": "56 ± 3.6 ms; n=47"
+              },
+              {
+                "name": "peak current density",
+                "variant": "63 ± 15",
+                "unit": "pA/pF",
+                "n": 14,
+                "wt_control": "136 ± 19 pA/pF; n=41"
+              }
+            ],
+            "predicted_charge_transfer": {
+              "synaptic_ratio_vs_WT": 0.08,
+              "non_synaptic_ratio_vs_WT": 0.02,
+              "evidence_location": "Swanger 2016 Table 3; author-calculated ratios.",
+              "source_id": "swanger2016"
+            },
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          }
+        ],
+        "integrated_function": {
+          "source_classification": "Likely LoF",
+          "source_id": "myers2023",
+          "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+          "cluster_interpretation": "included_as_likely_LoF",
+          "why": "Reduced agonist potency and current-related measures plus both charge-transfer ratios below 0.1 of WT; listed as Likely LoF in the multi-assay classification."
+        },
+        "context_caveats": [
+          "Recombinant diheteromeric receptor assay; not a neuronal or patient-level measurement.",
+          "Charge-transfer values are modeled ratios.",
+          "Developmental features are summarized in Chen 2020 Table 1 from earlier clinical reports; individual diagnosis and causal clinical classification require independent review before cohort enrollment."
+        ],
+        "cohort_tier": "core_likely_reduced"
+      }
+    },
+    {
+      "id": "variant:grin2a-c-2191g-a-p-asp731asn",
+      "type": "Variant",
+      "label": "GRIN2A p.Asp731Asn",
+      "aliases": [
+        "p.Asp731Asn"
+      ],
+      "properties": {
+        "variant_id": "GRIN2A:c.2191G>A:p.Asp731Asn",
+        "gene": "GRIN2A",
+        "transcript_accession": null,
+        "reported_cdna": "c.2191G>A",
+        "reported_protein": "p.Asp731Asn",
+        "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+        "demo_role": "reduced_function_lead",
+        "strict_reduced_function_inclusion": true,
+        "clinical_association": {
+          "reported_features": [
+            "epilepsy/seizures",
+            "intellectual disability",
+            "developmental delay",
+            "verbal dyspraxia"
+          ],
+          "evidence_location": "Chen 2020 Table 1, row 14; cites Lesca 2013, Swanger 2016, Addis 2017, and Gao 2017.",
+          "source_ids": [
+            "chen2020",
+            "swanger2016"
+          ]
+        },
+        "functional_evidence": [
+          {
+            "source_id": "swanger2016",
+            "evidence_location": "Table 2, GRIN2A-p.Asp731Asn row; Table 3, same variant row.",
+            "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+            "model": "Recombinant human GluN1/GluN2A receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "6,418 ± 278",
+                "unit": "µM",
+                "n": 7,
+                "wt_control": "3.4 ± 0.11 µM; n=51"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "1.5 ± 0.26",
+                "unit": "µM",
+                "n": 10,
+                "wt_control": "1.2 ± 0.05 µM; n=76"
+              },
+              {
+                "name": "weighted deactivation time constant (τw)",
+                "variant": null,
+                "unit": "ms",
+                "n": null,
+                "wt_control": "56 ± 3.6 ms; n=47",
+                "note": "Not measured because current amplitude was too small."
+              },
+              {
+                "name": "peak current density",
+                "variant": "0.22 ± 0.16",
+                "unit": "pA/pF",
+                "n": 5,
+                "wt_control": "136 ± 19 pA/pF; n=41"
+              }
+            ],
+            "predicted_charge_transfer": {
+              "synaptic_ratio_vs_WT": 0.013,
+              "non_synaptic_ratio_vs_WT": 5.1e-05,
+              "evidence_location": "Swanger 2016 Table 3; author-calculated ratios.",
+              "source_id": "swanger2016"
+            },
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          }
+        ],
+        "integrated_function": {
+          "source_classification": "Likely LoF",
+          "source_id": "myers2023",
+          "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+          "cluster_interpretation": "included_as_likely_LoF",
+          "why": "Extremely reduced glutamate potency and peak current; author-calculated charge-transfer ratios are far below WT. Classification appears in the 2023 integrated list."
+        },
+        "context_caveats": [
+          "τw was not determinable at the low response amplitude.",
+          "Recombinant diheteromeric receptor assay; charge transfer is modeled, not directly measured in vivo.",
+          "Developmental features are summarized in Chen 2020 Table 1 from earlier clinical reports; individual diagnosis and causal clinical classification require independent review before cohort enrollment."
+        ],
+        "cohort_tier": "core_likely_reduced"
+      }
+    },
+    {
+      "id": "cohort:grin2b:core_likely_reduced",
+      "type": "Disease",
+      "label": "GRIN2B-related neurodevelopmental disorder — selected Likely LoF variants",
+      "aliases": [
+        "GRIN2B"
+      ],
+      "properties": {
+        "gene": "GRIN2B",
+        "entity_scope": "selected_variant_research_cohort",
+        "cohort_tier": "core_likely_reduced",
+        "description": "Membership is limited to explicitly selected variants; it is not a claim about every person with this diagnosis.",
+        "expert_review": "pending"
+      }
+    },
+    {
+      "id": "gene:GRIN2B",
+      "type": "Gene",
+      "label": "GRIN2B",
+      "aliases": [
+        "GluN2B"
+      ],
+      "properties": {
+        "hgnc_id": "HGNC:4586"
+      }
+    },
+    {
+      "id": "variant:grin2b-c-1238a-g-p-glu413gly",
+      "type": "Variant",
+      "label": "GRIN2B p.Glu413Gly",
+      "aliases": [
+        "p.Glu413Gly"
+      ],
+      "properties": {
+        "variant_id": "GRIN2B:c.1238A>G:p.Glu413Gly",
+        "gene": "GRIN2B",
+        "transcript_accession": null,
+        "reported_cdna": "c.1238A>G",
+        "reported_protein": "p.Glu413Gly",
+        "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+        "demo_role": "reduced_function_lead",
+        "strict_reduced_function_inclusion": true,
+        "clinical_association": {
+          "reported_features": [
+            "intellectual disability",
+            "developmental delay",
+            "hypotonia"
+          ],
+          "evidence_location": "Chen 2020 Table 1, row 17; prior studies listed there include Adams 2014, Swanger 2016, Wells 2018, and Bell 2018.",
+          "source_ids": [
+            "chen2020",
+            "swanger2016"
+          ]
+        },
+        "functional_evidence": [
+          {
+            "source_id": "swanger2016",
+            "evidence_location": "Table 2, GRIN2B-p.Glu413Gly row; Table 3, same variant row.",
+            "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+            "model": "Recombinant human GluN1/GluN2B receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "79 ± 5.3",
+                "unit": "µM",
+                "n": 12,
+                "wt_control": "1.5 ± 0.07 µM; n=57"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "0.32 ± 0.02",
+                "unit": "µM",
+                "n": 8,
+                "wt_control": "0.38 ± 0.03 µM; n=47"
+              },
+              {
+                "name": "weighted deactivation time constant (τw)",
+                "variant": "20 ± 1.3",
+                "unit": "ms",
+                "n": 9,
+                "wt_control": "570 ± 23 ms; n=35"
+              },
+              {
+                "name": "peak current density",
+                "variant": "3.3 ± 1.3",
+                "unit": "pA/pF",
+                "n": 8,
+                "wt_control": "41 ± 5.0 pA/pF; n=31"
+              }
+            ],
+            "predicted_charge_transfer": {
+              "synaptic_ratio_vs_WT": 0.0034,
+              "non_synaptic_ratio_vs_WT": 0.002,
+              "evidence_location": "Swanger 2016 Table 3; author-calculated ratios.",
+              "source_id": "swanger2016"
+            },
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          }
+        ],
+        "integrated_function": {
+          "source_classification": "Likely LoF",
+          "source_id": "myers2023",
+          "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+          "cluster_interpretation": "included_as_likely_LoF",
+          "why": "Large loss of glutamate potency, weighted deactivation, and peak current; both modeled charge-transfer ratios are <0.004 of WT and Myers et al. classify it Likely LoF."
+        },
+        "context_caveats": [
+          "Recombinant diheteromeric receptor assay; not a neuronal or patient-level measurement.",
+          "Charge transfer is an author-calculated model output based on in vitro parameters."
+        ],
+        "cohort_tier": "core_likely_reduced"
+      }
+    },
+    {
+      "id": "cohort:grin2b:provisional_possible_reduced",
+      "type": "Disease",
+      "label": "GRIN2B-related neurodevelopmental disorder — provisional Possible LoF case",
+      "aliases": [
+        "GRIN2B provisional Possible LoF case"
+      ],
+      "properties": {
+        "gene": "GRIN2B",
+        "entity_scope": "selected_variant_research_cohort",
+        "cohort_tier": "provisional_possible_reduced",
+        "description": "Membership is limited to explicitly selected variants; it is not a claim about every person with this diagnosis.",
+        "expert_review": "pending"
+      }
+    },
+    {
+      "id": "variant:grin2b-c-1382g-t-p-cys461phe",
+      "type": "Variant",
+      "label": "GRIN2B p.Cys461Phe",
+      "aliases": [
+        "p.Cys461Phe"
+      ],
+      "properties": {
+        "variant_id": "GRIN2B:c.1382G>T:p.Cys461Phe",
+        "gene": "GRIN2B",
+        "transcript_accession": null,
+        "reported_cdna": "c.1382G>T",
+        "reported_protein": "p.Cys461Phe",
+        "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+        "demo_role": "reduced_function_lead",
+        "strict_reduced_function_inclusion": false,
+        "clinical_association": {
+          "reported_features": [
+            "epilepsy/seizures",
+            "intellectual disability",
+            "autism spectrum disorder"
+          ],
+          "evidence_location": "Chen 2020 Table 1, row 20; cites Swanger 2016, Fedele 2018, and Allen 2014.",
+          "source_ids": [
+            "chen2020",
+            "swanger2016"
+          ]
+        },
+        "functional_evidence": [
+          {
+            "source_id": "swanger2016",
+            "evidence_location": "Table 2, GRIN2B-p.Cys461Phe row; Table 3, same variant row.",
+            "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+            "model": "Recombinant human GluN1/GluN2B receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "169 ± 9.0",
+                "unit": "µM",
+                "n": 14,
+                "wt_control": "1.5 ± 0.07 µM; n=57"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "0.15 ± 0.007",
+                "unit": "µM",
+                "n": 8,
+                "wt_control": "0.38 ± 0.03 µM; n=47"
+              },
+              {
+                "name": "weighted deactivation time constant (τw)",
+                "variant": "28 ± 1.8",
+                "unit": "ms",
+                "n": 6,
+                "wt_control": "570 ± 23 ms; n=35"
+              },
+              {
+                "name": "peak current density",
+                "variant": "4.2 ± 1.0",
+                "unit": "pA/pF",
+                "n": 6,
+                "wt_control": "41 ± 5.0 pA/pF; n=31"
+              }
+            ],
+            "predicted_charge_transfer": {
+              "synaptic_ratio_vs_WT": 0.005,
+              "non_synaptic_ratio_vs_WT": 0.001,
+              "evidence_location": "Swanger 2016 Table 3; author-calculated ratios.",
+              "source_id": "swanger2016"
+            },
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          }
+        ],
+        "integrated_function": {
+          "source_classification": "Possible LoF",
+          "source_id": "myers2023",
+          "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+          "cluster_interpretation": "provisional_only; excluded_from_core_cluster_pending_expert_review",
+          "why": "Both modeled charge-transfer ratios are strongly reduced; the 2023 multi-assay framework retains the lower-confidence Possible LoF label rather than upgrading it."
+        },
+        "context_caveats": [
+          "The final class is Possible LoF, not Likely LoF.",
+          "Recombinant diheteromeric receptor assay; charge transfer is modeled."
+        ],
+        "cohort_tier": "provisional_possible_reduced"
+      }
+    },
+    {
+      "id": "variant:grin2b-c-1623c-g-p-ser541arg",
+      "type": "Variant",
+      "label": "GRIN2B p.Ser541Arg",
+      "aliases": [
+        "p.Ser541Arg"
+      ],
+      "properties": {
+        "variant_id": "GRIN2B:c.1623C>G:p.Ser541Arg",
+        "gene": "GRIN2B",
+        "transcript_accession": "NM_000834.5",
+        "reported_cdna": "c.1623C>G",
+        "reported_protein": "p.Ser541Arg",
+        "transcript_note": "RefSeq transcript NM_000834.5 is named on the NCBI ClinVar Variation 916601 record; functional-study tables report c.1623C>G/p.Ser541Arg without an accession.",
+        "demo_role": "reduced_function_lead",
+        "strict_reduced_function_inclusion": true,
+        "clinical_association": {
+          "reported_features": [
+            "severe intellectual disability",
+            "autism spectrum disorder",
+            "generalized seizures",
+            "dystonic movement disorder"
+          ],
+          "inheritance": "de novo",
+          "evidence_location": "Platzer 2017 Table 2, c.1623C>G row.",
+          "source_ids": [
+            "platzer2017"
+          ]
+        },
+        "functional_evidence": [
+          {
+            "source_id": "platzer2017",
+            "evidence_location": "Table 3, S541R row.",
+            "assay": "Two-electrode voltage clamp pharmacology and proton-sensitivity assay.",
+            "model": "Recombinant GluN1/GluN2B NMDARs expressed in Xenopus laevis oocytes.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "10 ± 1.7",
+                "unit": "µM",
+                "n": 10,
+                "wt_control": "1.5 ± 0.08 µM; n=44"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "1.0 ± 0.15",
+                "unit": "µM",
+                "n": 9,
+                "wt_control": "0.35 ± 0.02 µM; n=41"
+              },
+              {
+                "name": "Mg2+ IC50",
+                "variant": "18 ± 1.8",
+                "unit": "µM",
+                "n": 9,
+                "wt_control": "25 ± 2.7 µM; n=33"
+              },
+              {
+                "name": "current at pH 6.8 / pH 7.6",
+                "variant": "17 ± 0.4",
+                "unit": "%",
+                "n": 13,
+                "wt_control": "15 ± 0.5%; n=47"
+              }
+            ],
+            "predicted_charge_transfer": {
+              "synaptic_ratio_vs_WT": 0.03,
+              "non_synaptic_ratio_vs_WT": 0.004,
+              "evidence_location": "Xie 2023 Table 4; author-calculated relative charge transfer, using WT=1.",
+              "source_id": "xie2023"
+            },
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          }
+        ],
+        "integrated_function": {
+          "source_classification": "Likely LoF",
+          "source_id": "myers2023",
+          "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+          "cluster_interpretation": "included_as_likely_LoF",
+          "why": "The original study reports markedly decreased glutamate and glycine potency; the later integrated classification lists Likely LoF and the later charge-transfer estimate is 0.03/0.004 of WT."
+        },
+        "context_caveats": [
+          "Measured pharmacology comes from the 2017 diheteromeric assay; 2023 charge transfer is a model estimate.",
+          "The same residue substitution to glycine (S541G) has an opposing functional direction in a separate study; do not group by residue alone."
+        ],
+        "cohort_tier": "core_likely_reduced"
+      }
+    },
+    {
+      "id": "variant:grin2b-c-1657c-a-p-pro553thr",
+      "type": "Variant",
+      "label": "GRIN2B p.Pro553Thr",
+      "aliases": [
+        "p.Pro553Thr"
+      ],
+      "properties": {
+        "variant_id": "GRIN2B:c.1657C>A:p.Pro553Thr",
+        "gene": "GRIN2B",
+        "transcript_accession": null,
+        "reported_cdna": "c.1657C>A",
+        "reported_protein": "p.Pro553Thr",
+        "transcript_note": "The cited functional table does not name a transcript accession; notation is transcribed as published.",
+        "demo_role": "reduced_function_lead",
+        "strict_reduced_function_inclusion": true,
+        "clinical_association": {
+          "reported_features": [
+            "developmental delay",
+            "Rett-like syndrome",
+            "epilepsy"
+          ],
+          "evidence_location": "Xie 2023 Table 1, row 18; source citations [10, 26] in that paper.",
+          "source_ids": [
+            "xie2023"
+          ]
+        },
+        "functional_evidence": [
+          {
+            "source_id": "xie2023",
+            "evidence_location": "Tables 2–4, GRIN2B-P553T row.",
+            "assay": "Agonist concentration-response, channel pharmacology, whole-cell voltage clamp, MTSEA-derived open probability, and surface-expression assay.",
+            "model": "Recombinant GluN1/GluN2B receptors in Xenopus laevis oocytes and HEK cells; see paper methods for assay-specific setup.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "2.5 [1.9, 3.3]",
+                "unit": "µM; 95% CI",
+                "n": 11,
+                "wt_control": "1.3 [1.2, 1.4] µM; n=68"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "1.1 [0.89, 1.3]",
+                "unit": "µM; 95% CI",
+                "n": 14,
+                "wt_control": "0.34 [0.31, 0.37] µM; n=68"
+              },
+              {
+                "name": "weighted deactivation time constant (τw)",
+                "variant": "198 ± 39",
+                "unit": "ms",
+                "n": 5,
+                "wt_control": "1061 ± 91 ms; n=16"
+              },
+              {
+                "name": "peak current density",
+                "variant": "1.2 ± 0.5",
+                "unit": "pA/pF",
+                "n": 6,
+                "wt_control": "19 ± 3.6 pA/pF; n=16"
+              },
+              {
+                "name": "channel open probability (MTSEA method)",
+                "variant": "0.026 ± 0.001",
+                "unit": "unitless",
+                "n": 22,
+                "wt_control": "0.026 ± 0.001; n=45"
+              },
+              {
+                "name": "surface/total receptor ratio",
+                "variant": "121 ± 3.1",
+                "unit": "% of WT",
+                "n": 15,
+                "wt_control": "100% of WT; n=87"
+              }
+            ],
+            "predicted_charge_transfer": {
+              "synaptic_ratio_vs_WT": 0.11,
+              "non_synaptic_ratio_vs_WT": 0.29,
+              "evidence_location": "Xie 2023 Table 4; author-calculated ratios.",
+              "source_id": "xie2023"
+            },
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          }
+        ],
+        "integrated_function": {
+          "source_classification": "Likely LoF",
+          "source_id": "myers2023",
+          "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+          "cluster_interpretation": "included_as_likely_LoF",
+          "why": "Multiple measured parameters and both modeled charge-transfer ratios are reduced; the 2023 integrated classification lists Likely LoF."
+        },
+        "context_caveats": [
+          "Phenotype and prior source citations are those summarized in the 2023 paper; detailed case-level validation remains to be done.",
+          "Recombinant assays and computed charge-transfer estimates do not predict an individual's clinical course."
+        ],
+        "cohort_tier": "core_likely_reduced"
+      }
+    },
+    {
+      "id": "cohort:grin2b:opposing_control",
+      "type": "Disease",
+      "label": "GRIN2B-related neurodevelopmental disorder — opposing-function controls",
+      "aliases": [
+        "GRIN2B opposing-function controls"
+      ],
+      "properties": {
+        "gene": "GRIN2B",
+        "entity_scope": "selected_variant_research_cohort",
+        "cohort_tier": "opposing_control",
+        "description": "Membership is limited to explicitly selected variants; it is not a claim about every person with this diagnosis.",
+        "expert_review": "pending"
+      }
+    },
+    {
+      "id": "variant:grin2b-protein-p-ser541gly",
+      "type": "Variant",
+      "label": "GRIN2B p.Ser541Gly",
+      "aliases": [
+        "p.Ser541Gly"
+      ],
+      "properties": {
+        "variant_id": "GRIN2B:protein:p.Ser541Gly",
+        "gene": "GRIN2B",
+        "transcript_accession": null,
+        "reported_cdna": "c.1621A>C",
+        "reported_protein": "p.Ser541Gly",
+        "transcript_note": "The cited functional table does not name a transcript accession; notation is transcribed as published.",
+        "demo_role": "opposing_function_control_gain_of_function",
+        "strict_reduced_function_inclusion": false,
+        "clinical_association": {
+          "reported_features": [
+            "epilepsy",
+            "developmental delay",
+            "intellectual disability",
+            "movement disorder",
+            "autism spectrum disorder"
+          ],
+          "evidence_location": "Xie 2023 Table 1, row 12; variant source listed as This study.",
+          "source_ids": [
+            "xie2023"
+          ]
+        },
+        "functional_evidence": [
+          {
+            "source_id": "xie2023",
+            "evidence_location": "Tables 2–4, GRIN2B-S541G row.",
+            "assay": "Agonist concentration-response, channel pharmacology, whole-cell voltage clamp, MTSEA-derived open probability, and surface-expression assay.",
+            "model": "Recombinant GluN1/GluN2B receptors in Xenopus laevis oocytes and HEK cells; assay-specific setup is described in paper methods.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "0.30 [0.24, 0.38]",
+                "unit": "µM; 95% CI",
+                "n": 11,
+                "wt_control": "1.3 [1.2, 1.4] µM; n=68"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "0.071 [0.053, 0.095]",
+                "unit": "µM; 95% CI",
+                "n": 14,
+                "wt_control": "0.34 [0.31, 0.37] µM; n=68"
+              },
+              {
+                "name": "Mg2+ IC50",
+                "variant": "30 [20, 44]",
+                "unit": "µM; 95% CI",
+                "n": 12,
+                "wt_control": "27 [23, 32] µM; n=57"
+              },
+              {
+                "name": "weighted deactivation time constant (τw)",
+                "variant": "2460 ± 362",
+                "unit": "ms",
+                "n": 7,
+                "wt_control": "1061 ± 91 ms; n=16"
+              },
+              {
+                "name": "peak current density",
+                "variant": "3.7 ± 1.7",
+                "unit": "pA/pF",
+                "n": 7,
+                "wt_control": "19 ± 3.6 pA/pF; n=16"
+              },
+              {
+                "name": "channel open probability (MTSEA method)",
+                "variant": "0.045 ± 0.001",
+                "unit": "unitless",
+                "n": 21,
+                "wt_control": "0.026 ± 0.001; n=45"
+              },
+              {
+                "name": "surface/total receptor ratio",
+                "variant": "60 ± 24",
+                "unit": "% of WT",
+                "n": 3,
+                "wt_control": "100% of WT; n=87"
+              }
+            ],
+            "predicted_charge_transfer": {
+              "synaptic_ratio_vs_WT": 1.8,
+              "non_synaptic_ratio_vs_WT": 4.4,
+              "evidence_location": "Xie 2023 Table 4; author-calculated ratios.",
+              "source_id": "xie2023"
+            },
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          }
+        ],
+        "integrated_function": {
+          "source_classification": "Possible GoF",
+          "source_id": "myers2023",
+          "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+          "cluster_interpretation": "exclude_from_reduced_function_cluster; retain_as_opposing_effect_control",
+          "why": "Same-residue substitution as S541R but the source reports increased agonist potency and predicted charge transfer above WT; Myers et al. classify S541G as Possible GoF."
+        },
+        "context_caveats": [
+          "This is a same-residue, different-substitution counterexample; the result demonstrates why residue-level grouping is insufficient.",
+          "Functional classification is not a clinical pathogenicity classification.",
+          "Xie 2023 Table 1 prints c.1621A>C for p.Ser541Gly. ClinVar VCV001708206 lists NM_000834.5:c.1621A>G (p.Ser541Gly). Preserve the source notation; link protein-level assay evidence only. Do not merge these DNA alleles automatically."
+        ],
+        "cohort_tier": "opposing_control",
+        "identity_status": "publication_cdna_protein_discrepancy",
+        "identity_note": "Xie 2023 Table 1 prints c.1621A>C for p.Ser541Gly. ClinVar VCV001708206 lists NM_000834.5:c.1621A>G (p.Ser541Gly). Preserve the source notation; link protein-level assay evidence only. Do not merge these DNA alleles automatically."
+      }
+    },
+    {
+      "id": "variant:grin2b-c-1916c-t-p-ala639val",
+      "type": "Variant",
+      "label": "GRIN2B p.Ala639Val",
+      "aliases": [
+        "p.Ala639Val"
+      ],
+      "properties": {
+        "variant_id": "GRIN2B:c.1916C>T:p.Ala639Val",
+        "gene": "GRIN2B",
+        "transcript_accession": null,
+        "reported_cdna": "c.1916C>T",
+        "reported_protein": "p.Ala639Val",
+        "transcript_note": "The cited functional tables do not name a transcript accession; notation is transcribed as published.",
+        "demo_role": "opposing_function_control_gain_of_function",
+        "strict_reduced_function_inclusion": false,
+        "clinical_association": {
+          "reported_features": [
+            "epilepsy",
+            "intellectual disability",
+            "malformation of cortical development",
+            "cortical visual impairment"
+          ],
+          "inheritance": "de novo",
+          "evidence_location": "Xu 2024 Table 1, row 40; Platzer 2017 clinical table also reports severe ID, seizures, MCD, and CVI.",
+          "source_ids": [
+            "xu2024",
+            "platzer2017"
+          ]
+        },
+        "functional_evidence": [
+          {
+            "source_id": "xu2024",
+            "evidence_location": "Tables 2–3, GluN2B-A639V row; Figure 5 summarizes classification criteria.",
+            "assay": "Agonist and Mg2+ concentration-response, pH sensitivity, surface expression, channel open probability, deactivation and current amplitude.",
+            "model": "Recombinant GluN1/GluN2B diheteromeric NMDARs expressed in Xenopus laevis oocytes and HEK cells.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "0.28 [0.21, 0.36]",
+                "unit": "µM; 95% CI",
+                "n": 12,
+                "wt_control": "1.2 [1.1, 1.2] µM; n=66"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "0.065 [0.050, 0.086]",
+                "unit": "µM; 95% CI",
+                "n": 12,
+                "wt_control": "0.39 [0.35, 0.44] µM; n=62"
+              },
+              {
+                "name": "Mg2+ IC50",
+                "variant": "14 [12, 16]",
+                "unit": "µM; 95% CI",
+                "n": 12,
+                "wt_control": "22 [20, 25] µM; n=59"
+              },
+              {
+                "name": "weighted deactivation time constant (τw)",
+                "variant": "7954 ± 1726",
+                "unit": "ms",
+                "n": 5,
+                "wt_control": "524 ± 23 ms; n=26"
+              },
+              {
+                "name": "peak current density",
+                "variant": "7.2 ± 2.0",
+                "unit": "pA/pF",
+                "n": 5,
+                "wt_control": "55 ± 9.7 pA/pF; n=26"
+              },
+              {
+                "name": "channel open probability (MTSEA method)",
+                "variant": "0.72 ± 0.05",
+                "unit": "unitless",
+                "n": 11,
+                "wt_control": "0.033 ± 0.002; n=84"
+              },
+              {
+                "name": "surface/total receptor ratio",
+                "variant": "0.13 ± 0.07",
+                "unit": "relative to WT",
+                "n": 4,
+                "wt_control": "1.0 relative to WT"
+              }
+            ],
+            "predicted_charge_transfer": {
+              "synaptic_ratio_vs_WT": 7.9,
+              "non_synaptic_ratio_vs_WT": 6.2,
+              "evidence_location": "Xu 2024 Figure 5/Table 3 summary; author-calculated ratios.",
+              "source_id": "xu2024"
+            },
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          },
+          {
+            "source_id": "han2022",
+            "evidence_location": "Results, 'GRIN Variants Selected for Rescue Pharmacology in Triheteromeric NMDARs'; Supplemental Table S2; Table 1.",
+            "assay": "Glutamate and glycine potency in diheteromeric receptors; channel-blocker response in engineered GluN1/GluN2A/GluN2B triheteromeric receptors.",
+            "model": "Xenopus laevis oocytes; triheteromeric stoichiometry enforced with coiled-coil/ER-retention constructs and altered GluN2B C-terminus.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50, variant diheteromer",
+                "variant": "0.28 [0.21, 0.37]",
+                "unit": "µM; 95% CI",
+                "n": null,
+                "wt_control": "1.0 [0.90, 1.2] µM; 95% CI"
+              },
+              {
+                "name": "glycine EC50, variant diheteromer",
+                "variant": "0.07 [0.05, 0.09]",
+                "unit": "µM; 95% CI",
+                "n": null,
+                "wt_control": "0.33 [0.26, 0.41] µM; 95% CI"
+              }
+            ],
+            "triheteromeric_context": "Variant-containing receptors were tested for inhibitor response; this is not a full multi-assay or synaptic charge-transfer LoF/GoF classification.",
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          }
+        ],
+        "integrated_function": {
+          "source_classification": "Gain-of-function in the tested receptor assay",
+          "source_id": "xu2024",
+          "evidence_location": "Figure 5/Table 3 summary; charge-transfer ratios 7.9 and 6.2 of WT.",
+          "cluster_interpretation": "exclude_from_reduced_function_cluster; retain_as_opposing_effect_control",
+          "why": "Both author-calculated charge-transfer ratios and several functional parameters are above WT in the tested diheteromeric assay. A separate engineered-triheteromeric study also reports enhanced agonist potency, but tests pharmacological inhibitor response rather than complete net function."
+        },
+        "context_caveats": [
+          "The reduced surface-expression ratio coexists with increased gating, potency and modeled charge transfer; do not interpret one parameter alone as net LoF.",
+          "Triheteromeric receptor results depend on engineered stoichiometry and construct context; no neuronal or clinical effect is established."
+        ],
+        "cohort_tier": "opposing_control"
+      }
+    },
+    {
+      "id": "cohort:grin2b:unresolved_control",
+      "type": "Disease",
+      "label": "GRIN2B-related neurodevelopmental disorder — unresolved-function control",
+      "aliases": [
+        "GRIN2B unresolved-function control"
+      ],
+      "properties": {
+        "gene": "GRIN2B",
+        "entity_scope": "selected_variant_research_cohort",
+        "cohort_tier": "unresolved_control",
+        "description": "Membership is limited to explicitly selected variants; it is not a claim about every person with this diagnosis.",
+        "expert_review": "pending"
+      }
+    },
+    {
+      "id": "variant:grin2b-c-1619g-a-p-arg540his",
+      "type": "Variant",
+      "label": "GRIN2B p.Arg540His",
+      "aliases": [
+        "p.Arg540His"
+      ],
+      "properties": {
+        "variant_id": "GRIN2B:c.1619G>A:p.Arg540His",
+        "gene": "GRIN2B",
+        "transcript_accession": null,
+        "reported_cdna": "c.1619G>A",
+        "reported_protein": "p.Arg540His",
+        "transcript_note": "The cited functional table does not name a transcript accession; notation is transcribed as published.",
+        "demo_role": "unresolved_function_control",
+        "strict_reduced_function_inclusion": false,
+        "clinical_association": {
+          "reported_features": [
+            "intellectual disability",
+            "epilepsy"
+          ],
+          "evidence_location": "Swanger 2016 Table 2 lists ID; Chen 2020 Table 1 includes ID and epilepsy/seizures.",
+          "source_ids": [
+            "swanger2016",
+            "chen2020"
+          ]
+        },
+        "functional_evidence": [
+          {
+            "source_id": "swanger2016",
+            "evidence_location": "Table 2, GRIN2B-p.Arg540His row; Table 3, same variant row.",
+            "assay": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.",
+            "model": "Recombinant human GluN1/GluN2B receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+            "measured_parameters": [
+              {
+                "name": "glutamate EC50",
+                "variant": "0.64 ± 0.07",
+                "unit": "µM",
+                "n": 19,
+                "wt_control": "1.5 ± 0.07 µM; n=57"
+              },
+              {
+                "name": "glycine EC50",
+                "variant": "0.25 ± 0.02",
+                "unit": "µM",
+                "n": 16,
+                "wt_control": "0.38 ± 0.03 µM; n=47"
+              },
+              {
+                "name": "weighted deactivation time constant (τw)",
+                "variant": "1,157 ± 130",
+                "unit": "ms",
+                "n": 7,
+                "wt_control": "570 ± 23 ms; n=35"
+              },
+              {
+                "name": "peak current density",
+                "variant": "35 ± 12",
+                "unit": "pA/pF",
+                "n": 7,
+                "wt_control": "41 ± 5.0 pA/pF; n=31"
+              }
+            ],
+            "predicted_charge_transfer": {
+              "synaptic_ratio_vs_WT": 1.0,
+              "non_synaptic_ratio_vs_WT": 1.2,
+              "evidence_location": "Swanger 2016 Table 3; author-calculated ratios.",
+              "source_id": "swanger2016"
+            },
+            "uncertainty_note": "Mean ± SEM unless confidence interval explicitly shown; sample sizes are assay observations, not participant counts."
+          }
+        ],
+        "integrated_function": {
+          "source_classification": "No Effect or Indeterminant; exact subtype not specified in the paper's grouped statement",
+          "source_id": "myers2023",
+          "evidence_location": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+          "cluster_interpretation": "unresolved; do not use as a reduced-function lead",
+          "why": "Some measured properties differ from WT, but modeled charge transfer is near WT and the later paper does not state an exact subcategory for this variant in that sentence."
+        },
+        "context_caveats": [
+          "Retain as a functional uncertainty example, not as evidence for inclusion in a reduced-function group.",
+          "This source illustrates that individual parameter shifts do not by themselves establish net receptor loss."
+        ],
+        "cohort_tier": "unresolved_control"
+      }
+    },
+    {
+      "id": "asset:grin-registry",
+      "type": "Asset",
+      "label": "GRIN Variant Patient Registry",
+      "aliases": [],
+      "properties": {
+        "asset_type": "registry",
+        "access": "data_sharing_agreement_required",
+        "access_url": "https://grin2b.com/grin-registry/",
+        "reuse_scope": "Registry questions span gene, variant function, symptoms and longitudinal change. Research data sharing requires an agreement with the relevant registry team.",
+        "validation_questions": [
+          "Can consented cases with published functional evidence support a cross-gene observational comparison, and which outcome definitions can be harmonized?",
+          "No participant records acquired.",
+          "Counts of eligible loss-of-function cases are unknown.",
+          "Registry enrollment does not establish assay validation or trial eligibility."
+        ],
+        "limitations": [
+          "No participant records acquired.",
+          "Counts of eligible loss-of-function cases are unknown.",
+          "Registry enrollment does not establish assay validation or trial eligibility."
+        ],
+        "availability": "not independently confirmed",
+        "research_question": "Could existing registry measures and study methods support an observational comparison across selected GRIN2A and GRIN2B reduced-function variants?"
+      }
+    },
+    {
+      "id": "organization:university-of-colorado-grin-registry-team",
+      "type": "Organization",
+      "label": "University of Colorado GRIN registry team",
+      "aliases": [],
+      "properties": {
+        "contact_url": "https://grin2b.com/grin-registry/",
+        "contact_scope": "Public institutional or resource route; no contact sent"
+      }
+    },
+    {
+      "id": "organization:university-of-leipzig-grin-registry-team",
+      "type": "Organization",
+      "label": "University of Leipzig GRIN registry team",
+      "aliases": [],
+      "properties": {
+        "contact_url": "https://grin2b.com/grin-registry/",
+        "contact_scope": "Public institutional or resource route; no contact sent"
+      }
+    },
+    {
+      "id": "asset:cferv-functional-assays",
+      "type": "Asset",
+      "label": "CFERV functional characterization",
+      "aliases": [],
+      "properties": {
+        "asset_type": "research_service",
+        "access": "request_and_capacity_dependent",
+        "access_url": "https://med.emory.edu/departments/pharmacology-chemical-biology/programs-centers/cferv/request-analysis/index.html",
+        "reuse_scope": "Recombinant receptor assays characterize variant effects. Clinicians and researchers should first check the GRIN Portal; additional characterization depends on resources and is not guaranteed.",
+        "validation_questions": [
+          "Are existing functional reports and assay conditions comparable for the selected variants?",
+          "Availability and waiting time need confirmation.",
+          "In-vitro receptor effects do not by themselves establish effects in a person."
+        ],
+        "limitations": [
+          "Availability and waiting time need confirmation.",
+          "In-vitro receptor effects do not by themselves establish effects in a person."
+        ],
+        "availability": "not independently confirmed",
+        "research_question": "Could existing registry measures and study methods support an observational comparison across selected GRIN2A and GRIN2B reduced-function variants?"
+      }
+    },
+    {
+      "id": "organization:emory-university-cferv",
+      "type": "Organization",
+      "label": "Emory University CFERV",
+      "aliases": [],
+      "properties": {
+        "contact_url": "https://med.emory.edu/departments/pharmacology-chemical-biology/programs-centers/cferv/request-analysis/index.html",
+        "contact_scope": "Public institutional or resource route; no contact sent"
+      }
+    },
+    {
+      "id": "asset:combinedbrain-grin2b-samples",
+      "type": "Asset",
+      "label": "COMBINEDBrain GRIN2B biorepository resource",
+      "aliases": [],
+      "properties": {
+        "asset_type": "biorepository",
+        "access": "sample_request_required",
+        "access_url": "https://grin2b.com/for-researchers/",
+        "reuse_scope": "The Foundation lists GRIN2B plasma in COMBINEDBrain and a sample-request route.",
+        "validation_questions": [
+          "Does the current inventory include the exact selected variants, suitable controls and consent for the proposed assay?",
+          "Current inventory and functional classifications are unverified.",
+          "No samples or participant information acquired.",
+          "Foundation resource listing is not independent verification of stock."
+        ],
+        "limitations": [
+          "Current inventory and functional classifications are unverified.",
+          "No samples or participant information acquired.",
+          "Foundation resource listing is not independent verification of stock."
+        ],
+        "availability": "not independently confirmed",
+        "research_question": "Could existing registry measures and study methods support an observational comparison across selected GRIN2A and GRIN2B reduced-function variants?"
+      }
+    },
+    {
+      "id": "organization:combinedbrain",
+      "type": "Organization",
+      "label": "COMBINEDBrain",
+      "aliases": [],
+      "properties": {
+        "contact_url": "https://grin2b.com/for-researchers/",
+        "contact_scope": "Public institutional or resource route; no contact sent"
+      }
+    },
+    {
+      "id": "asset:grin-ipsc-organoid-program",
+      "type": "Asset",
+      "label": "Emory GRIN iPSC and organoid program",
+      "aliases": [],
+      "properties": {
+        "asset_type": "disease_model_program",
+        "access": "contact_program",
+        "access_url": "https://curegrin.org/gri-research-participation/",
+        "reuse_scope": "CureGRIN describes a GRIN iPSC and organoid research program and identifies Zhexing Wen as the research contact.",
+        "validation_questions": [
+          "Are existing lines available for the selected variants, with suitable controls and comparable differentiation protocols?",
+          "Gene-specific and variant-specific line inventory is not stated on this page.",
+          "GRIN2A/GRIN2B relevance is a candidate within the program's broad GRIN remit.",
+          "Enrollment information does not prove materials are ready for external distribution."
+        ],
+        "limitations": [
+          "Gene-specific and variant-specific line inventory is not stated on this page.",
+          "GRIN2A/GRIN2B relevance is a candidate within the program's broad GRIN remit.",
+          "Enrollment information does not prove materials are ready for external distribution."
+        ],
+        "availability": "not independently confirmed",
+        "research_question": "Could existing registry measures and study methods support an observational comparison across selected GRIN2A and GRIN2B reduced-function variants?"
+      }
+    },
+    {
+      "id": "organization:emory-university-research-team",
+      "type": "Organization",
+      "label": "Emory University research team",
+      "aliases": [],
+      "properties": {
+        "contact_url": "https://curegrin.org/gri-research-participation/",
+        "contact_scope": "Public institutional or resource route; no contact sent"
+      }
+    },
+    {
+      "id": "asset:grin-crossgene-outcome-methods",
+      "type": "Asset",
+      "label": "Published cross-gene GRIN outcome-assessment methods",
+      "aliases": [],
+      "properties": {
+        "asset_type": "study_methods",
+        "access": "published_methods_instrument_rights_separate",
+        "access_url": "https://pubmed.ncbi.nlm.nih.gov/38380699/",
+        "reuse_scope": "A phase 2A, open-label, single-arm study assessed a functionally selected cross-gene cohort. Its published assessment domains provide a concrete starting point for discussing shared observational measures.",
+        "validation_questions": [
+          "Which assessment definitions and schedules are feasible for an observational protocol, accounting for age, baseline severity and instrument rights?",
+          "Uncontrolled study design does not establish causal treatment efficacy.",
+          "This asset is study methodology; no treatment recommendation is made.",
+          "Instrument availability and reproduction rights require separate checks."
+        ],
+        "limitations": [
+          "Uncontrolled study design does not establish causal treatment efficacy.",
+          "This asset is study methodology; no treatment recommendation is made.",
+          "Instrument availability and reproduction rights require separate checks."
+        ],
+        "availability": "not independently confirmed",
+        "research_question": "Could existing registry measures and study methods support an observational comparison across selected GRIN2A and GRIN2B reduced-function variants?"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "paper:swanger2016",
+      "title": "Mechanistic Insight into NMDA Receptor Dysregulation by Rare Variants in the GluN2A and GluN2B Agonist Binding Domains",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5142120/",
+      "kind": "paper",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "paper:platzer2017",
+      "title": "GRIN2B encephalopathy: novel findings on phenotype, variant clustering, functional consequences and treatment aspects",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5656050/",
+      "kind": "paper",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "paper:chen2020",
+      "title": "Positive allosteric modulators that target NMDA receptors rectify loss-of-function GRIN variants associated with neurological and neuropsychiatric disorders",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7554152/",
+      "kind": "paper",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "paper:myers2023",
+      "title": "Classification of missense variants in the N-methyl-d-aspartate receptor GRIN gene family as gain- or loss-of-function",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10508039/",
+      "kind": "paper",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "paper:xie2023",
+      "title": "Functional effects of disease-associated variants reveal that the S1-M1 linker of the NMDA receptor critically controls channel opening",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10641759/",
+      "kind": "paper",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "paper:xu2024",
+      "title": "De novo GRIN variants in M3 helix associated with neurological disorders control channel gating of NMDA receptor",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10973091/",
+      "kind": "paper",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "paper:han2022",
+      "title": "Opportunities for Precision Treatment of GRIN2A and GRIN2B Gain-of-Function Variants in Triheteromeric N-Methyl-D-Aspartate Receptors",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11046977/",
+      "kind": "paper",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "resource-source:grin-registry",
+      "title": "GRIN Variant Patient Registry",
+      "url": "https://grin2b.com/grin-registry/",
+      "kind": "registry",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "resource-source:cferv-functional-assays",
+      "title": "CFERV functional characterization",
+      "url": "https://med.emory.edu/departments/pharmacology-chemical-biology/programs-centers/cferv/request-analysis/index.html",
+      "kind": "organization",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "resource-source:combinedbrain-grin2b-samples",
+      "title": "COMBINEDBrain GRIN2B biorepository resource",
+      "url": "https://grin2b.com/for-researchers/",
+      "kind": "organization",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "resource-source:grin-ipsc-organoid-program",
+      "title": "Emory GRIN iPSC and organoid program",
+      "url": "https://curegrin.org/gri-research-participation/",
+      "kind": "organization",
+      "retrieved_at": "2026-10-03",
+      "published_at": null,
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    },
+    {
+      "id": "resource-source:grin-crossgene-outcome-methods",
+      "title": "Published cross-gene GRIN outcome-assessment methods",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38380699/",
+      "kind": "paper",
+      "retrieved_at": "2026-10-03",
+      "published_at": "2024-05-03",
+      "license": "Source-specific rights; factual metadata and paraphrases only",
+      "synthetic": false
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim:001",
+      "subject": "cohort:grin2a:core_likely_reduced",
+      "predicate": "HAS_VARIANT",
+      "object": "variant:grin2a-c-1447g-a-p-gly483arg",
+      "assertion_type": "reported",
+      "context": {
+        "cohort_scope": "core_likely_reduced",
+        "clinical_causality": "not independently adjudicated"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:002",
+      "subject": "variant:grin2a-c-1447g-a-p-gly483arg",
+      "predicate": "AFFECTS",
+      "object": "gene:GRIN2A",
+      "assertion_type": "reported",
+      "context": {
+        "identity_scope": "protein substitution; original DNA notation retained separately"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:003",
+      "subject": "variant:grin2a-c-1447g-a-p-gly483arg",
+      "predicate": "HAS_EFFECT",
+      "object": "mechanism:nmda-receptor-signaling",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "loss_of_function",
+        "source_classification": "Likely LoF",
+        "cohort_tier": "core_likely_reduced",
+        "species": "human recombinant receptor subunits",
+        "tissue": "heterologous expression systems",
+        "stage": "in vitro receptor characterization",
+        "assay_details": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.; Recombinant human GluN1/GluN2A receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+        "expert_review": "pending; machine_checked indicates source transcription only",
+        "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:004",
+      "subject": "cohort:grin2a:core_likely_reduced",
+      "predicate": "HAS_VARIANT",
+      "object": "variant:grin2a-c-2146g-a-p-ala716thr",
+      "assertion_type": "reported",
+      "context": {
+        "cohort_scope": "core_likely_reduced",
+        "clinical_causality": "not independently adjudicated"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:005",
+      "subject": "variant:grin2a-c-2146g-a-p-ala716thr",
+      "predicate": "AFFECTS",
+      "object": "gene:GRIN2A",
+      "assertion_type": "reported",
+      "context": {
+        "identity_scope": "protein substitution; original DNA notation retained separately"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:006",
+      "subject": "variant:grin2a-c-2146g-a-p-ala716thr",
+      "predicate": "HAS_EFFECT",
+      "object": "mechanism:nmda-receptor-signaling",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "loss_of_function",
+        "source_classification": "Likely LoF",
+        "cohort_tier": "core_likely_reduced",
+        "species": "human recombinant receptor subunits",
+        "tissue": "heterologous expression systems",
+        "stage": "in vitro receptor characterization",
+        "assay_details": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.; Recombinant human GluN1/GluN2A receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+        "expert_review": "pending; machine_checked indicates source transcription only",
+        "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:007",
+      "subject": "cohort:grin2a:core_likely_reduced",
+      "predicate": "HAS_VARIANT",
+      "object": "variant:grin2a-c-2191g-a-p-asp731asn",
+      "assertion_type": "reported",
+      "context": {
+        "cohort_scope": "core_likely_reduced",
+        "clinical_causality": "not independently adjudicated"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:008",
+      "subject": "variant:grin2a-c-2191g-a-p-asp731asn",
+      "predicate": "AFFECTS",
+      "object": "gene:GRIN2A",
+      "assertion_type": "reported",
+      "context": {
+        "identity_scope": "protein substitution; original DNA notation retained separately"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:009",
+      "subject": "variant:grin2a-c-2191g-a-p-asp731asn",
+      "predicate": "HAS_EFFECT",
+      "object": "mechanism:nmda-receptor-signaling",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "loss_of_function",
+        "source_classification": "Likely LoF",
+        "cohort_tier": "core_likely_reduced",
+        "species": "human recombinant receptor subunits",
+        "tissue": "heterologous expression systems",
+        "stage": "in vitro receptor characterization",
+        "assay_details": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.; Recombinant human GluN1/GluN2A receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+        "expert_review": "pending; machine_checked indicates source transcription only",
+        "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:010",
+      "subject": "cohort:grin2b:core_likely_reduced",
+      "predicate": "HAS_VARIANT",
+      "object": "variant:grin2b-c-1238a-g-p-glu413gly",
+      "assertion_type": "reported",
+      "context": {
+        "cohort_scope": "core_likely_reduced",
+        "clinical_causality": "not independently adjudicated"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:011",
+      "subject": "variant:grin2b-c-1238a-g-p-glu413gly",
+      "predicate": "AFFECTS",
+      "object": "gene:GRIN2B",
+      "assertion_type": "reported",
+      "context": {
+        "identity_scope": "protein substitution; original DNA notation retained separately"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:012",
+      "subject": "variant:grin2b-c-1238a-g-p-glu413gly",
+      "predicate": "HAS_EFFECT",
+      "object": "mechanism:nmda-receptor-signaling",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "loss_of_function",
+        "source_classification": "Likely LoF",
+        "cohort_tier": "core_likely_reduced",
+        "species": "human recombinant receptor subunits",
+        "tissue": "heterologous expression systems",
+        "stage": "in vitro receptor characterization",
+        "assay_details": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.; Recombinant human GluN1/GluN2B receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+        "expert_review": "pending; machine_checked indicates source transcription only",
+        "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:013",
+      "subject": "cohort:grin2b:provisional_possible_reduced",
+      "predicate": "HAS_VARIANT",
+      "object": "variant:grin2b-c-1382g-t-p-cys461phe",
+      "assertion_type": "reported",
+      "context": {
+        "cohort_scope": "provisional_possible_reduced",
+        "clinical_causality": "not independently adjudicated"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:014",
+      "subject": "variant:grin2b-c-1382g-t-p-cys461phe",
+      "predicate": "AFFECTS",
+      "object": "gene:GRIN2B",
+      "assertion_type": "reported",
+      "context": {
+        "identity_scope": "protein substitution; original DNA notation retained separately"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:015",
+      "subject": "variant:grin2b-c-1382g-t-p-cys461phe",
+      "predicate": "HAS_EFFECT",
+      "object": "mechanism:nmda-receptor-signaling",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "loss_of_function",
+        "source_classification": "Possible LoF",
+        "cohort_tier": "provisional_possible_reduced",
+        "species": "human recombinant receptor subunits",
+        "tissue": "heterologous expression systems",
+        "stage": "in vitro receptor characterization",
+        "assay_details": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.; Recombinant human GluN1/GluN2B receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+        "expert_review": "pending; machine_checked indicates source transcription only",
+        "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:016",
+      "subject": "cohort:grin2b:core_likely_reduced",
+      "predicate": "HAS_VARIANT",
+      "object": "variant:grin2b-c-1623c-g-p-ser541arg",
+      "assertion_type": "reported",
+      "context": {
+        "cohort_scope": "core_likely_reduced",
+        "clinical_causality": "not independently adjudicated"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:017",
+      "subject": "variant:grin2b-c-1623c-g-p-ser541arg",
+      "predicate": "AFFECTS",
+      "object": "gene:GRIN2B",
+      "assertion_type": "reported",
+      "context": {
+        "identity_scope": "protein substitution; original DNA notation retained separately"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:018",
+      "subject": "variant:grin2b-c-1623c-g-p-ser541arg",
+      "predicate": "HAS_EFFECT",
+      "object": "mechanism:nmda-receptor-signaling",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "loss_of_function",
+        "source_classification": "Likely LoF",
+        "cohort_tier": "core_likely_reduced",
+        "species": "human recombinant receptor subunits",
+        "tissue": "heterologous expression systems",
+        "stage": "in vitro receptor characterization",
+        "assay_details": "Two-electrode voltage clamp pharmacology and proton-sensitivity assay.; Recombinant GluN1/GluN2B NMDARs expressed in Xenopus laevis oocytes.",
+        "expert_review": "pending; machine_checked indicates source transcription only",
+        "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:019",
+      "subject": "cohort:grin2b:core_likely_reduced",
+      "predicate": "HAS_VARIANT",
+      "object": "variant:grin2b-c-1657c-a-p-pro553thr",
+      "assertion_type": "reported",
+      "context": {
+        "cohort_scope": "core_likely_reduced",
+        "clinical_causality": "not independently adjudicated"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:020",
+      "subject": "variant:grin2b-c-1657c-a-p-pro553thr",
+      "predicate": "AFFECTS",
+      "object": "gene:GRIN2B",
+      "assertion_type": "reported",
+      "context": {
+        "identity_scope": "protein substitution; original DNA notation retained separately"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:021",
+      "subject": "variant:grin2b-c-1657c-a-p-pro553thr",
+      "predicate": "HAS_EFFECT",
+      "object": "mechanism:nmda-receptor-signaling",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "loss_of_function",
+        "source_classification": "Likely LoF",
+        "cohort_tier": "core_likely_reduced",
+        "species": "human recombinant receptor subunits",
+        "tissue": "heterologous expression systems",
+        "stage": "in vitro receptor characterization",
+        "assay_details": "Agonist concentration-response, channel pharmacology, whole-cell voltage clamp, MTSEA-derived open probability, and surface-expression assay.; Recombinant GluN1/GluN2B receptors in Xenopus laevis oocytes and HEK cells; see paper methods for assay-specific setup.",
+        "expert_review": "pending; machine_checked indicates source transcription only",
+        "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:022",
+      "subject": "cohort:grin2b:opposing_control",
+      "predicate": "HAS_VARIANT",
+      "object": "variant:grin2b-protein-p-ser541gly",
+      "assertion_type": "reported",
+      "context": {
+        "cohort_scope": "opposing_control",
+        "clinical_causality": "not independently adjudicated"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:023",
+      "subject": "variant:grin2b-protein-p-ser541gly",
+      "predicate": "AFFECTS",
+      "object": "gene:GRIN2B",
+      "assertion_type": "reported",
+      "context": {
+        "identity_scope": "protein substitution; original DNA notation retained separately"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:024",
+      "subject": "variant:grin2b-protein-p-ser541gly",
+      "predicate": "HAS_EFFECT",
+      "object": "mechanism:nmda-receptor-signaling",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "gain_of_function",
+        "source_classification": "Possible GoF",
+        "cohort_tier": "opposing_control",
+        "species": "human recombinant receptor subunits",
+        "tissue": "heterologous expression systems",
+        "stage": "in vitro receptor characterization",
+        "assay_details": "Agonist concentration-response, channel pharmacology, whole-cell voltage clamp, MTSEA-derived open probability, and surface-expression assay.; Recombinant GluN1/GluN2B receptors in Xenopus laevis oocytes and HEK cells; assay-specific setup is described in paper methods.",
+        "expert_review": "pending; machine_checked indicates source transcription only",
+        "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:025",
+      "subject": "cohort:grin2b:opposing_control",
+      "predicate": "HAS_VARIANT",
+      "object": "variant:grin2b-c-1916c-t-p-ala639val",
+      "assertion_type": "reported",
+      "context": {
+        "cohort_scope": "opposing_control",
+        "clinical_causality": "not independently adjudicated"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:026",
+      "subject": "variant:grin2b-c-1916c-t-p-ala639val",
+      "predicate": "AFFECTS",
+      "object": "gene:GRIN2B",
+      "assertion_type": "reported",
+      "context": {
+        "identity_scope": "protein substitution; original DNA notation retained separately"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:027",
+      "subject": "variant:grin2b-c-1916c-t-p-ala639val",
+      "predicate": "HAS_EFFECT",
+      "object": "mechanism:nmda-receptor-signaling",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "gain_of_function",
+        "source_classification": "Gain-of-function in the tested receptor assay",
+        "cohort_tier": "opposing_control",
+        "species": "human recombinant receptor subunits",
+        "tissue": "heterologous expression systems",
+        "stage": "in vitro receptor characterization",
+        "assay_details": "Agonist and Mg2+ concentration-response, pH sensitivity, surface expression, channel open probability, deactivation and current amplitude.; Recombinant GluN1/GluN2B diheteromeric NMDARs expressed in Xenopus laevis oocytes and HEK cells.; Glutamate and glycine potency in diheteromeric receptors; channel-blocker response in engineered GluN1/GluN2A/GluN2B triheteromeric receptors.; Xenopus laevis oocytes; triheteromeric stoichiometry enforced with coiled-coil/ER-retention constructs and altered GluN2B C-terminus.",
+        "expert_review": "pending; machine_checked indicates source transcription only",
+        "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:028",
+      "subject": "cohort:grin2b:unresolved_control",
+      "predicate": "HAS_VARIANT",
+      "object": "variant:grin2b-c-1619g-a-p-arg540his",
+      "assertion_type": "reported",
+      "context": {
+        "cohort_scope": "unresolved_control",
+        "clinical_causality": "not independently adjudicated"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:029",
+      "subject": "variant:grin2b-c-1619g-a-p-arg540his",
+      "predicate": "AFFECTS",
+      "object": "gene:GRIN2B",
+      "assertion_type": "reported",
+      "context": {
+        "identity_scope": "protein substitution; original DNA notation retained separately"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:030",
+      "subject": "variant:grin2b-c-1619g-a-p-arg540his",
+      "predicate": "HAS_EFFECT",
+      "object": "mechanism:nmda-receptor-signaling",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "unknown",
+        "source_classification": "No Effect or Indeterminant; exact subtype not specified in the paper's grouped statement",
+        "cohort_tier": "unresolved_control",
+        "species": "human recombinant receptor subunits",
+        "tissue": "heterologous expression systems",
+        "stage": "in vitro receptor characterization",
+        "assay_details": "Agonist concentration-response by two-electrode voltage clamp; deactivation and peak current by whole-cell voltage clamp.; Recombinant human GluN1/GluN2B receptors in Xenopus laevis oocytes for agonist EC50; HEK293 cells for τw and peak amplitude.",
+        "expert_review": "pending; machine_checked indicates source transcription only",
+        "scope_note": "Assay-level comparison only; neuronal, developmental and clinical transferability requires expert review."
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:031",
+      "subject": "organization:university-of-colorado-grin-registry-team",
+      "predicate": "MAINTAINS",
+      "object": "asset:grin-registry",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:032",
+      "subject": "organization:university-of-leipzig-grin-registry-team",
+      "predicate": "MAINTAINS",
+      "object": "asset:grin-registry",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:033",
+      "subject": "asset:grin-registry",
+      "predicate": "RELEVANT_TO",
+      "object": "cohort:grin2a:core_likely_reduced",
+      "assertion_type": "reported",
+      "context": {
+        "reported_scope": "gene-level resource description",
+        "selected_variant_inventory": "unknown",
+        "access_conditions": "data_sharing_agreement_required",
+        "adaptation": "proposed research question, not established suitability"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:034",
+      "subject": "asset:grin-registry",
+      "predicate": "RELEVANT_TO",
+      "object": "cohort:grin2b:core_likely_reduced",
+      "assertion_type": "reported",
+      "context": {
+        "reported_scope": "gene-level resource description",
+        "selected_variant_inventory": "unknown",
+        "access_conditions": "data_sharing_agreement_required",
+        "adaptation": "proposed research question, not established suitability"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:035",
+      "subject": "organization:emory-university-cferv",
+      "predicate": "MAINTAINS",
+      "object": "asset:cferv-functional-assays",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:036",
+      "subject": "asset:cferv-functional-assays",
+      "predicate": "RELEVANT_TO",
+      "object": "cohort:grin2a:core_likely_reduced",
+      "assertion_type": "reported",
+      "context": {
+        "reported_scope": "gene-level resource description",
+        "selected_variant_inventory": "unknown",
+        "access_conditions": "request_and_capacity_dependent",
+        "adaptation": "proposed research question, not established suitability"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:037",
+      "subject": "asset:cferv-functional-assays",
+      "predicate": "RELEVANT_TO",
+      "object": "cohort:grin2b:core_likely_reduced",
+      "assertion_type": "reported",
+      "context": {
+        "reported_scope": "gene-level resource description",
+        "selected_variant_inventory": "unknown",
+        "access_conditions": "request_and_capacity_dependent",
+        "adaptation": "proposed research question, not established suitability"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:038",
+      "subject": "organization:combinedbrain",
+      "predicate": "MAINTAINS",
+      "object": "asset:combinedbrain-grin2b-samples",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:039",
+      "subject": "asset:combinedbrain-grin2b-samples",
+      "predicate": "RELEVANT_TO",
+      "object": "cohort:grin2b:core_likely_reduced",
+      "assertion_type": "inferred",
+      "context": {
+        "reported_scope": "gene-level resource description",
+        "selected_variant_inventory": "unknown",
+        "access_conditions": "sample_request_required",
+        "adaptation": "proposed research question, not established suitability"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:040",
+      "subject": "organization:emory-university-research-team",
+      "predicate": "MAINTAINS",
+      "object": "asset:grin-ipsc-organoid-program",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:041",
+      "subject": "asset:grin-ipsc-organoid-program",
+      "predicate": "RELEVANT_TO",
+      "object": "cohort:grin2a:core_likely_reduced",
+      "assertion_type": "inferred",
+      "context": {
+        "reported_scope": "gene-level resource description",
+        "selected_variant_inventory": "unknown",
+        "access_conditions": "contact_program",
+        "adaptation": "proposed research question, not established suitability"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:042",
+      "subject": "asset:grin-ipsc-organoid-program",
+      "predicate": "RELEVANT_TO",
+      "object": "cohort:grin2b:core_likely_reduced",
+      "assertion_type": "inferred",
+      "context": {
+        "reported_scope": "gene-level resource description",
+        "selected_variant_inventory": "unknown",
+        "access_conditions": "contact_program",
+        "adaptation": "proposed research question, not established suitability"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:043",
+      "subject": "asset:grin-crossgene-outcome-methods",
+      "predicate": "RELEVANT_TO",
+      "object": "cohort:grin2a:core_likely_reduced",
+      "assertion_type": "reported",
+      "context": {
+        "reported_scope": "gene-level resource description",
+        "selected_variant_inventory": "unknown",
+        "access_conditions": "published_methods_instrument_rights_separate",
+        "adaptation": "proposed research question, not established suitability"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "claim:044",
+      "subject": "asset:grin-crossgene-outcome-methods",
+      "predicate": "RELEVANT_TO",
+      "object": "cohort:grin2b:core_likely_reduced",
+      "assertion_type": "reported",
+      "context": {
+        "reported_scope": "gene-level resource description",
+        "selected_variant_inventory": "unknown",
+        "access_conditions": "published_methods_instrument_rights_separate",
+        "adaptation": "proposed research question, not established suitability"
+      },
+      "extraction_confidence": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence:001",
+      "claim_id": "claim:001",
+      "source_id": "paper:chen2020",
+      "locator": "Chen 2020 Table 1, row 6; original disease-linked studies listed there include Lesca 2013, Swanger 2016, and Addis 2017.",
+      "excerpt": "Paraphrase: the source reports this variant in people with epilepsy/seizures, developmental delay, intellectual disability, dysphasia. The node represents only the selected research cohort.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:002",
+      "claim_id": "claim:002",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2A-p.Gly483Arg row; Table 3, same variant row.",
+      "excerpt": "Paraphrase: the tested receptor construct contains GRIN2A p.Gly483Arg.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:003",
+      "claim_id": "claim:003",
+      "source_id": "paper:myers2023",
+      "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+      "excerpt": "Paraphrase: GRIN2A p.Gly483Arg is categorized as Likely LoF. Large reduction in glutamate potency, deactivation/current measurements and both predicted charge-transfer ratios; independently listed as Likely LoF by the multi-assay framework.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:004",
+      "claim_id": "claim:003",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2A-p.Gly483Arg row; Table 3, same variant row.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 54 ± 6.3 µM (n=10); WT 3.4 ± 0.11 µM; n=51; glycine EC50 = 1.5 ± 0.12 µM (n=16); WT 1.2 ± 0.05 µM; n=76; weighted deactivation time constant (τw) = 20 ± 3.0 ms (n=10); WT 56 ± 3.6 ms; n=47; peak current density = 30 ± 11 pA/pF (n=10); WT 136 ± 19 pA/pF; n=41",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:005",
+      "claim_id": "claim:004",
+      "source_id": "paper:chen2020",
+      "locator": "Chen 2020 Table 1, row 12; cites Lesca 2013, Fainberg 2016, and Swanger 2016.",
+      "excerpt": "Paraphrase: the source reports this variant in people with epilepsy/seizures, developmental delay, verbal dyspraxia, hypotonia. The node represents only the selected research cohort.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:006",
+      "claim_id": "claim:005",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2A-p.Ala716Thr row; Table 3, same variant row.",
+      "excerpt": "Paraphrase: the tested receptor construct contains GRIN2A p.Ala716Thr.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:007",
+      "claim_id": "claim:006",
+      "source_id": "paper:myers2023",
+      "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+      "excerpt": "Paraphrase: GRIN2A p.Ala716Thr is categorized as Likely LoF. Reduced agonist potency and current-related measures plus both charge-transfer ratios below 0.1 of WT; listed as Likely LoF in the multi-assay classification.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:008",
+      "claim_id": "claim:006",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2A-p.Ala716Thr row; Table 3, same variant row.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 20 ± 1.9 µM (n=10); WT 3.4 ± 0.11 µM; n=51; glycine EC50 = 1.3 ± 0.09 µM (n=11); WT 1.2 ± 0.05 µM; n=76; weighted deactivation time constant (τw) = 32 ± 3.6 ms (n=13); WT 56 ± 3.6 ms; n=47; peak current density = 63 ± 15 pA/pF (n=14); WT 136 ± 19 pA/pF; n=41",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:009",
+      "claim_id": "claim:007",
+      "source_id": "paper:chen2020",
+      "locator": "Chen 2020 Table 1, row 14; cites Lesca 2013, Swanger 2016, Addis 2017, and Gao 2017.",
+      "excerpt": "Paraphrase: the source reports this variant in people with epilepsy/seizures, intellectual disability, developmental delay, verbal dyspraxia. The node represents only the selected research cohort.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:010",
+      "claim_id": "claim:008",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2A-p.Asp731Asn row; Table 3, same variant row.",
+      "excerpt": "Paraphrase: the tested receptor construct contains GRIN2A p.Asp731Asn.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:011",
+      "claim_id": "claim:009",
+      "source_id": "paper:myers2023",
+      "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+      "excerpt": "Paraphrase: GRIN2A p.Asp731Asn is categorized as Likely LoF. Extremely reduced glutamate potency and peak current; author-calculated charge-transfer ratios are far below WT. Classification appears in the 2023 integrated list.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:012",
+      "claim_id": "claim:009",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2A-p.Asp731Asn row; Table 3, same variant row.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 6,418 ± 278 µM (n=7); WT 3.4 ± 0.11 µM; n=51; glycine EC50 = 1.5 ± 0.26 µM (n=10); WT 1.2 ± 0.05 µM; n=76; peak current density = 0.22 ± 0.16 pA/pF (n=5); WT 136 ± 19 pA/pF; n=41",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:013",
+      "claim_id": "claim:010",
+      "source_id": "paper:chen2020",
+      "locator": "Chen 2020 Table 1, row 17; prior studies listed there include Adams 2014, Swanger 2016, Wells 2018, and Bell 2018.",
+      "excerpt": "Paraphrase: the source reports this variant in people with intellectual disability, developmental delay, hypotonia. The node represents only the selected research cohort.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:014",
+      "claim_id": "claim:011",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2B-p.Glu413Gly row; Table 3, same variant row.",
+      "excerpt": "Paraphrase: the tested receptor construct contains GRIN2B p.Glu413Gly.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:015",
+      "claim_id": "claim:012",
+      "source_id": "paper:myers2023",
+      "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+      "excerpt": "Paraphrase: GRIN2B p.Glu413Gly is categorized as Likely LoF. Large loss of glutamate potency, weighted deactivation, and peak current; both modeled charge-transfer ratios are <0.004 of WT and Myers et al. classify it Likely LoF.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:016",
+      "claim_id": "claim:012",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2B-p.Glu413Gly row; Table 3, same variant row.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 79 ± 5.3 µM (n=12); WT 1.5 ± 0.07 µM; n=57; glycine EC50 = 0.32 ± 0.02 µM (n=8); WT 0.38 ± 0.03 µM; n=47; weighted deactivation time constant (τw) = 20 ± 1.3 ms (n=9); WT 570 ± 23 ms; n=35; peak current density = 3.3 ± 1.3 pA/pF (n=8); WT 41 ± 5.0 pA/pF; n=31",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:017",
+      "claim_id": "claim:013",
+      "source_id": "paper:chen2020",
+      "locator": "Chen 2020 Table 1, row 20; cites Swanger 2016, Fedele 2018, and Allen 2014.",
+      "excerpt": "Paraphrase: the source reports this variant in people with epilepsy/seizures, intellectual disability, autism spectrum disorder. The node represents only the selected research cohort.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:018",
+      "claim_id": "claim:014",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2B-p.Cys461Phe row; Table 3, same variant row.",
+      "excerpt": "Paraphrase: the tested receptor construct contains GRIN2B p.Cys461Phe.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:019",
+      "claim_id": "claim:015",
+      "source_id": "paper:myers2023",
+      "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+      "excerpt": "Paraphrase: GRIN2B p.Cys461Phe is categorized as Possible LoF. Both modeled charge-transfer ratios are strongly reduced; the 2023 multi-assay framework retains the lower-confidence Possible LoF label rather than upgrading it.",
+      "stance": "supports",
+      "review_status": "unreviewed"
+    },
+    {
+      "id": "evidence:020",
+      "claim_id": "claim:015",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2B-p.Cys461Phe row; Table 3, same variant row.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 169 ± 9.0 µM (n=14); WT 1.5 ± 0.07 µM; n=57; glycine EC50 = 0.15 ± 0.007 µM (n=8); WT 0.38 ± 0.03 µM; n=47; weighted deactivation time constant (τw) = 28 ± 1.8 ms (n=6); WT 570 ± 23 ms; n=35; peak current density = 4.2 ± 1.0 pA/pF (n=6); WT 41 ± 5.0 pA/pF; n=31",
+      "stance": "supports",
+      "review_status": "unreviewed"
+    },
+    {
+      "id": "evidence:021",
+      "claim_id": "claim:016",
+      "source_id": "paper:platzer2017",
+      "locator": "Platzer 2017 Table 2, c.1623C>G row.",
+      "excerpt": "Paraphrase: the source reports this variant in people with severe intellectual disability, autism spectrum disorder, generalized seizures, dystonic movement disorder. The node represents only the selected research cohort.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:022",
+      "claim_id": "claim:017",
+      "source_id": "paper:platzer2017",
+      "locator": "Table 3, S541R row.",
+      "excerpt": "Paraphrase: the tested receptor construct contains GRIN2B p.Ser541Arg.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:023",
+      "claim_id": "claim:018",
+      "source_id": "paper:myers2023",
+      "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+      "excerpt": "Paraphrase: GRIN2B p.Ser541Arg is categorized as Likely LoF. The original study reports markedly decreased glutamate and glycine potency; the later integrated classification lists Likely LoF and the later charge-transfer estimate is 0.03/0.004 of WT.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:024",
+      "claim_id": "claim:018",
+      "source_id": "paper:platzer2017",
+      "locator": "Table 3, S541R row.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 10 ± 1.7 µM (n=10); WT 1.5 ± 0.08 µM; n=44; glycine EC50 = 1.0 ± 0.15 µM (n=9); WT 0.35 ± 0.02 µM; n=41; Mg2+ IC50 = 18 ± 1.8 µM (n=9); WT 25 ± 2.7 µM; n=33; current at pH 6.8 / pH 7.6 = 17 ± 0.4 % (n=13); WT 15 ± 0.5%; n=47",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:025",
+      "claim_id": "claim:019",
+      "source_id": "paper:xie2023",
+      "locator": "Xie 2023 Table 1, row 18; source citations [10, 26] in that paper.",
+      "excerpt": "Paraphrase: the source reports this variant in people with developmental delay, Rett-like syndrome, epilepsy. The node represents only the selected research cohort.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:026",
+      "claim_id": "claim:020",
+      "source_id": "paper:xie2023",
+      "locator": "Tables 2–4, GRIN2B-P553T row.",
+      "excerpt": "Paraphrase: the tested receptor construct contains GRIN2B p.Pro553Thr.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:027",
+      "claim_id": "claim:021",
+      "source_id": "paper:myers2023",
+      "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+      "excerpt": "Paraphrase: GRIN2B p.Pro553Thr is categorized as Likely LoF. Multiple measured parameters and both modeled charge-transfer ratios are reduced; the 2023 integrated classification lists Likely LoF.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:028",
+      "claim_id": "claim:021",
+      "source_id": "paper:xie2023",
+      "locator": "Tables 2–4, GRIN2B-P553T row.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 2.5 [1.9, 3.3] µM; 95% CI (n=11); WT 1.3 [1.2, 1.4] µM; n=68; glycine EC50 = 1.1 [0.89, 1.3] µM; 95% CI (n=14); WT 0.34 [0.31, 0.37] µM; n=68; weighted deactivation time constant (τw) = 198 ± 39 ms (n=5); WT 1061 ± 91 ms; n=16; peak current density = 1.2 ± 0.5 pA/pF (n=6); WT 19 ± 3.6 pA/pF; n=16; channel open probability (MTSEA method) = 0.026 ± 0.001 unitless (n=22); WT 0.026 ± 0.001; n=45; surface/total receptor ratio = 121 ± 3.1 % of WT (n=15); WT 100% of WT; n=87",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:029",
+      "claim_id": "claim:022",
+      "source_id": "paper:xie2023",
+      "locator": "Xie 2023 Table 1, row 12; variant source listed as This study.",
+      "excerpt": "Paraphrase: the source reports this variant in people with epilepsy, developmental delay, intellectual disability, movement disorder, autism spectrum disorder. The node represents only the selected research cohort.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:030",
+      "claim_id": "claim:023",
+      "source_id": "paper:xie2023",
+      "locator": "Tables 2–4, GRIN2B-S541G row.",
+      "excerpt": "Paraphrase: the tested receptor construct contains GRIN2B p.Ser541Gly.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:031",
+      "claim_id": "claim:024",
+      "source_id": "paper:myers2023",
+      "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+      "excerpt": "Paraphrase: GRIN2B p.Ser541Gly is categorized as Possible GoF. Same-residue substitution as S541R but the source reports increased agonist potency and predicted charge transfer above WT; Myers et al. classify S541G as Possible GoF.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:032",
+      "claim_id": "claim:024",
+      "source_id": "paper:xie2023",
+      "locator": "Tables 2–4, GRIN2B-S541G row.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 0.30 [0.24, 0.38] µM; 95% CI (n=11); WT 1.3 [1.2, 1.4] µM; n=68; glycine EC50 = 0.071 [0.053, 0.095] µM; 95% CI (n=14); WT 0.34 [0.31, 0.37] µM; n=68; Mg2+ IC50 = 30 [20, 44] µM; 95% CI (n=12); WT 27 [23, 32] µM; n=57; weighted deactivation time constant (τw) = 2460 ± 362 ms (n=7); WT 1061 ± 91 ms; n=16; peak current density = 3.7 ± 1.7 pA/pF (n=7); WT 19 ± 3.6 pA/pF; n=16; channel open probability (MTSEA method) = 0.045 ± 0.001 unitless (n=21); WT 0.026 ± 0.001; n=45; surface/total receptor ratio = 60 ± 24 % of WT (n=3); WT 100% of WT; n=87",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:033",
+      "claim_id": "claim:025",
+      "source_id": "paper:xu2024",
+      "locator": "Xu 2024 Table 1, row 40; Platzer 2017 clinical table also reports severe ID, seizures, MCD, and CVI.",
+      "excerpt": "Paraphrase: the source reports this variant in people with epilepsy, intellectual disability, malformation of cortical development, cortical visual impairment. The node represents only the selected research cohort.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:034",
+      "claim_id": "claim:026",
+      "source_id": "paper:xu2024",
+      "locator": "Tables 2–3, GluN2B-A639V row; Figure 5 summarizes classification criteria.",
+      "excerpt": "Paraphrase: the tested receptor construct contains GRIN2B p.Ala639Val.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:035",
+      "claim_id": "claim:027",
+      "source_id": "paper:xu2024",
+      "locator": "Figure 5/Table 3 summary; charge-transfer ratios 7.9 and 6.2 of WT.",
+      "excerpt": "Paraphrase: GRIN2B p.Ala639Val is categorized as Gain-of-function in the tested receptor assay. Both author-calculated charge-transfer ratios and several functional parameters are above WT in the tested diheteromeric assay. A separate engineered-triheteromeric study also reports enhanced agonist potency, but tests pharmacological inhibitor response rather than complete net function.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:036",
+      "claim_id": "claim:027",
+      "source_id": "paper:xu2024",
+      "locator": "Tables 2–3, GluN2B-A639V row; Figure 5 summarizes classification criteria.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 0.28 [0.21, 0.36] µM; 95% CI (n=12); WT 1.2 [1.1, 1.2] µM; n=66; glycine EC50 = 0.065 [0.050, 0.086] µM; 95% CI (n=12); WT 0.39 [0.35, 0.44] µM; n=62; Mg2+ IC50 = 14 [12, 16] µM; 95% CI (n=12); WT 22 [20, 25] µM; n=59; weighted deactivation time constant (τw) = 7954 ± 1726 ms (n=5); WT 524 ± 23 ms; n=26; peak current density = 7.2 ± 2.0 pA/pF (n=5); WT 55 ± 9.7 pA/pF; n=26; channel open probability (MTSEA method) = 0.72 ± 0.05 unitless (n=11); WT 0.033 ± 0.002; n=84; surface/total receptor ratio = 0.13 ± 0.07 relative to WT (n=4); WT 1.0 relative to WT",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:037",
+      "claim_id": "claim:027",
+      "source_id": "paper:han2022",
+      "locator": "Results, 'GRIN Variants Selected for Rescue Pharmacology in Triheteromeric NMDARs'; Supplemental Table S2; Table 1.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50, variant diheteromer = 0.28 [0.21, 0.37] µM; 95% CI (n=None); WT 1.0 [0.90, 1.2] µM; 95% CI; glycine EC50, variant diheteromer = 0.07 [0.05, 0.09] µM; 95% CI (n=None); WT 0.33 [0.26, 0.41] µM; 95% CI",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:038",
+      "claim_id": "claim:028",
+      "source_id": "paper:swanger2016",
+      "locator": "Swanger 2016 Table 2 lists ID; Chen 2020 Table 1 includes ID and epilepsy/seizures.",
+      "excerpt": "Paraphrase: the source reports this variant in people with intellectual disability, epilepsy. The node represents only the selected research cohort.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:039",
+      "claim_id": "claim:029",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2B-p.Arg540His row; Table 3, same variant row.",
+      "excerpt": "Paraphrase: the tested receptor construct contains GRIN2B p.Arg540His.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:040",
+      "claim_id": "claim:030",
+      "source_id": "paper:myers2023",
+      "locator": "Discussion, paragraph applying the framework to previously published variants (Supplementary Tables S3–S5).",
+      "excerpt": "Paraphrase: GRIN2B p.Arg540His is categorized as No Effect or Indeterminant; exact subtype not specified in the paper's grouped statement. Some measured properties differ from WT, but modeled charge transfer is near WT and the later paper does not state an exact subcategory for this variant in that sentence.",
+      "stance": "supports",
+      "review_status": "unreviewed"
+    },
+    {
+      "id": "evidence:041",
+      "claim_id": "claim:030",
+      "source_id": "paper:swanger2016",
+      "locator": "Table 2, GRIN2B-p.Arg540His row; Table 3, same variant row.",
+      "excerpt": "Tabulated measurements (structured factual transcription): glutamate EC50 = 0.64 ± 0.07 µM (n=19); WT 1.5 ± 0.07 µM; n=57; glycine EC50 = 0.25 ± 0.02 µM (n=16); WT 0.38 ± 0.03 µM; n=47; weighted deactivation time constant (τw) = 1,157 ± 130 ms (n=7); WT 570 ± 23 ms; n=35; peak current density = 35 ± 12 pA/pF (n=7); WT 41 ± 5.0 pA/pF; n=31",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:042",
+      "claim_id": "claim:031",
+      "source_id": "resource-source:grin-registry",
+      "locator": "Study goals 1–4 and FAQs 4",
+      "excerpt": "Paraphrase: GRIN Variant Patient Registry is described as a resource of University of Colorado GRIN registry team. Scope and current availability require confirmation.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:043",
+      "claim_id": "claim:032",
+      "source_id": "resource-source:grin-registry",
+      "locator": "Study goals 1–4 and FAQs 4",
+      "excerpt": "Paraphrase: GRIN Variant Patient Registry is described as a resource of University of Leipzig GRIN registry team. Scope and current availability require confirmation.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:044",
+      "claim_id": "claim:033",
+      "source_id": "resource-source:grin-registry",
+      "locator": "Study goals 1–4 and FAQs 4",
+      "excerpt": "Paraphrase: Registry questions span gene, variant function, symptoms and longitudinal change. Research data sharing requires an agreement with the relevant registry team. Potential adaptation to the selected cohort: Can consented cases with published functional evidence support a cross-gene observational comparison, and which outcome definitions can be harmonized?",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:045",
+      "claim_id": "claim:034",
+      "source_id": "resource-source:grin-registry",
+      "locator": "Study goals 1–4 and FAQs 4",
+      "excerpt": "Paraphrase: Registry questions span gene, variant function, symptoms and longitudinal change. Research data sharing requires an agreement with the relevant registry team. Potential adaptation to the selected cohort: Can consented cases with published functional evidence support a cross-gene observational comparison, and which outcome definitions can be harmonized?",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:046",
+      "claim_id": "claim:035",
+      "source_id": "resource-source:cferv-functional-assays",
+      "locator": "For Clinicians and Research Scientists; Request Analysis",
+      "excerpt": "Paraphrase: CFERV functional characterization is described as a resource of Emory University CFERV. Scope and current availability require confirmation.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:047",
+      "claim_id": "claim:036",
+      "source_id": "resource-source:cferv-functional-assays",
+      "locator": "For Clinicians and Research Scientists; Request Analysis",
+      "excerpt": "Paraphrase: Recombinant receptor assays characterize variant effects. Clinicians and researchers should first check the GRIN Portal; additional characterization depends on resources and is not guaranteed. Potential adaptation to the selected cohort: Are existing functional reports and assay conditions comparable for the selected variants?",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:048",
+      "claim_id": "claim:037",
+      "source_id": "resource-source:cferv-functional-assays",
+      "locator": "For Clinicians and Research Scientists; Request Analysis",
+      "excerpt": "Paraphrase: Recombinant receptor assays characterize variant effects. Clinicians and researchers should first check the GRIN Portal; additional characterization depends on resources and is not guaranteed. Potential adaptation to the selected cohort: Are existing functional reports and assay conditions comparable for the selected variants?",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:049",
+      "claim_id": "claim:038",
+      "source_id": "resource-source:combinedbrain-grin2b-samples",
+      "locator": "Patient Tissue",
+      "excerpt": "Paraphrase: COMBINEDBrain GRIN2B biorepository resource is described as a resource of COMBINEDBrain. Scope and current availability require confirmation.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:050",
+      "claim_id": "claim:039",
+      "source_id": "resource-source:combinedbrain-grin2b-samples",
+      "locator": "Patient Tissue",
+      "excerpt": "Paraphrase: The Foundation lists GRIN2B plasma in COMBINEDBrain and a sample-request route. Potential adaptation to the selected cohort: Does the current inventory include the exact selected variants, suitable controls and consent for the proposed assay?",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:051",
+      "claim_id": "claim:040",
+      "source_id": "resource-source:grin-ipsc-organoid-program",
+      "locator": "Disease Modeling Using 3-D Organoids Derived from Human Induced Pluripotent Stem Cells",
+      "excerpt": "Paraphrase: Emory GRIN iPSC and organoid program is described as a resource of Emory University research team. Scope and current availability require confirmation.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:052",
+      "claim_id": "claim:041",
+      "source_id": "resource-source:grin-ipsc-organoid-program",
+      "locator": "Disease Modeling Using 3-D Organoids Derived from Human Induced Pluripotent Stem Cells",
+      "excerpt": "Paraphrase: CureGRIN describes a GRIN iPSC and organoid research program and identifies Zhexing Wen as the research contact. Potential adaptation to the selected cohort: Are existing lines available for the selected variants, with suitable controls and comparable differentiation protocols?",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:053",
+      "claim_id": "claim:042",
+      "source_id": "resource-source:grin-ipsc-organoid-program",
+      "locator": "Disease Modeling Using 3-D Organoids Derived from Human Induced Pluripotent Stem Cells",
+      "excerpt": "Paraphrase: CureGRIN describes a GRIN iPSC and organoid research program and identifies Zhexing Wen as the research contact. Potential adaptation to the selected cohort: Are existing lines available for the selected variants, with suitable controls and comparable differentiation protocols?",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:054",
+      "claim_id": "claim:043",
+      "source_id": "resource-source:grin-crossgene-outcome-methods",
+      "locator": "Abstract: methods and cohort",
+      "excerpt": "Paraphrase: A phase 2A, open-label, single-arm study assessed a functionally selected cross-gene cohort. Its published assessment domains provide a concrete starting point for discussing shared observational measures. Potential adaptation to the selected cohort: Which assessment definitions and schedules are feasible for an observational protocol, accounting for age, baseline severity and instrument rights?",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "evidence:055",
+      "claim_id": "claim:044",
+      "source_id": "resource-source:grin-crossgene-outcome-methods",
+      "locator": "Abstract: methods and cohort",
+      "excerpt": "Paraphrase: A phase 2A, open-label, single-arm study assessed a functionally selected cross-gene cohort. Its published assessment domains provide a concrete starting point for discussing shared observational measures. Potential adaptation to the selected cohort: Which assessment definitions and schedules are feasible for an observational protocol, accounting for age, baseline severity and instrument rights?",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    }
+  ],
+  "coverage": [
+    {
+      "id": "coverage:cohort-grin2a-core-likely-reduced",
+      "source_id": "paper:myers2023",
+      "entity_id": "cohort:grin2a:core_likely_reduced",
+      "scope": "Selected variant classification and primary assay table checks",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Targeted ten-variant set; broader gene literature is harvested separately. No claim of all published functional variants or expert review."
+    },
+    {
+      "id": "coverage:cohort-grin2b-core-likely-reduced",
+      "source_id": "paper:myers2023",
+      "entity_id": "cohort:grin2b:core_likely_reduced",
+      "scope": "Selected variant classification and primary assay table checks",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Targeted ten-variant set; broader gene literature is harvested separately. No claim of all published functional variants or expert review."
+    },
+    {
+      "id": "coverage:cohort-grin2b-provisional-possible-reduced",
+      "source_id": "paper:myers2023",
+      "entity_id": "cohort:grin2b:provisional_possible_reduced",
+      "scope": "Selected variant classification and primary assay table checks",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Targeted ten-variant set; broader gene literature is harvested separately. No claim of all published functional variants or expert review."
+    },
+    {
+      "id": "coverage:cohort-grin2b-opposing-control",
+      "source_id": "paper:myers2023",
+      "entity_id": "cohort:grin2b:opposing_control",
+      "scope": "Selected variant classification and primary assay table checks",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Targeted ten-variant set; broader gene literature is harvested separately. No claim of all published functional variants or expert review."
+    },
+    {
+      "id": "coverage:cohort-grin2b-unresolved-control",
+      "source_id": "paper:myers2023",
+      "entity_id": "cohort:grin2b:unresolved_control",
+      "scope": "Selected variant classification and primary assay table checks",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Targeted ten-variant set; broader gene literature is harvested separately. No claim of all published functional variants or expert review."
+    }
+  ]
+}

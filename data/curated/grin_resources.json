@@ -2,13 +2,165 @@
   "scope": "Public research-resource metadata for the GRIN2A/GRIN2B functional cohort; no patient-level registry or biobank data",
   "retrieved_at": "2026-10-03",
   "resources": [
-    {"id":"grin-registry","name":"GRIN Variant Patient Registry","type":"registry","source_url":"https://grin2b.com/grin-registry/","locator":"Study goals 1–4 and FAQs 4","genes":["GRIN2A","GRIN2B"],"maintainers":["University of Colorado GRIN registry team","University of Leipzig GRIN registry team"],"summary":"Registry questions span gene, variant function, symptoms and longitudinal change. Research data sharing requires an agreement with the relevant registry team.","access":"data_sharing_agreement_required","contact_url":"https://med.emory.edu/departments/pharmacology-chemical-biology/programs-centers/cferv/request-analysis/index.html","reuse_question":"Can consented cases with published functional evidence support a cross-gene observational comparison, and which outcome definitions can be harmonized?","limitations":["No participant records acquired.","Counts of eligible loss-of-function cases are unknown.","Registry enrollment does not establish assay validation or trial eligibility."]},
-    {"id":"cferv-functional-assays","name":"CFERV functional characterization","type":"research_service","source_url":"https://med.emory.edu/departments/pharmacology-chemical-biology/programs-centers/cferv/request-analysis/index.html","locator":"For Clinicians and Research Scientists; Request Analysis","genes":["GRIN2A","GRIN2B"],"maintainers":["Emory University CFERV"],"summary":"Recombinant receptor assays characterize variant effects. Clinicians and researchers should first check the GRIN Portal; additional characterization depends on resources and is not guaranteed.","access":"request_and_capacity_dependent","contact_url":"https://med.emory.edu/departments/pharmacology-chemical-biology/programs-centers/cferv/request-analysis/index.html","reuse_question":"Are existing functional reports and assay conditions comparable for the selected variants?","limitations":["Availability and waiting time need confirmation.","In-vitro receptor effects do not by themselves establish effects in a person."]},
-    {"id":"combinedbrain-grin2b-samples","name":"COMBINEDBrain GRIN2B biorepository resource","type":"biorepository","source_url":"https://grin2b.com/for-researchers/","locator":"Patient Tissue","genes":["GRIN2B"],"maintainers":["COMBINEDBrain"],"summary":"The Foundation lists GRIN2B plasma in COMBINEDBrain and a sample-request route.","access":"sample_request_required","contact_url":"https://grin2b.com/for-researchers/","reuse_question":"Does the current inventory include the exact selected variants, suitable controls and consent for the proposed assay?","limitations":["Current inventory and functional classifications are unverified.","No samples or participant information acquired.","Foundation resource listing is not independent verification of stock."]},
-    {"id":"grin-ipsc-organoid-program","name":"Emory GRIN iPSC and organoid program","type":"disease_model_program","source_url":"https://curegrin.org/gri-research-participation/","locator":"Disease Modeling Using 3-D Organoids Derived from Human Induced Pluripotent Stem Cells","genes":["GRIN2A","GRIN2B"],"maintainers":["Emory University research team"],"summary":"CureGRIN describes a GRIN iPSC and organoid research program and identifies Zhexing Wen as the research contact.","access":"contact_program","contact_url":"https://curegrin.org/gri-research-participation/","reuse_question":"Are existing lines available for the selected variants, with suitable controls and comparable differentiation protocols?","limitations":["Gene-specific and variant-specific line inventory is not stated on this page.","GRIN2A/GRIN2B relevance is a candidate within the program's broad GRIN remit.","Enrollment information does not prove materials are ready for external distribution."]},
-    {"id":"grin-crossgene-outcome-methods","name":"Published cross-gene GRIN outcome-assessment methods","type":"study_methods","source_url":"https://pubmed.ncbi.nlm.nih.gov/38380699/","locator":"Abstract: methods and cohort","genes":["GRIN1","GRIN2A","GRIN2B"],"pmid":"38380699","doi":"10.1093/brain/awae041","nct_id":"NCT04646447","published_at":"2024-05-03","summary":"A phase 2A, open-label, single-arm study assessed a functionally selected cross-gene cohort. Its published assessment domains provide a concrete starting point for discussing shared observational measures.","outcome_domains":["adaptive behavior","cognition","motor function","sleep","quality of life","behavior","seizures and EEG"],"access":"published_methods_instrument_rights_separate","contact_url":"https://pubmed.ncbi.nlm.nih.gov/38380699/","reuse_question":"Which assessment definitions and schedules are feasible for an observational protocol, accounting for age, baseline severity and instrument rights?","limitations":["Uncontrolled study design does not establish causal treatment efficacy.","This asset is study methodology; no treatment recommendation is made.","Instrument availability and reproduction rights require separate checks."]}
+    {
+      "id": "grin-registry",
+      "name": "GRIN Variant Patient Registry",
+      "type": "registry",
+      "source_url": "https://grin2b.com/grin-registry/",
+      "locator": "Study goals 1–4 and FAQs 4",
+      "genes": [
+        "GRIN2A",
+        "GRIN2B"
+      ],
+      "maintainers": [
+        "University of Colorado GRIN registry team",
+        "University of Leipzig GRIN registry team"
+      ],
+      "summary": "Registry questions span gene, variant function, symptoms and longitudinal change. Research data sharing requires an agreement with the relevant registry team.",
+      "access": "data_sharing_agreement_required",
+      "contact_url": "https://grin2b.com/grin-registry/",
+      "reuse_question": "Can consented cases with published functional evidence support a cross-gene observational comparison, and which outcome definitions can be harmonized?",
+      "limitations": [
+        "No participant records acquired.",
+        "Counts of eligible loss-of-function cases are unknown.",
+        "Registry enrollment does not establish assay validation or trial eligibility."
+      ]
+    },
+    {
+      "id": "cferv-functional-assays",
+      "name": "CFERV functional characterization",
+      "type": "research_service",
+      "source_url": "https://med.emory.edu/departments/pharmacology-chemical-biology/programs-centers/cferv/request-analysis/index.html",
+      "locator": "For Clinicians and Research Scientists; Request Analysis",
+      "genes": [
+        "GRIN2A",
+        "GRIN2B"
+      ],
+      "maintainers": [
+        "Emory University CFERV"
+      ],
+      "summary": "Recombinant receptor assays characterize variant effects. Clinicians and researchers should first check the GRIN Portal; additional characterization depends on resources and is not guaranteed.",
+      "access": "request_and_capacity_dependent",
+      "contact_url": "https://med.emory.edu/departments/pharmacology-chemical-biology/programs-centers/cferv/request-analysis/index.html",
+      "reuse_question": "Are existing functional reports and assay conditions comparable for the selected variants?",
+      "limitations": [
+        "Availability and waiting time need confirmation.",
+        "In-vitro receptor effects do not by themselves establish effects in a person."
+      ]
+    },
+    {
+      "id": "combinedbrain-grin2b-samples",
+      "name": "COMBINEDBrain GRIN2B biorepository resource",
+      "type": "biorepository",
+      "source_url": "https://grin2b.com/for-researchers/",
+      "locator": "Patient Tissue",
+      "genes": [
+        "GRIN2B"
+      ],
+      "maintainers": [
+        "COMBINEDBrain"
+      ],
+      "summary": "The Foundation lists GRIN2B plasma in COMBINEDBrain and a sample-request route.",
+      "access": "sample_request_required",
+      "contact_url": "https://grin2b.com/for-researchers/",
+      "reuse_question": "Does the current inventory include the exact selected variants, suitable controls and consent for the proposed assay?",
+      "limitations": [
+        "Current inventory and functional classifications are unverified.",
+        "No samples or participant information acquired.",
+        "Foundation resource listing is not independent verification of stock."
+      ]
+    },
+    {
+      "id": "grin-ipsc-organoid-program",
+      "name": "Emory GRIN iPSC and organoid program",
+      "type": "disease_model_program",
+      "source_url": "https://curegrin.org/gri-research-participation/",
+      "locator": "Disease Modeling Using 3-D Organoids Derived from Human Induced Pluripotent Stem Cells",
+      "genes": [
+        "GRIN2A",
+        "GRIN2B"
+      ],
+      "maintainers": [
+        "Emory University research team"
+      ],
+      "summary": "CureGRIN describes a GRIN iPSC and organoid research program and identifies Zhexing Wen as the research contact.",
+      "access": "contact_program",
+      "contact_url": "https://curegrin.org/gri-research-participation/",
+      "reuse_question": "Are existing lines available for the selected variants, with suitable controls and comparable differentiation protocols?",
+      "limitations": [
+        "Gene-specific and variant-specific line inventory is not stated on this page.",
+        "GRIN2A/GRIN2B relevance is a candidate within the program's broad GRIN remit.",
+        "Enrollment information does not prove materials are ready for external distribution."
+      ]
+    },
+    {
+      "id": "grin-crossgene-outcome-methods",
+      "name": "Published cross-gene GRIN outcome-assessment methods",
+      "type": "study_methods",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/38380699/",
+      "locator": "Abstract: methods and cohort",
+      "genes": [
+        "GRIN1",
+        "GRIN2A",
+        "GRIN2B"
+      ],
+      "pmid": "38380699",
+      "doi": "10.1093/brain/awae041",
+      "nct_id": "NCT04646447",
+      "published_at": "2024-05-03",
+      "summary": "A phase 2A, open-label, single-arm study assessed a functionally selected cross-gene cohort. Its published assessment domains provide a concrete starting point for discussing shared observational measures.",
+      "outcome_domains": [
+        "adaptive behavior",
+        "cognition",
+        "motor function",
+        "sleep",
+        "quality of life",
+        "behavior",
+        "seizures and EEG"
+      ],
+      "access": "published_methods_instrument_rights_separate",
+      "contact_url": "https://pubmed.ncbi.nlm.nih.gov/38380699/",
+      "reuse_question": "Which assessment definitions and schedules are feasible for an observational protocol, accounting for age, baseline severity and instrument rights?",
+      "limitations": [
+        "Uncontrolled study design does not establish causal treatment efficacy.",
+        "This asset is study methodology; no treatment recommendation is made.",
+        "Instrument availability and reproduction rights require separate checks."
+      ]
+    }
   ],
   "announcements": [
-    {"id":"grin2b-foundation-2026-funding","source_url":"https://grin2b.com/2026/03/09/grin2b-foundation-announces-97180-in-new-research-funding/","announced_at":"2026-03-09","issuer":"GRIN2B Foundation","total_amount":97180,"currency":"USD","projects":[{"investigator":"Tim Benke","institution":"University of Colorado","amount":21600,"purpose":"Prepare an IND application for a future controlled L-serine study"},{"investigator":"Andrew Penn","institution":"University of Sussex","amount":21580,"purpose":"Develop neuronal GRIN2B functional-characterization methods"},{"investigator":"Hongjie Yuan","institution":"Emory University","amount":54000,"purpose":"Test a rescue strategy in a GRIN2B truncating-variant mouse model"}],"status":"issuer_announced_awards","limitations":["Announcement is evidence of funding intent/award, not completed results, regulatory approval or proven efficacy.","No unannounced future award is counted."]}
+    {
+      "id": "grin2b-foundation-2026-funding",
+      "source_url": "https://grin2b.com/2026/03/09/grin2b-foundation-announces-97180-in-new-research-funding/",
+      "announced_at": "2026-03-09",
+      "issuer": "GRIN2B Foundation",
+      "total_amount": 97180,
+      "currency": "USD",
+      "projects": [
+        {
+          "investigator": "Tim Benke",
+          "institution": "University of Colorado",
+          "amount": 21600,
+          "purpose": "Prepare an IND application for a future controlled L-serine study"
+        },
+        {
+          "investigator": "Andrew Penn",
+          "institution": "University of Sussex",
+          "amount": 21580,
+          "purpose": "Develop neuronal GRIN2B functional-characterization methods"
+        },
+        {
+          "investigator": "Hongjie Yuan",
+          "institution": "Emory University",
+          "amount": 54000,
+          "purpose": "Test a rescue strategy in a GRIN2B truncating-variant mouse model"
+        }
+      ],
+      "status": "issuer_announced_awards",
+      "limitations": [
+        "Announcement is evidence of funding intent/award, not completed results, regulatory approval or proven efficacy.",
+        "No unannounced future award is counted."
+      ]
+    }
   ]
 }

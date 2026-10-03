@@ -1,0 +1,152 @@
+{
+  "source": "grin_primary_pages",
+  "created_at": "2026-10-03T22:14:15.330867+00:00",
+  "artifacts": {
+    "PMC5656050.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5656050/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5656050/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_primary_pages/PMC5656050.html",
+      "bytes": 322253,
+      "sha256": "8162f4891cd7272c15b3a408510ecc10735497933a4c0554895aecc899af5754",
+      "retrieved_at": "2026-10-03T22:14:15.330828+00:00",
+      "license": "Article-specific rights; individual scholarly source reading, not a redistribution license",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "PMC5142120.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5142120/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5142120/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_primary_pages/PMC5142120.html",
+      "bytes": 352352,
+      "sha256": "0369308c65385a8e579189b62fa3292fef33742101b545c7b79e2d4d2e902f6d",
+      "retrieved_at": "2026-10-03T22:14:15.359053+00:00",
+      "license": "Article-specific rights; individual scholarly source reading, not a redistribution license",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "PMC7554152.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7554152/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7554152/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_primary_pages/PMC7554152.html",
+      "bytes": 255013,
+      "sha256": "195c31e2a92d1b050e32c517b6460b2dd2f9ecdded1c2d196c820ce2f3b5ee59",
+      "retrieved_at": "2026-10-03T22:14:15.805588+00:00",
+      "license": "Article-specific rights; individual scholarly source reading, not a redistribution license",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "PMC10508039.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10508039/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10508039/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_primary_pages/PMC10508039.html",
+      "bytes": 338121,
+      "sha256": "1df8ab98dd145887956e59ce8d31398052c9e6c54754db73cde01ebe8fde3d63",
+      "retrieved_at": "2026-10-03T22:14:15.876731+00:00",
+      "license": "Article-specific rights; individual scholarly source reading, not a redistribution license",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "PMC10641759.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10641759/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10641759/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_primary_pages/PMC10641759.html",
+      "bytes": 293308,
+      "sha256": "99d9d50a8a3b473c3af571bd79e79297c5b709dc7994ada8696b505a731c8592",
+      "retrieved_at": "2026-10-03T22:14:16.208937+00:00",
+      "license": "Article-specific rights; individual scholarly source reading, not a redistribution license",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "PMC10973091.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10973091/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10973091/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_primary_pages/PMC10973091.html",
+      "bytes": 393349,
+      "sha256": "4c1c9405a451f0fc8249d524918cb1d55cd1ae4871a27b67795f651af00c8aa6",
+      "retrieved_at": "2026-10-03T22:14:16.374917+00:00",
+      "license": "Article-specific rights; individual scholarly source reading, not a redistribution license",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "PMC11046977.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11046977/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11046977/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_primary_pages/PMC11046977.html",
+      "bytes": 242247,
+      "sha256": "83376a763dfaa8858be883275820649230626ddce2d430d44a5368c23a619c7d",
+      "retrieved_at": "2026-10-03T22:14:16.686012+00:00",
+      "license": "Article-specific rights; individual scholarly source reading, not a redistribution license",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    }
+  },
+  "datasets": {},
+  "status": "complete_for_scope",
+  "updated_at": "2026-10-03T22:14:16.686714+00:00",
+  "page_checks": {
+    "swanger2016": {
+      "path": "data/raw/harvest/grin_primary_pages/PMC5142120.html",
+      "usable": true
+    },
+    "platzer2017": {
+      "path": "data/raw/harvest/grin_primary_pages/PMC5656050.html",
+      "usable": true
+    },
+    "chen2020": {
+      "path": "data/raw/harvest/grin_primary_pages/PMC7554152.html",
+      "usable": true
+    },
+    "myers2023": {
+      "path": "data/raw/harvest/grin_primary_pages/PMC10508039.html",
+      "usable": true
+    },
+    "xie2023": {
+      "path": "data/raw/harvest/grin_primary_pages/PMC10641759.html",
+      "usable": true
+    },
+    "xu2024": {
+      "path": "data/raw/harvest/grin_primary_pages/PMC10973091.html",
+      "usable": true
+    },
+    "han2022": {
+      "path": "data/raw/harvest/grin_primary_pages/PMC11046977.html",
+      "usable": true
+    }
+  },
+  "scope": "Seven selected primary publications; public page content for table verification"
+}

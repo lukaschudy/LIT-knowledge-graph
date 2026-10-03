@@ -103,8 +103,8 @@
     "resources": {
       "path": "data/processed/harvest/grin_resources/resources.jsonl.gz",
       "records": 5,
-      "bytes": 2048,
-      "sha256": "dc38864633356045a6a9c672613e92e816bfbfda00a0ed9f35c6c564ba47d116",
+      "bytes": 2046,
+      "sha256": "f415da280e8ca53e221eb973e27250d8da73ac6031f7bb30951a54fcacc7a279",
       "input_paths": [
         "data/raw/harvest/grin_resources/63e81fb2cbe94573.html",
         "data/raw/harvest/grin_resources/226424f1f0ea21ca.html",
@@ -113,7 +113,7 @@
         "data/curated/grin_resources.json"
       ],
       "description": "Curated public GRIN resource facts; scope/access/availability uncertainties retained. Metadata only.",
-      "created_at": "2026-10-03T21:59:22.558863+00:00",
+      "created_at": "2026-10-03T22:16:09.139731+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     },
@@ -121,7 +121,7 @@
       "path": "data/processed/harvest/grin_resources/announcements.jsonl.gz",
       "records": 1,
       "bytes": 603,
-      "sha256": "a7ddf9409f689b27b76643745874b91fac92aef09a60efcf69375cea8c38cf34",
+      "sha256": "6e58e8f718e57ff17364ee2897ae5b0bf29f81555ebfffddafed418cb2c215b6",
       "input_paths": [
         "data/raw/harvest/grin_resources/63e81fb2cbe94573.html",
         "data/raw/harvest/grin_resources/226424f1f0ea21ca.html",
@@ -130,7 +130,7 @@
         "data/curated/grin_resources.json"
       ],
       "description": "Issuer announcement metadata; projected research is not a validated result.",
-      "created_at": "2026-10-03T21:59:22.559307+00:00",
+      "created_at": "2026-10-03T22:16:09.140361+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     },
@@ -138,18 +138,18 @@
       "path": "data/processed/harvest/grin_resources/study_records.jsonl.gz",
       "records": 1,
       "bytes": 7013,
-      "sha256": "10fd2e5fa16c9f8ad1f556d262cbb579b3978b1111d352ec5a5a6ba7c8007fef",
+      "sha256": "dadf8fecbdc54ab7265a6294022132ed75b7d7e86e2f8396c8ccbe4f6f14570a",
       "input_paths": [
         "data/raw/harvest/grin_resources/NCT04646447.json"
       ],
       "description": "Complete native trial record for the published cross-gene study; not an eligibility or treatment recommendation.",
-      "created_at": "2026-10-03T21:59:22.722686+00:00",
+      "created_at": "2026-10-03T22:16:09.141585+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     }
   },
   "status": "complete_for_scope",
-  "updated_at": "2026-10-03T21:59:22.730609+00:00",
+  "updated_at": "2026-10-03T22:16:09.141783+00:00",
   "scope": "Public research-resource metadata for the GRIN2A/GRIN2B functional cohort; no patient-level registry or biobank data",
   "unavailable_local_snapshots": [
     {
