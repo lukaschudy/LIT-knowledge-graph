@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T22:21:44.044544+00:00",
+  "generated_at": "2026-10-03T23:44:06.072071+00:00",
   "pdf_source_coverage": [
     {
       "id": "S01",
@@ -41,7 +41,7 @@
         },
         {
           "source": "europe_pmc_diseases",
-          "status": "in_progress"
+          "status": "complete_for_scope"
         },
         {
           "source": "grin_literature",
@@ -55,7 +55,7 @@
       "providers": [
         {
           "source": "pmc_grin_oa",
-          "status": "in_progress"
+          "status": "partial_fulltext_retrieval"
         }
       ]
     },
@@ -65,7 +65,7 @@
       "providers": [
         {
           "source": "clinicaltrials_gov",
-          "status": "expanding_disease_names"
+          "status": "complete_with_fallbacks"
         }
       ]
     },
@@ -75,7 +75,7 @@
       "providers": [
         {
           "source": "nih_reporter",
-          "status": "in_progress"
+          "status": "complete"
         }
       ]
     },
@@ -179,7 +179,7 @@
       "providers": [
         {
           "source": "mgi",
-          "status": "complete"
+          "status": "complete_for_scope"
         }
       ]
     },
@@ -239,11 +239,11 @@
     },
     {
       "source": "clinicaltrials_gov",
-      "status": "expanding_disease_names",
+      "status": "complete_with_fallbacks",
       "datasets": 1,
-      "records": 31132,
-      "raw_bytes": 3555257224,
-      "normalized_bytes": 118132841,
+      "records": 89770,
+      "raw_bytes": 4077355051,
+      "normalized_bytes": 381160121,
       "scope": null,
       "coverage": {
         "unique_nct_ids": 31132,
@@ -300,17 +300,22 @@
     },
     {
       "source": "europe_pmc_diseases",
-      "status": "in_progress",
-      "datasets": 1,
-      "records": 37410,
-      "raw_bytes": 3744388901,
-      "normalized_bytes": 578234,
+      "status": "complete_for_scope",
+      "datasets": 4,
+      "records": 4718225,
+      "raw_bytes": 16220520516,
+      "normalized_bytes": 2462854103,
       "scope": "Exhaustive cursor results for recorded rare-disease name phrases in titles/abstracts; retrieval candidates, not biological evidence.",
       "coverage": {
         "vocabulary_terms": 37410,
+        "eligible_search_terms": 37409,
+        "excluded_aliases": {
+          "the syndrome": "Non-discriminating generic phrase; does not identify the source disease."
+        },
         "total_queries": 424,
-        "completed_queries": 133,
-        "unique_articles": 541247
+        "completed_queries": 424,
+        "unique_articles": 2122515,
+        "query_memberships": 2557876
       },
       "failure": null,
       "reason": null
@@ -329,6 +334,18 @@
         "pages": 3,
         "limitation": "Searches title/abstract wording, so disease-name-only preprints may be missed. Europe PMC indexes current preprint records; preserve PPR IDs and DOI/version strings where supplied. The source does not always expose the originating server; none is inferred from DOI alone. Full text remains governed by each server's license."
       },
+      "failure": null,
+      "reason": null
+    },
+    {
+      "source": "europe_pmc_recheck",
+      "status": "complete_for_scope",
+      "datasets": 20,
+      "records": 465071,
+      "raw_bytes": 41644466,
+      "normalized_bytes": 3090692,
+      "scope": null,
+      "coverage": null,
       "failure": null,
       "reason": null
     },
@@ -863,8 +880,8 @@
       "datasets": 1,
       "records": 687,
       "raw_bytes": 0,
-      "normalized_bytes": 25848,
-      "scope": "Tables present in selected seven primary article HTML pages; supplemental files not included here",
+      "normalized_bytes": 30623,
+      "scope": "Table text and image references present in seven selected primary article HTML pages; supplemental files and image transcription excluded",
       "coverage": null,
       "failure": null,
       "reason": null
@@ -884,10 +901,10 @@
     {
       "source": "grin_reference",
       "status": "complete_for_scope",
-      "datasets": 11,
-      "records": 9612,
+      "datasets": 16,
+      "records": 9749,
       "raw_bytes": 0,
-      "normalized_bytes": 585060,
+      "normalized_bytes": 645113,
       "scope": "Exact gene/protein identifier slices of acquired reference snapshots; full native records retained. Independent curated functional evidence is required for demo inclusion.",
       "coverage": null,
       "failure": null,
@@ -901,6 +918,18 @@
       "raw_bytes": 500454,
       "normalized_bytes": 9662,
       "scope": "Public research-resource metadata for the GRIN2A/GRIN2B functional cohort; no patient-level registry or biobank data",
+      "coverage": null,
+      "failure": null,
+      "reason": null
+    },
+    {
+      "source": "grin_supplements",
+      "status": "complete_for_scope",
+      "datasets": 1,
+      "records": 9,
+      "raw_bytes": 783057,
+      "normalized_bytes": 9835,
+      "scope": "Myers 2023 supplemental PDF from Europe PMC supplementaryFiles; other papers supplements not included",
       "coverage": null,
       "failure": null,
       "reason": null
@@ -931,12 +960,12 @@
     },
     {
       "source": "mgi",
-      "status": "complete",
+      "status": "complete_for_scope",
       "datasets": 9,
-      "records": 759113,
-      "raw_bytes": 139156210,
-      "normalized_bytes": 19118726,
-      "scope": null,
+      "records": 759112,
+      "raw_bytes": 139203344,
+      "normalized_bytes": 32319739,
+      "scope": "Nine acquired MGI reports, with native columns and provider-defined semantic field names",
       "coverage": "Complete official orthology, human phenotype, allele, strain, gene phenotype and disease-model reports. Only positional native report columns emitted; semantic schemas not verified.",
       "failure": null,
       "reason": null
@@ -955,13 +984,3818 @@
     },
     {
       "source": "nih_reporter",
-      "status": "in_progress",
-      "datasets": 0,
-      "records": 0,
-      "raw_bytes": 882799450,
-      "normalized_bytes": 0,
+      "status": "complete",
+      "datasets": 2,
+      "records": 44086,
+      "raw_bytes": 1151367103,
+      "normalized_bytes": 120045836,
       "scope": null,
-      "coverage": null,
+      "coverage": {
+        "unique_application_fy_subproject_keys": 42553,
+        "fiscal_years": [
+          {
+            "fiscal_year": 1985,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 42,
+                "records_seen": 42,
+                "unique_keys": 42
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 23,
+                "records_seen": 23,
+                "unique_keys": 23
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 371,
+                "records_seen": 371,
+                "unique_keys": 371
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 11,
+                "records_seen": 11,
+                "unique_keys": 11
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1986,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 36,
+                "records_seen": 36,
+                "unique_keys": 36
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 21,
+                "records_seen": 21,
+                "unique_keys": 21
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 300,
+                "records_seen": 300,
+                "unique_keys": 300
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 9,
+                "records_seen": 9,
+                "unique_keys": 9
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1987,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 39,
+                "records_seen": 39,
+                "unique_keys": 39
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 22,
+                "records_seen": 22,
+                "unique_keys": 22
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 234,
+                "records_seen": 234,
+                "unique_keys": 234
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 6,
+                "records_seen": 6,
+                "unique_keys": 6
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1988,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 43,
+                "records_seen": 43,
+                "unique_keys": 43
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 30,
+                "records_seen": 30,
+                "unique_keys": 30
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 204,
+                "records_seen": 204,
+                "unique_keys": 204
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 4,
+                "records_seen": 4,
+                "unique_keys": 4
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1989,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 49,
+                "records_seen": 49,
+                "unique_keys": 49
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 28,
+                "records_seen": 28,
+                "unique_keys": 28
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 150,
+                "records_seen": 150,
+                "unique_keys": 150
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 5,
+                "records_seen": 5,
+                "unique_keys": 5
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1990,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 57,
+                "records_seen": 57,
+                "unique_keys": 57
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 31,
+                "records_seen": 31,
+                "unique_keys": 31
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 134,
+                "records_seen": 134,
+                "unique_keys": 134
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 4,
+                "records_seen": 4,
+                "unique_keys": 4
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1991,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 3,
+                "records_seen": 3,
+                "unique_keys": 3
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 69,
+                "records_seen": 69,
+                "unique_keys": 69
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 33,
+                "records_seen": 33,
+                "unique_keys": 33
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 110,
+                "records_seen": 110,
+                "unique_keys": 110
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 4,
+                "records_seen": 4,
+                "unique_keys": 4
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1992,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 87,
+                "records_seen": 87,
+                "unique_keys": 87
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 40,
+                "records_seen": 40,
+                "unique_keys": 40
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 4,
+                "records_seen": 4,
+                "unique_keys": 4
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 81,
+                "records_seen": 81,
+                "unique_keys": 81
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1993,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 84,
+                "records_seen": 84,
+                "unique_keys": 84
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 38,
+                "records_seen": 38,
+                "unique_keys": 38
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 6,
+                "records_seen": 6,
+                "unique_keys": 6
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 75,
+                "records_seen": 75,
+                "unique_keys": 75
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1994,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 80,
+                "records_seen": 80,
+                "unique_keys": 80
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 36,
+                "records_seen": 36,
+                "unique_keys": 36
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 5,
+                "records_seen": 5,
+                "unique_keys": 5
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 55,
+                "records_seen": 55,
+                "unique_keys": 55
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1995,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 84,
+                "records_seen": 84,
+                "unique_keys": 84
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 37,
+                "records_seen": 37,
+                "unique_keys": 37
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 7,
+                "records_seen": 7,
+                "unique_keys": 7
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 3,
+                "records_seen": 3,
+                "unique_keys": 3
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 37,
+                "records_seen": 37,
+                "unique_keys": 37
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1996,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 53,
+                "records_seen": 53,
+                "unique_keys": 53
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 14,
+                "records_seen": 14,
+                "unique_keys": 14
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 15,
+                "records_seen": 15,
+                "unique_keys": 15
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1997,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 142,
+                "records_seen": 142,
+                "unique_keys": 142
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 56,
+                "records_seen": 56,
+                "unique_keys": 56
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 14,
+                "records_seen": 14,
+                "unique_keys": 14
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 6,
+                "records_seen": 6,
+                "unique_keys": 6
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 70,
+                "records_seen": 70,
+                "unique_keys": 70
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 8,
+                "records_seen": 8,
+                "unique_keys": 8
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1998,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 170,
+                "records_seen": 170,
+                "unique_keys": 170
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 68,
+                "records_seen": 68,
+                "unique_keys": 68
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 16,
+                "records_seen": 16,
+                "unique_keys": 16
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 9,
+                "records_seen": 9,
+                "unique_keys": 9
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 78,
+                "records_seen": 78,
+                "unique_keys": 78
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              }
+            ]
+          },
+          {
+            "fiscal_year": 1999,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 194,
+                "records_seen": 194,
+                "unique_keys": 194
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 82,
+                "records_seen": 82,
+                "unique_keys": 82
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 20,
+                "records_seen": 20,
+                "unique_keys": 20
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 9,
+                "records_seen": 9,
+                "unique_keys": 9
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 80,
+                "records_seen": 80,
+                "unique_keys": 80
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 5,
+                "records_seen": 5,
+                "unique_keys": 5
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2000,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 194,
+                "records_seen": 194,
+                "unique_keys": 194
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 77,
+                "records_seen": 77,
+                "unique_keys": 77
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 17,
+                "records_seen": 17,
+                "unique_keys": 17
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 6,
+                "records_seen": 6,
+                "unique_keys": 6
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 49,
+                "records_seen": 49,
+                "unique_keys": 49
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 3,
+                "records_seen": 3,
+                "unique_keys": 3
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2001,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 204,
+                "records_seen": 204,
+                "unique_keys": 204
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 79,
+                "records_seen": 79,
+                "unique_keys": 79
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 15,
+                "records_seen": 15,
+                "unique_keys": 15
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 11,
+                "records_seen": 11,
+                "unique_keys": 11
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 50,
+                "records_seen": 50,
+                "unique_keys": 50
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2002,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 224,
+                "records_seen": 224,
+                "unique_keys": 224
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 96,
+                "records_seen": 96,
+                "unique_keys": 96
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 15,
+                "records_seen": 15,
+                "unique_keys": 15
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 12,
+                "records_seen": 12,
+                "unique_keys": 12
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 43,
+                "records_seen": 43,
+                "unique_keys": 43
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 3,
+                "records_seen": 3,
+                "unique_keys": 3
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2003,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 239,
+                "records_seen": 239,
+                "unique_keys": 239
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 109,
+                "records_seen": 109,
+                "unique_keys": 109
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 18,
+                "records_seen": 18,
+                "unique_keys": 18
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 12,
+                "records_seen": 12,
+                "unique_keys": 12
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 35,
+                "records_seen": 35,
+                "unique_keys": 35
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2004,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 7,
+                "records_seen": 7,
+                "unique_keys": 7
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 6,
+                "records_seen": 6,
+                "unique_keys": 6
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 285,
+                "records_seen": 285,
+                "unique_keys": 285
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 134,
+                "records_seen": 134,
+                "unique_keys": 134
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 33,
+                "records_seen": 33,
+                "unique_keys": 33
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 22,
+                "records_seen": 22,
+                "unique_keys": 22
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 53,
+                "records_seen": 53,
+                "unique_keys": 53
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2005,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 9,
+                "records_seen": 9,
+                "unique_keys": 9
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 7,
+                "records_seen": 7,
+                "unique_keys": 7
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 316,
+                "records_seen": 316,
+                "unique_keys": 316
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 155,
+                "records_seen": 155,
+                "unique_keys": 155
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 37,
+                "records_seen": 37,
+                "unique_keys": 37
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 25,
+                "records_seen": 25,
+                "unique_keys": 25
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 42,
+                "records_seen": 42,
+                "unique_keys": 42
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2006,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 10,
+                "records_seen": 10,
+                "unique_keys": 10
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 7,
+                "records_seen": 7,
+                "unique_keys": 7
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 409,
+                "records_seen": 409,
+                "unique_keys": 409
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 173,
+                "records_seen": 173,
+                "unique_keys": 173
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 46,
+                "records_seen": 46,
+                "unique_keys": 46
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 28,
+                "records_seen": 28,
+                "unique_keys": 28
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 37,
+                "records_seen": 37,
+                "unique_keys": 37
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2007,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 7,
+                "records_seen": 7,
+                "unique_keys": 7
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 8,
+                "records_seen": 8,
+                "unique_keys": 8
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 464,
+                "records_seen": 464,
+                "unique_keys": 464
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 232,
+                "records_seen": 232,
+                "unique_keys": 232
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 61,
+                "records_seen": 61,
+                "unique_keys": 61
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 36,
+                "records_seen": 36,
+                "unique_keys": 36
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 147,
+                "records_seen": 147,
+                "unique_keys": 147
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 149,
+                "records_seen": 149,
+                "unique_keys": 149
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 218,
+                "records_seen": 218,
+                "unique_keys": 218
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 120,
+                "records_seen": 120,
+                "unique_keys": 120
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2008,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 7,
+                "records_seen": 7,
+                "unique_keys": 7
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 10,
+                "records_seen": 10,
+                "unique_keys": 10
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 547,
+                "records_seen": 547,
+                "unique_keys": 547
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 265,
+                "records_seen": 265,
+                "unique_keys": 265
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 69,
+                "records_seen": 69,
+                "unique_keys": 69
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 51,
+                "records_seen": 51,
+                "unique_keys": 51
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 143,
+                "records_seen": 143,
+                "unique_keys": 143
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 143,
+                "records_seen": 143,
+                "unique_keys": 143
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 232,
+                "records_seen": 232,
+                "unique_keys": 232
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 133,
+                "records_seen": 133,
+                "unique_keys": 133
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2009,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 5,
+                "records_seen": 5,
+                "unique_keys": 5
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 19,
+                "records_seen": 19,
+                "unique_keys": 19
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 768,
+                "records_seen": 768,
+                "unique_keys": 768
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 400,
+                "records_seen": 400,
+                "unique_keys": 400
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 83,
+                "records_seen": 83,
+                "unique_keys": 83
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 58,
+                "records_seen": 58,
+                "unique_keys": 58
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 214,
+                "records_seen": 214,
+                "unique_keys": 214
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 230,
+                "records_seen": 230,
+                "unique_keys": 230
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 279,
+                "records_seen": 279,
+                "unique_keys": 279
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 154,
+                "records_seen": 154,
+                "unique_keys": 154
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2010,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 10,
+                "records_seen": 10,
+                "unique_keys": 10
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 23,
+                "records_seen": 23,
+                "unique_keys": 23
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 3,
+                "records_seen": 3,
+                "unique_keys": 3
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 844,
+                "records_seen": 844,
+                "unique_keys": 844
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 459,
+                "records_seen": 459,
+                "unique_keys": 459
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 86,
+                "records_seen": 86,
+                "unique_keys": 86
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 63,
+                "records_seen": 63,
+                "unique_keys": 63
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 237,
+                "records_seen": 237,
+                "unique_keys": 237
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 246,
+                "records_seen": 246,
+                "unique_keys": 246
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 246,
+                "records_seen": 246,
+                "unique_keys": 246
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 141,
+                "records_seen": 141,
+                "unique_keys": 141
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2011,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 8,
+                "records_seen": 8,
+                "unique_keys": 8
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 13,
+                "records_seen": 13,
+                "unique_keys": 13
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 753,
+                "records_seen": 753,
+                "unique_keys": 753
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 446,
+                "records_seen": 446,
+                "unique_keys": 446
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 62,
+                "records_seen": 62,
+                "unique_keys": 62
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 58,
+                "records_seen": 58,
+                "unique_keys": 58
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 234,
+                "records_seen": 234,
+                "unique_keys": 234
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 247,
+                "records_seen": 247,
+                "unique_keys": 247
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 220,
+                "records_seen": 220,
+                "unique_keys": 220
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 122,
+                "records_seen": 122,
+                "unique_keys": 122
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2012,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 6,
+                "records_seen": 6,
+                "unique_keys": 6
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 16,
+                "records_seen": 16,
+                "unique_keys": 16
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 836,
+                "records_seen": 836,
+                "unique_keys": 836
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 474,
+                "records_seen": 474,
+                "unique_keys": 474
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 86,
+                "records_seen": 86,
+                "unique_keys": 86
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 61,
+                "records_seen": 61,
+                "unique_keys": 61
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 291,
+                "records_seen": 291,
+                "unique_keys": 291
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 304,
+                "records_seen": 304,
+                "unique_keys": 304
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 246,
+                "records_seen": 246,
+                "unique_keys": 246
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 135,
+                "records_seen": 135,
+                "unique_keys": 135
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2013,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 11,
+                "records_seen": 11,
+                "unique_keys": 11
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 13,
+                "records_seen": 13,
+                "unique_keys": 13
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 3,
+                "records_seen": 3,
+                "unique_keys": 3
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 823,
+                "records_seen": 823,
+                "unique_keys": 823
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 418,
+                "records_seen": 418,
+                "unique_keys": 418
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 72,
+                "records_seen": 72,
+                "unique_keys": 72
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 55,
+                "records_seen": 55,
+                "unique_keys": 55
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 353,
+                "records_seen": 353,
+                "unique_keys": 353
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 351,
+                "records_seen": 351,
+                "unique_keys": 351
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 549,
+                "records_seen": 549,
+                "unique_keys": 549
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 456,
+                "records_seen": 456,
+                "unique_keys": 456
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2014,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 8,
+                "records_seen": 8,
+                "unique_keys": 8
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 8,
+                "records_seen": 8,
+                "unique_keys": 8
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 937,
+                "records_seen": 937,
+                "unique_keys": 936
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 483,
+                "records_seen": 483,
+                "unique_keys": 483
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 78,
+                "records_seen": 78,
+                "unique_keys": 78
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 50,
+                "records_seen": 50,
+                "unique_keys": 50
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 857,
+                "records_seen": 857,
+                "unique_keys": 857
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 589,
+                "records_seen": 589,
+                "unique_keys": 589
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 601,
+                "records_seen": 601,
+                "unique_keys": 601
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 514,
+                "records_seen": 514,
+                "unique_keys": 514
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2015,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 10,
+                "records_seen": 10,
+                "unique_keys": 10
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 14,
+                "records_seen": 14,
+                "unique_keys": 14
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 990,
+                "records_seen": 990,
+                "unique_keys": 990
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 522,
+                "records_seen": 522,
+                "unique_keys": 522
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 88,
+                "records_seen": 88,
+                "unique_keys": 88
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 61,
+                "records_seen": 61,
+                "unique_keys": 61
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 911,
+                "records_seen": 911,
+                "unique_keys": 911
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 642,
+                "records_seen": 642,
+                "unique_keys": 642
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 632,
+                "records_seen": 632,
+                "unique_keys": 632
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 551,
+                "records_seen": 551,
+                "unique_keys": 551
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2016,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 11,
+                "records_seen": 11,
+                "unique_keys": 11
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 20,
+                "records_seen": 20,
+                "unique_keys": 20
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1053,
+                "records_seen": 1053,
+                "unique_keys": 1052
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 557,
+                "records_seen": 557,
+                "unique_keys": 557
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 90,
+                "records_seen": 90,
+                "unique_keys": 90
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 51,
+                "records_seen": 51,
+                "unique_keys": 51
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 966,
+                "records_seen": 966,
+                "unique_keys": 966
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 691,
+                "records_seen": 691,
+                "unique_keys": 691
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 674,
+                "records_seen": 674,
+                "unique_keys": 674
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 568,
+                "records_seen": 568,
+                "unique_keys": 568
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2017,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 11,
+                "records_seen": 11,
+                "unique_keys": 11
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 19,
+                "records_seen": 19,
+                "unique_keys": 19
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1081,
+                "records_seen": 1081,
+                "unique_keys": 1081
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 570,
+                "records_seen": 570,
+                "unique_keys": 570
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 99,
+                "records_seen": 99,
+                "unique_keys": 99
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 56,
+                "records_seen": 56,
+                "unique_keys": 56
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 989,
+                "records_seen": 989,
+                "unique_keys": 989
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 741,
+                "records_seen": 741,
+                "unique_keys": 741
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 778,
+                "records_seen": 778,
+                "unique_keys": 778
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 637,
+                "records_seen": 637,
+                "unique_keys": 637
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2018,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 14,
+                "records_seen": 14,
+                "unique_keys": 14
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 24,
+                "records_seen": 24,
+                "unique_keys": 24
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1185,
+                "records_seen": 1185,
+                "unique_keys": 1185
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 608,
+                "records_seen": 608,
+                "unique_keys": 608
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 106,
+                "records_seen": 106,
+                "unique_keys": 106
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 69,
+                "records_seen": 69,
+                "unique_keys": 69
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1141,
+                "records_seen": 1141,
+                "unique_keys": 1141
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 819,
+                "records_seen": 819,
+                "unique_keys": 819
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 847,
+                "records_seen": 847,
+                "unique_keys": 847
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 703,
+                "records_seen": 703,
+                "unique_keys": 703
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2019,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 16,
+                "records_seen": 16,
+                "unique_keys": 16
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 22,
+                "records_seen": 22,
+                "unique_keys": 22
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1245,
+                "records_seen": 1245,
+                "unique_keys": 1245
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 625,
+                "records_seen": 625,
+                "unique_keys": 625
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 92,
+                "records_seen": 92,
+                "unique_keys": 92
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 53,
+                "records_seen": 53,
+                "unique_keys": 53
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1210,
+                "records_seen": 1210,
+                "unique_keys": 1210
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 865,
+                "records_seen": 865,
+                "unique_keys": 865
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 847,
+                "records_seen": 847,
+                "unique_keys": 847
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 695,
+                "records_seen": 695,
+                "unique_keys": 695
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2020,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 21,
+                "records_seen": 21,
+                "unique_keys": 21
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 31,
+                "records_seen": 31,
+                "unique_keys": 31
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1302,
+                "records_seen": 1302,
+                "unique_keys": 1302
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 684,
+                "records_seen": 684,
+                "unique_keys": 684
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 94,
+                "records_seen": 94,
+                "unique_keys": 94
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 57,
+                "records_seen": 57,
+                "unique_keys": 57
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1241,
+                "records_seen": 1241,
+                "unique_keys": 1241
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 907,
+                "records_seen": 907,
+                "unique_keys": 907
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 917,
+                "records_seen": 917,
+                "unique_keys": 917
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 773,
+                "records_seen": 773,
+                "unique_keys": 772
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2021,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 21,
+                "records_seen": 21,
+                "unique_keys": 21
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 30,
+                "records_seen": 30,
+                "unique_keys": 30
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1372,
+                "records_seen": 1372,
+                "unique_keys": 1370
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 702,
+                "records_seen": 702,
+                "unique_keys": 701
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 102,
+                "records_seen": 102,
+                "unique_keys": 102
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 61,
+                "records_seen": 61,
+                "unique_keys": 61
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1211,
+                "records_seen": 1211,
+                "unique_keys": 1211
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 886,
+                "records_seen": 886,
+                "unique_keys": 886
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 895,
+                "records_seen": 895,
+                "unique_keys": 895
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 768,
+                "records_seen": 768,
+                "unique_keys": 768
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2022,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 29,
+                "records_seen": 29,
+                "unique_keys": 29
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 25,
+                "records_seen": 25,
+                "unique_keys": 25
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1394,
+                "records_seen": 1394,
+                "unique_keys": 1393
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 691,
+                "records_seen": 691,
+                "unique_keys": 690
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 92,
+                "records_seen": 92,
+                "unique_keys": 92
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 56,
+                "records_seen": 56,
+                "unique_keys": 56
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1246,
+                "records_seen": 1246,
+                "unique_keys": 1246
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 905,
+                "records_seen": 905,
+                "unique_keys": 905
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 930,
+                "records_seen": 930,
+                "unique_keys": 930
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 785,
+                "records_seen": 785,
+                "unique_keys": 784
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2023,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 32,
+                "records_seen": 32,
+                "unique_keys": 32
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 28,
+                "records_seen": 28,
+                "unique_keys": 28
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1413,
+                "records_seen": 1413,
+                "unique_keys": 1411
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 769,
+                "records_seen": 769,
+                "unique_keys": 769
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 93,
+                "records_seen": 93,
+                "unique_keys": 93
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 59,
+                "records_seen": 59,
+                "unique_keys": 59
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1347,
+                "records_seen": 1347,
+                "unique_keys": 1347
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 1004,
+                "records_seen": 1004,
+                "unique_keys": 1004
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 986,
+                "records_seen": 986,
+                "unique_keys": 986
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 850,
+                "records_seen": 850,
+                "unique_keys": 850
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2024,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 28,
+                "records_seen": 28,
+                "unique_keys": 28
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 25,
+                "records_seen": 25,
+                "unique_keys": 25
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1347,
+                "records_seen": 1347,
+                "unique_keys": 1344
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 719,
+                "records_seen": 719,
+                "unique_keys": 719
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 98,
+                "records_seen": 98,
+                "unique_keys": 98
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 58,
+                "records_seen": 58,
+                "unique_keys": 58
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1305,
+                "records_seen": 1305,
+                "unique_keys": 1305
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 957,
+                "records_seen": 957,
+                "unique_keys": 957
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 915,
+                "records_seen": 915,
+                "unique_keys": 915
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 783,
+                "records_seen": 783,
+                "unique_keys": 783
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2025,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 27,
+                "records_seen": 27,
+                "unique_keys": 27
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 40,
+                "records_seen": 40,
+                "unique_keys": 40
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 0,
+                "records_seen": 0,
+                "unique_keys": 0
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 2,
+                "records_seen": 2,
+                "unique_keys": 2
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1410,
+                "records_seen": 1410,
+                "unique_keys": 1410
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 762,
+                "records_seen": 762,
+                "unique_keys": 762
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 88,
+                "records_seen": 88,
+                "unique_keys": 88
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 54,
+                "records_seen": 54,
+                "unique_keys": 54
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1374,
+                "records_seen": 1374,
+                "unique_keys": 1374
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 1013,
+                "records_seen": 1013,
+                "unique_keys": 1013
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 918,
+                "records_seen": 918,
+                "unique_keys": 918
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 815,
+                "records_seen": 815,
+                "unique_keys": 815
+              }
+            ]
+          },
+          {
+            "fiscal_year": 2026,
+            "searches": [
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare disease",
+                "reported_total": 27,
+                "records_seen": 27,
+                "unique_keys": 27
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "rare diseases",
+                "reported_total": 39,
+                "records_seen": 39,
+                "unique_keys": 39
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan disease",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "PROJECTTITLE",
+                "term": "orphan diseases",
+                "reported_total": 1,
+                "records_seen": 1,
+                "unique_keys": 1
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare disease",
+                "reported_total": 1295,
+                "records_seen": 1295,
+                "unique_keys": 1295
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "rare diseases",
+                "reported_total": 679,
+                "records_seen": 679,
+                "unique_keys": 679
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan disease",
+                "reported_total": 85,
+                "records_seen": 85,
+                "unique_keys": 85
+              },
+              {
+                "field": "ABSTRACTTEXT",
+                "term": "orphan diseases",
+                "reported_total": 48,
+                "records_seen": 48,
+                "unique_keys": 48
+              },
+              {
+                "field": "TERMS",
+                "term": "rare disease",
+                "reported_total": 1269,
+                "records_seen": 1269,
+                "unique_keys": 1269
+              },
+              {
+                "field": "TERMS",
+                "term": "rare diseases",
+                "reported_total": 947,
+                "records_seen": 947,
+                "unique_keys": 947
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan disease",
+                "reported_total": 860,
+                "records_seen": 860,
+                "unique_keys": 860
+              },
+              {
+                "field": "TERMS",
+                "term": "orphan diseases",
+                "reported_total": 771,
+                "records_seen": 771,
+                "unique_keys": 771
+              }
+            ]
+          }
+        ],
+        "query_errors": [
+          {
+            "query": "2014/ABSTRACTTEXT/rare disease",
+            "expected_unique": 937,
+            "unique_keys": 936,
+            "error": "unique application-key count does not match reported total"
+          },
+          {
+            "query": "2016/ABSTRACTTEXT/rare disease",
+            "expected_unique": 1053,
+            "unique_keys": 1052,
+            "error": "unique application-key count does not match reported total"
+          },
+          {
+            "query": "2020/TERMS/orphan diseases",
+            "expected_unique": 773,
+            "unique_keys": 772,
+            "error": "unique application-key count does not match reported total"
+          },
+          {
+            "query": "2021/ABSTRACTTEXT/rare disease",
+            "expected_unique": 1372,
+            "unique_keys": 1370,
+            "error": "unique application-key count does not match reported total"
+          },
+          {
+            "query": "2021/ABSTRACTTEXT/rare diseases",
+            "expected_unique": 702,
+            "unique_keys": 701,
+            "error": "unique application-key count does not match reported total"
+          },
+          {
+            "query": "2022/ABSTRACTTEXT/rare disease",
+            "expected_unique": 1394,
+            "unique_keys": 1393,
+            "error": "unique application-key count does not match reported total"
+          },
+          {
+            "query": "2022/ABSTRACTTEXT/rare diseases",
+            "expected_unique": 691,
+            "unique_keys": 690,
+            "error": "unique application-key count does not match reported total"
+          },
+          {
+            "query": "2022/TERMS/orphan diseases",
+            "expected_unique": 785,
+            "unique_keys": 784,
+            "error": "unique application-key count does not match reported total"
+          },
+          {
+            "query": "2023/ABSTRACTTEXT/rare disease",
+            "expected_unique": 1413,
+            "unique_keys": 1411,
+            "error": "unique application-key count does not match reported total"
+          },
+          {
+            "query": "2024/ABSTRACTTEXT/rare disease",
+            "expected_unique": 1347,
+            "unique_keys": 1344,
+            "error": "unique application-key count does not match reported total"
+          }
+        ],
+        "limitation": "RePORTER text search is broad but not guaranteed to cover disease-specific names absent from matched project text."
+      },
       "failure": null,
       "reason": null
     },
@@ -993,9 +4827,9 @@
       "source": "open_targets",
       "status": "partial",
       "datasets": 4,
-      "records": 516753,
-      "raw_bytes": 325040873,
-      "normalized_bytes": 42674729,
+      "records": 2864271,
+      "raw_bytes": 1080565587,
+      "normalized_bytes": 122613221,
       "scope": null,
       "coverage": {
         "rare_source_rows": 7200,
@@ -2345,7 +6179,7 @@
           "MONDO_8000008",
           "MONDO_8000024"
         ],
-        "target_associations_captured": 496930,
+        "target_associations_captured": 2844448,
         "diseases_with_over_100_target_associations": [
           {
             "disease_id": "MONDO_0000023",
@@ -27384,7 +31218,256 @@
           }
         ],
         "failed_batches": [],
-        "limitation": "Partial rare-disease slice via 6,730 MONDO identifiers mapped from RareSource OMIM/Orphanet xrefs; 5,388 returned and 1,342 did not resolve in the current API. Aggregate target associations limited to top 100 per disease (4,753 diseases had more; complete source-native evidence fetched separately only for 13 GRIN2A/GRIN2B disease IDs). Candidate drug count matched rows for all returned diseases. Full underlying evidence for other targets was not requested."
+        "limitation": "All aggregate association pages are acquired for returned disease IDs only. The 1,342 MONDO IDs in the input crosswalk that did not resolve remain unknown for Open Targets; full source-native evidence is separately complete only for the focused GRIN2A/GRIN2B disease identifiers.",
+        "target_associations_expected_total": 2844448,
+        "target_associations_first_page_records": 496930,
+        "target_association_continuation_expected_records": 2347518,
+        "target_association_continuation_records": 2347518,
+        "target_association_continuation_calls": 909,
+        "target_association_expected_calls": 909,
+        "target_association_failed_pages": [],
+        "target_association_page_size": 100,
+        "target_association_coverage_complete": true,
+        "resolved_disease_ids": 5388,
+        "mapped_mondo_ids_not_returned": 1342,
+        "target_association_uniqueness_audit": {
+          "rows": 2844448,
+          "distinct_disease_target_pairs": 2844448,
+          "duplicate_rows": 0,
+          "diseases_audited": 5388,
+          "distinct_target_count_mismatches": 0,
+          "diseases_with_distinct_target_count_mismatch": 0,
+          "mismatch_details": [],
+          "initial_offset_page_audit": {
+            "rows": 2844448,
+            "distinct_disease_target_pairs": 2791217,
+            "duplicate_rows": 53231,
+            "diseases_audited": 5388,
+            "diseases_with_distinct_target_count_mismatch": 1775,
+            "method": "distinct (disease_id,target.id) and per-disease distinct target counts over the original concatenated 100-row offset pages; exact raw artifacts retained",
+            "query_tie_behavior": "overlap occurs across adjacent pages at tied association scores, with identical score and source component payloads"
+          },
+          "repair": {
+            "affected_diseases": 37,
+            "repaired_diseases": 37,
+            "requests": 314,
+            "raw_files": [
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-10ebb0016ad76d6b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-939887ba73607fff.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-41f7ae2ed386b957.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c382a56acf3bff1d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5db67757e726d847.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-44eafa158f3b619d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-460c96573e29bf15.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-409d162d344ab41b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8af9f8fca516dff6.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-dc5d43ba4e98c9e0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b8408e4b177ac96a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-42ee62c810da6c92.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-53bd532d4cc15739.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b9edef94d6a39f2d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-61d5d7cd30b31ef5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f4dc536af2665959.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-099c5b2102d5a032.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0f114f991451616f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f977f955d04cd230.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-35cbdb92a5387537.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-feb99c4946fe6b23.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-4facc49f0d8fc3cc.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f9a73dd5a8320ce8.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-887b5941e5c24ded.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-98a021e7e4a64bd2.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-70fc9815db02b6a2.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c4c312c00c62e892.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-a66750ac91eabc2a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-432203ae29e06467.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-32df035055b8b0ed.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-24e052054463faec.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8267a9b3382b0194.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c846ee57b17b50c7.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-dcd2c81d1062d169.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f1a8909b1c98d3d3.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-940f9edccbf9ad68.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c4d171554369cd07.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1cea0454d706a27f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7e4efd71b49f321f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ad64de1128fe5d32.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1b55918c22eac66c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-a4f5079402b04e91.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7b05215391455d19.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6ae47b3e06112a0c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-2829884d16afcbd1.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8a1205adccee6ab5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-2ba5ccc1a0ac1e3f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b8d3f6a82e64a1f0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-167253003fadeeeb.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1194fe232a0173d5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-395d91315db43f89.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ad722b3ba5dd4046.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-eb571160463f3dd8.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6eb91ff7530b77b0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6e156b72fc3070ed.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-62a1029796c35035.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8fa041f0e539fc53.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-938d5575b73af1b5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-70a759e573714a27.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-3fa2313aecbf6c10.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-33edf6ee70da4501.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-352c979731cf59ac.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1d665baf68f1db07.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-e7586174aaa81f34.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-27c3245a471133b1.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7b56f22762497871.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6df092f490f80e19.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-dad84a6a74cd1f2c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1f35e7185cfdfede.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-211b8a75e9356907.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-631ce4b4e691dc5c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-a3604dea9d6d872b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1632be961a8bf58f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6f1243b277fbab2e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d9cdf4ad76ce6062.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ead0d5f9ffac42c2.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f5e7b14360c798c3.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8cb26684c9b7f7ac.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-12d7e3088b6a4cbf.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d98ee84892ea10de.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-04d1b7a3367edcc9.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-cb1a03ccdcdc4c18.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-627a79a4f622a131.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c155fdab4b85100f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-a95459fb48e40a1f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8692a7d5aaf21f40.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f51db4ba61d4b368.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-e5efaa3b85ae7273.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-10d921f33d4abc16.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9ff831d3fdb6bbb0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d7fede113b4437eb.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-200dc1c74f33c8aa.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-074c9890e6bda0d7.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b9376e50af0656cd.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0ff7fe52e9bf7af4.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b88b82908e1888c9.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c4cb2a938014f1e5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-4ad21729a10b8d6c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b47672161da92fdb.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-cd64a39365fc027c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-352307c36a1b8978.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-4191cab332b2fc68.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0ed6f409e4d418fd.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1738cf967fbedb50.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8245f5b0d874d432.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-51d164c9013ef8d0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-90fd8bff28df8714.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7b731eb81c113084.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-58ad6191206d46c8.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-2944fdbf6e96526b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9db0365ff041d870.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c9de119a86a90a02.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b6a4dcb7505ac24f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ae56699feff99e57.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b132a6010c8ea16e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1d9794e5311cff7e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ee8408cd2e09fad0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b5197766857a7552.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6cc8c026baf86a58.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7d1f933395f37968.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8d78be796c69b6db.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-af35670b3f03a24f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0ecbe2314d265aa2.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-417f322f4d5486e5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-e181a3d0137b7f2d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-21bd6d4e54dd5dbd.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-32415b2d6d19071e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6b0c7e5de286310c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0cf061ea67d1898d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-48701b1f721f1ff9.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-aa76e390ad8de529.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-fee90cb5345a50dc.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-62d81cad90d74a78.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-941a29a6dee3a03e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7bea4819f0f6ea3a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d4953a61fafcbef7.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5a110e4a1934302c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-074b0e20dc68f24a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-fb76ad5a66acabbd.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-540d44213cdc819a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-683ef34c786d949b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c868607965a3c589.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ccb80425d54a1852.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-62de7687532d5ef8.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-97844cd6d9489aef.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-68d5783110ec2c28.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9885195f56fafa3d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d76d90e3cb5f56c3.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f0061d8972538271.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1be1625248b28489.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1baa1191a1798641.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-551dd5afcc8dc23b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-92a37cd09abb8de6.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-2b8fa2e4d755a678.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5806d2f198d81339.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9a1b56a25f5f6e9e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0faf4a68d0867dab.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f41321fa9d98cc49.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-bdc411e6e96b45d3.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-16a64d49e473f1b2.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-cfaacbf958fb1318.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d592a8cf55d4dade.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9b9870017fd8b3de.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b6a933f61e4ff6ed.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-4caf2e248991b550.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0b175a2d8766eb61.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-18fad59821b7e1f3.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9c18edf4c98ea5d8.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9377e63dcfa7efb9.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5d1aa30e618d4f15.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c8893d41c2c72320.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9ca1dd7d34102b13.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-153bf2da9ad27d47.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-83c38e13088758ab.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5e7861d8476fac2d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d029d95b3a0c03fc.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-a05e2aca4818a119.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8addba86d9365c46.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b0f47974161343d5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7e9b4554652179e5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-4b8b6dd2e4b989eb.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-3488e8cde61c1d6e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-71326db1d385be5b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5664f1bb653d5d1a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ea180de6dd15d913.json"
+            ],
+            "parent_prefix_partitions_verified": 37,
+            "parent_prefix_partitions": 37,
+            "parent_prefix_count_mismatches": [],
+            "root_partition_count_mismatches": [],
+            "query_failures": [],
+            "root_partitions": 4,
+            "root_partitions_verified": 37,
+            "root_prefixes": [
+              "ENSG000000",
+              "ENSG000001",
+              "ENSG000002",
+              "ENSG000003"
+            ]
+          },
+          "current_pre_repair_audit": {
+            "rows": 2844448,
+            "distinct_disease_target_pairs": 2806164,
+            "duplicate_rows": 38284,
+            "diseases_audited": 5388
+          }
+        },
+        "original_offset_page_overlap_audit": {
+          "rows": 2844448,
+          "distinct_disease_target_pairs": 2791217,
+          "duplicate_rows": 53231,
+          "diseases_audited": 5388,
+          "diseases_with_distinct_target_count_mismatch": 1775,
+          "method": "distinct (disease_id,target.id) and per-disease distinct target counts over the original concatenated 100-row offset pages; exact raw artifacts retained",
+          "query_tie_behavior": "overlap occurs across adjacent pages at tied association scores, with identical score and source component payloads"
+        }
       },
       "failure": null,
       "reason": null
@@ -27415,13 +31498,243 @@
     },
     {
       "source": "pmc_grin_oa",
-      "status": "in_progress",
-      "datasets": 0,
-      "records": 0,
-      "raw_bytes": 7890161,
-      "normalized_bytes": 0,
+      "status": "partial_fulltext_retrieval",
+      "datasets": 6,
+      "records": 1907,
+      "raw_bytes": 65597272,
+      "normalized_bytes": 11330288,
       "scope": null,
-      "coverage": null,
+      "coverage": {
+        "pubmed_citations_scanned": 7775,
+        "focus_citations_excluded": 6520,
+        "linked_articles_with_pmcid": 656,
+        "metadata_pmcids_expected": 656,
+        "metadata_pmcids_returned": 626,
+        "metadata_exact_id_set_match": false,
+        "metadata_pmcids_missing": 30,
+        "metadata_batches": [
+          {
+            "requested": 40,
+            "reported_hits": 38,
+            "returned_unique_pmcids": 38,
+            "missing_pmcids": [
+              "PMC10723435",
+              "PMC10802391"
+            ],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 37,
+            "returned_unique_pmcids": 37,
+            "missing_pmcids": [
+              "PMC11100844",
+              "PMC11118622",
+              "PMC11370376"
+            ],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 36,
+            "returned_unique_pmcids": 36,
+            "missing_pmcids": [
+              "PMC11565768",
+              "PMC1158818",
+              "PMC12236485",
+              "PMC12324601"
+            ],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 33,
+            "returned_unique_pmcids": 33,
+            "missing_pmcids": [
+              "PMC12458955",
+              "PMC12633401",
+              "PMC12637776",
+              "PMC12642611",
+              "PMC12776060",
+              "PMC12803038",
+              "PMC12822670"
+            ],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 34,
+            "returned_unique_pmcids": 34,
+            "missing_pmcids": [
+              "PMC13228356",
+              "PMC13326711",
+              "PMC13370611",
+              "PMC13393530",
+              "PMC13596587",
+              "PMC1817770"
+            ],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 35,
+            "returned_unique_pmcids": 35,
+            "missing_pmcids": [
+              "PMC2230696",
+              "PMC2230705",
+              "PMC2230784",
+              "PMC2270066",
+              "PMC2342804"
+            ],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 39,
+            "returned_unique_pmcids": 39,
+            "missing_pmcids": [
+              "PMC3180569"
+            ],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 40,
+            "returned_unique_pmcids": 40,
+            "missing_pmcids": [],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 40,
+            "returned_unique_pmcids": 40,
+            "missing_pmcids": [],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 40,
+            "returned_unique_pmcids": 40,
+            "missing_pmcids": [],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 40,
+            "returned_unique_pmcids": 40,
+            "missing_pmcids": [],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 39,
+            "returned_unique_pmcids": 39,
+            "missing_pmcids": [
+              "PMC6187029"
+            ],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 40,
+            "returned_unique_pmcids": 40,
+            "missing_pmcids": [],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 40,
+            "returned_unique_pmcids": 40,
+            "missing_pmcids": [],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 40,
+            "returned_unique_pmcids": 40,
+            "missing_pmcids": [],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 40,
+            "reported_hits": 40,
+            "returned_unique_pmcids": 40,
+            "missing_pmcids": [],
+            "unexpected_pmcids": [],
+            "pages": 1
+          },
+          {
+            "requested": 16,
+            "reported_hits": 15,
+            "returned_unique_pmcids": 15,
+            "missing_pmcids": [
+              "PMC9901188"
+            ],
+            "unexpected_pmcids": [],
+            "pages": 1
+          }
+        ],
+        "metadata_errors": [],
+        "compatible_license_candidates": 373,
+        "license_counts": {
+          "cc by": 302,
+          "cc by-nc": 26,
+          "cc by-nc-nd": 39,
+          "cc by-nc-sa": 43,
+          "cc0": 2,
+          "missing": 214
+        },
+        "rights_queue_status_counts": {
+          "license_no_derivatives_review": 39,
+          "license_unknown": 214,
+          "metadata_missing_from_europe_pmc": 30
+        },
+        "all_656_target_accounting": {
+          "expected_linked_pmcs": 656,
+          "metadata_returned": 626,
+          "eligible_explicit_licenses": 373,
+          "queued_metadata_missing": 30,
+          "queued_unknown_license": 214,
+          "queued_nd_license": 39,
+          "queued_other_incompatible_license": 0,
+          "partition_sum": 656
+        },
+        "downloaded_jats_records": 329,
+        "queued_for_rights_review": 283,
+        "queued_for_fetch_retry": 44,
+        "citations_without_pmcid": 599,
+        "limitation": "The corpus is limited to PubMed-linked PMCIDs in the declared focus query. All returned source-provided CC BY, CC BY-SA, CC BY-NC, CC BY-NC-SA, and CC0 identifiers are eligible for research-copy retrieval; the noncommercial restriction is retained on each record. CC BY-NC-ND is excluded from copying and queued separately. Missing/unknown and non-CC licenses are separately queued. Supplement links are recorded; assets are not fetched unless separately rights-verified.",
+        "focused_scope": {
+          "pmids": [
+            "27839871",
+            "38380699",
+            "38538865"
+          ],
+          "pmcids": [
+            "PMC7554152"
+          ],
+          "title_abstract_mesh_regex": "mutation|variant|encephalopathy|neurodevelopment|loss[ -]?of[ -]?function"
+        },
+        "downloaded_html_records": 26,
+        "distinct_fulltext_articles_jats_or_html": 355,
+        "fulltext_fetch_unresolved_after_html": 18,
+        "xml_retry_queue_note": "Original 44 XML/body failures remain recorded; nested HTML outcomes identify the 26 recovered in HTML."
+      },
       "failure": null,
       "reason": null
     },
@@ -28200,9 +32513,9 @@
     }
   ],
   "totals": {
-    "records": 14148645,
-    "raw_bytes": 11083287349,
-    "normalized_bytes": 1325825134
+    "records": 21746825,
+    "raw_bytes": 25205790926,
+    "normalized_bytes": 4278809267
   },
   "interpretation": "Record totals mix entities, annotations, assertions, XML stanzas and query memberships. Completeness refers only to each declared source scope. Access-dependent providers and query limitations remain explicit."
 }
