@@ -1,6 +1,6 @@
 """Public funding and rare-disease target/drug metadata harvesters."""
 from __future__ import annotations
-import json, re, time
+import hashlib, json, re, time
 from collections import defaultdict
 from pathlib import Path
 import requests
@@ -248,7 +248,7 @@ def harvest_open_targets(batch_size=32, delay=.08):
         if batch_number%25==0: print(json.dumps({'event':'open_targets_progress','batch':batch_number,'total_batches':total_batches,'diseases':len(diseases),'associations':len(associations)}),flush=True)
         time.sleep(delay)
     source_paths=[core.PROCESSED/'raresource/diseases.jsonl.gz',core.PROCESSED/'mondo/obo_stanzas.jsonl.gz']
-    core.emit_records(source,'rare_diseases',diseases,input_paths=source_paths,description='Open Targets disease descriptions, xrefs, complete aggregate associated-target pages and drug/clinical candidate metadata, for MONDO IDs cross-linked from RareSource OMIM/Orphanet identifiers.')
+    core.emit_records(source,'rare_diseases',diseases,input_paths=source_paths,description='Open Targets disease descriptions, xrefs, initial associated-target page and drug/clinical candidate metadata for MONDO IDs cross-linked from RareSource OMIM/Orphanet identifiers. The target_associations dataset separately contains reconciled aggregate association rows.')
     if associations: core.emit_records(source,'target_associations',associations,input_paths=[core.RAW/source],description='Open Targets aggregate target-disease association scores and per-datatype/per-datasource score contributions; these are platform aggregates, not full underlying source assertions.')
     if drugs: core.emit_records(source,'drug_candidates',drugs,input_paths=[core.RAW/source],description='Open Targets clinical candidate records exposed on each matched rare disease, with native drug identifiers, cross-references and clinical-stage metadata.')
     version='current GraphQL API; release ID not exposed in API response'
@@ -259,6 +259,196 @@ def _association_page_query(ids,index,page_size=100):
     fields='''id name associatedTargets(page:{index:%d,size:%d}) { count rows { score datatypeScores { id score } datasourceScores { id score } target { id approvedSymbol } } }'''%(index,page_size)
     aliases=[f'd{i}: disease(efoId:"{ident}") {{ {fields} }}' for i,ident in enumerate(ids)]
     return 'query rareDiseaseAssociationPage { '+' '.join(aliases)+' }'
+
+def _association_full_query(entries):
+    fields='''associatedTargets(page:{index:0,size:%d},orderByScore:"score desc") { count rows { score datatypeScores { id score } datasourceScores { id score } target { id approvedSymbol } } }'''
+    aliases=[f'd{i}: disease(efoId:"{ident}") {{ id {fields % max(1,int(size))} }}' for i,(ident,size) in enumerate(entries)]
+    return 'query rareDiseaseAssociationFull { '+' '.join(aliases)+' }'
+
+def _association_prefix_query(entries,page_size=3000):
+    fields='''associatedTargets(page:{index:0,size:%d},BFilter:"%s",orderByScore:"score desc") { count rows { score datatypeScores { id score } datasourceScores { id score } target { id approvedSymbol } } }'''
+    aliases=[f'd{i}: disease(efoId:"{ident}") {{ id {fields % (page_size,prefix)} }}' for i,(ident,prefix) in enumerate(entries)]
+    return 'query rareDiseaseAssociationPrefix { '+' '.join(aliases)+' }'
+
+def _initial_association_records(disease_rows):
+    """Flatten immutable provider page-zero rows embedded in disease records."""
+    for disease in disease_rows:
+        ident=disease.get('id')
+        if not ident: continue
+        assoc=disease.get('associatedTargets') or {}; reported=assoc.get('count')
+        for row in assoc.get('rows') or []:
+            yield {'disease_id':ident,'disease_name':disease.get('name'),'target_association':row,'reported_association_count':reported,'page_index':0,'rare_source_identifiers':disease.get('rare_source_identifiers')}
+
+def _association_audit_complete(row_count,expected_count,audit):
+    mismatches=(audit or {}).get('distinct_target_count_mismatches',(audit or {}).get('diseases_with_distinct_target_count_mismatch'))
+    return bool(audit and mismatches==0 and audit.get('duplicate_rows')==0 and row_count==expected_count)
+
+def _association_prefix_children(prefix,count,page_size=3000):
+    """Return disjoint digit-prefix partitions when a filtered page is capped."""
+    return [prefix+str(digit) for digit in range(10)] if int(count)>page_size else []
+
+def _prefix_partition_complete(parent_count,child_counts):
+    return sum(int(x) for x in child_counts)==int(parent_count)
+
+def harvest_open_targets_uniqueness_repair(batch_size=8,page_size=3000,delay=.05):
+    """Replace tie-unstable offset pages with complete single-page/prefix partitions."""
+    source='open_targets'; root=core.PROCESSED/source; by_id={}
+    for r in core.read_records(root/'rare_diseases.jsonl.gz'):
+        if r.get('id'): by_id[r['id']]={'id':r['id'],'name':r.get('name'),'rare_source_identifiers':r.get('rare_source_identifiers'),'associatedTargets':{'count':(r.get('associatedTargets') or {}).get('count')}}
+    unique_by_disease=defaultdict(set); original_rows=0
+    for row in core.read_records(root/'target_associations.jsonl.gz'):
+        original_rows+=1
+        association=row.get('target_association') or {}; target=association.get('target') or {}
+        if row.get('disease_id') and target.get('id'): unique_by_disease[row['disease_id']].add(target['id'])
+    original_distinct=sum(len(targets) for targets in unique_by_disease.values())
+    original_audit={'rows':original_rows,'distinct_disease_target_pairs':original_distinct,'duplicate_rows':original_rows-original_distinct,'diseases_audited':len(by_id)}
+    affected=[]
+    for ident,disease in by_id.items():
+        expected=int((disease.get('associatedTargets') or {}).get('count') or 0)
+        if len(unique_by_disease.get(ident,set()))!=expected: affected.append((ident,expected))
+    del unique_by_disease
+    if not affected:
+        expected=sum(int((r.get('associatedTargets') or {}).get('count') or 0) for r in by_id.values())
+        audit={'rows':original_rows,'distinct_disease_target_pairs':original_distinct,'duplicate_rows':original_rows-original_distinct,'diseases_audited':len(by_id),'distinct_target_count_mismatches':0,'diseases_with_distinct_target_count_mismatch':0,'initial_offset_page_audit':(core.manifest(source).get('coverage') or {}).get('original_offset_page_overlap_audit',original_audit),'current_pre_repair_audit':original_audit,'repair':{'affected_diseases':0,'repaired_diseases':0,'requests':0,'root_partitions_verified':0,'parent_prefix_partitions':0,'parent_prefix_partitions_verified':0,'query_failures':[]}}
+        manifest=core.manifest(source); coverage=manifest.get('coverage') or {}; coverage['target_association_uniqueness_audit']=audit
+        complete=_association_audit_complete(original_rows,expected,audit); coverage['target_association_coverage_complete']=complete
+        core.update_manifest(source,status='partial',coverage=coverage,association_dataset={'records_expected':expected,'records_emitted':original_rows,'unique_disease_target_pairs':original_distinct,'duplicate_rows':original_rows-original_distinct,'distinct_target_count_mismatches':0,'complete_for_returned_diseases':complete})
+        return {'rows':original_rows,'distinct_pairs':original_distinct,'duplicates':original_rows-original_distinct,'repaired_diseases':0,'mismatches':0,'failures':[],'calls':0}
+    repaired={}; failures=[]; raw_paths=[]; calls=0
+    def raw_name(prefix,body):
+        digest=hashlib.sha256(json.dumps(body,sort_keys=True,separators=(',',':')).encode()).hexdigest()[:16]
+        return f'{prefix}-{digest}.json'
+    def fetch_body(filename_prefix,query):
+        nonlocal calls
+        body={'query':query}; filename=raw_name(filename_prefix,body)
+        # Reuse an earlier artifact only on exact request-body match and a valid
+        # recorded checksum. This safely migrates the first live run's indexed
+        # filenames without replacing its provenance or issuing duplicate calls.
+        prior=core.manifest(source).get('artifacts') or {}
+        for old_name,metadata in prior.items():
+            if metadata.get('url')==core.safe_url(OT) and metadata.get('method','GET')=='POST' and metadata.get('request_body')==body:
+                old_path=core.RAW/source/old_name
+                if old_path.exists() and core.digest(old_path)==metadata.get('sha256'):
+                    calls+=1; raw_paths.append(str(old_path.relative_to(core.ROOT)))
+                    return _json(old_path),old_name
+        calls+=1
+        p=core.download(source,OT,filename,license_name='Open Targets Platform data; CC BY 4.0, confirm release terms',version='current GraphQL API (release ID not exposed)',method='POST',json_body=body)
+        raw_paths.append(str(p.relative_to(core.ROOT)))
+        return _json(p),filename
+    # One response per disease fits in one page when provider count <= 3,000.
+    small=[x for x in affected if x[1]<=page_size]
+    def process_full(group):
+        if not group: return
+        try:
+            payload,filename=fetch_body('target-associations-unique-full',_association_full_query(group))
+            if payload.get('errors'):
+                if len(group)>1:
+                    midpoint=len(group)//2; process_full(group[:midpoint]); process_full(group[midpoint:]); return
+                retry_query=_association_full_query(group)+'\n# bounded retry to bypass cached GraphQL error'
+                payload,filename=fetch_body('target-associations-unique-full-retry',retry_query)
+                if payload.get('errors'):
+                    failures.append({'disease_ids':[x[0] for x in group],'error':payload['errors'][:2],'file':filename}); return
+            data=payload.get('data') or {}
+            for i,(ident,expected) in enumerate(group):
+                disease=data.get(f'd{i}') or {}; assoc=disease.get('associatedTargets') or {}; rows=assoc.get('rows') or []
+                targets=[((r.get('target') or {}).get('id')) for r in rows]; distinct=set(x for x in targets if x)
+                if disease.get('id')!=ident or int(assoc.get('count') or -1)!=expected or len(rows)!=expected or len(distinct)!=expected:
+                    failures.append({'disease_id':ident,'expected':expected,'provider_count':assoc.get('count'),'rows':len(rows),'distinct_targets':len(distinct),'file':filename})
+                else: repaired[ident]=[(filename,f'd{i}',None)]
+        except Exception as e:
+            if len(group)>1:
+                midpoint=len(group)//2; process_full(group[:midpoint]); process_full(group[midpoint:]); return
+            failures.append({'disease_ids':[x[0] for x in group],'error':f'{type(e).__name__}: {e}'})
+        if calls%25==0: print(json.dumps({'event':'open_targets_uniqueness_progress','calls':calls,'repaired':len(repaired),'affected':len(affected),'failures':len(failures)}),flush=True)
+        time.sleep(delay)
+    for offset in range(0,len(small),batch_size): process_full(small[offset:offset+batch_size])
+    # Larger disease sets are partitioned on target ID prefixes until every
+    # response fits in one page, avoiding unstable score-tie boundaries.
+    large=[(ident,count) for ident,count in affected if count>page_size]
+    pending=[(ident,f'ENSG00000{i}',count) for ident,count in large for i in range(4)]
+    root_counts=defaultdict(int); prefix_counts=defaultdict(int); parent_counts={}; child_counts=defaultdict(int); large_failed=set()
+    def process_prefix(group):
+        if not group: return
+        try:
+            payload,filename=fetch_body('target-associations-unique-prefix',_association_prefix_query([(d,pref) for d,pref,_ in group],page_size))
+            if payload.get('errors'):
+                if len(group)>1:
+                    midpoint=len(group)//2; process_prefix(group[:midpoint]); process_prefix(group[midpoint:]); return
+                retry_query=_association_prefix_query([(d,pref) for d,pref,_ in group],page_size)+'\n# bounded retry to bypass cached GraphQL error'
+                payload,filename=fetch_body('target-associations-unique-prefix-retry',retry_query)
+                if payload.get('errors'):
+                    failures.append({'disease_prefixes':[(x[0],x[1]) for x in group],'error':payload['errors'][:2],'file':filename}); large_failed.update(x[0] for x in group); return
+            data=payload.get('data') or {}
+            for i,(ident,prefix,parent_count) in enumerate(group):
+                disease=data.get(f'd{i}') or {}; assoc=disease.get('associatedTargets') or {}; rows=assoc.get('rows') or []; count=int(assoc.get('count') or 0)
+                if disease.get('id')!=ident or len(rows)!=min(page_size,count):
+                    failures.append({'disease_id':ident,'prefix':prefix,'provider_count':count,'rows':len(rows),'error':'prefix page count mismatch','file':filename}); large_failed.add(ident); continue
+                if len(rows)>page_size: failures.append({'disease_id':ident,'prefix':prefix,'error':'API exceeded single-page size','file':filename}); large_failed.add(ident); continue
+                if prefix in ('ENSG000000','ENSG000001','ENSG000002','ENSG000003'): root_counts[ident]+=count
+                if len(prefix)>len('ENSG00000')+1:
+                    parent=prefix[:-1]
+                    child_counts[(ident,parent)]+=count
+                if count>page_size:
+                    parent_counts[(ident,prefix)]=count
+                    children=_association_prefix_children(prefix,count,page_size)
+                    process_prefix([(ident,child,count) for child in children])
+                else:
+                    for row in rows:
+                        target=((row.get('target') or {}).get('id'))
+                        if not target or not target.startswith(prefix): failures.append({'disease_id':ident,'prefix':prefix,'target_id':target,'error':'returned target does not match prefix','file':filename}); large_failed.add(ident)
+                    prefix_counts[ident]+=count
+                    repaired.setdefault(ident,[]).append((filename,f'd{i}',prefix))
+        except Exception as e:
+            if len(group)>1:
+                midpoint=len(group)//2; process_prefix(group[:midpoint]); process_prefix(group[midpoint:]); return
+            failures.append({'disease_prefixes':[(x[0],x[1]) for x in group],'error':f'{type(e).__name__}: {e}'})
+            large_failed.update(x[0] for x in group)
+        if calls%25==0: print(json.dumps({'event':'open_targets_uniqueness_progress','calls':calls,'repaired':len(repaired),'affected':len(affected),'failures':len(failures)}),flush=True)
+        time.sleep(delay)
+    for offset in range(0,len(pending),batch_size): process_prefix(pending[offset:offset+batch_size])
+    for (ident,prefix),count in parent_counts.items():
+        if not _prefix_partition_complete(count,[child_counts.get((ident,prefix),0)]):
+            failures.append({'disease_id':ident,'parent_prefix':prefix,'parent_count':count,'child_count_sum':child_counts.get((ident,prefix),0),'error':'child prefix counts do not sum to parent prefix count'})
+            large_failed.add(ident)
+    for ident,count in large:
+        if root_counts.get(ident)!=count or prefix_counts.get(ident)!=count:
+            failures.append({'disease_id':ident,'provider_count':count,'root_prefix_count':root_counts.get(ident,0),'leaf_prefix_count':prefix_counts.get(ident,0),'error':'target-prefix counts do not sum to provider count'})
+            large_failed.add(ident)
+    for ident in large_failed: repaired.pop(ident,None)
+    # Keep the original page artifacts intact; replace only disease rows in the
+    # normalized data with validated one-page responses or disjoint prefixes.
+    def repaired_records():
+        for ident,parts in repaired.items():
+            for filename,alias,prefix in parts:
+                payload=_json(core.RAW/source/filename); sub=(payload.get('data') or {}).get(alias) or {}
+                if sub.get('id')!=ident: continue
+                for assoc in (sub.get('associatedTargets') or {}).get('rows') or []:
+                    yield {'disease_id':ident,'disease_name':by_id[ident].get('name'),'target_association':assoc,'reported_association_count':int((by_id[ident].get('associatedTargets') or {}).get('count') or 0),'page_index':0,'partition_prefix':prefix}
+    repaired_ids=set(repaired)
+    def all_rows():
+        for row in core.read_records(root/'target_associations.jsonl.gz'):
+            if row.get('disease_id') not in repaired_ids: yield row
+        yield from repaired_records()
+    expected_total=sum(int((r.get('associatedTargets') or {}).get('count') or 0) for r in by_id.values())
+    out=core.emit_records(source,'target_associations',all_rows(),input_paths=[root/'rare_diseases.jsonl.gz',core.RAW/source],description='All Open Targets aggregate target-disease associations for returned RareSource-mapped MONDO diseases. Tie-unstable offset pages were replaced for audited discrepancies using a single full page (<=3,000) or disjoint target-ID prefix partitions; score/source components are retained.')
+    # Final exact uniqueness audit, distinct target count compared with provider.
+    final_pairs=defaultdict(set); final_rows=0
+    for row in core.read_records(out):
+        final_rows+=1; target=((row.get('target_association') or {}).get('target') or {}).get('id')
+        if target: final_pairs[row['disease_id']].add(target)
+    mismatch=[]
+    for ident,disease in by_id.items():
+        reported=int((disease.get('associatedTargets') or {}).get('count') or 0); distinct=len(final_pairs.get(ident,set()))
+        if reported!=distinct: mismatch.append({'disease_id':ident,'provider_count':reported,'distinct_targets':distinct,'delta':distinct-reported})
+    manifest=core.manifest(source); coverage=manifest.get('coverage') or {}
+    distinct_pairs=sum(map(len,final_pairs.values())); duplicate_rows=final_rows-distinct_pairs
+    original_page_audit=coverage.get('original_offset_page_overlap_audit',original_audit)
+    audit={'rows':final_rows,'distinct_disease_target_pairs':distinct_pairs,'duplicate_rows':duplicate_rows,'diseases_audited':len(by_id),'distinct_target_count_mismatches':len(mismatch),'diseases_with_distinct_target_count_mismatch':len(mismatch),'mismatch_details':mismatch,'initial_offset_page_audit':original_page_audit,'current_pre_repair_audit':original_audit,'repair':{'affected_diseases':len(affected),'repaired_diseases':len(repaired_ids),'requests':calls,'root_partitions':4,'root_partitions_verified':len(large)-sum(1 for ident,count in large if root_counts.get(ident)!=count or prefix_counts.get(ident)!=count),'parent_prefix_partitions_verified':len(parent_counts)-sum(1 for (ident,prefix),count in parent_counts.items() if child_counts.get((ident,prefix),0)!=count),'parent_prefix_partitions':len(parent_counts),'parent_prefix_count_mismatches':[{'disease_id':ident,'prefix':prefix,'parent_count':count,'children_sum':child_counts.get((ident,prefix),0)} for (ident,prefix),count in parent_counts.items() if child_counts.get((ident,prefix),0)!=count],'root_partition_count_mismatches':[{'disease_id':ident,'provider_count':count,'root_sum':root_counts.get(ident,0),'leaf_sum':prefix_counts.get(ident,0)} for ident,count in large if root_counts.get(ident)!=count or prefix_counts.get(ident)!=count],'root_prefixes':['ENSG000000','ENSG000001','ENSG000002','ENSG000003'],'query_failures':failures}}
+    coverage['target_association_uniqueness_audit']=audit
+    coverage['target_associations_captured']=final_rows
+    coverage['target_association_coverage_complete']=_association_audit_complete(final_rows,expected_total,audit) and not failures
+    core.update_manifest(source,status='partial',coverage=coverage,association_dataset={'path':str(out.relative_to(core.ROOT)),'records_expected':expected_total,'records_emitted':final_rows,'unique_disease_target_pairs':audit['distinct_disease_target_pairs'],'duplicate_rows':audit['duplicate_rows'],'distinct_target_count_mismatches':len(mismatch),'failed_repair_queries':failures,'complete_for_returned_diseases':coverage['target_association_coverage_complete']})
+    return {'rows':final_rows,'distinct_pairs':audit['distinct_disease_target_pairs'],'duplicates':audit['duplicate_rows'],'repaired_diseases':len(repaired_ids),'mismatches':len(mismatch),'failures':failures,'calls':calls}
 
 def harvest_open_targets_association_pages(batch_size=32,page_size=100,delay=.08):
     """Fetch every remaining aggregate association page for all resolved rare diseases."""
@@ -300,8 +490,7 @@ def harvest_open_targets_association_pages(batch_size=32,page_size=100,delay=.08
     # Rebuild the flattened association dataset from the original first pages and
     # every successfully downloaded continuation page, streaming into gzip JSONL.
     def all_associations():
-        for row in core.read_records(core.PROCESSED/source/'target_associations.jsonl.gz'):
-            row.setdefault('page_index',0); yield row
+        yield from _initial_association_records(disease_rows)
         for call in completed:
             p=core.ROOT/call['path']; payload=_json(p); data=payload.get('data') or {}
             # group indices match the serialized alias order for this page/call.
@@ -311,21 +500,21 @@ def harvest_open_targets_association_pages(batch_size=32,page_size=100,delay=.08
                 if not sub: continue
                 result=sub.get('associatedTargets') or {}
                 for association in result.get('rows') or []:
-                    yield {'disease_id':ident,'disease_name':disease.get('name'),'target_association':association,'reported_association_count':total_count,'page_index':call['page_index']}
+                    yield {'disease_id':ident,'disease_name':disease.get('name'),'target_association':association,'reported_association_count':total_count,'page_index':call['page_index'],'rare_source_identifiers':disease.get('rare_source_identifiers')}
     count=sum(int((row.get('associatedTargets') or {}).get('count') or 0) for row in disease_rows)
     first_page_count=sum(len((row.get('associatedTargets') or {}).get('rows') or []) for row in disease_rows)
     expected_continuation=count-first_page_count
     continuation_complete=not failed and received==expected_continuation
     out=core.emit_records(source,'target_associations',all_associations(),input_paths=[core.PROCESSED/source/'rare_diseases.jsonl.gz',core.RAW/source],description='All Open Targets aggregate target-disease association pages for every returned MONDO disease in the RareSource-mapped query set. Each association retains provider overall score, datatype scores, datasource scores, target ID/symbol, disease ID/name, reported count and page index.')
     manifest=core.manifest(source); coverage=manifest.get('coverage') or {}
-    coverage.update({'target_associations_expected_total':count,'target_associations_first_page_records':first_page_count,'target_association_continuation_expected_records':expected_continuation,'target_association_continuation_records':received,'target_association_continuation_calls':len(completed),'target_association_expected_calls':total_calls,'target_association_failed_pages':failed,'target_association_page_size':page_size,'target_association_coverage_complete':continuation_complete,'resolved_disease_ids':len(by_id),'mapped_mondo_ids_not_returned':len(coverage.get('diseases_not_found') or []),'limitation':'All aggregate association pages are acquired for returned disease IDs only. The 1,342 MONDO IDs in the input crosswalk that did not resolve remain unknown for Open Targets; full source-native evidence is separately complete only for the focused GRIN2A/GRIN2B disease identifiers.'})
-    core.update_manifest(source,status='partial',coverage=coverage,association_dataset={'path':str(out.relative_to(core.ROOT)),'records_expected':count,'records_emitted':first_page_count+received,'first_page_records':first_page_count,'continuation_records':received,'failed_pages':failed,'complete_for_returned_diseases':continuation_complete})
+    coverage.update({'target_associations_expected_total':count,'target_associations_first_page_records':first_page_count,'target_association_continuation_expected_records':expected_continuation,'target_association_continuation_records':received,'target_association_continuation_calls':len(completed),'target_association_expected_calls':total_calls,'target_association_failed_pages':failed,'target_association_page_size':page_size,'target_association_continuation_complete':continuation_complete,'target_association_coverage_complete':False,'target_association_uniqueness_audit':{'required_before_complete':True,'invalidated_by_continuation_rerun':True},'resolved_disease_ids':len(by_id),'mapped_mondo_ids_not_returned':len(coverage.get('diseases_not_found') or []),'limitation':'All aggregate association pages are acquired for returned disease IDs only. Completeness requires exact distinct-target uniqueness audit; offset pages can overlap when score ties occur, so discrepant diseases require full-page/prefix repair. The 1,342 MONDO IDs in the input crosswalk that did not resolve remain unknown for Open Targets; full source-native evidence is separately complete only for the focused GRIN2A/GRIN2B disease identifiers.'})
+    core.update_manifest(source,status='partial',coverage=coverage,association_dataset={'path':str(out.relative_to(core.ROOT)),'records_expected':count,'records_emitted':first_page_count+received,'first_page_records':first_page_count,'continuation_records':received,'failed_pages':failed,'complete_for_returned_diseases':False})
     return {'expected':count,'continuation_records':received,'failed_pages':failed,'calls':len(completed),'expected_calls':total_calls}
 
 def main():
     import argparse
-    ap=argparse.ArgumentParser();ap.add_argument('source',choices=['grants_gov','open_targets','open_targets_association_pages','grin_evidence','all']);args=ap.parse_args()
-    jobs={'grants_gov':harvest_grants_gov,'open_targets':harvest_open_targets,'open_targets_association_pages':harvest_open_targets_association_pages,'grin_evidence':harvest_grin_evidence}
+    ap=argparse.ArgumentParser();ap.add_argument('source',choices=['grants_gov','open_targets','open_targets_association_pages','open_targets_uniqueness_repair','grin_evidence','all']);args=ap.parse_args()
+    jobs={'grants_gov':harvest_grants_gov,'open_targets':harvest_open_targets,'open_targets_association_pages':harvest_open_targets_association_pages,'open_targets_uniqueness_repair':harvest_open_targets_uniqueness_repair,'grin_evidence':harvest_grin_evidence}
     for name in jobs if args.source=='all' else [args.source]:
         print(json.dumps({'event':'source_started','source':name}),flush=True)
         try: jobs[name]()

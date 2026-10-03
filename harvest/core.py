@@ -112,7 +112,7 @@ def emit_records(source,name,records,*,input_paths=(),description=''):
     temp=dest.with_suffix(dest.suffix+'.tmp');count=0
     inputs=[str(Path(p).relative_to(ROOT)) for p in input_paths]
     try:
-        with gzip.open(temp,'wt',encoding='utf-8') as out:
+        with gzip.open(temp,'wt',encoding='utf-8',compresslevel=6) as out:
             for count,record in enumerate(records,1):
                 if not isinstance(record,dict):raise TypeError('Records must be dicts')
                 record=dict(record);record['_source']=source;record['_dataset']=name;record['_record']=count
