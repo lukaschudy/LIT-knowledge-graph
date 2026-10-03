@@ -52,6 +52,7 @@ The bundle contains 35 entities, 12 cited sources, 44 claims and 56 evidence rec
 - `data/curated/grin_atlas_bundle.json`: normalized Atlas graph.
 - `data/curated/grin_research_proposal.json`: discussion draft; nothing has been sent to research teams.
 - `data/curated/grin_demo_validation.json`: graph behavior and bundle checksum.
+- `data/curated/grin_functional_review_queue.json`: 39 source-categorized published variants and 14 newly assayed candidates from Myers 2023, retained separately for further review.
 - `docs/grin-evidence-notes.md`: primary references, source errors and interpretation limits.
 
 The publication's S541G cDNA/protein inconsistency is preserved and flagged. P553T has no exact protein-name match in the acquired ClinVar summary. Transcript identities require independent reconciliation before enrolling people. No patient-level registry data or samples have been acquired. This is a selected demonstration rather than a comprehensive extraction of every published GRIN functional variant. Expert review, outcome-instrument access and any claim of faster research remain outstanding.

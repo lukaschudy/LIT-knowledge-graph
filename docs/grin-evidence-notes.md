@@ -33,3 +33,9 @@ This is a targeted first slice, not a literature-complete extraction: it focuses
 The original Xie 2023 Table 1 prints c.1621A>C alongside p.Ser541Gly, whereas the ClinVar archive VCV001708206 lists NM_000834.5:c.1621A>G for p.Ser541Gly. The source notation is preserved with an identity-discrepancy flag; no automatic allele merge is permitted. The protein-level assay remains an opposing-function control.
 
 The Xie 2023 wild-type controls were checked against its own Tables 2 and 3 and corrected to the study-specific values (for example deactivation 1061 ± 91 ms, n=16); controls from the distinct Xu 2024 study must not be substituted. S541R charge-transfer values are explicitly attributed to Xie, separately from the Platzer assay measurements.
+
+## Expansion and supplemental coverage
+
+The separate `grin_functional_review_queue.json` records all 39 GRIN2A/GRIN2B protein variants explicitly named in the Myers Discussion category list, including ten expression-limited Likely LoF cases. It also preserves 14 newly assayed Table 1 candidates. Table 6 provides readable Indeterminant calls for I150V and E657D; twelve other final-call cells use images and remain untranscribed. No queue entry is automatically admitted to the selected cohort.
+
+The Myers supplemental PDF was acquired through Europe PMC and retained with checksums and nine pages of layout text. Tables S3–S5 support further assay review; the PDF remains the authoritative layout. Across the seven selected article HTML pages, 31 table rows contain images. The table dataset retains their URLs, alt text and cell spans and explicitly flags untranscribed image content. Blank extracted text is not evidence that the source lacked a result.

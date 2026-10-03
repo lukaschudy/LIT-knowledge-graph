@@ -21,8 +21,15 @@ def audit_source(manifest_path,deep=True):
         p=ROOT/a['path']
         if not p.exists():errors.append(f'Missing artifact {name}')
         elif p.stat().st_size!=a['bytes'] or digest(p)!=a['sha256']:errors.append(f'Artifact integrity mismatch: {name}')
+    for a in m.get('derived_files',[]):
+        p=ROOT/a['path']
+        if not p.exists():errors.append(f'Missing derived file: {a["path"]}')
+        elif p.stat().st_size!=a['bytes'] or digest(p)!=a['sha256']:errors.append(f'Derived file integrity mismatch: {a["path"]}')
     for name,d in m.get('datasets',{}).items():
         p=ROOT/d['path'];count=0;negative=0;empty_identity=0;first_error=None
+        for input_path in d.get('input_paths',[]):
+            if input_path==d['path']:errors.append(f'Dataset names itself as input: {name}')
+            elif not (ROOT/input_path).exists():errors.append(f'Missing input for {name}: {input_path}')
         if not p.exists():errors.append(f'Missing dataset {name}');continue
         if p.stat().st_size!=d['bytes'] or digest(p)!=d['sha256']:errors.append(f'Dataset integrity mismatch: {name}')
         if deep:
@@ -37,7 +44,7 @@ def audit_source(manifest_path,deep=True):
                 if count!=d['records']:raise ValueError(f'Record count {count} != manifest {d["records"]}')
             except Exception as e:errors.append(f'{name}: {e}')
         datasets.append({'dataset':name,'records':d['records'],'bytes':d['bytes'],'verified_records':count if deep else None,'negative_qualifier_records':negative if deep else None})
-    return {'source':source,'status':m.get('status'),'scope':m.get('scope',m.get('coverage')),'artifacts':len(m.get('artifacts',{})),'raw_bytes':sum(x['bytes'] for x in m.get('artifacts',{}).values()),'datasets':datasets,'errors':errors,'warnings':warnings}
+    return {'source':source,'manifest_sha256':digest(manifest_path),'manifest_updated_at':m.get('updated_at'),'status':m.get('status'),'scope':m.get('scope',m.get('coverage')),'artifacts':len(m.get('artifacts',{})),'raw_bytes':sum(x['bytes'] for x in m.get('artifacts',{}).values()),'datasets':datasets,'errors':errors,'warnings':warnings}
 
 def run(deep=True):
     results=[]

@@ -1,0 +1,586 @@
+{
+  "schema_version": 1,
+  "source": {
+    "title": "Classification of missense variants in the N-methyl-D-aspartate receptor GRIN gene family as gain- or loss-of-function",
+    "pmid": "37369021",
+    "pmcid": "PMC10508039",
+    "doi": "10.1093/hmg/ddad104",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10508039/",
+    "local_source": "data/raw/harvest/grin_primary_pages/PMC10508039.html",
+    "local_source_sha256": "1df8ab98dd145887956e59ce8d31398052c9e6c54754db73cde01ebe8fde3d63",
+    "supplement_pdf": "data/raw/harvest/grin_supplements/supplemental_information_8-7-23_final6_ddad104.pdf",
+    "supplement_pdf_sha256": "e5e62338f78e3e97f0bbc75c4ae596018270c9667ae08c397d226698fa7ed7fa",
+    "supplement_text": "data/raw/harvest/grin_supplements/myers2023-supplement.txt",
+    "supplement_text_sha256": "b6d1e7353bf17da5b954740c32a330bc2fc3c70e78b8feb736f2d6bb263f8db2",
+    "supplement_crosschecks": {
+      "table_s3": {
+        "locator": "Supplemental Table S3",
+        "discussion_listed_grin2a_b_matches": [
+          "GluN2A-G483R",
+          "GluN2A-A716T",
+          "GluN2A-D731N",
+          "GluN2B-E413G",
+          "GluN2B-C461F",
+          "GluN2B-S541G",
+          "GluN2B-S541R",
+          "GluN2B-R540H",
+          "GluN2B-P553T"
+        ],
+        "check": "All listed calls and relative-effect rows were checked against the Discussion categories; A639V is absent because it is from a later study."
+      },
+      "table_s4": {
+        "locator": "Supplemental Table S4",
+        "check": "Checked new Mg2+ IC50/current-response rows for WT and the listed GRIN2A/GRIN2B published variants; used as assay-data cross-reference, not as an independent category assignment."
+      },
+      "table_s5": {
+        "locator": "Supplemental Table S5",
+        "expression_limited_grin2a_b": [
+          "GluN2A-R518H",
+          "GluN2A-T531M",
+          "GluN2A-A548P",
+          "GluN2B-C436R",
+          "GluN2B-A549V",
+          "GluN2B-F550S",
+          "GluN2B-L551S",
+          "GluN2B-S555I",
+          "GluN2B-P553L",
+          "GluN2B-A636P"
+        ],
+        "check": "All ten listed variants and their Likely LoF* calls checked."
+      }
+    },
+    "locator": "Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list."
+  },
+  "scope": "Bounded source-linked review queue of GluN2A/GluN2B variants explicitly named in the published-variant classification paragraph. Not a complete catalog, reclassification, or cohort admission list.",
+  "source_limitations": [
+    "Category labels reproduce the paper's functional categories, not clinical pathogenicity labels; the supplementary Tables S3–S5 provide parameter-level cross-checks and identify expression-limited records.",
+    "Newly assayed Table 1 GRIN2B variants are stored separately as candidates; Table 6 has readable text calls for some rows, while other final-call cells are unavailable in the retained HTML.",
+    "The paragraph says six variants had No Effect or were Indeterminant but explicitly names only four GRIN2A/GRIN2B variants; this queue preserves the four named variants and does not invent the two missing names.",
+    "Variants assigned Likely LoF because expression was too low are retained under their explicitly separate source statement; the source notes they were not fully characterized pharmacologically/biophysically.",
+    "Entries are not automatically admitted to the selected functional cohort."
+  ],
+  "counts": {
+    "all_listed_grin2a_b_variants": 39,
+    "category_counts": {
+      "Likely GoF": 5,
+      "Possible GoF": 10,
+      "Likely LoF": 6,
+      "Possible LoF": 4,
+      "Likely LoF (expression too low)": 10,
+      "No Effect or Indeterminant (grouped by source)": 4
+    },
+    "no_effect_or_indeterminant_named_count": 4,
+    "new_table1_candidates": 14,
+    "table1_candidates_classification_available_as_text": 2,
+    "table1_candidates_classification_unavailable_as_text": 12
+  },
+  "variants": [
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-E551K",
+      "protein_change": "p.Glu551Lys",
+      "author_category": "Likely GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-S554T",
+      "protein_change": "p.Ser554Thr",
+      "author_category": "Likely GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-L611Q",
+      "protein_change": "p.Leu611Gln",
+      "author_category": "Likely GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-S555N",
+      "protein_change": "p.Ser555Asn",
+      "author_category": "Likely GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-R969H",
+      "protein_change": "p.Arg969His",
+      "author_category": "Likely GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-V506A",
+      "protein_change": "p.Val506Ala",
+      "author_category": "Possible GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-P552R",
+      "protein_change": "p.Pro552Arg",
+      "author_category": "Possible GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-N615K",
+      "protein_change": "p.Asn615Lys",
+      "author_category": "Possible GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-S541G",
+      "protein_change": "p.Ser541Gly",
+      "author_category": "Possible GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": true,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-W607C",
+      "protein_change": "p.Trp607Cys",
+      "author_category": "Possible GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-G611V",
+      "protein_change": "p.Gly611Val",
+      "author_category": "Possible GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-N615I",
+      "protein_change": "p.Asn615Ile",
+      "author_category": "Possible GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-N615K",
+      "protein_change": "p.Asn615Lys",
+      "author_category": "Possible GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-N616K",
+      "protein_change": "p.Asn616Lys",
+      "author_category": "Possible GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-V620M",
+      "protein_change": "p.Val620Met",
+      "author_category": "Possible GoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-G483R",
+      "protein_change": "p.Gly483Arg",
+      "author_category": "Likely LoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": true,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-A716T",
+      "protein_change": "p.Ala716Thr",
+      "author_category": "Likely LoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": true,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-D731N",
+      "protein_change": "p.Asp731Asn",
+      "author_category": "Likely LoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": true,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-E413G",
+      "protein_change": "p.Glu413Gly",
+      "author_category": "Likely LoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": true,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-S541R",
+      "protein_change": "p.Ser541Arg",
+      "author_category": "Likely LoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": true,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-P553T",
+      "protein_change": "p.Pro553Thr",
+      "author_category": "Likely LoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": true,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-S545L",
+      "protein_change": "p.Ser545Leu",
+      "author_category": "Possible LoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-M705V",
+      "protein_change": "p.Met705Val",
+      "author_category": "Possible LoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-V734L",
+      "protein_change": "p.Val734Leu",
+      "author_category": "Possible LoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-C461F",
+      "protein_change": "p.Cys461Phe",
+      "author_category": "Possible LoF",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": true,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-R518H",
+      "protein_change": "p.Arg518His",
+      "author_category": "Likely LoF (expression too low)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-T531M",
+      "protein_change": "p.Thr531Met",
+      "author_category": "Likely LoF (expression too low)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-A548P",
+      "protein_change": "p.Ala548Pro",
+      "author_category": "Likely LoF (expression too low)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-C436R",
+      "protein_change": "p.Cys436Arg",
+      "author_category": "Likely LoF (expression too low)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-A549V",
+      "protein_change": "p.Ala549Val",
+      "author_category": "Likely LoF (expression too low)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-F550S",
+      "protein_change": "p.Phe550Ser",
+      "author_category": "Likely LoF (expression too low)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-L551S",
+      "protein_change": "p.Leu551Ser",
+      "author_category": "Likely LoF (expression too low)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-S555I",
+      "protein_change": "p.Ser555Ile",
+      "author_category": "Likely LoF (expression too low)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-P553L",
+      "protein_change": "p.Pro553Leu",
+      "author_category": "Likely LoF (expression too low)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-A636P",
+      "protein_change": "p.Ala636Pro",
+      "author_category": "Likely LoF (expression too low)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-R504W",
+      "protein_change": "p.Arg504Trp",
+      "author_category": "No Effect or Indeterminant (grouped by source)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-K669N",
+      "protein_change": "p.Lys669Asn",
+      "author_category": "No Effect or Indeterminant (grouped by source)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2A",
+      "source_protein_notation": "GluN2A-P699S",
+      "protein_change": "p.Pro699Ser",
+      "author_category": "No Effect or Indeterminant (grouped by source)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-R540H",
+      "protein_change": "p.Arg540His",
+      "author_category": "No Effect or Indeterminant (grouped by source)",
+      "source_locator": "Myers et al. 2023, Discussion, paragraph beginning ‘To further illustrate the utility of this approach’; published-variant category list.",
+      "already_in_selected_demo": true,
+      "cohort_admission": "not_automatically_admitted"
+    }
+  ],
+  "newly_assayed_candidates": [
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-I150V",
+      "protein_change": "p.Ile150Val",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": "Indeterminant",
+      "classification_status": "available_as_text_in_Table_6",
+      "source_locator": "Myers et al. 2023, Table 1, row I150V; Table 6, row I150V, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-S526P",
+      "protein_change": "p.Ser526Pro",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row S526P; Table 6, row S526P, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-G533D",
+      "protein_change": "p.Gly533Asp",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row G533D; Table 6, row G533D, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-W607S",
+      "protein_change": "p.Trp607Ser",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row W607S; Table 6, row W607S, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-E657D",
+      "protein_change": "p.Glu657Asp",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": "Indeterminant",
+      "classification_status": "available_as_text_in_Table_6",
+      "source_locator": "Myers et al. 2023, Table 1, row E657D; Table 6, row E657D, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-R682H",
+      "protein_change": "p.Arg682His",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row R682H; Table 6, row R682H, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-G689S",
+      "protein_change": "p.Gly689Ser",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row G689S; Table 6, row G689S, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-R693S",
+      "protein_change": "p.Arg693Ser",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row R693S; Table 6, row R693S, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-I695S",
+      "protein_change": "p.Ile695Ser",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row I695S; Table 6, row I695S, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-I695T",
+      "protein_change": "p.Ile695Thr",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row I695T; Table 6, row I695T, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-M706V",
+      "protein_change": "p.Met706Val",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row M706V; Table 6, row M706V, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-E807K",
+      "protein_change": "p.Glu807Lys",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row E807K; Table 6, row E807K, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-S810N",
+      "protein_change": "p.Ser810Asn",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row S810N; Table 6, row S810N, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    },
+    {
+      "gene": "GRIN2B",
+      "source_protein_notation": "GluN2B-V821F",
+      "protein_change": "p.Val821Phe",
+      "candidate_type": "newly_assayed_Table_1_variant",
+      "author_category": null,
+      "classification_status": "unavailable_as_text; Table_6_classification_cell image-only or empty in retained HTML",
+      "source_locator": "Myers et al. 2023, Table 1, row V821F; Table 6, row V821F, final-call cell.",
+      "already_in_selected_demo": false,
+      "cohort_admission": "not_automatically_admitted"
+    }
+  ]
+}
