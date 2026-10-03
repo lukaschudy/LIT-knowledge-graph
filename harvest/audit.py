@@ -46,15 +46,33 @@ def audit_source(manifest_path,deep=True):
         datasets.append({'dataset':name,'records':d['records'],'bytes':d['bytes'],'verified_records':count if deep else None,'negative_qualifier_records':negative if deep else None})
     return {'source':source,'manifest_sha256':hashlib.sha256(manifest_bytes).hexdigest(),'manifest_updated_at':m.get('updated_at'),'status':m.get('status'),'scope':m.get('scope',m.get('coverage')),'artifacts':len(m.get('artifacts',{})),'raw_bytes':sum(x['bytes'] for x in m.get('artifacts',{}).values()),'datasets':datasets,'errors':errors,'warnings':warnings}
 
-def run(deep=True):
+def run(deep=True,reuse_verified=False):
+    previous={};previous_at=None
+    previous_path=ROOT/'data/harvest-audit.json'
+    if deep and reuse_verified and previous_path.exists():
+        old=json.loads(previous_path.read_text())
+        if old.get('deep_record_scan'):
+            previous={s['source']:s for s in old['sources']};previous_at=old['created_at']
     results=[]
     for p in sorted(MANIFESTS.glob('*.json')):
-        result=audit_source(p,deep);results.append(result)
+        prior=previous.get(p.stem)
+        reusable=prior and not prior['errors'] and prior.get('manifest_sha256')==digest(p)
+        if reusable:
+            # Rehash every artifact and dataset. Only the expensive structural
+            # JSON scan may be reused, after proving the bytes are unchanged.
+            result=audit_source(p,deep=False)
+            if not result['errors'] and result['manifest_sha256']==prior['manifest_sha256']:
+                result['datasets']=prior['datasets']
+                result['structural_validation_reused_from']=prior.get('structural_validation_reused_from',previous_at)
+            elif not result['errors']:
+                result=audit_source(p,deep)
+        else:result=audit_source(p,deep)
+        results.append(result)
         print(json.dumps({'source':result['source'],'errors':result['errors'],'records':sum(x['records'] for x in result['datasets'])}),flush=True)
     report={'created_at':now(),'deep_record_scan':deep,'sources':results,'totals':{'sources':len(results),'records':sum(d['records'] for s in results for d in s['datasets']),'raw_bytes':sum(s['raw_bytes'] for s in results),'errors':sum(len(s['errors']) for s in results)},'note':'Counts aggregate different entity/assertion/ontology/retrieval record types and are not a count of unique entities. Source-level completeness is limited to declared scope.'}
     atomic_json(ROOT/'data/harvest-audit.json',report)
     return report
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--quick',action='store_true');a=p.parse_args();r=run(not a.quick)
+    p=argparse.ArgumentParser();p.add_argument('--quick',action='store_true');p.add_argument('--reuse-verified',action='store_true');a=p.parse_args();r=run(not a.quick,a.reuse_verified)
     raise SystemExit(bool(r['totals']['errors']))
