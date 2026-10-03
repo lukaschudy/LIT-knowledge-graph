@@ -1,0 +1,76 @@
+{
+  "pdf_sources": {
+    "S01": [
+      "omim"
+    ],
+    "S02": [
+      "clinvar"
+    ],
+    "S03": [
+      "hpo"
+    ],
+    "S04": [
+      "pubmed",
+      "europe_pmc_diseases",
+      "grin_literature"
+    ],
+    "S05": [
+      "pmc"
+    ],
+    "S06": [
+      "clinicaltrials_gov"
+    ],
+    "S07": [
+      "nih_reporter"
+    ],
+    "S08": [
+      "nord"
+    ],
+    "S09": [
+      "global_genes"
+    ],
+    "S10": [
+      "orphadata",
+      "orphanet_expert_resources"
+    ],
+    "S11": [
+      "grin_resources"
+    ],
+    "S12": [
+      "eurordis"
+    ],
+    "S13": [
+      "genetic_alliance_uk"
+    ],
+    "S14": [
+      "genetic_alliance_us"
+    ],
+    "S15": [
+      "mondo"
+    ],
+    "S16": [
+      "grin_resources"
+    ],
+    "S17": [
+      "mgi"
+    ],
+    "S18": [
+      "rareconnect"
+    ],
+    "S19": [
+      "europe_pmc_preprints"
+    ],
+    "S20": [
+      "europe_pmc_preprints"
+    ],
+    "S21": [
+      "raresource"
+    ]
+  },
+  "notes": [
+    "S13 is Rare Disease UK, a campaign operated by Genetic Alliance UK; acquired member-directory records are explicitly the GAUK directory.",
+    "S19/S20 preprints are indexed Europe PMC PPR query results, not guaranteed complete bioRxiv/medRxiv server dumps.",
+    "S11/S16 are unbounded source classes, scoped to verified GRIN resources and announcements for the demonstration.",
+    "No original PDF source is silently omitted; missing access and incomplete scope remain visible."
+  ]
+}

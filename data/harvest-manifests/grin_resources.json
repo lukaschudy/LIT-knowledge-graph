@@ -1,0 +1,167 @@
+{
+  "source": "grin_resources",
+  "created_at": "2026-10-03T21:58:19.301036+00:00",
+  "artifacts": {
+    "63e81fb2cbe94573.html": {
+      "url": "https://grin2b.com/2026/03/09/grin2b-foundation-announces-97180-in-new-research-funding/",
+      "final_url": "https://grin2b.com/2026/03/09/grin2b-foundation-announces-97180-in-new-research-funding/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_resources/63e81fb2cbe94573.html",
+      "bytes": 82278,
+      "sha256": "2ed90e3e17b3e8a2007842d091164ffef7b035f50333c961883a8fc933da5f76",
+      "retrieved_at": "2026-10-03T21:58:19.300991+00:00",
+      "license": "Provider website copyright; local research snapshot, curated factual metadata and source links; no blanket text redistribution grant",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "226424f1f0ea21ca.html": {
+      "url": "https://grin2b.com/for-researchers/",
+      "final_url": "https://grin2b.com/for-researchers/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_resources/226424f1f0ea21ca.html",
+      "bytes": 79957,
+      "sha256": "ec0e6aaf733dbed642dee20a3e2da42866f3f456c5e0566010c0164c880d29fb",
+      "retrieved_at": "2026-10-03T21:58:20.028227+00:00",
+      "license": "Provider website copyright; local research snapshot, curated factual metadata and source links; no blanket text redistribution grant",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "ddf0d83e72921612.html": {
+      "url": "https://grin2b.com/grin-registry/",
+      "final_url": "https://grin2b.com/grin-registry/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_resources/ddf0d83e72921612.html",
+      "bytes": 79459,
+      "sha256": "282dd769adb4757dcec510512b593206cc6fe0f3d58e14301d1d5124cddf59be",
+      "retrieved_at": "2026-10-03T21:58:20.304378+00:00",
+      "license": "Provider website copyright; local research snapshot, curated factual metadata and source links; no blanket text redistribution grant",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "d8a6fe7d2ef3f4e6.html": {
+      "url": "https://med.emory.edu/departments/pharmacology-chemical-biology/programs-centers/cferv/request-analysis/index.html",
+      "final_url": "https://med.emory.edu/departments/pharmacology-chemical-biology/programs-centers/cferv/request-analysis/index.html",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_resources/d8a6fe7d2ef3f4e6.html",
+      "bytes": 234245,
+      "sha256": "5c422e1404aa1406e450892220d1729457a89f5fe4d3890e0f353d46684098b8",
+      "retrieved_at": "2026-10-03T21:58:21.092884+00:00",
+      "license": "Provider website copyright; local research snapshot, curated factual metadata and source links; no blanket text redistribution grant",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "last_modified": "Fri, 11 Sep 2026 22:30:48 GMT",
+      "etag": null
+    },
+    "8d6229d826287c65.html": {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38380699/",
+      "final_url": "https://pubmed.ncbi.nlm.nih.gov/38380699/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_resources/8d6229d826287c65.html",
+      "bytes": 5590,
+      "sha256": "bf81c02462656ab1fcd03938512cf29f5c7e691af53d4b914682f54aa3eb2619",
+      "retrieved_at": "2026-10-03T21:58:21.255467+00:00",
+      "license": "Provider website copyright; local research snapshot, curated factual metadata and source links; no blanket text redistribution grant",
+      "version": null,
+      "http_status": 203,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "NCT04646447.json": {
+      "url": "https://clinicaltrials.gov/api/v2/studies/NCT04646447",
+      "final_url": "https://clinicaltrials.gov/api/v2/studies/NCT04646447",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_resources/NCT04646447.json",
+      "bytes": 18925,
+      "sha256": "5d7fb2ccaaeed2b8f35698d6c496ea72396108997025a75dfc38643d390bcdb4",
+      "retrieved_at": "2026-10-03T21:59:22.721481+00:00",
+      "license": "ClinicalTrials.gov terms of use; preserve submitted record and update dates",
+      "version": null,
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": "\"0/0.34.1/muqqfpr4\""
+    }
+  },
+  "datasets": {
+    "resources": {
+      "path": "data/processed/harvest/grin_resources/resources.jsonl.gz",
+      "records": 5,
+      "bytes": 2048,
+      "sha256": "dc38864633356045a6a9c672613e92e816bfbfda00a0ed9f35c6c564ba47d116",
+      "input_paths": [
+        "data/raw/harvest/grin_resources/63e81fb2cbe94573.html",
+        "data/raw/harvest/grin_resources/226424f1f0ea21ca.html",
+        "data/raw/harvest/grin_resources/ddf0d83e72921612.html",
+        "data/raw/harvest/grin_resources/d8a6fe7d2ef3f4e6.html",
+        "data/curated/grin_resources.json"
+      ],
+      "description": "Curated public GRIN resource facts; scope/access/availability uncertainties retained. Metadata only.",
+      "created_at": "2026-10-03T21:59:22.558863+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "announcements": {
+      "path": "data/processed/harvest/grin_resources/announcements.jsonl.gz",
+      "records": 1,
+      "bytes": 603,
+      "sha256": "a7ddf9409f689b27b76643745874b91fac92aef09a60efcf69375cea8c38cf34",
+      "input_paths": [
+        "data/raw/harvest/grin_resources/63e81fb2cbe94573.html",
+        "data/raw/harvest/grin_resources/226424f1f0ea21ca.html",
+        "data/raw/harvest/grin_resources/ddf0d83e72921612.html",
+        "data/raw/harvest/grin_resources/d8a6fe7d2ef3f4e6.html",
+        "data/curated/grin_resources.json"
+      ],
+      "description": "Issuer announcement metadata; projected research is not a validated result.",
+      "created_at": "2026-10-03T21:59:22.559307+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "study_records": {
+      "path": "data/processed/harvest/grin_resources/study_records.jsonl.gz",
+      "records": 1,
+      "bytes": 7013,
+      "sha256": "10fd2e5fa16c9f8ad1f556d262cbb579b3978b1111d352ec5a5a6ba7c8007fef",
+      "input_paths": [
+        "data/raw/harvest/grin_resources/NCT04646447.json"
+      ],
+      "description": "Complete native trial record for the published cross-gene study; not an eligibility or treatment recommendation.",
+      "created_at": "2026-10-03T21:59:22.722686+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete_for_scope",
+  "updated_at": "2026-10-03T21:59:22.730609+00:00",
+  "scope": "Public research-resource metadata for the GRIN2A/GRIN2B functional cohort; no patient-level registry or biobank data",
+  "unavailable_local_snapshots": [
+    {
+      "url": "https://curegrin.org/gri-research-participation/",
+      "error": "grin_resources download failed: https://curegrin.org/gri-research-participation/: 403 Client Error: Forbidden for url: https://curegrin.org/gri-research-participation/",
+      "evidence_route": "Official page reviewed through web search/open; no local HTML snapshot available"
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38380699/",
+      "error": "HTML response is a browser challenge, not article content",
+      "evidence_route": "Official page reviewed through web search/open; no local HTML snapshot available"
+    }
+  ],
+  "curation": "Assistant-curated source facts; expert and provider review pending. No contact, application or enrollment submitted."
+}

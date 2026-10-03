@@ -1,0 +1,12 @@
+{
+  "source": "genetic_alliance_us",
+  "created_at": "2026-10-03T21:55:43.266754+00:00",
+  "artifacts": {},
+  "datasets": {},
+  "status": "provider_export_needed",
+  "scope": "Source content not acquired",
+  "reason": "Disease InfoSearch public UI returned no records in research; no documented export/API or suitable bulk-use grant established. This is not evidence the directory is empty.",
+  "provider_url": "https://geneticalliance.org/disease-info-search",
+  "evidence_notes": "docs/research/community.md",
+  "updated_at": "2026-10-03T21:55:43.266755+00:00"
+}

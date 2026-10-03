@@ -1,0 +1,177 @@
+{
+  "source": "grin_reference",
+  "created_at": "2026-10-03T21:56:57.217531+00:00",
+  "artifacts": {},
+  "datasets": {
+    "hgnc_hgnc_complete_set": {
+      "path": "data/processed/harvest/grin_reference/hgnc_hgnc_complete_set.jsonl.gz",
+      "records": 2,
+      "bytes": 949,
+      "sha256": "1c88f304a1f6976d1b036f0b6cae38740287c78b06d70bbad2593e2cb5ee2989",
+      "input_paths": [
+        "data/processed/harvest/hgnc/hgnc_complete_set.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B identifier slice, including uncertain/conflicting annotations. Membership is NOT evidence of reduced receptor function.",
+      "created_at": "2026-10-03T21:56:57.218019+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "clinvar_variant_summary": {
+      "path": "data/processed/harvest/grin_reference/clinvar_variant_summary.jsonl.gz",
+      "records": 8760,
+      "bytes": 560940,
+      "sha256": "d59a091ca233d88a901c6a6fd1bd3ae5b4823e45f01563576133fcdf9348caa3",
+      "input_paths": [
+        "data/processed/harvest/clinvar/variant_summary.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B identifier slice, including uncertain/conflicting annotations. Membership is NOT evidence of reduced receptor function.",
+      "created_at": "2026-10-03T21:57:50.160304+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "hpo_genes_to_disease": {
+      "path": "data/processed/harvest/grin_reference/hpo_genes_to_disease.jsonl.gz",
+      "records": 10,
+      "bytes": 483,
+      "sha256": "2cd50488be37436c7d5a8fc80b7e1a01d6c3c5519a40779405fdf6653318666c",
+      "input_paths": [
+        "data/processed/harvest/hpo/genes_to_disease.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B identifier slice, including uncertain/conflicting annotations. Membership is NOT evidence of reduced receptor function.",
+      "created_at": "2026-10-03T21:57:50.195437+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "hpo_genes_to_phenotype": {
+      "path": "data/processed/harvest/grin_reference/hpo_genes_to_phenotype.jsonl.gz",
+      "records": 216,
+      "bytes": 4536,
+      "sha256": "9f1bf8fd7e4d7add99b1f23acb787820be8009bd425bfe8883ea94cf223133f9",
+      "input_paths": [
+        "data/processed/harvest/hpo/genes_to_phenotype.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B identifier slice, including uncertain/conflicting annotations. Membership is NOT evidence of reduced receptor function.",
+      "created_at": "2026-10-03T21:57:50.951270+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "clingen_gene_disease_validity": {
+      "path": "data/processed/harvest/grin_reference/clingen_gene_disease_validity.jsonl.gz",
+      "records": 2,
+      "bytes": 536,
+      "sha256": "5e8f44dffdeda2e62098a2e8501c7a5eab367f392a048cef1cad0def4b4edfeb",
+      "input_paths": [
+        "data/processed/harvest/clingen/gene_disease_validity.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B identifier slice, including uncertain/conflicting annotations. Membership is NOT evidence of reduced receptor function.",
+      "created_at": "2026-10-03T21:57:50.963817+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "clingen_gene_disease_validity_lumping_splitting": {
+      "path": "data/processed/harvest/grin_reference/clingen_gene_disease_validity_lumping_splitting.jsonl.gz",
+      "records": 2,
+      "bytes": 680,
+      "sha256": "7aeb46dd6c36cc0a0e63a2cf5b4a26809ddac7982520dabd617907e3598304fe",
+      "input_paths": [
+        "data/processed/harvest/clingen/gene_disease_validity_lumping_splitting.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B identifier slice, including uncertain/conflicting annotations. Membership is NOT evidence of reduced receptor function.",
+      "created_at": "2026-10-03T21:57:50.978404+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "clingen_gene_dosage": {
+      "path": "data/processed/harvest/grin_reference/clingen_gene_dosage.jsonl.gz",
+      "records": 2,
+      "bytes": 395,
+      "sha256": "a88c2a738f15345121892c799ce0555b7ccf5169cff934c57909a11cd21af1f9",
+      "input_paths": [
+        "data/processed/harvest/clingen/gene_dosage.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B identifier slice, including uncertain/conflicting annotations. Membership is NOT evidence of reduced receptor function.",
+      "created_at": "2026-10-03T21:57:50.982826+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "gencc_assertions": {
+      "path": "data/processed/harvest/grin_reference/gencc_assertions.jsonl.gz",
+      "records": 19,
+      "bytes": 3944,
+      "sha256": "b9051843a0116ee518ffb4cef63f2ee88879eaacc4e709b8c6d0f4879b1580d9",
+      "input_paths": [
+        "data/processed/harvest/gencc/assertions.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B identifier slice, including uncertain/conflicting annotations. Membership is NOT evidence of reduced receptor function.",
+      "created_at": "2026-10-03T21:57:51.188546+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "reactome_UniProt2Reactome_All_Levels": {
+      "path": "data/processed/harvest/grin_reference/reactome_UniProt2Reactome_All_Levels.jsonl.gz",
+      "records": 69,
+      "bytes": 1859,
+      "sha256": "bd35bef636ddc7ae632acccb020c6df8a102ffe599a874668c0f2c22a810b196",
+      "input_paths": [
+        "data/processed/harvest/reactome/UniProt2Reactome_All_Levels.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B identifier slice, including uncertain/conflicting annotations. Membership is NOT evidence of reduced receptor function.",
+      "created_at": "2026-10-03T21:57:53.412608+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "go_human_annotations": {
+      "path": "data/processed/harvest/grin_reference/go_human_annotations.jsonl.gz",
+      "records": 312,
+      "bytes": 7200,
+      "sha256": "2b35d721973dfd8ca9c47d55e4e6afbf7f3b89fbc1276f490d8c49da5fb619ec",
+      "input_paths": [
+        "data/processed/harvest/go/human_annotations.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B identifier slice, including uncertain/conflicting annotations. Membership is NOT evidence of reduced receptor function.",
+      "created_at": "2026-10-03T21:57:56.255718+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "hpo_disease_phenotypes": {
+      "path": "data/processed/harvest/grin_reference/hpo_disease_phenotypes.jsonl.gz",
+      "records": 218,
+      "bytes": 3538,
+      "sha256": "7b637aa6192416fceb5cb805643066f66aabf1afe30486f87e5968b9835837df",
+      "input_paths": [
+        "data/processed/harvest/hpo/disease_phenotype_annotations.jsonl.gz"
+      ],
+      "description": "Phenotypes for diseases linked to GRIN2A/B in HPO genes_to_disease. Preserve NOT; disease-level annotations are not specific to a variant or LoF subgroup.",
+      "created_at": "2026-10-03T21:57:56.811824+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete_for_scope",
+  "updated_at": "2026-10-03T21:57:56.812089+00:00",
+  "scope": "Exact gene/protein identifier slices of acquired reference snapshots; full native records retained. Independent curated functional evidence is required for demo inclusion.",
+  "gene_symbols": [
+    "GRIN2A",
+    "GRIN2B"
+  ],
+  "hgnc_ids": [
+    "HGNC:4585",
+    "HGNC:4586"
+  ],
+  "uniprot_ids": [
+    "Q12879",
+    "Q13224"
+  ],
+  "disease_ids": [
+    "OMIM:245570",
+    "OMIM:613970",
+    "OMIM:616139",
+    "ORPHA:163721",
+    "ORPHA:1945",
+    "ORPHA:289266",
+    "ORPHA:589547",
+    "ORPHA:697160",
+    "ORPHA:725",
+    "ORPHA:98818"
+  ]
+}

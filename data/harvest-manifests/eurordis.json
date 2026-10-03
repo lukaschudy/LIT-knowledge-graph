@@ -1,0 +1,12 @@
+{
+  "source": "eurordis",
+  "created_at": "2026-10-03T21:55:43.266713+00:00",
+  "artifacts": {},
+  "datasets": {},
+  "status": "access_blocked",
+  "scope": "Source content not acquired",
+  "reason": "Directory returned HTTP 429 in source research and again in this harvest; no bulk export or reuse grant confirmed.",
+  "provider_url": "https://www.eurordis.org/who-we-are/our-members/",
+  "evidence_notes": "docs/research/community.md",
+  "updated_at": "2026-10-03T21:55:43.266714+00:00"
+}

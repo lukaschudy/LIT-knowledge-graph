@@ -1,0 +1,12 @@
+{
+  "source": "rareconnect",
+  "created_at": "2026-10-03T21:55:43.266793+00:00",
+  "artifacts": {},
+  "datasets": {},
+  "status": "retired_metadata_only",
+  "scope": "Source content not acquired",
+  "reason": "Platform retired 5 December 2023. No patient posts, profiles or health narratives collected; archive metadata access/export not established.",
+  "provider_url": "https://www.rareconnect.org/en/announcements",
+  "evidence_notes": "docs/research/assets.md",
+  "updated_at": "2026-10-03T21:55:43.266794+00:00"
+}
