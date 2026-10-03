@@ -1075,7 +1075,7 @@ def retry_pmc_html_fulltext(source="pmc_grin_oa"):
     html_ids={row["pmcid"] for row in html_records}
     coverage.update({"downloaded_html_records":len(html_ids),"distinct_fulltext_articles_jats_or_html":len(jats_ids|html_ids),
                      "fulltext_fetch_unresolved_after_html":len(audit["unavailable_ids"]),
-                     "xml_retry_queue_note":"Original 44 XML/body failures remain recorded; nested HTML outcomes identify the 26 recovered in HTML."})
+                     "xml_retry_queue_note":f"Original {len(failures)} XML/body failures remain recorded; nested HTML outcomes identify the {len(html_ids)} recovered in HTML."})
     core.update_manifest(source,html_fallback_audit=audit,coverage=coverage)
     return audit
 
