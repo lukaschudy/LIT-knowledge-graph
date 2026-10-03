@@ -24,6 +24,15 @@ python3 -m unittest discover -s tests_harvest -v
 python3 -m harvest.biology
 python3 -m harvest.enrichment
 python3 -m harvest.research
+python3 -m harvest.literature --workers 8
+python3 -m harvest.opportunities all
+python3 -m harvest.audit --reuse-verified
+python3 -m harvest.status
+python3 -m harvest.report
 ```
 
 Connector commands and the final coverage report will identify partial/failing sources; retries must resume recorded work rather than silently overwriting or reporting empty results as complete.
+
+The literature collector limits new requests to two per second and can use up to eight concurrent workers. It keeps a disk-backed identifier index and explicit per-query checkpoints. `--reuse-verified` still hashes every stored artifact and dataset; it only reuses the structural record scan when the manifest and all file bytes match the earlier successful audit.
+
+Read [the coverage report](harvest-coverage.md) for current source counts and access limitations, and [the GRIN demonstration](grin-demo.md) for the selected functional cohort and reproducible graph. Full acquisition datasets and the small curated demonstration are separate layers.

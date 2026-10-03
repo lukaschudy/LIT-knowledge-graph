@@ -35,12 +35,14 @@ Use `--replace` only when intentionally refreshing this demo database. Restart i
 
 ## Browser walkthrough
 
-1. Open <http://127.0.0.1:18766/explore> and search **GRIN2B**.
+1. Open <http://127.0.0.1:18766/records> and search **GRIN2B**.
 2. Select **GRIN2B-related neurodevelopmental disorder — selected Likely LoF variants**.
 3. Inspect the GRIN2A connection and select a biological relationship to see primary source links, exact locators and measurements.
 4. Check that provisional and unresolved cases say **Needs review**, while the opposing-function cohort says **Not supported** for this particular route.
 5. Open **Research assets** and inspect the registry, maintainer organizations, data-sharing conditions and unanswered availability questions.
 6. Review `data/curated/grin_research_proposal.json` for the concrete observational research question, partner routes and proposed feasibility milestone.
+
+The interactive graph is also available at <http://127.0.0.1:18766/explore>. The walkthrough above uses the evidence comparison view.
 
 The bundle contains 35 entities, 12 cited sources, 44 claims and 56 evidence records. Reported source claims and proposed asset adaptation are distinguished. “Machine checked” describes source transcription, not expert clinical validation. The graph acknowledges the already-established cross-gene GRIN relationship and registry; its contribution is traceable preparation of a research question.
 

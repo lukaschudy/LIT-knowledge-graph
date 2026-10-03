@@ -13,5 +13,10 @@
   ],
   "expert_review": "pending",
   "clinical_use": "not validated",
-  "browser_journey": "Search GRIN2B → selected Likely LoF cohort → GRIN2A connection → primary evidence → registry access conditions; manually exercised through browser automation."
+  "browser_journey": "Search GRIN2B \u2192 selected Likely LoF cohort \u2192 GRIN2A connection \u2192 primary evidence \u2192 registry access conditions; manually exercised through browser automation.",
+  "browser_routes": {
+    "evidence_comparison": "/records",
+    "interactive_graph": "/explore"
+  },
+  "browser_rechecked_at": "2026-10-03T23:10:00+00:00"
 }

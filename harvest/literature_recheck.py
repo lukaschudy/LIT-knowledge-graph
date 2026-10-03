@@ -5,7 +5,7 @@ search recall. This process never mutates the main collector's live database.
 """
 import argparse, hashlib, json, sqlite3
 from urllib.parse import urlencode
-from harvest.core import ROOT, RAW, PROCESSED, download, emit_records, update_manifest
+from harvest.core import ROOT, RAW, PROCESSED, download, emit_records, update_manifest, manifest, _MANIFEST_LOCK
 from harvest.literature import ENDPOINT
 
 SOURCE = 'europe_pmc_recheck'
@@ -32,7 +32,12 @@ def run(qid):
     emit_records(SOURCE,'identifiers_'+qid,({'article_id':k,'query_id':qid} for k in sorted(seen)),input_paths=paths,description='Independent date-sorted ID-only traversal of a query with duplicate core response rows.')
     report={'query_id':qid,'original_raw_rows':initial_rows,'original_unique_ids':len(initial),'recheck_raw_rows':raw_count,'recheck_unique_ids':len(seen),'reported_counts':sorted(set(reported)),'added_ids':sorted(seen-initial),'absent_ids':sorted(initial-seen),'identical_id_set':seen==initial,'pages':page}
     emit_records(SOURCE,'comparison_'+qid,[report],input_paths=original+paths,description='Snapshot set comparison; changed membership can also reflect provider updates.')
-    update_manifest(SOURCE,status='complete_for_scope',comparison=report,limitations=['A matching independently sorted ID set diagnoses duplicate response rows; it does not establish complete literature recall.','No main collection records are changed by this audit.'])
+    with _MANIFEST_LOCK:
+        prior=manifest(SOURCE)
+        comparisons=dict(prior.get('comparisons',{}))
+        if prior.get('comparison'):comparisons.setdefault(prior['comparison']['query_id'],prior['comparison'])
+        comparisons[qid]=report
+        update_manifest(SOURCE,status='complete_for_scope',comparison=report,comparisons=comparisons,limitations=['An independently sorted ID set can diagnose pagination gaps; it does not establish complete literature recall.','Recovery records explicitly document any later additions to the main corpus.'])
     print(json.dumps(report),flush=True)
 
 if __name__=='__main__':
