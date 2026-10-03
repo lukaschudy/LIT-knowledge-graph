@@ -5,7 +5,7 @@ The acquisition pipeline is separate from the concurrently developed Atlas appli
 ## Storage and evidence
 
 - `data/raw/harvest/<source>/`: downloaded source snapshots and API responses, outside Git.
-- `data/processed/harvest/<source>/`: streamed gzip JSONL records, outside Git.
+- `data/processed/harvest/<source>/`: streamed gzip JSONL records, outside Git; new exports default to compression level 6.
 - `data/harvest-manifests/<source>.json`: version, URL, acquisition time, licensing reference, SHA-256, counts and coverage, committed to Git.
 - `harvest/`: connector code. Requires Python 3.11+ and `requests`.
 
