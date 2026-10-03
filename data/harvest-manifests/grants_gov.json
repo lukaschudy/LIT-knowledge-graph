@@ -1,0 +1,1721 @@
+{
+  "source": "grants_gov",
+  "created_at": "2026-10-03T21:56:33.383778+00:00",
+  "artifacts": {
+    "search-rare-disease-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disease",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disease-offset-00000000.json",
+      "bytes": 42217,
+      "sha256": "33a0f88add09268588f2bbab53c03f64a598dfbb0c7266b7fc4d411005e5b5f6",
+      "retrieved_at": "2026-10-03T21:56:33.383714+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disease-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disease",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disease-offset-00000100.json",
+      "bytes": 43824,
+      "sha256": "47ccfa5a9c69a80ff4f4d3310f2b07b6dfb5a5bb6e7abf0869d18401d6919fd8",
+      "retrieved_at": "2026-10-03T21:56:33.650460+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disease-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disease",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disease-offset-00000200.json",
+      "bytes": 43674,
+      "sha256": "eab83fdbb7719e166356445d70fd92daccba29a5ce52417e445eac550dec709e",
+      "retrieved_at": "2026-10-03T21:56:34.495652+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disease-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disease",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disease-offset-00000300.json",
+      "bytes": 44618,
+      "sha256": "ede64e40875ab5c0591211576fc6e3f74ce2b0534cfefcfb2888a0476ea464ff",
+      "retrieved_at": "2026-10-03T21:56:34.746293+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disease-offset-00000400.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disease",
+        "rows": 100,
+        "startRecordNum": 400,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disease-offset-00000400.json",
+      "bytes": 24808,
+      "sha256": "2497ef88af2118bf281442af282b7705b48de550eb23d7eeb5e72fb2a23366ed",
+      "retrieved_at": "2026-10-03T21:56:34.991011+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-diseases-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare diseases",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-diseases-offset-00000000.json",
+      "bytes": 42218,
+      "sha256": "5b1ff828478354e17db1c85b328dc303e65c4f777f8ba1f33406bb967f75b3b5",
+      "retrieved_at": "2026-10-03T21:56:35.123269+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-diseases-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare diseases",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-diseases-offset-00000100.json",
+      "bytes": 43825,
+      "sha256": "ebcbfb720a3cadf1dd9004492258bdb2ba89c53eaff105adca223d766a4f03f6",
+      "retrieved_at": "2026-10-03T21:56:35.365286+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-diseases-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare diseases",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-diseases-offset-00000200.json",
+      "bytes": 43675,
+      "sha256": "025ac382d110356115e118b7d79fc9ada99b1feaf15ffd9b1779d86fb4b57986",
+      "retrieved_at": "2026-10-03T21:56:35.628236+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-diseases-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare diseases",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-diseases-offset-00000300.json",
+      "bytes": 44619,
+      "sha256": "5e507a28a47b0fa70946c63849e24d09fb0ccc7b74f14335e84e8b4c6e0fb359",
+      "retrieved_at": "2026-10-03T21:56:35.874619+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-diseases-offset-00000400.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare diseases",
+        "rows": 100,
+        "startRecordNum": 400,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-diseases-offset-00000400.json",
+      "bytes": 24809,
+      "sha256": "be0b14f14c6f4a8ad84957fd68afee14febf19368e27e4712bdb5c7dce2f3693",
+      "retrieved_at": "2026-10-03T21:56:36.122743+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-disease-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan disease",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-disease-offset-00000000.json",
+      "bytes": 40957,
+      "sha256": "4013e4246c6abf527b6dfbe6e04822177effc98ebd42a3a692814db36b761e59",
+      "retrieved_at": "2026-10-03T21:56:36.278214+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-disease-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan disease",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-disease-offset-00000100.json",
+      "bytes": 42728,
+      "sha256": "fe8d9bf7eac25b700e7e4bf644173238b63dc190f72498587c1ec0930b886b36",
+      "retrieved_at": "2026-10-03T21:56:36.530094+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-disease-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan disease",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-disease-offset-00000200.json",
+      "bytes": 43165,
+      "sha256": "49d89297acc8fbb9f5166ea9480337a231b651f281c04cb7938f53a39829e087",
+      "retrieved_at": "2026-10-03T21:56:36.781752+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-disease-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan disease",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-disease-offset-00000300.json",
+      "bytes": 42878,
+      "sha256": "b6780edd72231553b0bac0298a26e27ca6ae045b7ec79a6a23aa7b7d6649dcd3",
+      "retrieved_at": "2026-10-03T21:56:37.042042+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-disease-offset-00000400.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan disease",
+        "rows": 100,
+        "startRecordNum": 400,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-disease-offset-00000400.json",
+      "bytes": 8291,
+      "sha256": "cc2697ac7216992731a8ddac309ba13582198d9b7d306c714fcbd2112a8d9161",
+      "retrieved_at": "2026-10-03T21:56:37.265039+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-diseases-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan diseases",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-diseases-offset-00000000.json",
+      "bytes": 40958,
+      "sha256": "d50ae25e8d6f5edf98d73d9efa6b583debeeb9493b14ddd3636843bf1c6bba95",
+      "retrieved_at": "2026-10-03T21:56:37.414113+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-diseases-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan diseases",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-diseases-offset-00000100.json",
+      "bytes": 42729,
+      "sha256": "e9ccce6fadea8f828daa832530709af13df7be685e5566c7a2f9166a671402b2",
+      "retrieved_at": "2026-10-03T21:56:37.658818+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-diseases-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan diseases",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-diseases-offset-00000200.json",
+      "bytes": 43166,
+      "sha256": "9bc94c1ca33a0bffc469086de2576b2b941b4a8683f9231300b5a7a7104e33d4",
+      "retrieved_at": "2026-10-03T21:56:37.896992+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-diseases-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan diseases",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-diseases-offset-00000300.json",
+      "bytes": 42879,
+      "sha256": "964c94c6195578860787d1c9c7d1e3a7648b90c5b18ad29eb1c00c112ae53261",
+      "retrieved_at": "2026-10-03T21:56:38.136836+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-diseases-offset-00000400.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan diseases",
+        "rows": 100,
+        "startRecordNum": 400,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-diseases-offset-00000400.json",
+      "bytes": 8292,
+      "sha256": "fa9aa4ed812f57ac098fb9fa8babccadcec9d6a0bbc8de213d72afa37a8c25c2",
+      "retrieved_at": "2026-10-03T21:56:38.375416+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-drug-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan drug",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-drug-offset-00000000.json",
+      "bytes": 41505,
+      "sha256": "1a5c5ee51259440e5bd779b408582d18d4d341eb9f6e12be92ba69131ddc4eab",
+      "retrieved_at": "2026-10-03T21:56:38.530024+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-drug-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan drug",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-drug-offset-00000100.json",
+      "bytes": 44497,
+      "sha256": "c4ec2e757529796d10910ac5768ea0de50191195d266b671e80228c3740c57e1",
+      "retrieved_at": "2026-10-03T21:56:38.797681+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-drug-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan drug",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-drug-offset-00000200.json",
+      "bytes": 35091,
+      "sha256": "a4cbef08b28dfb166f42fa3455369101d84a9ef209f6a9dc45d3de02e360ca5c",
+      "retrieved_at": "2026-10-03T21:56:39.061046+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-products-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan products",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-products-offset-00000000.json",
+      "bytes": 45275,
+      "sha256": "117d6954efd61e577be9ebe41c6505145921899406a770ffd8f752c2df042f64",
+      "retrieved_at": "2026-10-03T21:56:39.239843+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-products-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan products",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-products-offset-00000100.json",
+      "bytes": 43030,
+      "sha256": "d6519c01afbad167d94ac9f2294a77e496bbb63657e8418ca96c8a5afd67e12c",
+      "retrieved_at": "2026-10-03T21:56:39.483809+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-products-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan products",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-products-offset-00000200.json",
+      "bytes": 43796,
+      "sha256": "d578be6f8266c27410d7d137efa3729b0952fbf28cfd3860730c37ebbbc4f682",
+      "retrieved_at": "2026-10-03T21:56:39.733949+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-products-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan products",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-products-offset-00000300.json",
+      "bytes": 45665,
+      "sha256": "133afacc15ffa1187a335590260b33a0c7d9ddc91ec50ecb7bdc9a1163a2607b",
+      "retrieved_at": "2026-10-03T21:56:39.988739+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-products-offset-00000400.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan products",
+        "rows": 100,
+        "startRecordNum": 400,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-products-offset-00000400.json",
+      "bytes": 12733,
+      "sha256": "559c6ff14aac9c3d9beae8021b4230e8e04f5cab85c90e98615ea2698c70054f",
+      "retrieved_at": "2026-10-03T21:56:40.217810+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorder-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorder",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorder-offset-00000000.json",
+      "bytes": 42704,
+      "sha256": "3daf73abc17c5bbfafb713e35c6ec15c148656520756263f6d87d2e17336817b",
+      "retrieved_at": "2026-10-03T21:56:40.988467+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorder-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorder",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorder-offset-00000100.json",
+      "bytes": 45118,
+      "sha256": "9bcf5766d62fd39eb39f0a0634d78d6bf068e370b7073e1fd2e83f2b52aebe4c",
+      "retrieved_at": "2026-10-03T21:56:41.248030+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorder-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorder",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorder-offset-00000200.json",
+      "bytes": 43368,
+      "sha256": "d5ed64d9bea78533471d9932939aed2c8b1993c41300305cac7f8e880e432ddf",
+      "retrieved_at": "2026-10-03T21:56:41.489865+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorder-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorder",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorder-offset-00000300.json",
+      "bytes": 21691,
+      "sha256": "0f88960951bcdb5d381df8b1abe806aea6755f3d0a4e937b1dc36f68b182d75d",
+      "retrieved_at": "2026-10-03T21:56:41.734647+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorders-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorders",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorders-offset-00000000.json",
+      "bytes": 42705,
+      "sha256": "53905504a67deadcc6444f1af983195a1a618d6fd805ac157ee44736ca2308a8",
+      "retrieved_at": "2026-10-03T21:56:41.888410+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorders-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorders",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorders-offset-00000100.json",
+      "bytes": 45119,
+      "sha256": "2084d071b62175aa827ec74877936a5f26550ee03c163a98f6bb413f04fad70a",
+      "retrieved_at": "2026-10-03T21:56:42.153665+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorders-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorders",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorders-offset-00000200.json",
+      "bytes": 43369,
+      "sha256": "1ffc98a5529d3a23ce411e79021a4639133c363147d6ac1faa6a3888c2970e67",
+      "retrieved_at": "2026-10-03T21:56:42.393894+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorders-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorders",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorders-offset-00000300.json",
+      "bytes": 21692,
+      "sha256": "715fcc6f3f97869cf0ab0fc86c82809bd53702c4389640f8e1596c6587f83635",
+      "retrieved_at": "2026-10-03T21:56:42.627452+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "fetchOpportunity-probe.json": {
+      "url": "https://api.grants.gov/v1/api/fetchOpportunity",
+      "final_url": "https://api.grants.gov/v1/api/fetchOpportunity",
+      "method": "POST",
+      "request_body": {
+        "oppId": "356879"
+      },
+      "path": "data/raw/harvest/grants_gov/fetchOpportunity-probe.json",
+      "bytes": 443,
+      "sha256": "8f1bb068c6de974c58e0d97d88ee95f7a91ea9a4bd9b8ac263b15b2fe61d925a",
+      "retrieved_at": "2026-10-03T21:56:42.737116+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disease-forecasted-posted-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disease",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disease-forecasted-posted-offset-00000000.json",
+      "bytes": 42217,
+      "sha256": "2adbacc08134d03045a164e0652ead829de5cdd8088713eca207a27f6e3958a1",
+      "retrieved_at": "2026-10-03T22:08:43.453840+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disease-forecasted-posted-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disease",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disease-forecasted-posted-offset-00000100.json",
+      "bytes": 43824,
+      "sha256": "51ad8c6984f0fba2fb6a330a9529115b7bd0d572eaca0c313833dbab93e13da6",
+      "retrieved_at": "2026-10-03T22:08:43.714468+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disease-forecasted-posted-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disease",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disease-forecasted-posted-offset-00000200.json",
+      "bytes": 43674,
+      "sha256": "f25c6b8af78836bac56b76ae325b002b5768a03bcb79e44933e941dd503e3f05",
+      "retrieved_at": "2026-10-03T22:08:44.036885+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disease-forecasted-posted-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disease",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disease-forecasted-posted-offset-00000300.json",
+      "bytes": 44618,
+      "sha256": "c11b6874273748af62525f2ac22943b177dc592a5636931c6a507692dd61e3f0",
+      "retrieved_at": "2026-10-03T22:08:44.307851+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disease-forecasted-posted-offset-00000400.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disease",
+        "rows": 100,
+        "startRecordNum": 400,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disease-forecasted-posted-offset-00000400.json",
+      "bytes": 24808,
+      "sha256": "907c78428400e60df0e7664dcc894fb65101289adfcb59eea46cf3371ba5b09d",
+      "retrieved_at": "2026-10-03T22:08:44.543770+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-diseases-forecasted-posted-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare diseases",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-diseases-forecasted-posted-offset-00000000.json",
+      "bytes": 42218,
+      "sha256": "a70d5924f2add519ed8f858033007a7025fc110d9fbaf73670b3080679e74c93",
+      "retrieved_at": "2026-10-03T22:08:44.692067+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-diseases-forecasted-posted-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare diseases",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-diseases-forecasted-posted-offset-00000100.json",
+      "bytes": 43825,
+      "sha256": "c07a815c373de8e9a2dd2607df3739df7b8838b52790ede55ca0db073f9d5a83",
+      "retrieved_at": "2026-10-03T22:08:44.956339+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-diseases-forecasted-posted-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare diseases",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-diseases-forecasted-posted-offset-00000200.json",
+      "bytes": 43675,
+      "sha256": "46d6c48e0855dc4bb5f2bf27c4ea58ecf37caa895460d1f3e626129d3c81d9b3",
+      "retrieved_at": "2026-10-03T22:08:45.202335+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-diseases-forecasted-posted-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare diseases",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-diseases-forecasted-posted-offset-00000300.json",
+      "bytes": 44619,
+      "sha256": "9e7e7649c99d93878592b5989f8cfd4778b4078a4df74c2a97b6bf1f5c01e1c9",
+      "retrieved_at": "2026-10-03T22:08:45.448670+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-diseases-forecasted-posted-offset-00000400.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare diseases",
+        "rows": 100,
+        "startRecordNum": 400,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-diseases-forecasted-posted-offset-00000400.json",
+      "bytes": 24809,
+      "sha256": "b7709d7d26fb8db6db4d5cd9d878c8c7ca67986ebf2e4f4bbcee13eadbb33b95",
+      "retrieved_at": "2026-10-03T22:08:45.693767+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-disease-forecasted-posted-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan disease",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-disease-forecasted-posted-offset-00000000.json",
+      "bytes": 40957,
+      "sha256": "0e083b76194705a79c5cb56eb0a074b7962f5bb8dc2b231a594d8df594bce333",
+      "retrieved_at": "2026-10-03T22:08:45.865662+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-disease-forecasted-posted-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan disease",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-disease-forecasted-posted-offset-00000100.json",
+      "bytes": 42728,
+      "sha256": "e5d7282a40b0866d3134efff3d4cd31cd452b860dd52f50369dd88d0bca1a3f8",
+      "retrieved_at": "2026-10-03T22:08:46.118111+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-disease-forecasted-posted-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan disease",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-disease-forecasted-posted-offset-00000200.json",
+      "bytes": 43165,
+      "sha256": "2b08e5f2433b03aed9a4cc3be85894d140321f23b24db1cc195bd73be840276f",
+      "retrieved_at": "2026-10-03T22:08:46.373249+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-disease-forecasted-posted-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan disease",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-disease-forecasted-posted-offset-00000300.json",
+      "bytes": 42878,
+      "sha256": "9960745c422c27447b52d9039a80363c47b2908c4743a6e5fcbcf7143fbb4e3e",
+      "retrieved_at": "2026-10-03T22:08:46.627118+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-disease-forecasted-posted-offset-00000400.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan disease",
+        "rows": 100,
+        "startRecordNum": 400,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-disease-forecasted-posted-offset-00000400.json",
+      "bytes": 8291,
+      "sha256": "241aea799c27e31596aed18c8efb0fa9e8d3e16ad0c16e88462e284765e0869e",
+      "retrieved_at": "2026-10-03T22:08:46.882468+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-diseases-forecasted-posted-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan diseases",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-diseases-forecasted-posted-offset-00000000.json",
+      "bytes": 40958,
+      "sha256": "7ac9921a65e378e48c8d3f9bc6f363bd3aab2ce26590642acc69d0d3c3c6d5a1",
+      "retrieved_at": "2026-10-03T22:08:47.037446+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-diseases-forecasted-posted-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan diseases",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-diseases-forecasted-posted-offset-00000100.json",
+      "bytes": 42729,
+      "sha256": "f622b8214c23a159ee9d0045f58fb420380cf912ea450604ecd69bc42e61ec06",
+      "retrieved_at": "2026-10-03T22:08:47.303920+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-diseases-forecasted-posted-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan diseases",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-diseases-forecasted-posted-offset-00000200.json",
+      "bytes": 43166,
+      "sha256": "dcb528a1a17e9aef4c6d95f47dbbbfba82dbd551bf744524effa7ee2348ce576",
+      "retrieved_at": "2026-10-03T22:08:47.571070+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-diseases-forecasted-posted-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan diseases",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-diseases-forecasted-posted-offset-00000300.json",
+      "bytes": 42879,
+      "sha256": "55167421cd65f4d984a1244f8ed91673853020c75f9e2026b260f9b78acfbac1",
+      "retrieved_at": "2026-10-03T22:08:47.815134+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-diseases-forecasted-posted-offset-00000400.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan diseases",
+        "rows": 100,
+        "startRecordNum": 400,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-diseases-forecasted-posted-offset-00000400.json",
+      "bytes": 8292,
+      "sha256": "389b2216a496bbe38112e280ee6ce55d985e0f00df3d47031246dc8b7e6996b6",
+      "retrieved_at": "2026-10-03T22:08:48.054448+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-drug-forecasted-posted-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan drug",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-drug-forecasted-posted-offset-00000000.json",
+      "bytes": 41505,
+      "sha256": "8dc5f83a94850861721e700ca7db7ae23c0d8a9f1bf07e5a7aebfe7b795f46f9",
+      "retrieved_at": "2026-10-03T22:08:48.214584+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-drug-forecasted-posted-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan drug",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-drug-forecasted-posted-offset-00000100.json",
+      "bytes": 44497,
+      "sha256": "24d0ed5ecb17d9aaf856f0ce8b9277383d47b9b21c85321e6dba19a1227961cd",
+      "retrieved_at": "2026-10-03T22:08:48.474692+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-drug-forecasted-posted-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan drug",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-drug-forecasted-posted-offset-00000200.json",
+      "bytes": 35091,
+      "sha256": "5a859f02807c0714ed2eef0f2c4677a7fb9fe3383a0ca52d959928338810cac2",
+      "retrieved_at": "2026-10-03T22:08:48.741438+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-products-forecasted-posted-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan products",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-products-forecasted-posted-offset-00000000.json",
+      "bytes": 45275,
+      "sha256": "422dd1bf0bf8a6c10ab4ddf1556817dcc2411de9945527e8a56b29dd946a72f2",
+      "retrieved_at": "2026-10-03T22:08:48.902750+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-products-forecasted-posted-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan products",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-products-forecasted-posted-offset-00000100.json",
+      "bytes": 43030,
+      "sha256": "fcd4e097fb2d3216db8ad772b0f7afb1b46ef6a8f91c3cf941bf8d63bd291697",
+      "retrieved_at": "2026-10-03T22:08:49.149379+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-products-forecasted-posted-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan products",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-products-forecasted-posted-offset-00000200.json",
+      "bytes": 43796,
+      "sha256": "2c480d1b0e0fe8913bcea59360b76a32186e8ba61f49622a4031628e807239ba",
+      "retrieved_at": "2026-10-03T22:08:49.406095+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-products-forecasted-posted-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan products",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-products-forecasted-posted-offset-00000300.json",
+      "bytes": 45665,
+      "sha256": "93bf35e2b5488783f7c85f1ce97e0e07fed2c2ea2c2316b126eddcf305f34b94",
+      "retrieved_at": "2026-10-03T22:08:49.667452+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-orphan-products-forecasted-posted-offset-00000400.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "orphan products",
+        "rows": 100,
+        "startRecordNum": 400,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-orphan-products-forecasted-posted-offset-00000400.json",
+      "bytes": 12733,
+      "sha256": "e92c2a29ac21d2d71e69a1b5ea2c0902d90a2728c6f157b09e5da6c90468a047",
+      "retrieved_at": "2026-10-03T22:08:49.891924+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorder-forecasted-posted-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorder",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorder-forecasted-posted-offset-00000000.json",
+      "bytes": 42704,
+      "sha256": "f69bb815b2080f35ac513e87ad10e0b115cab58c7ddd047e05f1a0af6035ed9b",
+      "retrieved_at": "2026-10-03T22:08:50.052912+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorder-forecasted-posted-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorder",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorder-forecasted-posted-offset-00000100.json",
+      "bytes": 45118,
+      "sha256": "d751100be1cbe8085614dd10c35c289bc0f5eb9068e7f6bd46bce881ebb59412",
+      "retrieved_at": "2026-10-03T22:08:50.300015+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorder-forecasted-posted-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorder",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorder-forecasted-posted-offset-00000200.json",
+      "bytes": 43368,
+      "sha256": "4101144f919307b3ee13e834185260a24bbf2ff6e22599bdcb5bbd834c9fc06c",
+      "retrieved_at": "2026-10-03T22:08:50.550549+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorder-forecasted-posted-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorder",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorder-forecasted-posted-offset-00000300.json",
+      "bytes": 21691,
+      "sha256": "9767ce0c5e6f72d83fdf454ab5cd9aebd077de132a75bdca7b0c68860670ec3a",
+      "retrieved_at": "2026-10-03T22:08:50.807906+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorders-forecasted-posted-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorders",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorders-forecasted-posted-offset-00000000.json",
+      "bytes": 42705,
+      "sha256": "46c10e20e576cc72edcbbbeac7fe0eb4a30b88f464e9e9b5c91e148d980806fb",
+      "retrieved_at": "2026-10-03T22:08:50.952843+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorders-forecasted-posted-offset-00000100.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorders",
+        "rows": 100,
+        "startRecordNum": 100,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorders-forecasted-posted-offset-00000100.json",
+      "bytes": 45119,
+      "sha256": "9419826cb6be14f67325d47c49a227f3f5674e491c30e0dbf0053d441f102a52",
+      "retrieved_at": "2026-10-03T22:08:51.203665+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorders-forecasted-posted-offset-00000200.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorders",
+        "rows": 100,
+        "startRecordNum": 200,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorders-forecasted-posted-offset-00000200.json",
+      "bytes": 43369,
+      "sha256": "b0990963fe71365bb4bd9c2a09f63b524fba7e79cdad514ddca90a5a3dd43618",
+      "retrieved_at": "2026-10-03T22:08:51.452112+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-rare-disorders-forecasted-posted-offset-00000300.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "rare disorders",
+        "rows": 100,
+        "startRecordNum": 300,
+        "oppStatuses": "forecasted|posted"
+      },
+      "path": "data/raw/harvest/grants_gov/search-rare-disorders-forecasted-posted-offset-00000300.json",
+      "bytes": 21692,
+      "sha256": "cdb856f4be9318ebc00dacffe5683a6cba1e24df5297cc95c3ef4bb1a4c5375b",
+      "retrieved_at": "2026-10-03T22:08:51.728154+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-grin2a-forecasted-posted-closed-archived-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "GRIN2A",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted|closed|archived"
+      },
+      "path": "data/raw/harvest/grants_gov/search-grin2a-forecasted-posted-closed-archived-offset-00000000.json",
+      "bytes": 904,
+      "sha256": "110bfd2e9df27bf0a13cce6c1b0ea76f96847ab0617aedfd59e22772ac86100a",
+      "retrieved_at": "2026-10-03T22:08:51.863850+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    },
+    "search-grin2b-forecasted-posted-closed-archived-offset-00000000.json": {
+      "url": "https://api.grants.gov/v1/api/search2",
+      "final_url": "https://api.grants.gov/v1/api/search2",
+      "method": "POST",
+      "request_body": {
+        "keyword": "GRIN2B",
+        "rows": 100,
+        "startRecordNum": 0,
+        "oppStatuses": "forecasted|posted|closed|archived"
+      },
+      "path": "data/raw/harvest/grants_gov/search-grin2b-forecasted-posted-closed-archived-offset-00000000.json",
+      "bytes": 904,
+      "sha256": "7d20ae46fea8b7b4fed7d314b709163f514421c342a058fbbfdde96ccaf4fcea",
+      "retrieved_at": "2026-10-03T22:08:51.990181+00:00",
+      "license": "U.S. federal public opportunity metadata",
+      "version": "search2-current",
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    }
+  },
+  "datasets": {
+    "opportunities": {
+      "path": "data/processed/harvest/grants_gov/opportunities.jsonl.gz",
+      "records": 785,
+      "bytes": 51635,
+      "sha256": "ad3d6cd40958aef21a8e24788d5f54e042afa04d45ce12e814d7f459cccbde3c",
+      "input_paths": [
+        "data/raw/harvest/grants_gov"
+      ],
+      "description": "Complete union of all paged Grants.gov search2 results for rare/orphan disease, orphan product and rare disorder terms, restricted to current forecasted/posted opportunities. Native search result fields and every matching query are retained.",
+      "created_at": "2026-10-03T22:09:41.587680+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "opportunity_detail_endpoint_probe": {
+      "path": "data/processed/harvest/grants_gov/opportunity_detail_endpoint_probe.jsonl.gz",
+      "records": 1,
+      "bytes": 462,
+      "sha256": "72c9f958ef95ce1d14991439d7ae75447cfc56da41e84f567c853f9eea292861",
+      "input_paths": [
+        "data/raw/harvest/grants_gov/fetchOpportunity-probe.json"
+      ],
+      "description": "One public fetchOpportunity endpoint health response. Search2 has no human-readable opportunity detail records; the current details backend probe determined whether detailed expansion was possible.",
+      "created_at": "2026-10-03T22:09:41.588589+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "partial",
+  "updated_at": "2026-10-03T22:09:41.596418+00:00",
+  "search_terms": [
+    "rare disease",
+    "rare diseases",
+    "orphan disease",
+    "orphan diseases",
+    "orphan drug",
+    "orphan products",
+    "rare disorder",
+    "rare disorders",
+    "GRIN2A",
+    "GRIN2B"
+  ],
+  "coverage": {
+    "unique_opportunities": 785,
+    "searches": [
+      {
+        "term": "rare disease",
+        "status_filter": "forecasted|posted",
+        "hit_count_reported": 448,
+        "records_received": 448,
+        "pages": 5,
+        "complete": true
+      },
+      {
+        "term": "rare diseases",
+        "status_filter": "forecasted|posted",
+        "hit_count_reported": 448,
+        "records_received": 448,
+        "pages": 5,
+        "complete": true
+      },
+      {
+        "term": "orphan disease",
+        "status_filter": "forecasted|posted",
+        "hit_count_reported": 401,
+        "records_received": 401,
+        "pages": 5,
+        "complete": true
+      },
+      {
+        "term": "orphan diseases",
+        "status_filter": "forecasted|posted",
+        "hit_count_reported": 401,
+        "records_received": 401,
+        "pages": 5,
+        "complete": true
+      },
+      {
+        "term": "orphan drug",
+        "status_filter": "forecasted|posted",
+        "hit_count_reported": 280,
+        "records_received": 280,
+        "pages": 3,
+        "complete": true
+      },
+      {
+        "term": "orphan products",
+        "status_filter": "forecasted|posted",
+        "hit_count_reported": 402,
+        "records_received": 402,
+        "pages": 5,
+        "complete": true
+      },
+      {
+        "term": "rare disorder",
+        "status_filter": "forecasted|posted",
+        "hit_count_reported": 341,
+        "records_received": 341,
+        "pages": 4,
+        "complete": true
+      },
+      {
+        "term": "rare disorders",
+        "status_filter": "forecasted|posted",
+        "hit_count_reported": 341,
+        "records_received": 341,
+        "pages": 4,
+        "complete": true
+      },
+      {
+        "term": "GRIN2A",
+        "status_filter": "forecasted|posted|closed|archived",
+        "hit_count_reported": 0,
+        "records_received": 0,
+        "pages": 1,
+        "complete": true
+      },
+      {
+        "term": "GRIN2B",
+        "status_filter": "forecasted|posted|closed|archived",
+        "hit_count_reported": 0,
+        "records_received": 0,
+        "pages": 1,
+        "complete": true
+      }
+    ],
+    "statuses": {
+      "rare_orphan_phrases": [
+        "forecasted",
+        "posted"
+      ],
+      "gene_symbol_queries": [
+        "forecasted",
+        "posted",
+        "closed",
+        "archived"
+      ]
+    },
+    "detail_endpoint_available": false,
+    "detail_endpoint_message": "No response received, as the webservice at the backend server at URI 'https://apply07.grants.gov/grantsws/rest/opportunity/details' is not available.",
+    "incomplete_searches": [],
+    "limitation": "Search2 metadata is the complete result summary for each paged query; phrase indexing limits recall. The documented fetchOpportunity detail endpoint was probed once; search results remain metadata-only while its backend is unavailable."
+  }
+}

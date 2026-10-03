@@ -76,19 +76,28 @@ def run():
             if not rows or not nxt or nxt==cursor:break
             if len(seen)>=expected:break
             cursor=nxt;time.sleep(.15)
-        if len(seen)<expected:raise ValueError(f'Incomplete pagination for {qid}: expected {expected}, got {len(seen)}')
         with progress_lock:
-            progress['completed'][qid]={'reported_hits':expected,'unique_retrieved':len(seen),'pages':page,'input_paths':paths,'completed_at':now()}
+            status='count_verified' if len(seen)==expected else 'count_discrepancy'
+            progress['completed'][qid]={'reported_hits':expected,'last_reported_hits':int(obj['hitCount']),'unique_retrieved':len(seen),'pages':page,'input_paths':paths,'completed_at':now(),'status':status}
             atomic_json(progress_path,progress)
             update_manifest(SOURCE,status='in_progress',coverage={'vocabulary_terms':len(terms),'total_queries':len(groups),'completed_queries':len(progress['completed']),'unique_articles':connection.execute('SELECT COUNT(*) FROM records').fetchone()[0]},scope='Exhaustive cursor results for recorded rare-disease name phrases in titles/abstracts; retrieval candidates, not biological evidence.')
             print(json.dumps({'event':'query_complete','query_index':index+1,'queries':len(groups),'hits':len(seen)}),flush=True)
         connection.close()
+    errors={}
+    def guarded_group(item):
+        try:harvest_group(item)
+        except Exception as exc:
+            with progress_lock:
+                errors[queries[item[0]]['query_id']]=str(exc)
+                atomic_json(work/'query_errors.json',errors)
+                print(json.dumps({'event':'query_error','query_index':item[0]+1,'error':str(exc)}),flush=True)
     with ThreadPoolExecutor(max_workers=4) as pool:
-        list(pool.map(harvest_group,enumerate(groups)))
+        list(pool.map(guarded_group,enumerate(groups)))
     emit_records(SOURCE,'queries',queries,input_paths=[source_path],description='Exact query definitions linking vocabulary batches to retrieval membership.')
     emit_records(SOURCE,'articles',(json.loads(r[0]) for r in connection.execute('SELECT data FROM records ORDER BY key')),description='Deduplicated complete Europe PMC core metadata per source:id; abstracts, authors, affiliations, grants, identifiers and available rights retained. Raw input artifacts and per-query progress establish provenance.')
     emit_records(SOURCE,'query_membership',({'query_id':q,'article_id':k} for q,k in connection.execute('SELECT query_id,key FROM matches ORDER BY query_id,key')),description='Search batch membership only; an article need not match every term in a batch.')
-    update_manifest(SOURCE,status='complete_for_scope',queries=progress['completed'],limitations=['Preferred name and multiword alias matches are discovery candidates, not proven disease associations.','Short or single-word aliases excluded to reduce ambiguity; preferred names all included.','No source search guarantees complete recall; title/abstract search misses full-text-only mentions.','Europe PMC updates during traversal may change counts; acquired pages remain reproducible snapshots.'])
+    discrepancies={k:v for k,v in progress['completed'].items() if v['reported_hits']!=v['unique_retrieved']}
+    update_manifest(SOURCE,status='complete_with_query_gaps' if errors or discrepancies else 'complete_for_scope',queries=progress['completed'],query_errors=errors,count_discrepancies=discrepancies,limitations=['Preferred name and multiword alias matches are discovery candidates, not proven disease associations.','Short or single-word aliases excluded to reduce ambiguity; preferred names all included.','No source search guarantees complete recall; title/abstract search misses full-text-only mentions.','Europe PMC updates during traversal may change counts; acquired pages remain reproducible snapshots.'])
     connection.close()
 
 if __name__=='__main__':run()
