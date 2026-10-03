@@ -9,49 +9,99 @@ The original six-page PDF is [`Knowledge graph`](Knowledge%20graph) (its filenam
 
 ## Architecture and visual walkthroughs
 
-The challenge asks for a journey from diagnosis to a justified connection, reusable asset, partner and practical next step. This architecture supports that journey by checking whether a proposed action is scientifically relevant and feasible, with its evidence and unresolved questions visible.
+The challenge asks for a journey from diagnosis to a justified connection, reusable asset, partner and practical next step. Read the architecture in three stages: **prepare evidence → find opportunities → recommend an action**. Feedback, source updates and evaluation keep those stages useful over time.
 
-```mermaid
-flowchart TD
-    subgraph Preparation[Prepare evidence before user queries]
-        Sources[Versioned sources] --> Extract[Astra extracts claims]
-        Extract --> Review[Validation and scientific review]
-        Review --> Stores[TopK passages + structured graph]
-    end
-    subgraph Live[Bounded live recommendation loop]
-        Goal[Variant + research goal] --> Retrieve[Search passages and graph in parallel]
-        Retrieve --> Propose[Propose assets, partners and actions]
-        Propose --> Check[Check compatibility, access and contradictions]
-        Check --> Gap{Would missing evidence change the action?}
-        Gap -->|Yes, within budget| Followup[Targeted follow-up search]
-        Followup --> Retrieve
-        Gap -->|No, or budget reached| Result[Rank actions and disclose blockers]
-    end
-    Stores --> Retrieve
-    Result --> Feedback[User constraints or expert corrections]
-    Feedback -->|Refine priorities| Goal
-    Feedback -->|New factual evidence| Review
-    Changes[New or corrected sources] --> Sources
-    Review --> Invalidate[Invalidate affected cached recommendations]
-    Invalidate --> Check
-    Result -.-> Evaluate[Held-out tasks + qualified review]
-    Evaluate -.->|Improve retrieval and decision rules| Retrieve
-```
+These diagrams describe the proposed architecture; the full loops are not yet implemented.
 
-- **[Explore all five loops and compare approaches](docs/visualizations/research-decision-loops.html):** switch between evidence preparation, recommendation, feedback, maintenance and evaluation; test how missing or incompatible evidence changes an action.
-- **[Explore the interface concept](docs/visualizations/rare-atlas-interface.html):** follow a fictional diagnosis through connections, evidence, assets and a collaboration brief. This explains the intended experience, not live scientific findings.
+### 1. Prepare the evidence once
 
-The interactive files can be downloaded and opened in a browser; GitHub displays their source. The diagrams here render directly in the README.
+Before users search, preserve source records and ask Astra to extract claims with their supporting passages. Validation and scientific review determine which claims can support recommendations. TopK stores searchable passages; the graph stores entities, relationships and provenance.
 
 ```mermaid
 flowchart LR
-    Diagnosis[Diagnosis or variant] --> Connection[Explained connection]
-    Connection --> Evidence[Inspect evidence and uncertainty]
-    Evidence --> Asset[Assess asset and partner]
-    Asset --> Action[Cited brief and next research step]
+    Sources[Source records] --> Extract[Astra extracts claims]
+    Extract --> Review[Validate and review]
+    Review --> Graph[Qualified graph claims]
+    Sources --> TopK[TopK passage index]
 ```
 
-**Why this direction:** TopK finds relevant evidence; the graph preserves relationships and provenance; Astra assesses candidate actions; validation and review keep unsupported connections from becoming recommendations. Precomputed evidence, parallel retrieval and a limited follow-up round keep live work bounded. These techniques are not individually new—the value to test is how well the complete workflow reduces effort to an acceptable research proposal. **10× is a target, not a measured result**, and these loops remain proposed rather than fully implemented.
+**Why it matters:** this work is reused across queries. A searchable passage is not automatically an accepted scientific claim.
+
+### 2. Find relevant opportunities
+
+Resolve the exact variant and the user's research goal. Search TopK and a small graph neighborhood in parallel, then combine their evidence into candidate assets, partners and actions.
+
+```mermaid
+flowchart LR
+    Goal[Variant + research goal] --> Search[TopK finds passages]
+    Goal --> Graph[Graph finds relationships]
+    Search --> Candidates[Candidate opportunities]
+    Graph --> Candidates
+```
+
+**Why it matters:** semantic similarity helps find evidence, while graph relationships connect that evidence to people and assets. Neither alone establishes that an opportunity is suitable.
+
+### 3. Check the opportunity and recommend a next step
+
+Astra assesses scientific fit, access conditions and contradictory evidence. If a missing fact could change the decision, make one targeted follow-up round through step 2. Otherwise, return the best justified action with its partner, sources and unresolved blockers.
+
+```mermaid
+flowchart TD
+    Candidates[Candidate opportunities] --> Check[Assess fit, access and contradictions]
+    Check --> Gap{Decisive evidence missing?}
+    Gap -->|Yes, budget remains| Search[Targeted search via step 2]
+    Search --> Check
+    Gap -->|No, or budget reached| Action[Action + partner + evidence + blockers]
+```
+
+**Why it matters:** the system can recommend a feasibility discussion, ask for clarification or reject a candidate. It does not have to produce a positive recommendation. Precomputed evidence, parallel retrieval and a bounded follow-up keep live work limited.
+
+### 4. Refine the result with user and expert feedback
+
+A user's priorities can change which action is most useful. A factual correction needs evidence and review before it changes the graph.
+
+```mermaid
+flowchart LR
+    Result[Recommendation] --> Feedback[User or expert feedback]
+    Feedback -->|New preference| Goal[Refine goal in step 2]
+    Feedback -->|Factual correction| Review[Validate evidence in step 1]
+```
+
+**Why it matters:** feedback improves relevance without treating a user's acceptance as scientific proof.
+
+### 5. Recheck recommendations when evidence changes
+
+In the background, trace a new study, correction or asset update to the claims and recommendations it affects. Review the changes, refresh the stores and invalidate affected cached results before reassessing them.
+
+```mermaid
+flowchart LR
+    Change[Source changes] --> Review[Review affected claims]
+    Review --> Refresh[Update stores and invalidate caches]
+    Refresh --> Recheck[Reassess via step 3]
+```
+
+**Why it matters:** a recommendation must remain tied to the evidence that justified it. Maintenance happens outside the normal live query.
+
+### 6. Measure whether the workflow is actually better
+
+Compare search, basic retrieval-augmented chat, graph-assisted retrieval and our workflow on the same held-out research tasks. Qualified reviewers assess the proposals; include corrections, failures, human effort, latency and cost.
+
+```mermaid
+flowchart LR
+    Tasks[Held-out tasks] --> Compare[Run comparable workflows]
+    Compare --> Review[Review quality and measure effort]
+    Review --> Improve[Improve and retest]
+    Improve --> Compare
+```
+
+**Why it matters:** these techniques are not individually new. Our advantage must come from reducing the effort to an acceptable research proposal. **10× is a target, not a measured result**, and does not imply 10× faster treatment development.
+
+### Interactive walkthroughs
+
+- **[Explore all five loops and compare approaches](docs/visualizations/research-decision-loops.html):** evidence preparation, discovery/recommendation (steps 2–3 above), feedback, maintenance and evaluation. Switch the example between supporting, missing and incompatible evidence.
+- **[Explore the interface concept](docs/visualizations/rare-atlas-interface.html):** follow a fictional diagnosis through connections, evidence, assets and a collaboration brief. This explains the intended experience, not live scientific findings.
+
+Download the interactive files and open them in a browser; GitHub displays their source. The diagrams above render directly in the README.
 
 ## Deliverables
 
