@@ -19169,6 +19169,710 @@
       "content_type": "text/xml; charset=UTF-8",
       "last_modified": null,
       "etag": null
+    },
+    "html-fallback-PMC6577092.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6577092/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6577092/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6577092.html",
+      "bytes": 94970,
+      "sha256": "7dc1d7ebf71846d0bc49acb6c901cfcd6aaf205019c98557531ea951c330da49",
+      "retrieved_at": "2026-10-03T23:16:59.002019+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6578662.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578662/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578662/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6578662.html",
+      "bytes": 89089,
+      "sha256": "a4bc1181d2468a93d486ff6f551c7c46863fd1930581aebc9b72c280afc77b95",
+      "retrieved_at": "2026-10-03T23:16:59.709366+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6578835.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578835/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578835/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6578835.html",
+      "bytes": 205528,
+      "sha256": "d6786f95cec93406a14fed5d1a8f8bef24d5b17319a74094c1a05ce3cac5a411",
+      "retrieved_at": "2026-10-03T23:17:00.549531+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6578172.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578172/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578172/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6578172.html",
+      "bytes": 90878,
+      "sha256": "6e4e231d75603046bf7282f173476814b779f94d7e6ff7d3ee44d9a042ea3b5a",
+      "retrieved_at": "2026-10-03T23:17:01.245139+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6782132.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6782132/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6782132/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6782132.html",
+      "bytes": 246669,
+      "sha256": "3447672f35472b645d1f6bed6e0806547b17fc92e8f46182a32cdd6d07f1d8f3",
+      "retrieved_at": "2026-10-03T23:17:02.050793+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6793323.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6793323/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6793323/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6793323.html",
+      "bytes": 168924,
+      "sha256": "9375d313481ab8447c1388f15c64561abb486df804d169602d14f93252dc97a8",
+      "retrieved_at": "2026-10-03T23:17:02.764419+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6763802.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6763802/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6763802/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6763802.html",
+      "bytes": 214673,
+      "sha256": "b5114f39b2e6addfa05462509dcf4a423596f5e6ff657eb7d8943bb7341cf67b",
+      "retrieved_at": "2026-10-03T23:17:03.611317+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6725474.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725474/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725474/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6725474.html",
+      "bytes": 205214,
+      "sha256": "391a38d12c8fd1eeae83c946d82848aa33e1d8d265f7d5fba8df5710cbc9ab55",
+      "retrieved_at": "2026-10-03T23:17:04.451742+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6786025.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6786025/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6786025/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6786025.html",
+      "bytes": 229240,
+      "sha256": "711bd4532e422ed316c676f70d95036f2d5ea30e7499879c5feda3c86a5b09c3",
+      "retrieved_at": "2026-10-03T23:17:05.328019+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6725706.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725706/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725706/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6725706.html",
+      "bytes": 180226,
+      "sha256": "b239d2cdac583566ba3ceec66c730ffb4df24319b4a11dd7ea310e2a4194d2e1",
+      "retrieved_at": "2026-10-03T23:17:06.129710+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC2464284.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2464284/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2464284/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2464284.html",
+      "bytes": 21307,
+      "sha256": "2c0cd0032665ffc63e60ef206fafddc40331bf2b0ebf47b4a4a52c28adaafcfd",
+      "retrieved_at": "2026-10-03T23:17:06.672273+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC2890238.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2890238/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2890238/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2890238.html",
+      "bytes": 21304,
+      "sha256": "a03f66186faa2dc6cb57dd411e867e12272bad04832705da42d1ccb23377961c",
+      "retrieved_at": "2026-10-03T23:17:07.193131+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC2276391.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2276391/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2276391/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2276391.html",
+      "bytes": 21307,
+      "sha256": "0d8dc15e3e69b2e778690c540f9f96ccbdd4a7f85694060d180c6d7262565fff",
+      "retrieved_at": "2026-10-03T23:17:07.721043+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6671534.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6671534/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6671534/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6671534.html",
+      "bytes": 21304,
+      "sha256": "abdda8074ffdf8f846c2728ce8dc7b6602a27977f4d6880997bb582f08744bbc",
+      "retrieved_at": "2026-10-03T23:17:08.256655+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6671075.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6671075/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6671075/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6671075.html",
+      "bytes": 21308,
+      "sha256": "24257bcf2401c86b9891f511a2c889e4195894073086c0815d4ca0edb4b1ceab",
+      "retrieved_at": "2026-10-03T23:17:08.808412+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6670593.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6670593/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6670593/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6670593.html",
+      "bytes": 21308,
+      "sha256": "ed1bb18c7bee0cd3b8267b2e3f4bd2933b64ccf2da36c918f1df2bed99431fe3",
+      "retrieved_at": "2026-10-03T23:17:09.358442+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC2775551.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2775551/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2775551/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2775551.html",
+      "bytes": 21308,
+      "sha256": "5543a2944eb10abad7903138353e15224c788ef9a4062b5c5561ec40943cb976",
+      "retrieved_at": "2026-10-03T23:17:09.887975+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC4283557.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4283557/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4283557/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC4283557.html",
+      "bytes": 21308,
+      "sha256": "02c29aa00623792353806ee5de28d10d4bffd8b35fa6f7d5d562999b036605c4",
+      "retrieved_at": "2026-10-03T23:17:10.419039+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC2740454.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2740454/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2740454/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2740454.html",
+      "bytes": 21308,
+      "sha256": "5a35da483f63dee3573e908e8f66968f40c07a6c972f48f6c9cf81ca6f2278e8",
+      "retrieved_at": "2026-10-03T23:17:10.946588+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC2898334.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2898334/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2898334/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2898334.html",
+      "bytes": 21308,
+      "sha256": "321c3131e9d03a94fceb23572c56d6ccf9434a9dd33167f58fa43718e1170718",
+      "retrieved_at": "2026-10-03T23:17:11.722789+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC3842477.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3842477/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3842477/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3842477.html",
+      "bytes": 211178,
+      "sha256": "9898f9c3d779adde43a869acd4e2c12130cc2dd24bc1a3bb985791f8eebd4132",
+      "retrieved_at": "2026-10-03T23:17:12.498356+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC3030119.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3030119/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3030119/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3030119.html",
+      "bytes": 180387,
+      "sha256": "7d9f6129578f341bdc882ad63f96a9e677a321180afcac2971a10a1ec1a76862",
+      "retrieved_at": "2026-10-03T23:17:13.330801+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC3092540.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3092540/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3092540/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3092540.html",
+      "bytes": 174139,
+      "sha256": "c76f41cd0a46906a281ff805e8619f7798773f7a0df36d68e85c050ba6a49482",
+      "retrieved_at": "2026-10-03T23:17:13.979985+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC3137056.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3137056/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3137056/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3137056.html",
+      "bytes": 215937,
+      "sha256": "89cce16d619fd5ab24ca2180d82fba83b03ac8638980aa44830bd5051133db94",
+      "retrieved_at": "2026-10-03T23:17:14.776559+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC3173099.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3173099/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3173099/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3173099.html",
+      "bytes": 216594,
+      "sha256": "41cdbe7f825aeed3e8e91733b22a894f555fb56ec24449a92446606cde138a30",
+      "retrieved_at": "2026-10-03T23:17:15.568216+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC3281702.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3281702/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3281702/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3281702.html",
+      "bytes": 240905,
+      "sha256": "79acbf95cda9051135955d49063e4a785f5a73d32cab3f6819be60b550f657a5",
+      "retrieved_at": "2026-10-03T23:17:16.271577+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC3346149.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3346149/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3346149/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3346149.html",
+      "bytes": 221836,
+      "sha256": "6ed7db6b92ebc28ef3cc69fb4224cd75a07fd7481528e802da4eb85081da19cf",
+      "retrieved_at": "2026-10-03T23:17:17.017416+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6703487.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6703487/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6703487/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6703487.html",
+      "bytes": 223089,
+      "sha256": "aa1bfd9e06e0a0475322817947e92e35a4e31ee2a2839b32eb1bb4406e7a6ba7",
+      "retrieved_at": "2026-10-03T23:17:17.683137+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC3431703.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3431703/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3431703/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3431703.html",
+      "bytes": 225314,
+      "sha256": "1d1df095898dd0a36d64102ff42ff3681580fd2af98f77bee169ae4d334b62d2",
+      "retrieved_at": "2026-10-03T23:17:18.379310+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC3431666.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3431666/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3431666/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3431666.html",
+      "bytes": 219020,
+      "sha256": "1a0f0f226e0943dd35d3ba2494559d534993032ac437da1ad234a90c26a219d3",
+      "retrieved_at": "2026-10-03T23:17:19.123821+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC4252539.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4252539/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4252539/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC4252539.html",
+      "bytes": 21307,
+      "sha256": "b19340c914c5c664ae1435960f62e38e72e3b97265280ccb84a5461d542b580d",
+      "retrieved_at": "2026-10-03T23:17:19.658433+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC4468639.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4468639/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4468639/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC4468639.html",
+      "bytes": 21304,
+      "sha256": "1ff809272f33a7de62b44c1d9ee3ba7bba806870952d4e595b0f68f111f6f2d3",
+      "retrieved_at": "2026-10-03T23:17:20.180596+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC4879209.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4879209/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4879209/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC4879209.html",
+      "bytes": 21308,
+      "sha256": "1731ed59395aab2ebde14aba7297d3338c03a5354613aa8fb721934356771e2b",
+      "retrieved_at": "2026-10-03T23:17:20.705707+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC4965558.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4965558/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4965558/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC4965558.html",
+      "bytes": 21303,
+      "sha256": "46af3d6a7958cef399276f76095b26d3f60f88ebe8a10185e7d8e38deb26b785",
+      "retrieved_at": "2026-10-03T23:17:21.229570+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC6705565.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6705565/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6705565/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6705565.html",
+      "bytes": 21308,
+      "sha256": "99edd12d2847719bff3bef2a54bd6ccaf82946ae91139a7db1efe7c19698e1ee",
+      "retrieved_at": "2026-10-03T23:17:21.746739+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC5050332.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5050332/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5050332/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC5050332.html",
+      "bytes": 225571,
+      "sha256": "7727955584d1b90a669b1875abaec5ff54278821508847cd6abbc16f2aee5c16",
+      "retrieved_at": "2026-10-03T23:17:22.471879+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC5391683.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5391683/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5391683/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC5391683.html",
+      "bytes": 241265,
+      "sha256": "93b8ff0fe3a59021531c4941f61f3739d2f9b16094f172c2ed9b289bfbbad7c6",
+      "retrieved_at": "2026-10-03T23:17:23.143642+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC7863909.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7863909/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7863909/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC7863909.html",
+      "bytes": 280997,
+      "sha256": "43bcc9ceb8378e2862e8a9b336d5f8072b427dbaad52bcaf6c45a461b2f4a8f0",
+      "retrieved_at": "2026-10-03T23:17:23.847272+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC7726548.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7726548/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7726548/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC7726548.html",
+      "bytes": 253536,
+      "sha256": "fabd0fed8f65aed90a9c3904a003f0139a3d4d530a0454ba2071996dffe7bf41",
+      "retrieved_at": "2026-10-03T23:17:24.512129+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC8018758.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8018758/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8018758/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC8018758.html",
+      "bytes": 286453,
+      "sha256": "40d0bc613522104b0722f9928d9185664caa884160f2d16e85915c0c61c41b45",
+      "retrieved_at": "2026-10-03T23:17:25.253381+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC10860613.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10860613/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10860613/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC10860613.html",
+      "bytes": 235360,
+      "sha256": "d729463f6410d0d5e4d69bddf063bf0576d75ef0168299100b14aaaddeaad67c",
+      "retrieved_at": "2026-10-03T23:17:25.946522+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC11293445.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11293445/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11293445/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC11293445.html",
+      "bytes": 313149,
+      "sha256": "6b7f3649fa37bcfcc8a616b64b515e037a0709251b0d35ff1cefb8a582bac703",
+      "retrieved_at": "2026-10-03T23:17:26.712961+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC11391497.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11391497/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11391497/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC11391497.html",
+      "bytes": 272091,
+      "sha256": "e3306c11353cf61358baa3a956e3466c5de477462f7fbbece3c65cff5dd91723",
+      "retrieved_at": "2026-10-03T23:17:27.397559+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "html-fallback-PMC12873636.html": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12873636/",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12873636/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC12873636.html",
+      "bytes": 297839,
+      "sha256": "d2a4a95537cd15e9fa6ef86ca76216e74b7233437f798482fb71b10d20eb4566",
+      "retrieved_at": "2026-10-03T23:17:28.114278+00:00",
+      "license": "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",
+      "version": "cc by-nc-sa",
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
     }
   },
   "datasets": {
@@ -19230,20 +19934,34 @@
     "fulltext_retry_queue": {
       "path": "data/processed/harvest/pmc_grin_oa/fulltext_retry_queue.jsonl.gz",
       "records": 44,
-      "bytes": 4475,
-      "sha256": "90084fe86ed12712aa8335581ef01028f7daa786e66cb7f2469e58002ed4753a",
+      "bytes": 5516,
+      "sha256": "d03aade023513296ff6be5da18f9ccbe62152ea187f421d4b8d96ab2db32e773",
       "input_paths": [
-        "data/processed/harvest/grin_literature/grin_gene_citations.jsonl.gz",
+        "data/raw/harvest/pmc_grin_oa/fulltext_progress.json",
         "data/raw/harvest/pmc_grin_oa"
       ],
-      "description": "Europe PMC full-text fetch or identity errors for records with an explicit compatible license.",
-      "created_at": "2026-10-03T22:48:44.238567+00:00",
+      "description": "Original licensed XML retrieval failures preserved with one bounded official PMC HTML fallback outcome per target.",
+      "created_at": "2026-10-03T23:18:06.026579+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "grin_html_full_text": {
+      "path": "data/processed/harvest/pmc_grin_oa/grin_html_full_text.jsonl.gz",
+      "records": 26,
+      "bytes": 552954,
+      "sha256": "d1412be053ac5023b6990bcc54140c74b6caed9b5f30a22104052e52e24491e5",
+      "input_paths": [
+        "data/raw/harvest/pmc_grin_oa/fulltext_progress.json",
+        "data/processed/harvest/pmc_grin_oa/license_metadata.jsonl.gz"
+      ],
+      "description": "Separately labeled PMC official article HTML full text for licensed targets whose PMC EFetch XML response contained metadata but no body. HTML was accepted only after canonical PMCID and substantial article-body checks; this does not alter or replace verified JATS.",
+      "created_at": "2026-10-03T23:18:06.019197+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     }
   },
   "status": "partial_fulltext_retrieval",
-  "updated_at": "2026-10-03T22:48:44.244741+00:00",
+  "updated_at": "2026-10-03T23:19:02.727582+00:00",
   "resume_note": "Europe PMC metadata complete; focused licensed full-text batch in progress; progress/errors will be checkpointed per PMCID.",
   "coverage": {
     "pubmed_citations_scanned": 7775,
@@ -19470,6 +20188,1055 @@
         "PMC7554152"
       ],
       "title_abstract_mesh_regex": "mutation|variant|encephalopathy|neurodevelopment|loss[ -]?of[ -]?function"
-    }
+    },
+    "downloaded_html_records": 26,
+    "distinct_fulltext_articles_jats_or_html": 355,
+    "fulltext_fetch_unresolved_after_html": 18,
+    "xml_retry_queue_note": "Original 44 XML/body failures remain recorded; nested HTML outcomes identify the 26 recovered in HTML."
+  },
+  "html_fallback_audit": {
+    "requested_xml_body_missing_ids": 44,
+    "attempted_html_ids": 44,
+    "recovered_count": 26,
+    "recovered_ids": [
+      "PMC10860613",
+      "PMC11293445",
+      "PMC11391497",
+      "PMC12873636",
+      "PMC3030119",
+      "PMC3092540",
+      "PMC3137056",
+      "PMC3173099",
+      "PMC3281702",
+      "PMC3346149",
+      "PMC3431666",
+      "PMC3431703",
+      "PMC3842477",
+      "PMC5050332",
+      "PMC5391683",
+      "PMC6578835",
+      "PMC6703487",
+      "PMC6725474",
+      "PMC6725706",
+      "PMC6763802",
+      "PMC6782132",
+      "PMC6786025",
+      "PMC6793323",
+      "PMC7726548",
+      "PMC7863909",
+      "PMC8018758"
+    ],
+    "unavailable_ids": [
+      "PMC2276391",
+      "PMC2464284",
+      "PMC2740454",
+      "PMC2775551",
+      "PMC2890238",
+      "PMC2898334",
+      "PMC4252539",
+      "PMC4283557",
+      "PMC4468639",
+      "PMC4879209",
+      "PMC4965558",
+      "PMC6577092",
+      "PMC6578172",
+      "PMC6578662",
+      "PMC6670593",
+      "PMC6671075",
+      "PMC6671534",
+      "PMC6705565"
+    ],
+    "per_id": [
+      {
+        "pmcid": "PMC6577092",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6577092/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6577092.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_body_not_substantial",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": 3811,
+          "article_text_chars": 3811,
+          "paragraphs": 2,
+          "pmid": "7916045",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6577092/"
+          ]
+        },
+        "status": "html_body_not_substantial",
+        "error_details": {
+          "canonical": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6577092/"
+          ],
+          "pmid": "7916045",
+          "main_text_chars": 3811,
+          "article_text_chars": 3811,
+          "paragraphs": 2
+        }
+      },
+      {
+        "pmcid": "PMC6578662",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578662/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6578662.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_body_not_substantial",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": 711,
+          "article_text_chars": 711,
+          "paragraphs": 2,
+          "pmid": "8551347",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578662/"
+          ]
+        },
+        "status": "html_body_not_substantial",
+        "error_details": {
+          "canonical": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578662/"
+          ],
+          "pmid": "8551347",
+          "main_text_chars": 711,
+          "article_text_chars": 711,
+          "paragraphs": 2
+        }
+      },
+      {
+        "pmcid": "PMC6578835",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578835/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6578835.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578835/",
+          "main_text_chars": 51141,
+          "article_text_chars": 51141,
+          "paragraphs": 51,
+          "pmid": "8642401",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC6578172",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578172/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6578172.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_body_not_substantial",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": 2234,
+          "article_text_chars": 2234,
+          "paragraphs": 2,
+          "pmid": "7891171",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578172/"
+          ]
+        },
+        "status": "html_body_not_substantial",
+        "error_details": {
+          "canonical": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC6578172/"
+          ],
+          "pmid": "7891171",
+          "main_text_chars": 2234,
+          "article_text_chars": 2234,
+          "paragraphs": 2
+        }
+      },
+      {
+        "pmcid": "PMC6782132",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6782132/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6782132.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6782132/",
+          "main_text_chars": 83761,
+          "article_text_chars": 83761,
+          "paragraphs": 63,
+          "pmid": "9920661",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC6793323",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6793323/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6793323.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6793323/",
+          "main_text_chars": 36620,
+          "article_text_chars": 36620,
+          "paragraphs": 31,
+          "pmid": "9822733",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC6763802",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6763802/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6763802.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6763802/",
+          "main_text_chars": 62335,
+          "article_text_chars": 62335,
+          "paragraphs": 42,
+          "pmid": "11160420",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC6725474",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725474/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6725474.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725474/",
+          "main_text_chars": 67234,
+          "article_text_chars": 67234,
+          "paragraphs": 41,
+          "pmid": "15647474",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC6786025",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6786025/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6786025.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6786025/",
+          "main_text_chars": 78696,
+          "article_text_chars": 78696,
+          "paragraphs": 59,
+          "pmid": "9952395",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC6725706",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725706/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6725706.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6725706/",
+          "main_text_chars": 51639,
+          "article_text_chars": 51639,
+          "paragraphs": 51,
+          "pmid": "16221859",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC2464284",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2464284/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2464284.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC2890238",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2890238/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2890238.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC2276391",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2276391/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2276391.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC6671534",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6671534/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6671534.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC6671075",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6671075/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6671075.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC6670593",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6670593/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6670593.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC2775551",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2775551/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2775551.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC4283557",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4283557/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC4283557.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC2740454",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2740454/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2740454.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC2898334",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2898334/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC2898334.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC3842477",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3842477/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3842477.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3842477/",
+          "main_text_chars": 59789,
+          "article_text_chars": 59789,
+          "paragraphs": 46,
+          "pmid": "20519536",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC3030119",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3030119/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3030119.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3030119/",
+          "main_text_chars": 48401,
+          "article_text_chars": 48401,
+          "paragraphs": 41,
+          "pmid": "21209193",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC3092540",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3092540/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3092540.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3092540/",
+          "main_text_chars": 37692,
+          "article_text_chars": 37692,
+          "paragraphs": 47,
+          "pmid": "21525271",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC3137056",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3137056/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3137056.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3137056/",
+          "main_text_chars": 65375,
+          "article_text_chars": 65375,
+          "paragraphs": 61,
+          "pmid": "21610080",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC3173099",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3173099/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3173099.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3173099/",
+          "main_text_chars": 55602,
+          "article_text_chars": 55602,
+          "paragraphs": 42,
+          "pmid": "21768120",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC3281702",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3281702/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3281702.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3281702/",
+          "main_text_chars": 66413,
+          "article_text_chars": 66413,
+          "paragraphs": 45,
+          "pmid": "22179603",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC3346149",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3346149/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3346149.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3346149/",
+          "main_text_chars": 54669,
+          "article_text_chars": 54669,
+          "paragraphs": 49,
+          "pmid": "22427672",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC6703487",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6703487/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6703487.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6703487/",
+          "main_text_chars": 65729,
+          "article_text_chars": 65729,
+          "paragraphs": 69,
+          "pmid": "22514311",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC3431703",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3431703/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3431703.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3431703/",
+          "main_text_chars": 58740,
+          "article_text_chars": 58740,
+          "paragraphs": 43,
+          "pmid": "22715100",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC3431666",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3431666/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC3431666.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3431666/",
+          "main_text_chars": 69891,
+          "article_text_chars": 69891,
+          "paragraphs": 50,
+          "pmid": "22740692",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC4252539",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4252539/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC4252539.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC4468639",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4468639/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC4468639.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC4879209",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4879209/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC4879209.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC4965558",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4965558/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC4965558.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC6705565",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6705565/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC6705565.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "html_identity_mismatch",
+        "validation": {
+          "canonical_url": null,
+          "main_text_chars": null,
+          "article_text_chars": null,
+          "paragraphs": null,
+          "pmid": null,
+          "error": null,
+          "challenge_marker": null,
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ]
+        },
+        "status": "html_identity_mismatch",
+        "error_details": {
+          "canonical": [
+            "https://www.google.com/recaptcha/challengepage"
+          ],
+          "pmid": null
+        }
+      },
+      {
+        "pmcid": "PMC5050332",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5050332/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC5050332.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5050332/",
+          "main_text_chars": 70049,
+          "article_text_chars": 70049,
+          "paragraphs": 52,
+          "pmid": "27707974",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC5391683",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5391683/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC5391683.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5391683/",
+          "main_text_chars": 65273,
+          "article_text_chars": 65273,
+          "paragraphs": 53,
+          "pmid": "28283559",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC7863909",
+        "license": "cc by",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7863909/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC7863909.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7863909/",
+          "main_text_chars": 91792,
+          "article_text_chars": 91792,
+          "paragraphs": 61,
+          "pmid": "33037073",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC7726548",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7726548/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC7726548.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7726548/",
+          "main_text_chars": 72049,
+          "article_text_chars": 72049,
+          "paragraphs": 50,
+          "pmid": "33158959",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC8018758",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8018758/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC8018758.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8018758/",
+          "main_text_chars": 93209,
+          "article_text_chars": 93209,
+          "paragraphs": 85,
+          "pmid": "33526476",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC10860613",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10860613/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC10860613.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10860613/",
+          "main_text_chars": 76061,
+          "article_text_chars": 76061,
+          "paragraphs": 60,
+          "pmid": "38050135",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC11293445",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11293445/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC11293445.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11293445/",
+          "main_text_chars": 117110,
+          "article_text_chars": 117110,
+          "paragraphs": 78,
+          "pmid": "38926089",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC11391497",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11391497/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC11391497.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11391497/",
+          "main_text_chars": 83608,
+          "article_text_chars": 83608,
+          "paragraphs": 55,
+          "pmid": "39134419",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      },
+      {
+        "pmcid": "PMC12873636",
+        "license": "cc by-nc-sa",
+        "html_endpoint": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12873636/",
+        "html_path": "data/raw/harvest/pmc_grin_oa/html-fallback-PMC12873636.html",
+        "retrieval_source": "official_pmc_article_html",
+        "html_status": "validated_html_full_text",
+        "validation": {
+          "canonical_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12873636/",
+          "main_text_chars": 94246,
+          "article_text_chars": 94246,
+          "paragraphs": 74,
+          "pmid": "41513466",
+          "error": null,
+          "challenge_marker": null,
+          "canonical": null
+        },
+        "status": "html_fallback_recovered"
+      }
+    ],
+    "limitation": "HTML copies are a separately labeled format. They do not replace the XML dataset and failed/challenge/metadata-only pages remain unavailable."
   }
 }

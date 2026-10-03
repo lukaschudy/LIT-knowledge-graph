@@ -8,6 +8,12 @@ from harvest import research
 
 
 class ResearchParsingTests(unittest.TestCase):
+    def test_pmc_html_rejects_wrong_identity_and_login_challenge(self):
+        wrong='<html><head><link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2/"/></head><body><main id="main-content"><article>'+('<p>Long article paragraph. </p>'*80)+'</article></main></body></html>'
+        login='<html><head><link rel="canonical" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1/"/><meta name="citation_pmid" content="1"/></head><body><main id="main-content"><article>Sign in to continue</article></main></body></html>'
+        self.assertEqual(research._pmc_html_validation(wrong,"PMC1")["status"],"html_identity_mismatch")
+        self.assertEqual(research._pmc_html_validation(login,"PMC1")["status"],"html_challenge_or_login")
+
     def test_pmc_jats_validation_requires_exact_id_and_body(self):
         import xml.etree.ElementTree as ET
         wrong=ET.fromstring('<article><front><article-meta><article-id pub-id-type="pmcid">PMC2</article-id></article-meta></front><body>Text</body></article>')

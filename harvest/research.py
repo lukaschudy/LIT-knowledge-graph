@@ -15,6 +15,7 @@ import re
 import threading
 import time
 import xml.etree.ElementTree as ET
+from html.parser import HTMLParser
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, timedelta
 from pathlib import Path
@@ -110,6 +111,67 @@ def _pmc_jats_error(article, expected_pmcid):
     body=article.find(".//body")
     if body is None or not _text(body): return "fulltext_body_missing",returned
     return None,returned
+
+
+class _PmcArticleHtmlParser(HTMLParser):
+    """Collect only rendered text under PMC's main article region and identity metadata."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.main_depth=0; self.article_depth=0; self.p_depth=0
+        self.main_text=[]; self.article_text=[]; self.paragraphs=[]; self.current_paragraph=[]
+        self.canonical=[]; self.pmid=None; self.title=None
+    def handle_starttag(self, tag, attrs):
+        attrs=dict(attrs)
+        if tag=="meta":
+            name=(attrs.get("name") or "").lower()
+            if name=="citation_pmid": self.pmid=attrs.get("content")
+            if name=="citation_title": self.title=attrs.get("content")
+        if tag=="link" and "canonical" in (attrs.get("rel") or "").lower(): self.canonical.append(attrs.get("href",""))
+        if tag=="main" and attrs.get("id")=="main-content": self.main_depth+=1
+        elif self.main_depth:
+            if tag=="main": self.main_depth+=1
+        if self.main_depth and tag=="article": self.article_depth+=1
+        if self.main_depth and tag=="p":
+            self.p_depth+=1
+            if self.p_depth==1: self.current_paragraph=[]
+    def handle_endtag(self, tag):
+        if self.main_depth and tag=="p" and self.p_depth:
+            self.p_depth-=1
+            if self.p_depth==0:
+                text=" ".join("".join(self.current_paragraph).split())
+                if text: self.paragraphs.append(text)
+                self.current_paragraph=[]
+        if self.main_depth and tag=="article" and self.article_depth: self.article_depth-=1
+        if tag=="main" and self.main_depth: self.main_depth-=1
+    def handle_data(self, data):
+        if not self.main_depth: return
+        if self.p_depth: self.current_paragraph.append(data)
+        if self.article_depth: self.article_text.append(data)
+        self.main_text.append(data)
+
+
+def _pmc_html_validation(html, expected_pmcid):
+    parser=_PmcArticleHtmlParser()
+    try: parser.feed(html); parser.close()
+    except Exception as exc: return {"ok":False,"status":"invalid_html","error":str(exc)[:300]}
+    canonical=" ".join(parser.canonical)
+    canonical_match=bool(re.search(r"/articles/"+re.escape(expected_pmcid)+r"/?(?:$|[?#])",canonical))
+    text=" ".join(" ".join(parser.main_text).split())
+    article_text=" ".join(" ".join(parser.article_text).split())
+    challenge_patterns=("captcha","verify you are human","checking your browser","access denied",
+                        "robot check","sign in to continue","log in to continue","temporarily blocked")
+    lower=text.lower()
+    challenge=next((phrase for phrase in challenge_patterns if phrase in lower),None)
+    if not canonical_match:
+        return {"ok":False,"status":"html_identity_mismatch","canonical":parser.canonical,"pmid":parser.pmid}
+    if challenge:
+        return {"ok":False,"status":"html_challenge_or_login","challenge_marker":challenge,"canonical":parser.canonical}
+    if parser.pmid is None or len(article_text)<1000 or len(text)<1200 or len(parser.paragraphs)<3:
+        return {"ok":False,"status":"html_body_not_substantial","canonical":parser.canonical,"pmid":parser.pmid,
+                "main_text_chars":len(text),"article_text_chars":len(article_text),"paragraphs":len(parser.paragraphs)}
+    return {"ok":True,"status":"validated_html_full_text","canonical_url":parser.canonical[0],"pmid":parser.pmid,
+            "title":parser.title,"body_text":article_text,"main_text_chars":len(text),"article_text_chars":len(article_text),
+            "paragraphs":len(parser.paragraphs)}
 
 
 def _esearch(term, retstart, retmax, email, tool, source="pubmed"):
@@ -937,9 +999,90 @@ def harvest_pmc_linked(pubmed_path=None, source="pmc_linked_oa", dataset_name="l
     return len(fulltexts),len(queued)
 
 
+def retry_pmc_html_fulltext(source="pmc_grin_oa"):
+    """Try one official PMC HTML page for each licensed target whose XML lacked a body."""
+    progress_path=core.RAW/source/"fulltext_progress.json"
+    progress=json.loads(progress_path.read_text(encoding="utf-8"))
+    failures=[row for row in progress.get("errors",[]) if row.get("status")=="fulltext_body_missing"]
+    if not failures:
+        return {"eligible_targets":0,"recovered_ids":[],"unavailable_ids":[]}
+    licensed={row.get("pmcid"):row for row in core.read_records(core.PROCESSED/source/"license_metadata.jsonl.gz")}
+    reuse_root=core.RAW/"grin_primary_pages"
+    html_records=[]; statuses=[]
+    for index,item in enumerate(failures):
+        pmcid=item["pmcid"]
+        metadata=licensed.get(pmcid,{})
+        license_id=(metadata.get("license") or item.get("license") or "").strip().lower()
+        if license_id not in {"cc by","cc by-sa","cc by-nc","cc by-nc-sa","cc0"}:
+            statuses.append({"pmcid":pmcid,"status":"html_fallback_skipped_license_not_eligible","license":license_id or None})
+            continue
+        reuse_path=reuse_root/(pmcid+".html")
+        url=f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/"
+        try:
+            if reuse_path.exists():
+                html=reuse_path.read_text(encoding="utf-8",errors="replace")
+                provenance={"html_endpoint":url,"html_path":str(reuse_path.relative_to(core.ROOT)),
+                            "retrieval_source":"reused_verified_grin_primary_pages","raw_artifact_owned_by":"grin_primary_pages"}
+            else:
+                artifact=_get(source,url,f"html-fallback-{pmcid}.html",
+                              "Explicit compatible license recorded in Europe PMC core metadata; PMC official article HTML snapshot",license_id)
+                html=artifact.read_text(encoding="utf-8",errors="replace")
+                provenance={"html_endpoint":url,"html_path":str(artifact.relative_to(core.ROOT)),
+                            "retrieval_source":"official_pmc_article_html"}
+            validation=_pmc_html_validation(html,pmcid)
+            status={"pmcid":pmcid,"license":license_id,**provenance,
+                    "html_status":validation["status"],"validation":{"canonical_url":validation.get("canonical_url"),
+                    "main_text_chars":validation.get("main_text_chars"),"article_text_chars":validation.get("article_text_chars"),
+                    "paragraphs":validation.get("paragraphs"),"pmid":validation.get("pmid"),"error":validation.get("error"),
+                    "challenge_marker":validation.get("challenge_marker"),"canonical":validation.get("canonical")}}
+            if validation["ok"]:
+                source_pmid_ids=metadata.get("pmids",item.get("pmids",[]))
+                html_records.append({"pmcid":pmcid,"pmids":source_pmid_ids,"title":validation.get("title") or metadata.get("title"),
+                    "license":license_id,"format":"PMC article HTML full text","body_text":validation["body_text"],
+                    "body_text_characters":len(validation["body_text"]),"canonical_url":validation["canonical_url"],
+                    "html_endpoint":provenance["html_endpoint"],"html_path":provenance["html_path"],"retrieval_source":provenance["retrieval_source"],
+                    "source_xml_status":"metadata_only_no_article_body"})
+                status["status"]="html_fallback_recovered"
+            else:
+                status["status"]=validation["status"]
+                status["error_details"]={k:v for k,v in validation.items() if k not in {"ok","status"}}
+            statuses.append(status)
+        except Exception as exc:
+            statuses.append({"pmcid":pmcid,"license":license_id,"html_endpoint":url,
+                             "retrieval_source":"official_pmc_article_html","status":"html_fallback_fetch_error","error":str(exc)[:500]})
+        if index+1<len(failures): time.sleep(.4)
+    if html_records:
+        core.emit_records(source,"grin_html_full_text",html_records,input_paths=[progress_path,core.PROCESSED/source/"license_metadata.jsonl.gz"],
+            description="Separately labeled PMC official article HTML full text for licensed targets whose PMC EFetch XML response contained metadata but no body. HTML was accepted only after canonical PMCID and substantial article-body checks; this does not alter or replace verified JATS.")
+    status_by_id={row["pmcid"]:row for row in statuses}
+    retry_rows=[]
+    for original in core.read_records(core.PROCESSED/source/"fulltext_retry_queue.jsonl.gz"):
+        current=status_by_id.get(original.get("pmcid"))
+        row=dict(original)
+        if current:
+            row["html_fallback"]={k:v for k,v in current.items() if k!="validation"}
+        retry_rows.append(row)
+    if retry_rows:
+        core.emit_records(source,"fulltext_retry_queue",retry_rows,input_paths=[progress_path,core.RAW/source],
+            description="Original licensed XML retrieval failures preserved with one bounded official PMC HTML fallback outcome per target.")
+    audit={"requested_xml_body_missing_ids":len(failures),"attempted_html_ids":len(statuses),
+           "recovered_count":len(html_records),"recovered_ids":sorted(row["pmcid"] for row in html_records),
+           "unavailable_ids":sorted(row["pmcid"] for row in statuses if row["status"]!="html_fallback_recovered"),
+           "per_id":statuses,"limitation":"HTML copies are a separately labeled format. They do not replace the XML dataset and failed/challenge/metadata-only pages remain unavailable."}
+    current=core.manifest(source)
+    coverage=dict(current.get("coverage",{}))
+    jats_ids={row["pmcid"] for row in core.read_records(core.PROCESSED/source/"grin_licensed_full_text.jsonl.gz")}
+    html_ids={row["pmcid"] for row in html_records}
+    coverage.update({"downloaded_html_records":len(html_ids),"distinct_fulltext_articles_jats_or_html":len(jats_ids|html_ids),
+                     "fulltext_fetch_unresolved_after_html":len(audit["unavailable_ids"]),
+                     "xml_retry_queue_note":"Original 44 XML/body failures remain recorded; nested HTML outcomes identify the 26 recovered in HTML."})
+    core.update_manifest(source,html_fallback_audit=audit,coverage=coverage)
+    return audit
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument("source",choices=["pubmed","grin","clinicaltrials","ctg_diseases","reporter","reporter_grin","preprints","pmc","pmc_grin","all"])
+    p.add_argument("source",choices=["pubmed","grin","clinicaltrials","ctg_diseases","reporter","reporter_grin","preprints","pmc","pmc_grin","pmc_html_retry","all"])
     p.add_argument("--email",default=os.environ.get("HARVEST_CONTACT_EMAIL"),help="Optional contact email sent to NCBI E-utilities; defaults to HARVEST_CONTACT_EMAIL")
     p.add_argument("--pubmed-start-year",type=int,default=1900)
     p.add_argument("--reporter-start-year",type=int,default=1985)
@@ -955,6 +1098,7 @@ def main():
     if args.source in ("preprints","all"): harvest_preprints()
     if args.source=="pmc": harvest_pmc_linked()
     if args.source=="pmc_grin": harvest_pmc_linked(core.PROCESSED/"grin_literature/grin_gene_citations.jsonl.gz",source="pmc_grin_oa",dataset_name="grin_licensed_full_text")
+    if args.source=="pmc_html_retry": retry_pmc_html_fulltext()
 
 
 if __name__=="__main__":main()
