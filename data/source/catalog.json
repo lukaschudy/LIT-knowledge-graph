@@ -1,0 +1,244 @@
+[
+  {
+    "id": "S01",
+    "name": "OMIM",
+    "notes_file": "biology.md",
+    "notes_heading": "OMIM — Online Mendelian Inheritance in Man",
+    "pdf_pages": [
+      3,
+      5
+    ],
+    "pdf_url": "https://omim.org/",
+    "route_summary": "Registered/licensed bulk or API; current API details unverified"
+  },
+  {
+    "id": "S02",
+    "name": "ClinVar",
+    "notes_file": "biology.md",
+    "notes_heading": "ClinVar",
+    "pdf_pages": [
+      3,
+      5
+    ],
+    "pdf_url": "https://www.ncbi.nlm.nih.gov/clinvar/",
+    "route_summary": "Bulk XML/TSV; focused E-utilities; documentation-reviewed"
+  },
+  {
+    "id": "S03",
+    "name": "HPO",
+    "notes_file": "biology.md",
+    "notes_heading": "HPO — Human Phenotype Ontology",
+    "pdf_pages": [
+      3,
+      5
+    ],
+    "pdf_url": "https://hpo.jax.org/",
+    "route_summary": "Pinned ontology and annotation files; headers live-probed"
+  },
+  {
+    "id": "S04",
+    "name": "PubMed",
+    "notes_file": "research.md",
+    "notes_heading": "PubMed",
+    "pdf_pages": [
+      3,
+      5
+    ],
+    "pdf_url": "https://pubmed.ncbi.nlm.nih.gov/",
+    "route_summary": "E-utilities or baseline + updates; small API samples verified"
+  },
+  {
+    "id": "S05",
+    "name": "PubMed Central (PMC)",
+    "notes_file": "research.md",
+    "notes_heading": "PubMed Central (PMC)",
+    "pdf_pages": [
+      3,
+      5
+    ],
+    "pdf_url": null,
+    "route_summary": "OAI-PMH/current PMC Cloud; article-level reuse rights"
+  },
+  {
+    "id": "S06",
+    "name": "ClinicalTrials.gov",
+    "notes_file": "research.md",
+    "notes_heading": "ClinicalTrials.gov",
+    "pdf_pages": [
+      4,
+      5
+    ],
+    "pdf_url": "https://clinicaltrials.gov/",
+    "route_summary": "API v2; search and update filter samples verified"
+  },
+  {
+    "id": "S07",
+    "name": "NIH RePORTER",
+    "notes_file": "research.md",
+    "notes_heading": "NIH RePORTER",
+    "pdf_pages": [
+      4,
+      5
+    ],
+    "pdf_url": "https://reporter.nih.gov/",
+    "route_summary": "POST API or ExPORTER files; project sample verified"
+  },
+  {
+    "id": "S08",
+    "name": "NORD",
+    "notes_file": "community.md",
+    "notes_heading": "NORD (US National Organization for Rare Disorders)",
+    "pdf_pages": [
+      4,
+      5
+    ],
+    "pdf_url": "https://rarediseases.org/",
+    "route_summary": "Permission/export request; disease CSV fields require confirmation"
+  },
+  {
+    "id": "S09",
+    "name": "Global Genes",
+    "notes_file": "community.md",
+    "notes_heading": "Global Genes (US-based/global advocacy and support network)",
+    "pdf_pages": [
+      4,
+      5
+    ],
+    "pdf_url": "https://globalgenes.org/",
+    "route_summary": "Global Advocacy Alliance list; access and permission required"
+  },
+  {
+    "id": "S10",
+    "name": "Orphanet / Orphadata",
+    "notes_file": "biology.md",
+    "notes_heading": "Orphanet / Orphadata",
+    "pdf_pages": [
+      4,
+      5
+    ],
+    "pdf_url": "https://www.orpha.net/",
+    "route_summary": "Open science XML/JSON/API; expert-resource exports conditional"
+  },
+  {
+    "id": "S11",
+    "name": "Verified patient-group / patient-org websites",
+    "notes_file": "assets.md",
+    "notes_heading": "Verified patient-group / patient-org websites",
+    "pdf_pages": [
+      4,
+      5
+    ],
+    "pdf_url": null,
+    "route_summary": "Curated public asset pages or permitted site-specific collection"
+  },
+  {
+    "id": "S12",
+    "name": "EURORDIS",
+    "notes_file": "community.md",
+    "notes_heading": "EURORDIS – Rare Diseases Europe",
+    "pdf_pages": [
+      5
+    ],
+    "pdf_url": "https://www.eurordis.org/",
+    "route_summary": "Member profiles; directory was rate-limited; reuse unresolved"
+  },
+  {
+    "id": "S13",
+    "name": "Rare Disease UK",
+    "notes_file": "community.md",
+    "notes_heading": "Rare Disease UK (RDUK)",
+    "pdf_pages": [
+      5
+    ],
+    "pdf_url": "https://raredisease.org.uk/",
+    "route_summary": "Campaign content; GAUK A–Z is a separate community directory"
+  },
+  {
+    "id": "S14",
+    "name": "Genetic Alliance (US)",
+    "notes_file": "community.md",
+    "notes_heading": "Genetic Alliance (United States) and Genetic Alliance UK (distinct entities)",
+    "pdf_pages": [
+      5
+    ],
+    "pdf_url": "https://geneticalliance.org/",
+    "route_summary": "Disease InfoSearch; current records/export access unresolved"
+  },
+  {
+    "id": "S15",
+    "name": "MONDO",
+    "notes_file": "biology.md",
+    "notes_heading": "MONDO — Mondo Disease Ontology",
+    "pdf_pages": [
+      5
+    ],
+    "pdf_url": "https://mondo.monarchinitiative.org/",
+    "route_summary": "Pinned ontology releases; release/header sample verified"
+  },
+  {
+    "id": "S16",
+    "name": "Press releases",
+    "notes_file": "assets.md",
+    "notes_heading": "Press releases",
+    "pdf_pages": [
+      5
+    ],
+    "pdf_url": null,
+    "route_summary": "Issuer archives/feeds; preserve announcements and corroboration"
+  },
+  {
+    "id": "S17",
+    "name": "Jackson Laboratory",
+    "notes_file": "assets.md",
+    "notes_heading": "Jackson Laboratory (JAX)",
+    "pdf_pages": [
+      5
+    ],
+    "pdf_url": "https://www.jax.org/",
+    "route_summary": "MGI reports/batch export; samples verified; asset availability separate"
+  },
+  {
+    "id": "S18",
+    "name": "RareConnect",
+    "notes_file": "assets.md",
+    "notes_heading": "RareConnect",
+    "pdf_pages": [
+      5
+    ],
+    "pdf_url": "https://www.rareconnect.org/",
+    "route_summary": "Historical archive only; no public bulk interface verified"
+  },
+  {
+    "id": "S19",
+    "name": "bioRxiv",
+    "notes_file": "research.md",
+    "notes_heading": "bioRxiv",
+    "pdf_pages": [
+      5
+    ],
+    "pdf_url": "https://www.biorxiv.org/",
+    "route_summary": "Date/cursor API; metadata sample verified; per-version rights"
+  },
+  {
+    "id": "S20",
+    "name": "medRxiv",
+    "notes_file": "research.md",
+    "notes_heading": "medRxiv",
+    "pdf_pages": [
+      5
+    ],
+    "pdf_url": "https://www.medrxiv.org/",
+    "route_summary": "Date/cursor API; metadata sample verified; per-version rights"
+  },
+  {
+    "id": "S21",
+    "name": "RARe-SOURCE",
+    "notes_file": "assets.md",
+    "notes_heading": "RARe-SOURCE",
+    "pdf_pages": [
+      2
+    ],
+    "pdf_url": "https://raresource.nih.gov/about-us/",
+    "route_summary": "Documented UI CSV exports; API/bulk contract unverified"
+  }
+]

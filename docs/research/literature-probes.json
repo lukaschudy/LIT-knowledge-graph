@@ -1,0 +1,106 @@
+{
+  "researched_at": "2026-10-03",
+  "note": "Read-only probes; records were inspected in memory only. No titles, abstracts, names, identifiers beyond endpoint path, or other returned prose are retained here.",
+  "probes": [
+    {
+      "source": "PubMed ESearch",
+      "label": "live-tested",
+      "method": "GET",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=Gaucher+disease%5BTitle%2FAbstract%5D&retmax=1&retmode=json&tool=rare_disease_kg_probe&email=probe%40example.org",
+      "status": 200,
+      "content_type": "application/json",
+      "response_keys": ["esearchresult"],
+      "esearchresult_keys": ["count", "retmax", "retstart", "idlist", "translationset", "querytranslation"],
+      "matching_count_at_probe_time": 6008,
+      "returned_id_count": 1
+    },
+    {
+      "source": "PubMed EFetch",
+      "label": "live-tested",
+      "method": "GET",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=31452104&retmode=xml",
+      "status": 200,
+      "content_type": "text/xml",
+      "bytes": 6081,
+      "contains_pubmedarticle_element": true,
+      "contains_pmid_element": true
+    },
+    {
+      "source": "ClinicalTrials.gov API v2 search",
+      "label": "live-tested",
+      "method": "GET",
+      "url": "https://clinicaltrials.gov/api/v2/studies?query.cond=Gaucher%20Disease&pageSize=1",
+      "status": 200,
+      "content_type": "application/json",
+      "response_keys": ["studies", "nextPageToken"],
+      "returned_study_count": 1,
+      "nextPageToken_present": true,
+      "study_record_keys": ["protocolSection", "resultsSection", "derivedSection", "hasResults"]
+    },
+    {
+      "source": "ClinicalTrials.gov LastUpdatePostDate filter",
+      "label": "live-tested",
+      "method": "GET",
+      "url": "https://clinicaltrials.gov/api/v2/studies?filter.advanced=AREA%5BLastUpdatePostDate%5DRANGE%5B2025-01-01%2C2025-01-31%5D&pageSize=1",
+      "status": 200,
+      "content_type": "application/json",
+      "response_keys": ["studies", "nextPageToken"],
+      "returned_study_count": 1,
+      "nextPageToken_present": true
+    },
+    {
+      "source": "NIH RePORTER v2 project search",
+      "label": "live-tested",
+      "method": "POST",
+      "url": "https://api.reporter.nih.gov/v2/projects/search",
+      "request_summary": {"criteria": {"advanced_text_search": {"operator": "and", "search_field": "projecttitle", "search_text": "Gaucher disease"}}, "offset": 0, "limit": 1},
+      "status": 200,
+      "content_type": "application/json",
+      "response_keys": ["meta", "results"],
+      "total_matches_at_probe_time": 266,
+      "returned_project_count": 1,
+      "result_keys": ["appl_id", "subproject_id", "fiscal_year", "project_num", "project_serial_num", "organization", "award_type", "activity_code", "award_amount", "is_active", "project_num_split", "principal_investigators", "contact_pi_name", "program_officers", "agency_ic_admin", "agency_ic_fundings", "cong_dist", "spending_categories", "project_start_date", "project_end_date", "organization_type", "geo_lat_lon", "opportunity_number", "full_study_section", "award_notice_date", "is_new", "mechanism_code_dc", "core_project_num", "terms", "pref_terms", "abstract_text", "project_title", "phr_text", "spending_categories_desc", "agency_code", "covid_response", "arra_funded", "budget_start", "budget_end", "cfda_code", "funding_mechanism", "direct_cost_amt", "indirect_cost_amt", "project_detail_url", "date_added"]
+    },
+    {
+      "source": "bioRxiv API",
+      "label": "live-tested",
+      "method": "GET",
+      "url": "https://api.biorxiv.org/details/biorxiv/2025-01-01/2025-01-01/0/json",
+      "status": 200,
+      "content_type": "application/json",
+      "response_keys": ["messages", "collection"],
+      "message_keys": ["status", "category", "interval", "cursor", "count", "count_new_papers", "total"],
+      "returned_record_count": 30,
+      "record_keys": ["title", "authors", "author_corresponding", "author_corresponding_institution", "doi", "date", "version", "type", "license", "category", "jatsxml", "abstract", "published", "server"]
+    },
+    {
+      "source": "medRxiv API",
+      "label": "live-tested",
+      "method": "GET",
+      "url": "https://api.biorxiv.org/details/medrxiv/2025-01-01/2025-01-01/0/json",
+      "status": 200,
+      "content_type": "application/json",
+      "response_keys": ["messages", "collection"],
+      "message_keys": ["status", "category", "interval", "cursor", "count", "count_new_papers", "total"],
+      "returned_record_count": 15,
+      "record_keys": ["title", "authors", "author_corresponding", "author_corresponding_institution", "doi", "date", "version", "type", "license", "category", "jatsxml", "abstract", "published", "server"]
+    }
+  ],
+  "blocked_or_unverified": [
+    {
+      "item": "ClinicalTrials.gov API/download documentation in web renderer",
+      "status": "documentation page fetch failed in web tool; endpoint probes succeeded through HTTP",
+      "note": "No distinct scheduled daily update feed was confirmed. Do not describe a daily update feed as an available route. API filter.advanced by LastUpdatePostDate was live-tested; bulk download cadence/manifest should be confirmed from the current official download page before implementation."
+    },
+    {
+      "item": "PMC cloud migration status",
+      "status": "official documentation states transition date and current service notice",
+      "note": "NCBI announced August 2026 as migration month; by the 2026-10-03 research date, the official PMC OA Web Service notice says it is no longer available (effective August 25, 2026), and PMC OAI-PMH docs now list PMC Cloud as an allowed automated dataset retrieval service."
+    },
+    {
+      "item": "NIH RePORTER search_id paging semantics beyond docs",
+      "status": "not live-tested",
+      "note": "Official docs describe search_id as a handle for continuing/retrieving the result set and prohibit combining it with new criteria. Offset maximums remain documented; no evidence that search_id bypasses the documented offset caps."
+    }
+  ]
+}

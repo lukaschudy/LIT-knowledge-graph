@@ -1,0 +1,79 @@
+{
+  "checked_date": "2026-10-03",
+  "scope": "Bounded metadata, HEAD, and byte-range checks only; no full ontology or Orphadata bulk file downloaded.",
+  "hpo": {
+    "release_metadata_url": "https://api.github.com/repos/obophenotype/human-phenotype-ontology/releases/latest",
+    "release_metadata_status": 200,
+    "tag": "v2026-09-01",
+    "published_at": "2026-09-03T06:08:39Z",
+    "phenotype_hpoa": {
+      "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/phenotype.hpoa",
+      "release_asset_size_bytes": 35816037,
+      "request_range": "bytes=0-2047",
+      "http_status": 206,
+      "response_content_range": "bytes 0-2047/35816037",
+      "bytes_read": 2048,
+      "header": "database_id\tdisease_name\tqualifier\thpo_id\treference\tevidence\tonset\tfrequency\tsex\tmodifier\taspect\tbiocuration",
+      "version_metadata": "#version: 2026-09-02",
+      "hpo_version_metadata": "#hpo-version: http://purl.obolibrary.org/obo/hp/releases/2026-09-01/hp.json"
+    },
+    "genes_to_phenotype": {
+      "url": "https://github.com/obophenotype/human-phenotype-ontology/releases/download/v2026-09-01/genes_to_phenotype.txt",
+      "release_asset_size_bytes": 20821704,
+      "request_range": "bytes=0-2047",
+      "http_status": 206,
+      "bytes_read": 2048,
+      "header": "ncbi_gene_id\tgene_symbol\thpo_id\thpo_name\tfrequency\tdisease_id"
+    },
+    "license_source": "https://hpo.jax.org/app/license; repository LICENSE.md links to this page; terms require acknowledgment/citation, public date/version display, preservation of file contents and embedded logical relations, and service/product acknowledgement."
+  },
+  "mondo": {
+    "release_metadata_url": "https://api.github.com/repos/monarch-initiative/mondo/releases/latest",
+    "release_metadata_status": 200,
+    "tag": "v2026-09-01",
+    "published_at": "2026-09-01T17:41:30Z",
+    "assets": {
+      "mondo.owl": {"url": "https://github.com/monarch-initiative/mondo/releases/download/v2026-09-01/mondo.owl", "size_bytes": 254230660, "range_probe_status": 206, "range_probe_bytes": 2048},
+      "mondo.obo": {"url": "https://github.com/monarch-initiative/mondo/releases/download/v2026-09-01/mondo.obo", "size_bytes": 53134854, "range_probe_status": 206, "range_probe_bytes": 2048, "first_lines": ["format-version: 1.2", "data-version: releases/2026-09-01"]},
+      "mondo.json": {"url": "https://github.com/monarch-initiative/mondo/releases/download/v2026-09-01/mondo.json", "size_bytes": 107586061},
+      "mondo-rare.owl": {"url": "https://github.com/monarch-initiative/mondo/releases/download/v2026-09-01/mondo-rare.owl", "size_bytes": 160361059}
+    },
+    "license_source": "https://mondo.monarchinitiative.org/pages/download/ (CC BY 4.0)"
+  },
+  "orphadata": {
+    "openapi_url": "https://api.orphadata.com/openapi.json",
+    "openapi_status": 200,
+    "openapi_bytes_read": 84802,
+    "openapi_title": "Orphadata APIs",
+    "openapi_version": "1.0.0",
+    "authentication_scheme_declared": false,
+    "pagination_parameters_declared": false,
+    "documented_routes": [
+      "GET /rd-cross-referencing/orphacodes/{orphacode}?lang=en",
+      "GET /rd-phenotypes/orphacodes/{orphacode}?lang=en",
+      "GET /rd-associated-genes/genes",
+      "GET /rd-associated-genes/orphacodes/{orphacode}",
+      "GET /rd-classification/orphacodes",
+      "GET /rd-epidemiology/orphacodes?lang=en",
+      "GET /rd-natural_history/orphacodes?lang=en"
+    ],
+    "live_api_sample": {
+      "url": "https://api.orphadata.com/rd-phenotypes/orphacodes/558?lang=en",
+      "http_status": 200,
+      "content_type": "application/json",
+      "bytes_read": 2048,
+      "observed_fields": ["data.__count", "data.__licence.identifier", "data.__licence.link", "data.results.Date", "data.results.Disorder.HPODisorderAssociation"],
+      "observed_count": 1,
+      "observed_license": "CC-BY-4.0",
+      "observed_data_date": "2026-06-23 07:57:18"
+    },
+    "bulk_head_checks": [
+      {"url": "https://www.orphadata.com/data/xml/en_product1.xml", "http_status": 200, "content_type": "application/xml", "content_length_bytes": 54026799, "last_modified": "Mon, 29 Jun 2026 12:20:47 GMT"},
+      {"url": "https://www.orphadata.com/data/xml/en_product4.xml", "http_status": 200, "content_type": "application/xml", "content_length_bytes": 47893357, "last_modified": "Mon, 29 Jun 2026 12:07:59 GMT"},
+      {"url": "https://www.orphadata.com/data/xml/en_product6.xml", "http_status": 200, "content_type": "application/xml", "content_length_bytes": 22612034, "last_modified": "Mon, 29 Jun 2026 12:21:58 GMT"},
+      {"url": "https://www.orphadata.com/data/json/en_product1.json.tar.gz", "http_status": 200, "content_type": "application/x-gzip", "content_length_bytes": 2993383, "last_modified": "Mon, 29 Jun 2026 12:40:41 GMT"}
+    ],
+    "open_science_source": "https://sciences.orphadata.com/orphanet-scientific-knowledge-files/ (science products under CC BY 4.0, released twice yearly)",
+    "restricted_expert_resources_source": "https://www.orphadata.com/expert-resources/ (DTA for academia/public entities; service contract for for-profit users)"
+  }
+}
