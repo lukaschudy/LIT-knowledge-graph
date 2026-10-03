@@ -1,6 +1,6 @@
 """Streaming downloads and auditable JSONL datasets. No implicit clinical claims."""
 from __future__ import annotations
-import gzip, hashlib, json, os, shutil, time
+import gzip, hashlib, json, os, shutil, time, threading
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit, parse_qsl, urlencode, urlunsplit
@@ -15,6 +15,7 @@ SESSION=requests.Session()
 SESSION.headers['User-Agent']=USER_AGENT
 SESSION.headers['Accept-Encoding']='identity'
 DISK_FLOOR=8*1024**3
+_MANIFEST_LOCK=threading.RLock()
 
 
 def now(): return datetime.now(timezone.utc).isoformat()
@@ -41,7 +42,8 @@ def manifest(source):
     return json.loads(path.read_text()) if path.exists() else {'source':source,'created_at':now(),'artifacts':{},'datasets':{},'status':'in_progress'}
 
 def update_manifest(source, **values):
-    data=manifest(source); data.update(values); data['updated_at']=now(); atomic_json(MANIFESTS/(source+'.json'),data); return data
+    with _MANIFEST_LOCK:
+        data=manifest(source); data.update(values); data['updated_at']=now(); atomic_json(MANIFESTS/(source+'.json'),data); return data
 
 def download(source,url,filename,*,license_name,version=None,refresh=False,method='GET',json_body=None):
     """Cache immutable acquisitions; interrupted GET downloads resume via Range.
@@ -95,7 +97,8 @@ def download(source,url,filename,*,license_name,version=None,refresh=False,metho
                 part.replace(dest)
                 if resume_info.exists():resume_info.unlink()
                 entry={'url':safe_url(url),'final_url':safe_url(response.url),'method':method,'request_body':json_body,'path':str(dest.relative_to(ROOT)),'bytes':dest.stat().st_size,'sha256':digest(dest),'retrieved_at':now(),'license':license_name,'version':version,'http_status':response.status_code,'content_type':response.headers.get('Content-Type'),'last_modified':response.headers.get('Last-Modified'),'etag':response.headers.get('ETag')}
-                data=manifest(source);data['artifacts'][filename]=entry;data['updated_at']=now();atomic_json(MANIFESTS/(source+'.json'),data)
+                with _MANIFEST_LOCK:
+                    data=manifest(source);data['artifacts'][filename]=entry;data['updated_at']=now();atomic_json(MANIFESTS/(source+'.json'),data)
                 print(json.dumps({'event':'downloaded','source':source,'file':filename,'bytes':entry['bytes']}),flush=True)
                 return dest
         except (requests.RequestException,ValueError) as e:
@@ -119,7 +122,8 @@ def emit_records(source,name,records,*,input_paths=(),description=''):
     except BaseException:
         if temp.exists():temp.unlink()
         raise
-    data=manifest(source);data['datasets'][name]={'path':str(dest.relative_to(ROOT)),'records':count,'bytes':dest.stat().st_size,'sha256':digest(dest),'input_paths':inputs,'description':description,'created_at':now(),'format':'gzip-jsonl','parser_version':'harvest-v1'};data['updated_at']=now();atomic_json(MANIFESTS/(source+'.json'),data)
+    with _MANIFEST_LOCK:
+        data=manifest(source);data['datasets'][name]={'path':str(dest.relative_to(ROOT)),'records':count,'bytes':dest.stat().st_size,'sha256':digest(dest),'input_paths':inputs,'description':description,'created_at':now(),'format':'gzip-jsonl','parser_version':'harvest-v1'};data['updated_at']=now();atomic_json(MANIFESTS/(source+'.json'),data)
     print(json.dumps({'event':'normalized','source':source,'dataset':name,'records':count}),flush=True)
     return dest
 
