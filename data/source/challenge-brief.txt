@@ -1,0 +1,330 @@
+                             7th Global AI Hackathon
+
+
+
+                              CHALLENGE
+
+
+
+
+                            05         ····················
+
+
+
+
+AI Atlas for the World’s Rare Diseases
+
+ Connect the world’s knowledge so patient groups facing an untreated rare disease can find a
+                                       path forward
+
+
+
+
+                                  S U P P O R T E D           B Y
+                     RARE DISEASE ATLAS · OpenAI × Buffalo Initiative × Hack-Nation · Challenge Brief
+
+
+
+
+Goals and Motivation
+
+Imagine learning that your child has a rare genetic disease—and that no approved treatment exists. You know the gene’s
+name, but it does not tell you who could help or what to do next. Like Maria, the patient leader in this challenge, you
+begin finding other families, raising money, and asking researchers where to start. A diagnosis has made you the
+organizer of a research effort you never expected to lead.
+
+
+     10,000                        80%                         5,000                         350M                 <5%
+   known rare diseases         trace back to DNA              are monogenic                people affected     have an approved
+                                                                                             worldwide            treatment
+
+
+
+
+ THE 10× GOAL                   Help rare disease research advance toward a possible treatment 10× faster.
+
+
+
+
+                                Five thousand scattered points of light. One map to see the constellations.
+
+Why now. Disease vocabularies and public research databases provide a foundation for connecting this information.
+Language models can help extract relationships from papers; graph analytics can reveal links across genes, symptoms,
+studies, and communities. NIH projects such as RARe-SOURCE already combine biomedical data and AI. The
+opportunity is to turn those capabilities into an understandable, evidence-backed route that patient groups can act on.
+
+
+Current Challenges
+
+ KNOWLEDGE IS                         Moving toward a treatment requires connected work: understanding the biology, gathering
+ SCATTERED                            patient data, choosing experiments, and bringing the right researchers and clinical
+                                      partners together. Yet the relevant knowledge sits across papers, disease databases,
+                                      studies, and patient organizations.
+ GROUPS REBUILD WHAT                  Another community may already have a useful registry or experimental model. Maria
+ EXISTS                               cannot reuse what she cannot find—or judge whether it applies. Groups spend scarce
+                                      time and funding rebuilding similar assets.
+ NAMES HIDE MECHANISMS                Different genes can disrupt the same biological process; one gene can have different
+                                      effects; similar symptoms can have different causes. Organizing by disease name misses
+                                      the research a community could share.
+
+
+
+ THE KEY INSIGHT                      A monogenic disease can be caused by variants in one gene, but its research pathway
+                                      may connect to many diseases. Organizing knowledge by mechanism and phenotype—
+                                      the pattern of symptoms—may reveal opportunities to share research. Each proposed link
+                                      needs evidence.
+
+
+Your Challenge
+
+Build the AI Atlas for the World’s Rare Diseases: a knowledge graph whose nodes represent diseases, genes and
+variants, mechanisms, symptoms, patient groups, papers, studies, and research assets. Its edges explain how those
+things relate and cite the evidence. Use AI to assemble and reconcile the information, then graph analytics to find
+meaningful clusters. Give Maria an interface that carries her from her disease to a supported connection, an existing
+asset, a collaborator, and a concrete next step toward treatment.
+Three questions drive the atlas. Maria needs to know: Who shares our disease characteristics? What useful work
+already exists? What should we do together next? The atlas should find the dots nobody’s connected, explain why
+they’re connected with cited evidence, and turn that into an action a patient group leader can take this week.
+
+
+
+
+                                Hack-Nation × OpenAI × Buffalo Initiative · 7th Global AI Hackathon · Page 2
+                          RARE DISEASE ATLAS · OpenAI × Buffalo Initiative × Hack-Nation · Challenge Brief
+
+
+
+
+The People Who Must Turn Knowledge into Progress
+
+Maria leads the journey. Devon brings the family’s needs; Priya assesses therapeutic opportunities; Dr. Osei tests the
+science.
+
+ Maria                            Pain point: Maria leads a patient group for a disease with no approved treatment. She is
+ Patient organization leader      assembling families, clinical observations, a registry, and research partners from scratch. She
+                                  cannot tell whether a related group has already built an asset she could reuse or whether a
+                                  seemingly similar disease follows a different mechanism.
+                                  What changes: An explainable graph shows her closest disease clusters, the genes and
+                                  symptoms connecting them, which evidence comes from papers or studies, and which patient
+                                  groups are already working on the same pathway. It highlights a shared clinical opportunity and
+                                  the next experiment needed to validate it. Optional but valuable: investors who’ve backed similar
+                                  modalities before, and funders whose RFAs quietly signal where money is about to move.
+                                  “We may be the only family with this diagnosis, but this pathway connects us to another
+                                  community and an existing study. Here is what must be checked before we join forces.”
+                                  Leans on: Clustering · Pathway navigator · Connector
+ Devon                            Pain point: Days into a diagnosis, Devon runs 2 a.m. searches with zero medical background and
+ Newly diagnosed patient /        zero community. Search engines return either nothing useful or dense journal abstracts written for
+ caregiver                        specialists.
+                                  What changes: Devon finds their exact community when one exists, or an evidence-qualified
+                                  connection to related communities, research, and support. If no useful connection is known, the
+                                  atlas says so clearly and shows what evidence could change that.
+                                  “Here is the patient group for your exact diagnosis. If none exists, here are the closest related
+                                  communities and how to help build the missing one.”
+                                  Leans on: Search engine
+ Priya                            Pain point: Priya holds one therapeutic mechanism—a way to replace a missing protein, say, or
+ Biotech / pharma scout           silence a toxic one—and needs every disease cluster it could plausibly treat. Evaluating
+                                  candidates one disease at a time, scattered across papers, conference talks, and cold outreach,
+                                  takes months per mechanism.
+                                  What changes: A ranked view of clusters with mechanistic evidence, patient communities,
+                                  existing assets, and unmet needs gives Priya a concrete route to assess therapeutic potential.
+                                  “A ranked list of clusters matching your mechanism, each annotated with active patient advocacy
+                                  groups, existing infrastructure, and named contacts.”
+                                  Leans on: Clustering · Search engine
+ Dr. Osei                         Pain point: Dr. Osei runs a lab devoted to one gene and one rare disease, publishing papers and
+ Academic researcher /            applying for grants inside an academic silo. He has no way of knowing a colleague three
+ clinician-scientist              universities away is chasing an “unrelated” disease that is, mechanistically, nearly the same
+                                  problem.
+                                  What changes: An evidence-backed cluster shows Dr. Osei where to test a shared mechanism,
+                                  recruit collaborators, and reuse existing patient-group infrastructure.
+                                  “Who else works on my mechanism, across every gene name that mechanism can hide under—
+                                  plus a way to reach them.”
+                                  Leans on: Connector
+
+
+Modules
+
+Module 1: Connect the Evidence (Graph Builder)
+Start with one disease cluster—then scale up to all of the world’s medical information. Resolve names and synonyms,
+assign stable identifiers, and record the source, date, and confidence of each relationship. These connections let the
+atlas answer Maria’s questions:
+
+ Edge                                       Source                             What it does
+ Gene–variant–mechanism                     OMIM, ClinVar                      Connects molecular changes to their effects, rather than
+                                                                               treating shared gene names as sufficient
+ Disease–phenotype                          HPO                                Identifies symptom patterns shared across genes and
+                                                                               distinguishes broad symptoms from unusually informative
+                                                                               ones
+ Publication–claim–investigator             PubMed / PMC                       Traces a proposed relationship to its supporting or
+                                                                               contradictory research and the people studying it
+
+
+
+
+                                     Hack-Nation × OpenAI × Buffalo Initiative · 7th Global AI Hackathon · Page 3
+                       RARE DISEASE ATLAS · OpenAI × Buffalo Initiative × Hack-Nation · Challenge Brief
+
+
+
+
+ Edge                                    Source                             What it does
+ Study–condition–intervention            ClinicalTrials.gov                 Finds studies or designs that might inform a cluster; assess
+                                                                            eligibility and mechanism before suggesting a shared trial
+ Funding–researcher–asset                NIH RePORTER                       Shows current programs, reusable infrastructure, and gaps
+                                                                            along the proposed clinical pathway
+ Patient organization–disease–           NORD, Global Genes,                Reveals communities that could pool evidence and reduce
+ registry                                Orphanet, verified group           duplicated work
+                                         sites
+
+
+Module 2: Make Each Connection Trustworthy
+A promising graph path matters only if Maria and a scientist can inspect it. Show the supporting source, distinguish
+observations from inferred links, and surface contradictory findings. Help the group decide what to investigate next.
+
+ No supported route?              Say so. Explain the search coverage and the missing evidence, so the group knows what is
+                                  unknown and what to test next.
+
+Module 3: Turn the Network into Action
+Use the graph to surface opportunities no single disease community could see alone:
+
+ 1. Mechanistic overlap                 Cluster diseases by variant effect, pathway, and phenotype rather than by name or
+                                        category, so a lysosomal storage disease and a differently-named disease sharing the
+                                        same pathway show up as neighbors.
+ 2. Find what can be shared             Map registries, natural history studies, models, biomarkers, and clinical studies onto the
+                                        cluster. Identify duplicate efforts and test whether assets or study designs could be
+                                        adapted across communities.
+ 3. Network overlap                     Surface when two “unrelated” disease communities already share a key opinion leader
+                                        (researcher, clinician, biotech rep, investor/funder).
+
+
+
+
+Make the Network Understandable to a Family
+
+The graph is the engine; the experience must make its meaning clear. Someone facing an untreated disease should be
+able to see why a connection matters, what remains uncertain, and who could help. Use the concept below as a starting
+point and innovate on the experience.
+
+
+
+
+ Illustrative starting point: a disease map becomes valuable when it helps Maria understand a connection and act on it. Design your own way to
+                                                             make that journey clear.
+
+
+
+                                  Hack-Nation × OpenAI × Buffalo Initiative · 7th Global AI Hackathon · Page 4
+                       RARE DISEASE ATLAS · OpenAI × Buffalo Initiative × Hack-Nation · Challenge Brief
+
+
+
+
+ Low ink, high signal             Whitespace does the design work; color carries meaning alone.
+ One global search                Disease, gene, symptom, patient group, or mechanism can open the same graph, with clear
+                                  synonym resolution.
+ Progressive reveal               Summary first, depth on click.
+ Explain every edge               Put source, relationship type, confidence, and contradictory evidence beside the connection it
+                                  supports.
+ Patient action view              Show shared assets, possible clinical pathways, partners, and next experiments; distinguish
+                                  viable leads from unsupported links.
+
+
+Stretch Goals
+
+     •   Invent new uses for the network. Propose an experiment that tests a shared mechanism, identify an
+         overlooked research partner, or let patient groups contribute missing evidence.
+     •   Reduce the burden of care. Explore how these connections could help patients while treatment research
+         progresses. Choose the opportunity you believe could change patients’ lives most.
+
+
+Think Bigger: The 10× Moonshot
+
+Choose a meaningful milestone toward a possible treatment, such as launching a shared natural history study or
+reaching a decision on a therapeutic candidate. Compare the existing timeline with your proposed route and explain the
+assumptions behind a 10× acceleration.
+
+ YOUR 24-HOUR AMBITION                  Demonstrate one complete journey from disease to connection to shared action. Make the
+                                        case for how it could shorten a meaningful step toward treatment by 10×, and show what
+                                        would need to be validated next.
+
+
+Built with OpenAI
+
+     •   Extract. Pull genes, variants, phenotypes, claims and investigators out of papers and abstracts into graph
+         edges, each tied to its source.
+     •   Reconcile. Resolve names and synonyms across disease vocabularies so one disease, gene or symptom
+         maps to one stable node.
+     •   Explain. Turn a graph path into plain language a family can follow, with every step citing the edge that supports
+         it.
+
+
+ If you want to win the challenge track prizes, then you would need to leverage OpenAI’s models or tools.
+
+
+
+
+Data Sources and Hints
+
+Begin with a focused slice that has enough biology, research, and patient-group information to demonstrate a complete
+path. Show how the graph can grow as new evidence and communities contribute.
+
+ Category                          Source                                                       Use
+ Patient-group directories         NORD, Global Genes, Orphanet, EURORDIS, Rare                 Find communities, registries and the
+                                   Disease UK, Genetic Alliance                                 groups already working on a pathway
+ Research signal                   PubMed / PMC, NIH RePORTER                                   Claims, investigators, funding and active
+                                                                                                programs
+ Biology engine                    OMIM, HPO, MONDO, ClinVar                                    Genes, variants, phenotypes and stable
+                                                                                                disease identifiers
+ Assets already built              ClinicalTrials.gov, patient-org websites and press           Studies, registries and reusable designs
+                                   releases
+ Stretch sources                   Jackson Laboratory, RareConnect, bioRxiv, medRxiv            Models, communities and the newest
+                                                                                                preprints
+
+
+
+
+                                  Hack-Nation × OpenAI × Buffalo Initiative · 7th Global AI Hackathon · Page 5
+                      RARE DISEASE ATLAS · OpenAI × Buffalo Initiative × Hack-Nation · Challenge Brief
+
+
+
+
+What Good Looks Like
+
+Maria types her disease into one search box. The atlas follows it to a disrupted pathway, another gene, a related
+disease, and the patient group working on it. Every edge has an explanation and a source. Next, she discovers an
+existing registry and study design: the atlas shows what is reusable, what differs between the diseases, and which
+biological or eligibility questions need expert review. Finally, she approaches a partner with a sourced proposal for
+shared research. If the graph reveals no supported lead, she leaves with a clear account of what is unknown and a next
+question to test. That is the bar.
+
+
+What Makes a Strong Submission
+
+ Criterion                              What judges look for
+ Graph quality                          Meaningful node and edge design, defensible clustering, useful paths, counterexamples, and
+                                        clear treatment of uncertainty
+ Evidence integrity                     Sourced, cross-checked claims that distinguish data from hypotheses and clinical proof
+ Patient progress                       A family or group moves from an isolated diagnosis to a justified collaboration, reusable asset,
+                                        and next research or clinical milestone
+ 10× impact                             A meaningful milestone toward a possible treatment, the existing timeline versus your route,
+                                        and the assumptions behind a 10× acceleration
+ Ambition and product craft             An intuitive experience that helps patient groups collaborate at a scale no single disease
+                                        community could achieve alone
+
+
+
+What to Submit
+
+     •   Working prototype. Deployed or easy to run locally, ready for judges to search and explore live.
+     •   Source code repository. With a README covering architecture and how to reproduce the dataset.
+     •   A Team video and a 1-minute walkthrough. Follow a family or patient group through the graph to either a
+         justified collaboration and next step, or an honest gap with a plan to investigate it.
+
+         Give patient groups the connections to turn an isolated diagnosis into a shared path toward treatment.
+                         Build boldly. Make the evidence understandable. Show the next step.
+
+
+
+
+                                 Hack-Nation × OpenAI × Buffalo Initiative · 7th Global AI Hackathon · Page 6
+
