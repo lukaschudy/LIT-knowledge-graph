@@ -1,0 +1,57 @@
+[
+  {
+    "name": "MGI_mouse_human_phenotype",
+    "url": "https://www.informatics.jax.org/downloads/reports/HMD_HumanPhenotype.rpt",
+    "checked_at_utc": "2026-10-03T21:32:51.030685+00:00",
+    "status": 200,
+    "content_type": null,
+    "bytes_sampled": 131072,
+    "partial_sample": true,
+    "sample_sha256": "671efc6868cba7a5468f16a68059b1b3ed89029c56c8c8f7e0abd7b0eb0e962e",
+    "sample_column_counts": [
+      6,
+      6,
+      6
+    ],
+    "sample_first_identifiers": [
+      "A1BG",
+      "A1CF",
+      "A2M"
+    ]
+  },
+  {
+    "name": "MGI_phenotypic_alleles",
+    "url": "https://www.informatics.jax.org/downloads/reports/MGI_PhenotypicAllele.rpt",
+    "checked_at_utc": "2026-10-03T21:32:51.645855+00:00",
+    "status": 200,
+    "content_type": "text/plain",
+    "bytes_sampled": 131072,
+    "partial_sample": true,
+    "sample_sha256": "8315d3b3dae9d4133316e0ac89fccbc7c04091b103cc793d781951589033051d",
+    "sample_column_counts": [
+      1,
+      1,
+      1
+    ],
+    "sample_first_identifiers": [
+      "#",
+      "#Allele symbols are usually of the form xxx<yy>, where the <> enclose the part of the symbol that is superscripted.",
+      "#"
+    ]
+  },
+  {
+    "name": "UniProt_STXBP1",
+    "url": "https://rest.uniprot.org/uniprotkb/search?query=gene_exact%3ASTXBP1%20AND%20organism_id%3A9606&format=json&size=1",
+    "checked_at_utc": "2026-10-03T21:32:52.246167+00:00",
+    "status": 200,
+    "content_type": "application/json",
+    "bytes_sampled": 59320,
+    "partial_sample": true,
+    "sample_sha256": "ca4ff4aaf00141793762e07fe0de4cb4224227fb2ac50d10a5202fbbe3187175",
+    "top_level_keys": [
+      "results"
+    ],
+    "result_count": 1,
+    "accession": "P61764"
+  }
+]
