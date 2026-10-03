@@ -1,0 +1,77 @@
+{
+  "source": "grin_supplements",
+  "created_at": "2026-10-03T22:29:02.041005+00:00",
+  "artifacts": {
+    "myers2023-supplement.pdf": {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/10508039/bin/supplemental_information_8-7-23_final6_ddad104.pdf",
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/10508039/bin/supplemental_information_8-7-23_final6_ddad104.pdf",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_supplements/myers2023-supplement.pdf",
+      "bytes": 1817,
+      "sha256": "6279f654349e52ca455b1c176bd886f5edce522bfb97c8b54a25c0a84847c8ee",
+      "retrieved_at": "2026-10-03T22:29:02.040975+00:00",
+      "license": "Article-specific supplemental reuse terms; source retained, no blanket redistribution permission inferred",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "myers2023-supplementaryFiles.zip": {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10508039/supplementaryFiles",
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10508039/supplementaryFiles",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_supplements/myers2023-supplementaryFiles.zip",
+      "bytes": 781240,
+      "sha256": "273f10302ccb68b2e187bc49159ce188291f900223fa65f07ff4f46005c4fa30",
+      "retrieved_at": "2026-10-03T22:29:32.416799+00:00",
+      "license": "PMC10508039 article-specific supplemental reuse terms",
+      "version": null,
+      "http_status": 200,
+      "content_type": "application/zip",
+      "last_modified": null,
+      "etag": null
+    }
+  },
+  "datasets": {
+    "myers2023_supplement_pages": {
+      "path": "data/processed/harvest/grin_supplements/myers2023_supplement_pages.jsonl.gz",
+      "records": 9,
+      "bytes": 9835,
+      "sha256": "e2542db9cab754868d1e89df25ca295ba298ebc333156051c8df7855df4584c2",
+      "input_paths": [
+        "data/raw/harvest/grin_supplements/myers2023-supplementaryFiles.zip"
+      ],
+      "description": "Per-page pdftotext -layout extraction of supplemental Tables S1–S5 and methods. Native PDF preserved; table interpretation and OCR of graphics are separate review work.",
+      "created_at": "2026-10-03T22:30:05.119897+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete_for_scope",
+  "updated_at": "2026-10-03T22:30:05.120498+00:00",
+  "scope": "Myers 2023 supplemental PDF from Europe PMC supplementaryFiles; other papers supplements not included",
+  "derived_files": [
+    {
+      "path": "data/raw/harvest/grin_supplements/supplemental_information_8-7-23_final6_ddad104.pdf",
+      "bytes": 629251,
+      "sha256": "e5e62338f78e3e97f0bbc75c4ae596018270c9667ae08c397d226698fa7ed7fa",
+      "input_path": "data/raw/harvest/grin_supplements/myers2023-supplementaryFiles.zip"
+    },
+    {
+      "path": "data/raw/harvest/grin_supplements/myers2023-supplement.txt",
+      "bytes": 38728,
+      "sha256": "b6d1e7353bf17da5b954740c32a330bc2fc3c70e78b8feb736f2d6bb263f8db2",
+      "input_path": "data/raw/harvest/grin_supplements/myers2023-supplementaryFiles.zip"
+    }
+  ],
+  "invalid_research_artifacts": {
+    "myers2023-supplement.pdf": "Direct PMC endpoint returned HTML access page, not a PDF; not parsed or used as evidence."
+  },
+  "limitations": [
+    "Layout text is not a semantic table reconstruction. Color, figure labels and embedded images may require manual inspection.",
+    "Supplemental coverage is one selected paper, not all acquired literature."
+  ]
+}

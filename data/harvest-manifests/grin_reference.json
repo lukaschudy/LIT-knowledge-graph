@@ -158,10 +158,62 @@
       "created_at": "2026-10-03T22:27:54.681233+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
+    },
+    "mgi_hmd_humanphenotype": {
+      "path": "data/processed/harvest/grin_reference/mgi_hmd_humanphenotype.jsonl.gz",
+      "records": 2,
+      "bytes": 407,
+      "sha256": "dd1f71800f77cc84a47e849950350fb8a1e7430f736295f121a548d2f81d0fbe",
+      "input_paths": [
+        "data/processed/harvest/mgi/hmd_humanphenotype.jsonl.gz"
+      ],
+      "description": "Exact human gene or ortholog mouse marker identifier slice. Preserve NOT models and multi-gene genotypes; disease-level model lists do not establish a GRIN-variant-specific model or current stock availability.",
+      "created_at": "2026-10-03T22:32:02.824053+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "mgi_mgi_phenotypicallele": {
+      "path": "data/processed/harvest/grin_reference/mgi_mgi_phenotypicallele.jsonl.gz",
+      "records": 43,
+      "bytes": 3662,
+      "sha256": "6f2cbc0d2cde960ded8cd83306d2d359200f1dc12e644bcec38d72f6a5ad4f21",
+      "input_paths": [
+        "data/processed/harvest/mgi/mgi_phenotypicallele.jsonl.gz"
+      ],
+      "description": "Exact human gene or ortholog mouse marker identifier slice. Preserve NOT models and multi-gene genotypes; disease-level model lists do not establish a GRIN-variant-specific model or current stock availability.",
+      "created_at": "2026-10-03T22:32:03.458240+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "mgi_mgi_genepheno": {
+      "path": "data/processed/harvest/grin_reference/mgi_mgi_genepheno.jsonl.gz",
+      "records": 75,
+      "bytes": 2996,
+      "sha256": "9c350f0cc68f1ac7200912351e7b54bbd798f0bee7b9767b9376bd1ef01e7a23",
+      "input_paths": [
+        "data/processed/harvest/mgi/mgi_genepheno.jsonl.gz"
+      ],
+      "description": "Exact human gene or ortholog mouse marker identifier slice. Preserve NOT models and multi-gene genotypes; disease-level model lists do not establish a GRIN-variant-specific model or current stock availability.",
+      "created_at": "2026-10-03T22:32:04.344036+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "mgi_mgi_diseasegenemodel": {
+      "path": "data/processed/harvest/grin_reference/mgi_mgi_diseasegenemodel.jsonl.gz",
+      "records": 15,
+      "bytes": 4423,
+      "sha256": "4df93242e74ec7a82dd387b43c064f8a697e73076cdc97c528c0325bd8501d84",
+      "input_paths": [
+        "data/processed/harvest/mgi/mgi_diseasegenemodel.jsonl.gz"
+      ],
+      "description": "Exact human gene or ortholog mouse marker identifier slice. Preserve NOT models and multi-gene genotypes; disease-level model lists do not establish a GRIN-variant-specific model or current stock availability.",
+      "created_at": "2026-10-03T22:32:04.624702+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
     }
   },
   "status": "complete_for_scope",
-  "updated_at": "2026-10-03T22:27:54.681250+00:00",
+  "updated_at": "2026-10-03T22:32:04.722030+00:00",
   "scope": "Exact gene/protein identifier slices of acquired reference snapshots; full native records retained. Independent curated functional evidence is required for demo inclusion.",
   "gene_symbols": [
     "GRIN2A",
@@ -186,5 +238,18 @@
     "ORPHA:697160",
     "ORPHA:725",
     "ORPHA:98818"
+  ],
+  "mgi_slice_counts": {
+    "hmd_humanphenotype": 2,
+    "mgi_phenotypicallele": 43,
+    "mgi_genepheno": 75,
+    "mgi_geno_diseasedo": 0,
+    "mgi_geno_notdiseasedo": 0,
+    "mgi_diseasegenemodel": 15,
+    "mgi_diseasemousemodel": 0
+  },
+  "mouse_ortholog_ids": [
+    "MGI:95820",
+    "MGI:95821"
   ]
 }

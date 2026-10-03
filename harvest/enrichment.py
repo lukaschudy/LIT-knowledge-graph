@@ -138,14 +138,9 @@ def mgi():
            'MGI_GenePheno.rpt','MGI_Geno_DiseaseDO.rpt','MGI_Geno_NotDiseaseDO.rpt',
            'MGI_DiseaseGeneModel.rpt','MGI_DiseaseMouseModel.rpt']
     for fn in specs:
-        p=fetch('mgi',base+fn,fn)
-        def records(p=p):
-            with open_text(p) as f:
-                for line in f:
-                    if not line.strip() or line.startswith('#'):continue
-                    cols=line.rstrip('\r\n').split('\t')
-                    yield {'native_columns':cols}
-        emit_records('mgi',fn.removesuffix('.rpt').lower(),records(),input_paths=[p],description='Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.')
+        fetch('mgi',base+fn,fn)
+    from harvest.mgi_schema import run as normalize_mgi
+    normalize_mgi()
 
 def ror():
     # Resolve the latest versioned ROR record from Zenodo's official API.

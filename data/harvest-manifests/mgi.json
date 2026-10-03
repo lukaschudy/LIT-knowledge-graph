@@ -145,130 +145,161 @@
       "content_type": "text/plain",
       "last_modified": "Mon, 21 Sep 2026 12:00:31 GMT",
       "etag": "\"de4e64-65bfcff32d635\""
+    },
+    "report-index.html": {
+      "url": "https://www.informatics.jax.org/downloads/reports/index.html",
+      "final_url": "https://www.informatics.jax.org/downloads/reports/index.html",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/mgi/report-index.html",
+      "bytes": 47134,
+      "sha256": "85300b34d0152b3a9397888d8bf646b12d0b2fa94718ef973908eff88123d0a8",
+      "retrieved_at": "2026-10-03T22:31:15.984021+00:00",
+      "license": "MGI provider report-format documentation",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html",
+      "last_modified": null,
+      "etag": null
     }
   },
   "datasets": {
     "hmd_humanphenotype": {
       "path": "data/processed/harvest/mgi/hmd_humanphenotype.jsonl.gz",
       "records": 28880,
-      "bytes": 496911,
-      "sha256": "072e3937ab3382dcca947e54b6701e593d96054fb8e8175b405aa2093c8d6774",
+      "bytes": 902244,
+      "sha256": "78b33db3b79e4babfb10930726c8da3e0cab9e3e33fb6d68d37dd731d4d981b1",
       "input_paths": [
-        "data/raw/harvest/mgi/HMD_HumanPhenotype.rpt"
+        "data/raw/harvest/mgi/HMD_HumanPhenotype.rpt",
+        "data/raw/harvest/mgi/report-index.html"
       ],
-      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
-      "created_at": "2026-10-03T21:51:39.683111+00:00",
+      "description": "Provider-defined named fields plus all original positional columns and source line; embedded comment/header rows excluded. NOT model annotations remain explicit. No human disease/function inference from mouse annotations.",
+      "created_at": "2026-10-03T22:31:16.399184+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     },
     "hom_allorganism": {
       "path": "data/processed/harvest/mgi/hom_allorganism.jsonl.gz",
-      "records": 96201,
-      "bytes": 3752891,
-      "sha256": "b9e7e8c3f4bf9ab5537cd025a532f6e8415b44d2d859d5831296a31a218a2807",
+      "records": 96200,
+      "bytes": 6315340,
+      "sha256": "1920cb0e0251fe27887b5a98bc28781ef0cc78381288c45bad045b3976fa2d14",
       "input_paths": [
-        "data/raw/harvest/mgi/HOM_AllOrganism.rpt"
+        "data/raw/harvest/mgi/HOM_AllOrganism.rpt",
+        "data/raw/harvest/mgi/report-index.html"
       ],
-      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
-      "created_at": "2026-10-03T21:51:40.956928+00:00",
+      "description": "Provider-defined named fields plus all original positional columns and source line; embedded comment/header rows excluded. NOT model annotations remain explicit. No human disease/function inference from mouse annotations.",
+      "created_at": "2026-10-03T22:31:18.361785+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     },
     "mgi_phenotypicallele": {
       "path": "data/processed/harvest/mgi/mgi_phenotypicallele.jsonl.gz",
       "records": 141601,
-      "bytes": 4989172,
-      "sha256": "04dec81330291b88e838f85a04cfe14dba5f8fbead2247efef98b31184620323",
+      "bytes": 9012520,
+      "sha256": "169718470a00b03a99416f3ab25190555f2905e3d365243633371f9dc44ae5f3",
       "input_paths": [
-        "data/raw/harvest/mgi/MGI_PhenotypicAllele.rpt"
+        "data/raw/harvest/mgi/MGI_PhenotypicAllele.rpt",
+        "data/raw/harvest/mgi/report-index.html"
       ],
-      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
-      "created_at": "2026-10-03T21:51:42.641826+00:00",
+      "description": "Provider-defined named fields plus all original positional columns and source line; embedded comment/header rows excluded. NOT model annotations remain explicit. No human disease/function inference from mouse annotations.",
+      "created_at": "2026-10-03T22:31:21.009724+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     },
     "mgi_strain": {
       "path": "data/processed/harvest/mgi/mgi_strain.jsonl.gz",
       "records": 124519,
-      "bytes": 1574727,
-      "sha256": "f216bf2b53cac446054cd41c2292d68c8768192aab54749a60c9615661a7725f",
+      "bytes": 2863699,
+      "sha256": "a483b436b7613151bc5dd07360f5a751825d5e1043626771152969f1a654453d",
       "input_paths": [
-        "data/raw/harvest/mgi/MGI_Strain.rpt"
+        "data/raw/harvest/mgi/MGI_Strain.rpt",
+        "data/raw/harvest/mgi/report-index.html"
       ],
-      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
-      "created_at": "2026-10-03T21:51:43.325069+00:00",
+      "description": "Provider-defined named fields plus all original positional columns and source line; embedded comment/header rows excluded. NOT model annotations remain explicit. No human disease/function inference from mouse annotations.",
+      "created_at": "2026-10-03T22:31:22.147066+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     },
     "mgi_genepheno": {
       "path": "data/processed/harvest/mgi/mgi_genepheno.jsonl.gz",
       "records": 283275,
-      "bytes": 3912490,
-      "sha256": "c0f146cea5bf6d865e717fcd4a6bcc9e65983dbda9a82e8bef9869b7c7cb9995",
+      "bytes": 7102664,
+      "sha256": "10cf74a50b52ee915984a811d07212bf0146c954eb59218ae49baed6f5700800",
       "input_paths": [
-        "data/raw/harvest/mgi/MGI_GenePheno.rpt"
+        "data/raw/harvest/mgi/MGI_GenePheno.rpt",
+        "data/raw/harvest/mgi/report-index.html"
       ],
-      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
-      "created_at": "2026-10-03T21:51:50.384210+00:00",
+      "description": "Provider-defined named fields plus all original positional columns and source line; embedded comment/header rows excluded. NOT model annotations remain explicit. No human disease/function inference from mouse annotations.",
+      "created_at": "2026-10-03T22:31:25.010864+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     },
     "mgi_geno_diseasedo": {
       "path": "data/processed/harvest/mgi/mgi_geno_diseasedo.jsonl.gz",
       "records": 54008,
-      "bytes": 667855,
-      "sha256": "0c4b468ae06bd5531b44793212d4f3704cac2b5a1e4c451ff96b100ac977ac8c",
+      "bytes": 1244461,
+      "sha256": "c42e0e132e8bbd1e1b75b78edc6bfb75f7966a1cd7e8eb4b6dd0bba62b378bd8",
       "input_paths": [
-        "data/raw/harvest/mgi/MGI_Geno_DiseaseDO.rpt"
+        "data/raw/harvest/mgi/MGI_Geno_DiseaseDO.rpt",
+        "data/raw/harvest/mgi/report-index.html"
       ],
-      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
-      "created_at": "2026-10-03T21:51:52.514496+00:00",
+      "description": "Provider-defined named fields plus all original positional columns and source line; embedded comment/header rows excluded. NOT model annotations remain explicit. No human disease/function inference from mouse annotations.",
+      "created_at": "2026-10-03T22:31:25.517631+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     },
     "mgi_geno_notdiseasedo": {
       "path": "data/processed/harvest/mgi/mgi_geno_notdiseasedo.jsonl.gz",
       "records": 1214,
-      "bytes": 18357,
-      "sha256": "d416a59ff615fbb614882fb9029d8a184fff3f3f95aae562e1efaeaae2978ae1",
+      "bytes": 32811,
+      "sha256": "a9dee41edda37b6ab31ac00db08b8df4de0fa3806851ab4aeeffef58223974d4",
       "input_paths": [
-        "data/raw/harvest/mgi/MGI_Geno_NotDiseaseDO.rpt"
+        "data/raw/harvest/mgi/MGI_Geno_NotDiseaseDO.rpt",
+        "data/raw/harvest/mgi/report-index.html"
       ],
-      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
-      "created_at": "2026-10-03T21:51:53.204810+00:00",
+      "description": "Provider-defined named fields plus all original positional columns and source line; embedded comment/header rows excluded. NOT model annotations remain explicit. No human disease/function inference from mouse annotations.",
+      "created_at": "2026-10-03T22:31:25.530749+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     },
     "mgi_diseasegenemodel": {
       "path": "data/processed/harvest/mgi/mgi_diseasegenemodel.jsonl.gz",
       "records": 13915,
-      "bytes": 1961210,
-      "sha256": "741438f5754d2e2f9757d31ad03b9ba64ad157270484cb1b82edefecd610b95a",
+      "bytes": 2500516,
+      "sha256": "cade56cc2ac9b8c70cec3421a1bfb7f6cebb5dba6f0360236aba2ce709b01672",
       "input_paths": [
-        "data/raw/harvest/mgi/MGI_DiseaseGeneModel.rpt"
+        "data/raw/harvest/mgi/MGI_DiseaseGeneModel.rpt",
+        "data/raw/harvest/mgi/report-index.html"
       ],
-      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
-      "created_at": "2026-10-03T21:51:55.894326+00:00",
+      "description": "Provider-defined named fields plus all original positional columns and source line; embedded comment/header rows excluded. NOT model annotations remain explicit. No human disease/function inference from mouse annotations.",
+      "created_at": "2026-10-03T22:31:26.120925+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     },
     "mgi_diseasemousemodel": {
       "path": "data/processed/harvest/mgi/mgi_diseasemousemodel.jsonl.gz",
       "records": 15500,
-      "bytes": 1745113,
-      "sha256": "91356b8c2cb59d63968ba9c02d21f3d13f2e60ad4ab0b2e46c5e78050903dd73",
+      "bytes": 2345484,
+      "sha256": "f4e42db4229520a602e3f9ec97575f1effb44dc419a1a3c4b380857891cccb61",
       "input_paths": [
-        "data/raw/harvest/mgi/MGI_DiseaseMouseModel.rpt"
+        "data/raw/harvest/mgi/MGI_DiseaseMouseModel.rpt",
+        "data/raw/harvest/mgi/report-index.html"
       ],
-      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
-      "created_at": "2026-10-03T21:51:59.094519+00:00",
+      "description": "Provider-defined named fields plus all original positional columns and source line; embedded comment/header rows excluded. NOT model annotations remain explicit. No human disease/function inference from mouse annotations.",
+      "created_at": "2026-10-03T22:31:26.673965+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     }
   },
-  "status": "complete",
-  "updated_at": "2026-10-03T21:52:09.467190+00:00",
+  "status": "complete_for_scope",
+  "updated_at": "2026-10-03T22:31:26.674260+00:00",
   "rights": "CC BY 4.0 for data and annotations",
   "coverage": "Complete official orthology, human phenotype, allele, strain, gene phenotype and disease-model reports. Only positional native report columns emitted; semantic schemas not verified.",
-  "limitations": "Current provider release. Exact retrieval timestamp and SHA-256 are in each artifact record. MGI report rows retain positional native columns only; semantic labels were not assumed."
+  "limitations": [
+    "MGI reports include non-rare conditions and multiple organisms where specified.",
+    "Mouse gene-level models and available stocks do not establish a human variant-specific phenotype or therapeutic effect.",
+    "Trailing empty columns are preserved in native_columns. Disease-only rows without allele pairs do not assert availability of a mouse model."
+  ],
+  "schema_reference": "https://www.informatics.jax.org/downloads/reports/index.html",
+  "scope": "Nine acquired MGI reports, with native columns and provider-defined semantic field names"
 }
