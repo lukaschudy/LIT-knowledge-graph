@@ -7751,19 +7751,19 @@
     "rare_disease_citations": {
       "path": "data/processed/harvest/pubmed/rare_disease_citations.jsonl.gz",
       "records": 54131,
-      "bytes": 199942605,
-      "sha256": "5e3aa7742e482787b1fd41f2093918a86d8a9e0d5a54b14911f4cf7677311241",
+      "bytes": 188332694,
+      "sha256": "3344acf950fb69c26e950498a51ac872fe220f2a8afdd40df7c4d41c5551591d",
       "input_paths": [
         "data/raw/harvest/pubmed"
       ],
       "description": "PubMed XML normalized from complete cached EFetch files for query: (\"Rare Diseases\"[MeSH Terms] OR rare disease*[Title/Abstract] OR orphan disease*[Title/Abstract]).",
-      "created_at": "2026-10-03T22:09:30.658667+00:00",
+      "created_at": "2026-10-03T22:19:20.410930+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     }
   },
   "status": "complete",
-  "updated_at": "2026-10-03T22:09:30.665837+00:00",
+  "updated_at": "2026-10-03T22:21:24.272812+00:00",
   "query": "(\"Rare Diseases\"[MeSH Terms] OR rare disease*[Title/Abstract] OR orphan disease*[Title/Abstract])",
   "coverage": {
     "query_partition_requests": 86,
@@ -8466,5 +8466,9 @@
     ],
     "partition_count_mismatches": [],
     "limitation": "Broad generic rare/orphan-disease query; disease-name-specific and phenotype-only studies can be missed."
-  }
+  },
+  "quality_notes": [
+    "Parser audit on 2026-10-03 found recursive ArticleId extraction was importing PMCID/PMID identifiers from ReferenceList citations. Extraction is now restricted to PubmedData/ArticleIdList; PMID is scoped to the primary MedlineCitation (or BookDocument for book articles). Both broad and focused datasets were rebuilt from cached XML. Example PMID 8642401 fell from 59 nested identifiers to its actual article PMID, PMCID, and DOI."
+  ],
+  "parser_version": "harvest-v1-primary-article-identifiers"
 }

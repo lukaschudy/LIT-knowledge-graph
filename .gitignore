@@ -7,3 +7,8 @@ data/raw/
 data/processed/
 *.tmp
 
+data/*.sqlite
+data/*.sqlite-*
+build/
+dist/
+*.egg-info/

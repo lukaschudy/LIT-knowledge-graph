@@ -1,0 +1,11 @@
+Asset: connected-biology.png
+Created with the built-in image_gen tool, 2026-10-03.
+Purpose: Conceptual editorial illustration, not biological evidence or a microscopy image.
+Prompt:
+Use case: stylized-concept.
+Asset type: original editorial illustration for Atlas, a rare disease research website, displayed as the right half of a restrained split hero.
+Primary request: a beautiful conceptual biological network, delicate branching cellular structures rendered as an archival scientific art plate. Two or three translucent pale green cell bodies, with richly detailed, very fine moss-green branching filaments reaching between them. A meaningful feeling of distinct pieces of biology becoming connected. Organic, quiet, sophisticated.
+Style: tactile botanical/scientific engraving meets contemporary editorial art, fine graphite-like stippling and etched linework, very subtle translucency, paper texture. Not a literal medical image or scientific evidence.
+Composition: landscape 4:3, asymmetrical cellular forms across the field, some fine branches elegantly cropped by edges, generous quiet ivory space around forms. A striking close-up rather than many tiny scattered icons. Flat print surface, no drop shadows.
+Palette: warm ivory paper, deep forest and sage green, a tiny restrained muted ochre accent. No vivid neon.
+Constraints: no text, no labels, no logos, no UI, no cards, no rounded frames, no diagrams with arrows, no DNA helix, no hands, no stock lab photo, no glows, no shiny 3D spheres. Image goes edge to edge.

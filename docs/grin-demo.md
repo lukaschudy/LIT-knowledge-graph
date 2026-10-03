@@ -28,14 +28,14 @@ python3 -m harvest.grin_bundle
 python3 -m harvest.grin_brief
 python3 -m unittest tests_harvest.test_grin_cluster tests_harvest.test_grin_bundle
 python3 -m atlas ingest data/curated/grin_atlas_bundle.json --db data/grin-demo.sqlite
-python3 -m atlas serve --db data/grin-demo.sqlite --port 8766
+python3 -m atlas serve --db data/grin-demo.sqlite --port 18766
 ```
 
 Use `--replace` only when intentionally refreshing this demo database. Restart its server after ingesting a changed bundle. The default/synthetic demo database is separate.
 
 ## Browser walkthrough
 
-1. Open <http://127.0.0.1:8766> and search **GRIN2B**.
+1. Open <http://127.0.0.1:18766> and search **GRIN2B**.
 2. Select **GRIN2B-related neurodevelopmental disorder — selected Likely LoF variants**.
 3. Inspect the GRIN2A connection and select a biological relationship to see primary source links, exact locators and measurements.
 4. Check that provisional and unresolved cases say **Needs review**, while the opposing-function cohort says **Not supported** for this particular route.

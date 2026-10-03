@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lit-rare-disease-atlas"
+version = "0.1.0"
+description = "Evidence-first knowledge graph skeleton for shared rare-disease research"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.setuptools.packages.find]
+include = ["atlas*"]
+
+[tool.setuptools.package-data]
+atlas = ["web/*.html", "web/*.js", "web/*.css", "web/fonts/*.woff2", "web/fonts/*LICENSE.txt", "web/images/*.png", "web/images/*.txt"]

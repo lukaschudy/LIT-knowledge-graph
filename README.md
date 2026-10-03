@@ -1,5 +1,8 @@
 # LIT rare-disease knowledge graph
 
+> **Runnable graph skeleton:** See [ATLAS.md](ATLAS.md) for the local explorer, schema, ingestion boundary, commands, tests and research-backed architecture. The bundled demo is explicitly synthetic.
+
+
 Research and extraction planning for the **AI Atlas for the World’s Rare Diseases** challenge.
 
 The original six-page PDF is [`Knowledge graph`](Knowledge%20graph) (its filename has no extension). Its text is preserved in [`data/source/challenge-brief.txt`](data/source/challenge-brief.txt).
@@ -10,8 +13,12 @@ The original six-page PDF is [`Knowledge graph`](Knowledge%20graph) (its filenam
 - [Source-by-source extraction guide](docs/source-extraction-guide.md)
 - [Additional sources and ingestion priorities](docs/additional-sources.md)
 - [Graph design and implementation sequence](docs/ingestion-plan.md)
+- [GRIN cluster, demo and evaluation plan](docs/grin-cluster-plan.md)
+- [Frontend strategy](docs/frontend-strategy.md)
+- [Proposed recommendation loops and model architecture](docs/architecture/recommendation-loops.md)
+- [Interactive architecture comparison](docs/visualizations/research-decision-loops.html) (open in a browser)
 
-This repository documents how to acquire and model the sources. It does not yet contain a populated knowledge graph or production ingestion connectors. Access and reuse conditions vary by provider; evidence and unresolved dependencies are recorded per source.
+This repository documents how to acquire and model the sources. The runnable skeleton includes a synthetic acceptance graph and an offline HPOA converter; it does not yet contain a populated biomedical graph or production ingestion connectors. Access and reuse conditions vary by provider; evidence and unresolved dependencies are recorded per source.
 
 ## Reproduce the PDF extraction
 

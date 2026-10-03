@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Atlas — research connections</title>
+  <link rel="preload" href="/fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a href="#workspace" class="skip-link">Skip to research</a>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="brand" href="/" aria-label="Atlas home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="brand-name">atlas<span class="brand-period">.</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <button type="button" data-view="explore" aria-current="page">Explore</button>
+        <button type="button" data-view="assets">Research assets</button>
+        <button type="button" data-view="sources">Sources</button>
+      </nav>
+      <section class="search-section" aria-label="Search the atlas">
+        <form class="search-form" id="search-form" autocomplete="off">
+          <span class="search-icon" aria-hidden="true"></span>
+          <label class="sr-only" for="search-input">Search diseases, genes, phenotypes, or synonyms</label>
+          <input id="search-input" type="search" placeholder="Search the atlas" aria-autocomplete="list" aria-controls="search-results" aria-expanded="false">
+          <button class="search-submit" type="submit" aria-label="Search atlas">↵</button>
+          <div class="search-results" id="search-results" role="listbox" aria-label="Search results" hidden></div>
+        </form>
+      </section>
+      <button class="method-button" type="button" id="method-button">Guide</button>
+    </div>
+  </header>
+  <div class="app-shell">
+    <div class="demo-ribbon" id="demo-ribbon" hidden><span class="demo-ribbon__dot" aria-hidden="true"></span><strong>Demonstration</strong><span id="dataset-title">Fictional data for exploring the interface.</span></div>
+    <main>
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+      <section id="workspace" class="workspace" aria-live="polite" tabindex="-1"><div class="loading-state"><span class="spinner" aria-hidden="true"></span>Opening the atlas…</div></section>
+    </main>
+    <footer class="footer"><span>Atlas <span class="footer-divider">/</span> Rare disease research</span><span id="footer-dataset">Local research collection</span></footer>
+  </div>
+  <dialog id="method-dialog" class="method-dialog" aria-labelledby="method-title">
+    <div class="dialog-head"><div><p class="eyebrow">Using Atlas</p><h2 id="method-title">Follow the evidence.</h2></div><button class="icon-button" type="button" id="close-method" aria-label="Close">×</button></div>
+    <p class="dialog-lede">A connection is a research lead. Inspect the biological context and the underlying sources before deciding what deserves a closer look.</p>
+    <div class="method-grid"><div><span class="method-index">01</span><h3>Compare</h3><p>Related diseases are ordered for review. The order is not a probability of success.</p></div><div><span class="method-index">02</span><h3>Inspect</h3><p>Select a relationship to see its exact supporting evidence, context, and any conflicting findings.</p></div><div><span class="method-index">03</span><h3>Connect</h3><p>Find a research asset, its maintainer, and the questions to resolve before reuse.</p></div></div>
+    <p class="dialog-caution">Research leads, not diagnoses or treatment recommendations. Machine-checked evidence is not the same as expert scientific review.</p>
+  </dialog>
+  <dialog id="evidence-dialog" class="evidence-dialog" aria-labelledby="evidence-title">
+    <div class="dialog-head"><div><p class="eyebrow">Evidence record</p><h2 id="evidence-title">Claim details</h2></div><button class="icon-button" type="button" id="close-evidence" aria-label="Close evidence">×</button></div>
+    <div id="evidence-content"></div>
+  </dialog>
+</body>
+</html>

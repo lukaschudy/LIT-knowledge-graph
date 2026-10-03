@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/atlas.schema.json",
+  "title": "Rare-disease atlas bundle",
+  "type": "object",
+  "required": ["schema_version", "dataset", "nodes", "sources", "claims", "evidence", "coverage"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "dataset": {
+      "type": "object",
+      "required": ["id", "title", "description", "synthetic", "created_at"],
+      "properties": {
+        "id": {"$ref": "#/$defs/nonempty"},
+        "title": {"$ref": "#/$defs/nonempty"},
+        "description": {"$ref": "#/$defs/nonempty"},
+        "synthetic": {"type": "boolean"},
+        "created_at": {"$ref": "#/$defs/date"}
+      },
+      "additionalProperties": false
+    },
+    "nodes": {"type": "array", "items": {"$ref": "#/$defs/node"}},
+    "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}},
+    "claims": {"type": "array", "items": {"$ref": "#/$defs/claim"}},
+    "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}},
+    "coverage": {"type": "array", "items": {"$ref": "#/$defs/coverage"}}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nonempty": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "date": {"type": "string", "format": "date"},
+    "node": {
+      "type": "object",
+      "required": ["id", "type", "label", "aliases", "properties"],
+      "properties": {
+        "id": {"$ref": "#/$defs/nonempty"},
+        "type": {"enum": ["Disease", "Gene", "Variant", "Mechanism", "Phenotype", "Organization", "Person", "Study", "Asset", "Publication", "Funding"]},
+        "label": {"$ref": "#/$defs/nonempty"},
+        "aliases": {"type": "array", "items": {"$ref": "#/$defs/nonempty"}},
+        "properties": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["id", "title", "url", "published_at", "retrieved_at", "kind", "synthetic", "license"],
+      "properties": {
+        "id": {"$ref": "#/$defs/nonempty"},
+        "title": {"$ref": "#/$defs/nonempty"},
+        "url": {"type": "string", "format": "uri", "pattern": "^https?://[^/\\s]+"},
+        "published_at": {"anyOf": [{"$ref": "#/$defs/date"}, {"type": "null"}]},
+        "retrieved_at": {"$ref": "#/$defs/date"},
+        "kind": {"enum": ["database", "paper", "registry", "organization", "fixture"]},
+        "synthetic": {"type": "boolean"},
+        "license": {"$ref": "#/$defs/nonempty"}
+      },
+      "additionalProperties": false
+    },
+    "claim": {
+      "type": "object",
+      "required": ["id", "subject", "predicate", "object", "assertion_type", "context", "extraction_confidence"],
+      "properties": {
+        "id": {"$ref": "#/$defs/nonempty"},
+        "subject": {"$ref": "#/$defs/nonempty"},
+        "predicate": {"enum": ["HAS_VARIANT", "AFFECTS", "HAS_EFFECT", "INVOLVES", "HAS_PHENOTYPE", "REPRESENTS", "MAINTAINS", "RELEVANT_TO", "STUDIES", "AFFILIATED_WITH", "USED_IN", "AUTHORED", "FUNDS", "CONTRAINDICATED_FOR", "IS_A", "SAME_AS"]},
+        "object": {"$ref": "#/$defs/nonempty"},
+        "assertion_type": {"enum": ["reported", "inferred"]},
+        "context": {
+          "type": "object",
+          "properties": {
+            "effect": {"enum": ["loss_of_function", "gain_of_function", "unknown"]},
+            "species": {"type": "string"},
+            "tissue": {"type": "string"},
+            "stage": {"type": "string"},
+            "negated": {"type": "boolean"},
+            "onset": {"type": "string"},
+            "frequency": {"type": "string"},
+            "evidence_code": {"type": "string"}
+          },
+          "additionalProperties": true
+        },
+        "extraction_confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["id", "claim_id", "source_id", "locator", "excerpt", "stance", "review_status"],
+      "properties": {
+        "id": {"$ref": "#/$defs/nonempty"},
+        "claim_id": {"$ref": "#/$defs/nonempty"},
+        "source_id": {"$ref": "#/$defs/nonempty"},
+        "locator": {"$ref": "#/$defs/nonempty"},
+        "excerpt": {"$ref": "#/$defs/nonempty"},
+        "stance": {"enum": ["supports", "contradicts"]},
+        "review_status": {"enum": ["unreviewed", "machine_checked", "human_reviewed"]}
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["id", "source_id", "entity_id", "scope", "status", "searched_at", "notes"],
+      "properties": {
+        "id": {"$ref": "#/$defs/nonempty"},
+        "source_id": {"$ref": "#/$defs/nonempty"},
+        "entity_id": {"$ref": "#/$defs/nonempty"},
+        "scope": {"$ref": "#/$defs/nonempty"},
+        "status": {"enum": ["searched", "not_searched", "failed"]},
+        "searched_at": {"anyOf": [{"$ref": "#/$defs/date"}, {"type": "null"}]},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

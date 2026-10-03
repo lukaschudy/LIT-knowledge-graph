@@ -3223,661 +3223,316 @@
     "grin_gene_citations": {
       "path": "data/processed/harvest/grin_literature/grin_gene_citations.jsonl.gz",
       "records": 7775,
-      "bytes": 43817562,
-      "sha256": "f0990e4cfa6fd8950dd600ef497d4163a801badb4a9835127f3f96f9205479bd",
+      "bytes": 40754426,
+      "sha256": "c4f85df6c52ec3401c0b4ee1f1e7f7f526f17ba1c38f207999b85fbff5ac142f",
       "input_paths": [
         "data/raw/harvest/grin_literature"
       ],
-      "description": "PubMed query: (GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]); publication years 1900-2026.",
-      "created_at": "2026-10-03T21:59:57.321963+00:00",
+      "description": "PubMed XML normalized from complete cached EFetch files for query: (GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]).",
+      "created_at": "2026-10-03T22:18:23.051427+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     }
   },
   "status": "complete",
-  "updated_at": "2026-10-03T21:59:57.323714+00:00",
+  "updated_at": "2026-10-03T22:21:24.313880+00:00",
   "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract])",
   "coverage": {
-    "start_year": 1900,
-    "end_year": 2026,
-    "matching_unique_pmids": 7775,
+    "query_partition_requests": 35,
+    "query_partition_occurrences": 8899,
+    "unique_searched_pmids": 7775,
+    "unique_fetched_pmids": 7775,
+    "normalized_records": 7775,
+    "missing_fetched_pmids": [],
+    "unexpected_fetched_pmids": [],
+    "exact_id_set_match": true,
     "partitions": [
       {
-        "partition": "1900",
-        "count": 0,
-        "ids_returned": 0
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"1992\"[Date - Publication])",
+        "reported_count": 2,
+        "ids_returned": 2,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"1993\"[Date - Publication])",
+        "reported_count": 14,
+        "ids_returned": 14,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"1994\"[Date - Publication])",
+        "reported_count": 28,
+        "ids_returned": 28,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"1995\"[Date - Publication])",
+        "reported_count": 38,
+        "ids_returned": 38,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"1996\"[Date - Publication])",
+        "reported_count": 56,
+        "ids_returned": 56,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"1997\"[Date - Publication])",
+        "reported_count": 77,
+        "ids_returned": 77,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"1998\"[Date - Publication])",
+        "reported_count": 98,
+        "ids_returned": 98,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"1999\"[Date - Publication])",
+        "reported_count": 104,
+        "ids_returned": 104,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2000\"[Date - Publication])",
+        "reported_count": 129,
+        "ids_returned": 129,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2001\"[Date - Publication])",
+        "reported_count": 127,
+        "ids_returned": 127,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2002\"[Date - Publication])",
+        "reported_count": 143,
+        "ids_returned": 143,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2003\"[Date - Publication])",
+        "reported_count": 186,
+        "ids_returned": 186,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2004\"[Date - Publication])",
+        "reported_count": 188,
+        "ids_returned": 188,
+        "page_offsets": [
+          0
+        ]
       },
       {
-        "partition": "1901",
-        "count": 0,
-        "ids_returned": 0
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2005\"[Date - Publication])",
+        "reported_count": 229,
+        "ids_returned": 229,
+        "page_offsets": [
+          0
+        ]
       },
       {
-        "partition": "1902",
-        "count": 0,
-        "ids_returned": 0
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2006\"[Date - Publication])",
+        "reported_count": 220,
+        "ids_returned": 220,
+        "page_offsets": [
+          0
+        ]
       },
       {
-        "partition": "1903",
-        "count": 0,
-        "ids_returned": 0
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2007\"[Date - Publication])",
+        "reported_count": 260,
+        "ids_returned": 260,
+        "page_offsets": [
+          0
+        ]
       },
       {
-        "partition": "1904",
-        "count": 0,
-        "ids_returned": 0
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2008\"[Date - Publication])",
+        "reported_count": 274,
+        "ids_returned": 274,
+        "page_offsets": [
+          0
+        ]
       },
       {
-        "partition": "1905",
-        "count": 0,
-        "ids_returned": 0
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2009\"[Date - Publication])",
+        "reported_count": 284,
+        "ids_returned": 284,
+        "page_offsets": [
+          0
+        ]
       },
       {
-        "partition": "1906",
-        "count": 0,
-        "ids_returned": 0
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2010\"[Date - Publication])",
+        "reported_count": 302,
+        "ids_returned": 302,
+        "page_offsets": [
+          0
+        ]
       },
       {
-        "partition": "1907",
-        "count": 0,
-        "ids_returned": 0
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2011\"[Date - Publication])",
+        "reported_count": 342,
+        "ids_returned": 342,
+        "page_offsets": [
+          0
+        ]
       },
       {
-        "partition": "1908",
-        "count": 0,
-        "ids_returned": 0
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2012\"[Date - Publication])",
+        "reported_count": 376,
+        "ids_returned": 376,
+        "page_offsets": [
+          0
+        ]
       },
       {
-        "partition": "1909",
-        "count": 0,
-        "ids_returned": 0
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2013\"[Date - Publication])",
+        "reported_count": 374,
+        "ids_returned": 374,
+        "page_offsets": [
+          0
+        ]
       },
       {
-        "partition": "1910",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1911",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1912",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1913",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1914",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1915",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1916",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1917",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1918",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1919",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1920",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1921",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1922",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1923",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1924",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1925",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1926",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1927",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1928",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1929",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1930",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1931",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1932",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1933",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1934",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1935",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1936",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1937",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1938",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1939",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1940",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1941",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1942",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1943",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1944",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1945",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1946",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1947",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1948",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1949",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1950",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1951",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1952",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1953",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1954",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1955",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1956",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1957",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1958",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1959",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1960",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1961",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1962",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1963",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1964",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1965",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1966",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1967",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1968",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1969",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1970",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1971",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1972",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1973",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1974",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1975",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1976",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1977",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1978",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1979",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1980",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1981",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1982",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1983",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1984",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1985",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1986",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1987",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1988",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1989",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1990",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1991",
-        "count": 0,
-        "ids_returned": 0
-      },
-      {
-        "partition": "1992",
-        "count": 2,
-        "ids_returned": 2
-      },
-      {
-        "partition": "1993",
-        "count": 14,
-        "ids_returned": 14
-      },
-      {
-        "partition": "1994",
-        "count": 28,
-        "ids_returned": 28
-      },
-      {
-        "partition": "1995",
-        "count": 38,
-        "ids_returned": 38
-      },
-      {
-        "partition": "1996",
-        "count": 56,
-        "ids_returned": 56
-      },
-      {
-        "partition": "1997",
-        "count": 77,
-        "ids_returned": 77
-      },
-      {
-        "partition": "1998",
-        "count": 98,
-        "ids_returned": 98
-      },
-      {
-        "partition": "1999",
-        "count": 104,
-        "ids_returned": 104
-      },
-      {
-        "partition": "2000",
-        "count": 129,
-        "ids_returned": 129
-      },
-      {
-        "partition": "2001",
-        "count": 127,
-        "ids_returned": 127
-      },
-      {
-        "partition": "2002",
-        "count": 143,
-        "ids_returned": 143
-      },
-      {
-        "partition": "2003",
-        "count": 186,
-        "ids_returned": 186
-      },
-      {
-        "partition": "2004",
-        "count": 188,
-        "ids_returned": 188
-      },
-      {
-        "partition": "2005",
-        "count": 229,
-        "ids_returned": 229
-      },
-      {
-        "partition": "2006",
-        "count": 220,
-        "ids_returned": 220
-      },
-      {
-        "partition": "2007",
-        "count": 260,
-        "ids_returned": 260
-      },
-      {
-        "partition": "2008",
-        "count": 274,
-        "ids_returned": 274
-      },
-      {
-        "partition": "2009",
-        "count": 284,
-        "ids_returned": 284
-      },
-      {
-        "partition": "2010",
-        "count": 302,
-        "ids_returned": 302
-      },
-      {
-        "partition": "2011",
-        "count": 342,
-        "ids_returned": 342
-      },
-      {
-        "partition": "2012",
-        "count": 376,
-        "ids_returned": 376
-      },
-      {
-        "partition": "2013",
-        "count": 374,
-        "ids_returned": 374
-      },
-      {
-        "partition": "2014",
-        "count": 399,
-        "ids_returned": 399
-      },
-      {
-        "partition": "2015",
-        "count": 434,
-        "ids_returned": 434
-      },
-      {
-        "partition": "2016",
-        "count": 442,
-        "ids_returned": 442
-      },
-      {
-        "partition": "2017",
-        "count": 419,
-        "ids_returned": 419
-      },
-      {
-        "partition": "2018",
-        "count": 414,
-        "ids_returned": 414
-      },
-      {
-        "partition": "2019",
-        "count": 375,
-        "ids_returned": 375
-      },
-      {
-        "partition": "2020",
-        "count": 375,
-        "ids_returned": 375
-      },
-      {
-        "partition": "2021",
-        "count": 442,
-        "ids_returned": 442
-      },
-      {
-        "partition": "2022",
-        "count": 368,
-        "ids_returned": 368
-      },
-      {
-        "partition": "2023",
-        "count": 333,
-        "ids_returned": 333
-      },
-      {
-        "partition": "2024",
-        "count": 363,
-        "ids_returned": 363
-      },
-      {
-        "partition": "2025",
-        "count": 378,
-        "ids_returned": 378
-      },
-      {
-        "partition": "2026",
-        "count": 306,
-        "ids_returned": 306
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2014\"[Date - Publication])",
+        "reported_count": 399,
+        "ids_returned": 399,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2015\"[Date - Publication])",
+        "reported_count": 434,
+        "ids_returned": 434,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2016\"[Date - Publication])",
+        "reported_count": 442,
+        "ids_returned": 442,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2017\"[Date - Publication])",
+        "reported_count": 419,
+        "ids_returned": 419,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2018\"[Date - Publication])",
+        "reported_count": 414,
+        "ids_returned": 414,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2019\"[Date - Publication])",
+        "reported_count": 375,
+        "ids_returned": 375,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2020\"[Date - Publication])",
+        "reported_count": 375,
+        "ids_returned": 375,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2021\"[Date - Publication])",
+        "reported_count": 442,
+        "ids_returned": 442,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2022\"[Date - Publication])",
+        "reported_count": 368,
+        "ids_returned": 368,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2023\"[Date - Publication])",
+        "reported_count": 333,
+        "ids_returned": 333,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2024\"[Date - Publication])",
+        "reported_count": 363,
+        "ids_returned": 363,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2025\"[Date - Publication])",
+        "reported_count": 378,
+        "ids_returned": 378,
+        "page_offsets": [
+          0
+        ]
+      },
+      {
+        "query": "(GRIN2A[Title/Abstract] OR GRIN2B[Title/Abstract] OR GluN2A[Title/Abstract] OR GluN2B[Title/Abstract] OR NR2A[Title/Abstract] OR NR2B[Title/Abstract]) AND (\"2026\"[Date - Publication])",
+        "reported_count": 306,
+        "ids_returned": 306,
+        "page_offsets": [
+          0
+        ]
       }
     ],
-    "limitation": "Search retrieves title/abstract/index matches; papers discussing relevant concepts without these terms can be missed."
-  }
+    "partition_count_mismatches": [],
+    "limitation": "Broad generic rare/orphan-disease query; disease-name-specific and phenotype-only studies can be missed."
+  },
+  "quality_notes": [
+    "Parser audit on 2026-10-03 found recursive ArticleId extraction was importing PMCID/PMID identifiers from ReferenceList citations. Extraction is now restricted to PubmedData/ArticleIdList; PMID is scoped to the primary MedlineCitation (or BookDocument for book articles). Both broad and focused datasets were rebuilt from cached XML. Example PMID 8642401 fell from 59 nested identifiers to its actual article PMID, PMCID, and DOI."
+  ],
+  "parser_version": "harvest-v1-primary-article-identifiers"
 }

@@ -255,10 +255,77 @@ def harvest_open_targets(batch_size=32, delay=.08):
     core.update_manifest(source,status='partial',provider_release=version,coverage={'rare_source_rows':7200,'mondo_diseases_queried':len(ids),'diseases_returned':len(diseases),'diseases_not_found':absent,'target_associations_captured':len(associations),'diseases_with_over_100_target_associations':truncated,'drug_candidates_captured':len(drugs),'diseases_with_truncated_drug_candidates':drug_truncated,'batches':requests_log,'failed_batches':errors,'limitation':'Partial targeted slice of Open Targets: aggregate associated-target top 100 per disease only (provider full counts preserved), plus candidate drugs exposed by the API. Source-native evidence records are harvested separately for GRIN2A/GRIN2B. Disease coverage depends on MONDO xref links from RareSource OMIM/Orphanet identifiers.'},rights='Open Targets Platform data; provider documentation describes CC BY 4.0; review current release terms')
     return diseases
 
+def _association_page_query(ids,index,page_size=100):
+    fields='''id name associatedTargets(page:{index:%d,size:%d}) { count rows { score datatypeScores { id score } datasourceScores { id score } target { id approvedSymbol } } }'''%(index,page_size)
+    aliases=[f'd{i}: disease(efoId:"{ident}") {{ {fields} }}' for i,ident in enumerate(ids)]
+    return 'query rareDiseaseAssociationPage { '+' '.join(aliases)+' }'
+
+def harvest_open_targets_association_pages(batch_size=32,page_size=100,delay=.08):
+    """Fetch every remaining aggregate association page for all resolved rare diseases."""
+    source='open_targets'; disease_rows=list(core.read_records(core.PROCESSED/source/'rare_diseases.jsonl.gz'))
+    by_id={r['id']:r for r in disease_rows if r.get('id')}
+    work=[]
+    for ident,row in by_id.items():
+        count=int((row.get('associatedTargets') or {}).get('count') or 0)
+        for index in range(1,(count+page_size-1)//page_size): work.append((index,ident,count))
+    pages=defaultdict(list)
+    for index,ident,count in work: pages[index].append((ident,count))
+    failed=[];completed=[];received=0;total_calls=sum((len(v)+batch_size-1)//batch_size for v in pages.values())
+    call_no=0
+    for index in sorted(pages):
+        eligible=pages[index]
+        for offset in range(0,len(eligible),batch_size):
+            group=eligible[offset:offset+batch_size]; ids=[x[0] for x in group]; query=_association_page_query(ids,index,page_size)
+            filename=f'target-associations-page-{index:03d}-batch-{offset//batch_size:04d}.json'
+            call_no+=1; body={'query':query}
+            try:
+                p=core.download(source,OT,filename,license_name='Open Targets Platform data; CC BY 4.0, confirm release terms',version='current GraphQL API (release ID not exposed)',method='POST',json_body=body)
+                payload=_json(p)
+                if payload.get('errors'): raise RuntimeError(str(payload['errors'][:1]))
+                data=payload.get('data') or {}; page_counts={}
+                for i,(ident,total_count) in enumerate(group):
+                    item=data.get(f'd{i}')
+                    if not item: failed.append({'disease_id':ident,'page_index':index,'expected':min(page_size,max(0,total_count-index*page_size)),'error':'No disease returned'});continue
+                    result=item.get('associatedTargets') or {}; rows=result.get('rows') or []
+                    expected=min(page_size,max(0,total_count-index*page_size))
+                    page_counts[ident]={'expected':expected,'received':len(rows),'reported_total':result.get('count')}
+                    received+=len(rows)
+                    if len(rows)!=expected or int(result.get('count') or -1)!=total_count:
+                        failed.append({'disease_id':ident,'page_index':index,**page_counts[ident]})
+                completed.append({'page_index':index,'offset':offset,'disease_count':len(group),'path':str(p.relative_to(core.ROOT)),'records_received':sum(v['received'] for v in page_counts.values()),'record_counts':page_counts})
+            except Exception as e:
+                failed.append({'page_index':index,'offset':offset,'disease_ids':ids,'error':f'{type(e).__name__}: {e}'})
+            if call_no%50==0: print(json.dumps({'event':'open_targets_associations_progress','calls':call_no,'total_calls':total_calls,'records_received':received,'failed_pages':len(failed)}),flush=True)
+            time.sleep(delay)
+    # Rebuild the flattened association dataset from the original first pages and
+    # every successfully downloaded continuation page, streaming into gzip JSONL.
+    def all_associations():
+        for row in core.read_records(core.PROCESSED/source/'target_associations.jsonl.gz'):
+            row.setdefault('page_index',0); yield row
+        for call in completed:
+            p=core.ROOT/call['path']; payload=_json(p); data=payload.get('data') or {}
+            # group indices match the serialized alias order for this page/call.
+            group=pages[call['page_index']][call['offset']:call['offset']+batch_size]
+            for i,(ident,total_count) in enumerate(group):
+                disease=by_id[ident]; sub=data.get(f'd{i}')
+                if not sub: continue
+                result=sub.get('associatedTargets') or {}
+                for association in result.get('rows') or []:
+                    yield {'disease_id':ident,'disease_name':disease.get('name'),'target_association':association,'reported_association_count':total_count,'page_index':call['page_index']}
+    count=sum(int((row.get('associatedTargets') or {}).get('count') or 0) for row in disease_rows)
+    first_page_count=sum(len((row.get('associatedTargets') or {}).get('rows') or []) for row in disease_rows)
+    expected_continuation=count-first_page_count
+    continuation_complete=not failed and received==expected_continuation
+    out=core.emit_records(source,'target_associations',all_associations(),input_paths=[core.PROCESSED/source/'rare_diseases.jsonl.gz',core.RAW/source],description='All Open Targets aggregate target-disease association pages for every returned MONDO disease in the RareSource-mapped query set. Each association retains provider overall score, datatype scores, datasource scores, target ID/symbol, disease ID/name, reported count and page index.')
+    manifest=core.manifest(source); coverage=manifest.get('coverage') or {}
+    coverage.update({'target_associations_expected_total':count,'target_associations_first_page_records':first_page_count,'target_association_continuation_expected_records':expected_continuation,'target_association_continuation_records':received,'target_association_continuation_calls':len(completed),'target_association_expected_calls':total_calls,'target_association_failed_pages':failed,'target_association_page_size':page_size,'target_association_coverage_complete':continuation_complete,'resolved_disease_ids':len(by_id),'mapped_mondo_ids_not_returned':len(coverage.get('diseases_not_found') or []),'limitation':'All aggregate association pages are acquired for returned disease IDs only. The 1,342 MONDO IDs in the input crosswalk that did not resolve remain unknown for Open Targets; full source-native evidence is separately complete only for the focused GRIN2A/GRIN2B disease identifiers.'})
+    core.update_manifest(source,status='partial',coverage=coverage,association_dataset={'path':str(out.relative_to(core.ROOT)),'records_expected':count,'records_emitted':first_page_count+received,'first_page_records':first_page_count,'continuation_records':received,'failed_pages':failed,'complete_for_returned_diseases':continuation_complete})
+    return {'expected':count,'continuation_records':received,'failed_pages':failed,'calls':len(completed),'expected_calls':total_calls}
+
 def main():
     import argparse
-    ap=argparse.ArgumentParser();ap.add_argument('source',choices=['grants_gov','open_targets','grin_evidence','all']);args=ap.parse_args()
-    jobs={'grants_gov':harvest_grants_gov,'open_targets':harvest_open_targets,'grin_evidence':harvest_grin_evidence}
+    ap=argparse.ArgumentParser();ap.add_argument('source',choices=['grants_gov','open_targets','open_targets_association_pages','grin_evidence','all']);args=ap.parse_args()
+    jobs={'grants_gov':harvest_grants_gov,'open_targets':harvest_open_targets,'open_targets_association_pages':harvest_open_targets_association_pages,'grin_evidence':harvest_grin_evidence}
     for name in jobs if args.source=='all' else [args.source]:
         print(json.dumps({'event':'source_started','source':name}),flush=True)
         try: jobs[name]()

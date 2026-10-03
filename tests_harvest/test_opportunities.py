@@ -1,5 +1,5 @@
 import unittest
-from harvest.opportunities import TERMS, grants_search_body, _ot_query_batch, grin_disease_mondo_ids
+from harvest.opportunities import TERMS, grants_search_body, _ot_query_batch, _association_page_query, grin_disease_mondo_ids
 
 class OpportunityHarvestTests(unittest.TestCase):
     def test_grants_search_pagination_and_statuses(self):
@@ -15,6 +15,13 @@ class OpportunityHarvestTests(unittest.TestCase):
         self.assertIn('d1: disease(efoId:"MONDO_0000002")',query)
         self.assertIn('datasourceScores',query)
         self.assertIn('drugAndClinicalCandidates',query)
+
+    def test_open_targets_association_continuation_query_uses_requested_page_and_scores(self):
+        query=_association_page_query(['MONDO_0000001','MONDO_0000002'],3,100)
+        self.assertIn('page:{index:3,size:100}',query)
+        self.assertIn('d1: disease(efoId:"MONDO_0000002")',query)
+        self.assertIn('datasourceScores { id score }',query)
+        self.assertIn('datatypeScores { id score }',query)
 
     def test_grin_curated_disease_ids_include_clingen_complex_ndd(self):
         ids=grin_disease_mondo_ids()

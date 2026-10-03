@@ -1,0 +1,544 @@
+{
+  "created_at": "2026-10-03T21:53:34.086581+00:00",
+  "deep_record_scan": true,
+  "sources": [
+    {
+      "source": "clingen",
+      "status": "complete",
+      "scope": "Complete current Gene-Disease Validity (standard and lumping/splitting), Gene Dosage and all Gene Dosage CSV exports.",
+      "artifacts": 4,
+      "raw_bytes": 3978060,
+      "datasets": [
+        {
+          "dataset": "gene_disease_validity",
+          "records": 3695,
+          "bytes": 248259,
+          "verified_records": 3695,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "gene_disease_validity_lumping_splitting",
+          "records": 3695,
+          "bytes": 269878,
+          "verified_records": 3695,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "gene_dosage",
+          "records": 1715,
+          "bytes": 39000,
+          "verified_records": 1715,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "gene_dosage_all",
+          "records": 2233,
+          "bytes": 106726,
+          "verified_records": 2233,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "clinicaltrials_gov",
+      "status": "complete",
+      "scope": {
+        "unique_nct_ids": 31132,
+        "searches": [
+          {
+            "term": "rare disease",
+            "records_seen": 1035,
+            "pages": 2
+          },
+          {
+            "term": "orphan disease",
+            "records_seen": 70,
+            "pages": 1
+          },
+          {
+            "term": "neurodevelopmental disorder",
+            "records_seen": 5813,
+            "pages": 6
+          },
+          {
+            "term": "inherited disorder",
+            "records_seen": 25294,
+            "pages": 26
+          }
+        ],
+        "limitation": "Text/condition query set is broad but cannot enumerate every disease-specific name or guarantee all rare disease trials."
+      },
+      "artifacts": 35,
+      "raw_bytes": 607152089,
+      "datasets": [
+        {
+          "dataset": "rare_disease_studies",
+          "records": 31132,
+          "bytes": 117924863,
+          "verified_records": 31132,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "clinvar",
+      "status": "in_progress",
+      "scope": null,
+      "artifacts": 1,
+      "raw_bytes": 450727547,
+      "datasets": [],
+      "errors": [],
+      "warnings": [
+        "Source acquisition is not marked complete for its declared scope"
+      ]
+    },
+    {
+      "source": "europe_pmc_diseases",
+      "status": "in_progress",
+      "scope": "Exhaustive cursor results for recorded rare-disease name phrases in titles/abstracts; retrieval candidates, not biological evidence.",
+      "artifacts": 19,
+      "raw_bytes": 106668452,
+      "datasets": [
+        {
+          "dataset": "search_vocabulary",
+          "records": 37410,
+          "bytes": 578234,
+          "verified_records": 37410,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": [
+        "Source acquisition is not marked complete for its declared scope"
+      ]
+    },
+    {
+      "source": "europe_pmc_preprints",
+      "status": "complete",
+      "scope": {
+        "unique_preprint_ids": 2579,
+        "reported_hit_count": 2579,
+        "pages": 3,
+        "limitation": "Searches title/abstract wording, so disease-name-only preprints may be missed. Europe PMC indexes current preprint records; preserve PPR IDs and DOI/version strings where supplied. Full text remains governed by each server's license."
+      },
+      "artifacts": 3,
+      "raw_bytes": 11216229,
+      "datasets": [
+        {
+          "dataset": "rare_disease_related_preprints",
+          "records": 2579,
+          "bytes": 2853675,
+          "verified_records": 2579,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "gencc",
+      "status": "complete",
+      "scope": "Current complete versioned SGC assertion CSV export (new format).",
+      "artifacts": 1,
+      "raw_bytes": 26919595,
+      "datasets": [
+        {
+          "dataset": "assertions",
+          "records": 30328,
+          "bytes": 5901164,
+          "verified_records": 30328,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "genetic_alliance_uk",
+      "status": "complete_for_scope",
+      "scope": "Entire public A–Z directory snapshot; membership is not endorsement or disease-association evidence.",
+      "artifacts": 1,
+      "raw_bytes": 121273,
+      "datasets": [
+        {
+          "dataset": "member_organizations",
+          "records": 260,
+          "bytes": 6759,
+          "verified_records": 260,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "go",
+      "status": "complete",
+      "scope": "Current go-basic ontology and complete GOA human GAF annotation file.",
+      "artifacts": 2,
+      "raw_bytes": 47269781,
+      "datasets": [
+        {
+          "dataset": "ontology",
+          "records": 48345,
+          "bytes": 4762781,
+          "verified_records": 48345,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "human_annotations",
+          "records": 906445,
+          "bytes": 20081661,
+          "verified_records": 906445,
+          "negative_qualifier_records": 1501
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "hgnc",
+      "status": "complete",
+      "scope": "Current complete approved HGNC gene dataset plus complete withdrawn symbol report.",
+      "artifacts": 2,
+      "raw_bytes": 17222110,
+      "datasets": [
+        {
+          "dataset": "hgnc_complete_set",
+          "records": 45187,
+          "bytes": 4926909,
+          "verified_records": 45187,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "withdrawn",
+          "records": 5291,
+          "bytes": 81850,
+          "verified_records": 5291,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "hpo",
+      "status": "complete",
+      "scope": "Complete pinned HPO OBO ontology, disease annotations, genes_to_phenotype and genes_to_disease files.",
+      "artifacts": 4,
+      "raw_bytes": 69553843,
+      "datasets": [
+        {
+          "dataset": "ontology_terms",
+          "records": 20483,
+          "bytes": 2221217,
+          "verified_records": 20483,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "disease_phenotype_annotations",
+          "records": 286651,
+          "bytes": 3377398,
+          "verified_records": 286651,
+          "negative_qualifier_records": 733
+        },
+        {
+          "dataset": "genes_to_phenotype",
+          "records": 333983,
+          "bytes": 5538589,
+          "verified_records": 333983,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "genes_to_disease",
+          "records": 16099,
+          "bytes": 226336,
+          "verified_records": 16099,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "mgi",
+      "status": "complete",
+      "scope": "Complete official orthology, human phenotype, allele, strain, gene phenotype and disease-model reports. Only positional native report columns emitted; semantic schemas not verified.",
+      "artifacts": 9,
+      "raw_bytes": 139156210,
+      "datasets": [
+        {
+          "dataset": "hmd_humanphenotype",
+          "records": 28880,
+          "bytes": 496911,
+          "verified_records": 28880,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "hom_allorganism",
+          "records": 96201,
+          "bytes": 3752891,
+          "verified_records": 96201,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "mgi_phenotypicallele",
+          "records": 141601,
+          "bytes": 4989172,
+          "verified_records": 141601,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "mgi_strain",
+          "records": 124519,
+          "bytes": 1574727,
+          "verified_records": 124519,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "mgi_genepheno",
+          "records": 283275,
+          "bytes": 3912490,
+          "verified_records": 283275,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "mgi_geno_diseasedo",
+          "records": 54008,
+          "bytes": 667855,
+          "verified_records": 54008,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "mgi_geno_notdiseasedo",
+          "records": 1214,
+          "bytes": 18357,
+          "verified_records": 1214,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "mgi_diseasegenemodel",
+          "records": 13915,
+          "bytes": 1961210,
+          "verified_records": 13915,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "mgi_diseasemousemodel",
+          "records": 15500,
+          "bytes": 1745113,
+          "verified_records": 15500,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "mondo",
+      "status": "complete",
+      "scope": "Complete pinned MONDO OWL and OBO.",
+      "artifacts": 2,
+      "raw_bytes": 307365514,
+      "datasets": [
+        {
+          "dataset": "obo_stanzas",
+          "records": 63561,
+          "bytes": 7925088,
+          "verified_records": 63561,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "owl_axioms",
+          "records": 472285,
+          "bytes": 15486837,
+          "verified_records": 472285,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "nih_reporter",
+      "status": "in_progress",
+      "scope": null,
+      "artifacts": 356,
+      "raw_bytes": 188666234,
+      "datasets": [],
+      "errors": [],
+      "warnings": [
+        "Source acquisition is not marked complete for its declared scope"
+      ]
+    },
+    {
+      "source": "orphadata",
+      "status": "complete",
+      "scope": "Complete July 2026 cross-reference, phenotype, associated-gene, epidemiology, natural-history and all 34 classification XML products. Other Orphadata products (such as linearisation, functional consequences, nomenclature packs and expert resources) are not included.",
+      "artifacts": 39,
+      "raw_bytes": 185236990,
+      "datasets": [
+        {
+          "dataset": "cross_references",
+          "records": 11645,
+          "bytes": 3260266,
+          "verified_records": 11645,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "phenotypes",
+          "records": 4357,
+          "bytes": 2756617,
+          "verified_records": 4357,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "genes",
+          "records": 4245,
+          "bytes": 1394939,
+          "verified_records": 4245,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "epidemiology",
+          "records": 6728,
+          "bytes": 634521,
+          "verified_records": 6728,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "natural_history",
+          "records": 7790,
+          "bytes": 343352,
+          "verified_records": 7790,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "classifications",
+          "records": 48261,
+          "bytes": 1610663,
+          "verified_records": 48261,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "pubmed",
+      "status": "in_progress",
+      "scope": null,
+      "artifacts": 361,
+      "raw_bytes": 108322898,
+      "datasets": [],
+      "errors": [],
+      "warnings": [
+        "Source acquisition is not marked complete for its declared scope"
+      ]
+    },
+    {
+      "source": "raresource",
+      "status": "complete_for_scope",
+      "scope": "Public disease and gene tables; curated literature annotations and variants are separate products, not yet included.",
+      "artifacts": 2,
+      "raw_bytes": 4875568,
+      "datasets": [
+        {
+          "dataset": "diseases",
+          "records": 7200,
+          "bytes": 720660,
+          "verified_records": 7200,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "genes",
+          "records": 4512,
+          "bytes": 329002,
+          "verified_records": 4512,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "reactome",
+      "status": "complete",
+      "scope": "Current complete pathway, hierarchy and UniProt mapping files; mapping contains all organisms (organism retained; human subset is filterable).",
+      "artifacts": 3,
+      "raw_bytes": 120050170,
+      "datasets": [
+        {
+          "dataset": "UniProt2Reactome_All_Levels",
+          "records": 942792,
+          "bytes": 20727816,
+          "verified_records": 942792,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "ReactomePathways",
+          "records": 23603,
+          "bytes": 524078,
+          "verified_records": 23603,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "ReactomePathwaysRelation",
+          "records": 23717,
+          "bytes": 208633,
+          "verified_records": 23717,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "ror",
+      "status": "complete",
+      "scope": "Current complete versioned ROR data dump ZIP, including inactive and withdrawn organizations.",
+      "artifacts": 1,
+      "raw_bytes": 37540961,
+      "datasets": [
+        {
+          "dataset": "organizations",
+          "records": 141528,
+          "bytes": 18639861,
+          "verified_records": 141528,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "source": "uniprot",
+      "status": "complete",
+      "scope": "All reviewed UniProtKB human (taxon 9606) records returned by current release stream.",
+      "artifacts": 1,
+      "raw_bytes": 167501908,
+      "datasets": [
+        {
+          "dataset": "reviewed_human",
+          "records": 20431,
+          "bytes": 164152191,
+          "verified_records": 20431,
+          "negative_qualifier_records": 0
+        }
+      ],
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "totals": {
+    "sources": 19,
+    "records": 4317299,
+    "raw_bytes": 2599545432,
+    "errors": 0
+  },
+  "note": "Counts aggregate different entity/assertion/ontology/retrieval record types and are not a count of unique entities. Source-level completeness is limited to declared scope."
+}

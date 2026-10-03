@@ -8,5 +8,5 @@
   "reason": "Directory returned HTTP 429 in source research and again in this harvest; no bulk export or reuse grant confirmed.",
   "provider_url": "https://www.eurordis.org/who-we-are/our-members/",
   "evidence_notes": "docs/research/community.md",
-  "updated_at": "2026-10-03T21:55:43.266714+00:00"
+  "updated_at": "2026-10-03T22:02:33.443123+00:00"
 }

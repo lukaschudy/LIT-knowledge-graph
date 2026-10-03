@@ -8,5 +8,5 @@
   "reason": "Current member-list and historical PDF route returned HTTP 403 during source research; terms restrict automated content extraction. No bypass attempted.",
   "provider_url": "https://globalgenes.org/about-us/global-advocacy-alliance/global-advocacy-alliance-members/",
   "evidence_notes": "docs/research/community.md",
-  "updated_at": "2026-10-03T21:55:43.266663+00:00"
+  "updated_at": "2026-10-03T22:02:33.443017+00:00"
 }

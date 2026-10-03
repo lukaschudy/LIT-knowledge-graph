@@ -1,0 +1,903 @@
+{
+  "schema_version": "1.0",
+  "dataset": {
+    "id": "demo:atlas-v1",
+    "title": "Atlas \u00b7 evidence to shared research",
+    "description": "Entirely fictional acceptance fixture. Names, biological statements, people, organizations and assets are invented to demonstrate software behavior; none are medical evidence.",
+    "synthetic": true,
+    "created_at": "2026-10-03"
+  },
+  "nodes": [
+    {
+      "id": "demo:disease-a",
+      "type": "Disease",
+      "label": "Aurora syndrome",
+      "aliases": [
+        "Aurora",
+        "AS-demo"
+      ],
+      "properties": {
+        "description": "Fictional disease for software demonstration only."
+      }
+    },
+    {
+      "id": "demo:disease-b",
+      "type": "Disease",
+      "label": "Boreal syndrome",
+      "aliases": [
+        "Boreal"
+      ],
+      "properties": {
+        "description": "Fictional disease for software demonstration only."
+      }
+    },
+    {
+      "id": "demo:disease-c",
+      "type": "Disease",
+      "label": "Cinder syndrome",
+      "aliases": [
+        "Cinder"
+      ],
+      "properties": {
+        "description": "Fictional disease for software demonstration only."
+      }
+    },
+    {
+      "id": "demo:disease-d",
+      "type": "Disease",
+      "label": "Delta syndrome",
+      "aliases": [
+        "Delta",
+        "Unmapped demo"
+      ],
+      "properties": {
+        "description": "Fictional disease for software demonstration only."
+      }
+    },
+    {
+      "id": "demo:disease-e",
+      "type": "Disease",
+      "label": "Echo syndrome",
+      "aliases": [
+        "Echo"
+      ],
+      "properties": {
+        "description": "Fictional disease for software demonstration only."
+      }
+    },
+    {
+      "id": "demo:disease-f",
+      "type": "Disease",
+      "label": "Fjord syndrome",
+      "aliases": [
+        "Fjord"
+      ],
+      "properties": {
+        "description": "Fictional disease for software demonstration only."
+      }
+    },
+    {
+      "id": "demo:variant-a",
+      "type": "Variant",
+      "label": "Variant A (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:variant-b",
+      "type": "Variant",
+      "label": "Variant B (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:variant-c",
+      "type": "Variant",
+      "label": "Variant C (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:variant-e",
+      "type": "Variant",
+      "label": "Variant E (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:variant-f",
+      "type": "Variant",
+      "label": "Variant F (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:gene-a",
+      "type": "Gene",
+      "label": "DEMO-GENE-A",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:gene-b",
+      "type": "Gene",
+      "label": "DEMO-GENE-B",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:gene-e",
+      "type": "Gene",
+      "label": "DEMO-GENE-E",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:gene-f",
+      "type": "Gene",
+      "label": "DEMO-GENE-F",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:mechanism-transport",
+      "type": "Mechanism",
+      "label": "Cellular transport process (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:phenotype-motor",
+      "type": "Phenotype",
+      "label": "Motor phenotype (fictional)",
+      "aliases": [],
+      "properties": {
+        "information_content": 1.5
+      }
+    },
+    {
+      "id": "demo:phenotype-delta",
+      "type": "Phenotype",
+      "label": "Distinct Delta phenotype (fictional)",
+      "aliases": [],
+      "properties": {
+        "information_content": 2.0
+      }
+    },
+    {
+      "id": "demo:org-aurora",
+      "type": "Organization",
+      "label": "Aurora Families (fictional)",
+      "aliases": [],
+      "properties": {
+        "organization_type": "patient_group"
+      }
+    },
+    {
+      "id": "demo:org-boreal",
+      "type": "Organization",
+      "label": "Boreal Research Community (fictional)",
+      "aliases": [],
+      "properties": {
+        "organization_type": "patient_group"
+      }
+    },
+    {
+      "id": "demo:person-boreal",
+      "type": "Person",
+      "label": "Dr. Rowan Example (fictional)",
+      "aliases": [],
+      "properties": {
+        "role": "Research collaborator; no real contact details"
+      }
+    },
+    {
+      "id": "demo:asset-registry",
+      "type": "Asset",
+      "label": "Boreal natural-history data dictionary (fictional)",
+      "aliases": [],
+      "properties": {
+        "asset_type": "registry_design",
+        "reuse_scope": "Review the data dictionary and outcome collection structure for potential adaptation.",
+        "limitations": [
+          "Participant populations are separate.",
+          "Permission to access or reuse has not been established.",
+          "Shared mechanism does not establish compatible endpoints."
+        ],
+        "validation_questions": [
+          "Are the outcome definitions meaningful in Aurora?",
+          "Does the age and progression range match the proposed research population?",
+          "Will the asset owner permit adaptation?"
+        ]
+      }
+    },
+    {
+      "id": "demo:study-boreal",
+      "type": "Study",
+      "label": "Boreal observational design (fictional)",
+      "aliases": [],
+      "properties": {
+        "study_type": "natural_history",
+        "status": "illustrative_only"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "demo:source-mechanisms",
+      "title": "Mechanism fixture statements",
+      "url": "https://example.org/atlas-fixture/mechanisms",
+      "published_at": "2026-09-01",
+      "retrieved_at": "2026-10-03",
+      "kind": "fixture",
+      "synthetic": true,
+      "license": "CC0-1.0; fictional software fixture"
+    },
+    {
+      "id": "demo:source-community",
+      "title": "Community fixture statements",
+      "url": "https://example.org/atlas-fixture/community",
+      "published_at": "2026-09-01",
+      "retrieved_at": "2026-10-03",
+      "kind": "fixture",
+      "synthetic": true,
+      "license": "CC0-1.0; fictional software fixture"
+    },
+    {
+      "id": "demo:source-assets",
+      "title": "Research asset fixture statements",
+      "url": "https://example.org/atlas-fixture/assets",
+      "published_at": "2026-09-01",
+      "retrieved_at": "2026-10-03",
+      "kind": "fixture",
+      "synthetic": true,
+      "license": "CC0-1.0; fictional software fixture"
+    },
+    {
+      "id": "demo:source-conflict",
+      "title": "Contradictory fixture statement",
+      "url": "https://example.org/atlas-fixture/conflict",
+      "published_at": "2026-09-01",
+      "retrieved_at": "2026-10-03",
+      "kind": "fixture",
+      "synthetic": true,
+      "license": "CC0-1.0; fictional software fixture"
+    }
+  ],
+  "claims": [
+    {
+      "id": "demo:claim-a-variant",
+      "subject": "demo:disease-a",
+      "predicate": "HAS_VARIANT",
+      "object": "demo:variant-a",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-a-gene",
+      "subject": "demo:variant-a",
+      "predicate": "AFFECTS",
+      "object": "demo:gene-a",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-a-effect",
+      "subject": "demo:variant-a",
+      "predicate": "HAS_EFFECT",
+      "object": "demo:mechanism-transport",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "loss_of_function",
+        "species": "human",
+        "tissue": "neural",
+        "stage": "childhood"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-a-phenotype",
+      "subject": "demo:disease-a",
+      "predicate": "HAS_PHENOTYPE",
+      "object": "demo:phenotype-motor",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-b-variant",
+      "subject": "demo:disease-b",
+      "predicate": "HAS_VARIANT",
+      "object": "demo:variant-b",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-b-gene",
+      "subject": "demo:variant-b",
+      "predicate": "AFFECTS",
+      "object": "demo:gene-b",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-b-effect",
+      "subject": "demo:variant-b",
+      "predicate": "HAS_EFFECT",
+      "object": "demo:mechanism-transport",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "loss_of_function",
+        "species": "human",
+        "tissue": "neural",
+        "stage": "childhood"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-b-phenotype",
+      "subject": "demo:disease-b",
+      "predicate": "HAS_PHENOTYPE",
+      "object": "demo:phenotype-motor",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-c-variant",
+      "subject": "demo:disease-c",
+      "predicate": "HAS_VARIANT",
+      "object": "demo:variant-c",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-c-gene",
+      "subject": "demo:variant-c",
+      "predicate": "AFFECTS",
+      "object": "demo:gene-a",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-c-effect",
+      "subject": "demo:variant-c",
+      "predicate": "HAS_EFFECT",
+      "object": "demo:mechanism-transport",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "gain_of_function",
+        "species": "human",
+        "tissue": "neural",
+        "stage": "childhood"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-c-phenotype",
+      "subject": "demo:disease-c",
+      "predicate": "HAS_PHENOTYPE",
+      "object": "demo:phenotype-motor",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-e-variant",
+      "subject": "demo:disease-e",
+      "predicate": "HAS_VARIANT",
+      "object": "demo:variant-e",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-e-gene",
+      "subject": "demo:variant-e",
+      "predicate": "AFFECTS",
+      "object": "demo:gene-e",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-e-effect",
+      "subject": "demo:variant-e",
+      "predicate": "HAS_EFFECT",
+      "object": "demo:mechanism-transport",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "unknown",
+        "species": "human",
+        "tissue": "neural",
+        "stage": "childhood"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-e-phenotype",
+      "subject": "demo:disease-e",
+      "predicate": "HAS_PHENOTYPE",
+      "object": "demo:phenotype-motor",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-f-variant",
+      "subject": "demo:disease-f",
+      "predicate": "HAS_VARIANT",
+      "object": "demo:variant-f",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-f-gene",
+      "subject": "demo:variant-f",
+      "predicate": "AFFECTS",
+      "object": "demo:gene-f",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-f-effect",
+      "subject": "demo:variant-f",
+      "predicate": "HAS_EFFECT",
+      "object": "demo:mechanism-transport",
+      "assertion_type": "reported",
+      "context": {
+        "effect": "loss_of_function",
+        "species": "human",
+        "tissue": "neural",
+        "stage": "childhood"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-f-phenotype",
+      "subject": "demo:disease-f",
+      "predicate": "HAS_PHENOTYPE",
+      "object": "demo:phenotype-motor",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-d-phenotype",
+      "subject": "demo:disease-d",
+      "predicate": "HAS_PHENOTYPE",
+      "object": "demo:phenotype-delta",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-aurora-community",
+      "subject": "demo:org-aurora",
+      "predicate": "REPRESENTS",
+      "object": "demo:disease-a",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-boreal-community",
+      "subject": "demo:org-boreal",
+      "predicate": "REPRESENTS",
+      "object": "demo:disease-b",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-boreal-person",
+      "subject": "demo:person-boreal",
+      "predicate": "STUDIES",
+      "object": "demo:disease-b",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-boreal-affiliation",
+      "subject": "demo:person-boreal",
+      "predicate": "AFFILIATED_WITH",
+      "object": "demo:org-boreal",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-registry-owner",
+      "subject": "demo:org-boreal",
+      "predicate": "MAINTAINS",
+      "object": "demo:asset-registry",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-registry-disease",
+      "subject": "demo:asset-registry",
+      "predicate": "RELEVANT_TO",
+      "object": "demo:disease-b",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-registry-study",
+      "subject": "demo:asset-registry",
+      "predicate": "USED_IN",
+      "object": "demo:study-boreal",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-study-disease",
+      "subject": "demo:study-boreal",
+      "predicate": "STUDIES",
+      "object": "demo:disease-b",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:claim-d-hypothesis",
+      "subject": "demo:disease-d",
+      "predicate": "INVOLVES",
+      "object": "demo:mechanism-transport",
+      "assertion_type": "inferred",
+      "context": {
+        "effect": "loss_of_function"
+      },
+      "extraction_confidence": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "demo:evidence-a-variant",
+      "claim_id": "demo:claim-a-variant",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-a-variant",
+      "excerpt": "FICTIONAL TEST STATEMENT: Aurora syndrome \u2014 HAS_VARIANT \u2192 Variant A (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-a-gene",
+      "claim_id": "demo:claim-a-gene",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-a-gene",
+      "excerpt": "FICTIONAL TEST STATEMENT: Variant A (fictional) \u2014 AFFECTS \u2192 DEMO-GENE-A.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-a-effect",
+      "claim_id": "demo:claim-a-effect",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-a-effect",
+      "excerpt": "FICTIONAL TEST STATEMENT: variant A has loss_of_function effect on the fictional transport process in human neural tissue during childhood.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-a-phenotype",
+      "claim_id": "demo:claim-a-phenotype",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-a-phenotype",
+      "excerpt": "FICTIONAL TEST STATEMENT: Aurora syndrome \u2014 HAS_PHENOTYPE \u2192 Motor phenotype (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-b-variant",
+      "claim_id": "demo:claim-b-variant",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-b-variant",
+      "excerpt": "FICTIONAL TEST STATEMENT: Boreal syndrome \u2014 HAS_VARIANT \u2192 Variant B (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-b-gene",
+      "claim_id": "demo:claim-b-gene",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-b-gene",
+      "excerpt": "FICTIONAL TEST STATEMENT: Variant B (fictional) \u2014 AFFECTS \u2192 DEMO-GENE-B.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-b-effect",
+      "claim_id": "demo:claim-b-effect",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-b-effect",
+      "excerpt": "FICTIONAL TEST STATEMENT: variant B has loss_of_function effect on the fictional transport process in human neural tissue during childhood.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-b-phenotype",
+      "claim_id": "demo:claim-b-phenotype",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-b-phenotype",
+      "excerpt": "FICTIONAL TEST STATEMENT: Boreal syndrome \u2014 HAS_PHENOTYPE \u2192 Motor phenotype (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-c-variant",
+      "claim_id": "demo:claim-c-variant",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-c-variant",
+      "excerpt": "FICTIONAL TEST STATEMENT: Cinder syndrome \u2014 HAS_VARIANT \u2192 Variant C (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-c-gene",
+      "claim_id": "demo:claim-c-gene",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-c-gene",
+      "excerpt": "FICTIONAL TEST STATEMENT: Variant C (fictional) \u2014 AFFECTS \u2192 DEMO-GENE-A.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-c-effect",
+      "claim_id": "demo:claim-c-effect",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-c-effect",
+      "excerpt": "FICTIONAL TEST STATEMENT: variant C has gain_of_function effect on the fictional transport process in human neural tissue during childhood.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-c-phenotype",
+      "claim_id": "demo:claim-c-phenotype",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-c-phenotype",
+      "excerpt": "FICTIONAL TEST STATEMENT: Cinder syndrome \u2014 HAS_PHENOTYPE \u2192 Motor phenotype (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-e-variant",
+      "claim_id": "demo:claim-e-variant",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-e-variant",
+      "excerpt": "FICTIONAL TEST STATEMENT: Echo syndrome \u2014 HAS_VARIANT \u2192 Variant E (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-e-gene",
+      "claim_id": "demo:claim-e-gene",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-e-gene",
+      "excerpt": "FICTIONAL TEST STATEMENT: Variant E (fictional) \u2014 AFFECTS \u2192 DEMO-GENE-E.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-e-effect",
+      "claim_id": "demo:claim-e-effect",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-e-effect",
+      "excerpt": "FICTIONAL TEST STATEMENT: variant E has unknown effect on the fictional transport process in human neural tissue during childhood.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-e-phenotype",
+      "claim_id": "demo:claim-e-phenotype",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-e-phenotype",
+      "excerpt": "FICTIONAL TEST STATEMENT: Echo syndrome \u2014 HAS_PHENOTYPE \u2192 Motor phenotype (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-f-variant",
+      "claim_id": "demo:claim-f-variant",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-f-variant",
+      "excerpt": "FICTIONAL TEST STATEMENT: Fjord syndrome \u2014 HAS_VARIANT \u2192 Variant F (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-f-gene",
+      "claim_id": "demo:claim-f-gene",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-f-gene",
+      "excerpt": "FICTIONAL TEST STATEMENT: Variant F (fictional) \u2014 AFFECTS \u2192 DEMO-GENE-F.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-f-effect",
+      "claim_id": "demo:claim-f-effect",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-f-effect",
+      "excerpt": "FICTIONAL TEST STATEMENT: variant F has loss_of_function effect on the fictional transport process in human neural tissue during childhood.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-f-phenotype",
+      "claim_id": "demo:claim-f-phenotype",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-f-phenotype",
+      "excerpt": "FICTIONAL TEST STATEMENT: Fjord syndrome \u2014 HAS_PHENOTYPE \u2192 Motor phenotype (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-d-phenotype",
+      "claim_id": "demo:claim-d-phenotype",
+      "source_id": "demo:source-mechanisms",
+      "locator": "fixture record demo:claim-d-phenotype",
+      "excerpt": "FICTIONAL TEST STATEMENT: Delta syndrome \u2014 HAS_PHENOTYPE \u2192 Distinct Delta phenotype (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-aurora-community",
+      "claim_id": "demo:claim-aurora-community",
+      "source_id": "demo:source-community",
+      "locator": "fixture record demo:claim-aurora-community",
+      "excerpt": "FICTIONAL TEST STATEMENT: Aurora Families (fictional) \u2014 REPRESENTS \u2192 Aurora syndrome.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-boreal-community",
+      "claim_id": "demo:claim-boreal-community",
+      "source_id": "demo:source-community",
+      "locator": "fixture record demo:claim-boreal-community",
+      "excerpt": "FICTIONAL TEST STATEMENT: Boreal Research Community (fictional) \u2014 REPRESENTS \u2192 Boreal syndrome.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-boreal-person",
+      "claim_id": "demo:claim-boreal-person",
+      "source_id": "demo:source-community",
+      "locator": "fixture record demo:claim-boreal-person",
+      "excerpt": "FICTIONAL TEST STATEMENT: Dr. Rowan Example (fictional) \u2014 STUDIES \u2192 Boreal syndrome.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-boreal-affiliation",
+      "claim_id": "demo:claim-boreal-affiliation",
+      "source_id": "demo:source-community",
+      "locator": "fixture record demo:claim-boreal-affiliation",
+      "excerpt": "FICTIONAL TEST STATEMENT: Dr. Rowan Example (fictional) \u2014 AFFILIATED_WITH \u2192 Boreal Research Community (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-registry-owner",
+      "claim_id": "demo:claim-registry-owner",
+      "source_id": "demo:source-assets",
+      "locator": "fixture record demo:claim-registry-owner",
+      "excerpt": "FICTIONAL TEST STATEMENT: Boreal Research Community (fictional) \u2014 MAINTAINS \u2192 Boreal natural-history data dictionary (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-registry-disease",
+      "claim_id": "demo:claim-registry-disease",
+      "source_id": "demo:source-assets",
+      "locator": "fixture record demo:claim-registry-disease",
+      "excerpt": "FICTIONAL TEST STATEMENT: Boreal natural-history data dictionary (fictional) \u2014 RELEVANT_TO \u2192 Boreal syndrome.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-registry-study",
+      "claim_id": "demo:claim-registry-study",
+      "source_id": "demo:source-assets",
+      "locator": "fixture record demo:claim-registry-study",
+      "excerpt": "FICTIONAL TEST STATEMENT: Boreal natural-history data dictionary (fictional) \u2014 USED_IN \u2192 Boreal observational design (fictional).",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-study-disease",
+      "claim_id": "demo:claim-study-disease",
+      "source_id": "demo:source-assets",
+      "locator": "fixture record demo:claim-study-disease",
+      "excerpt": "FICTIONAL TEST STATEMENT: Boreal observational design (fictional) \u2014 STUDIES \u2192 Boreal syndrome.",
+      "stance": "supports",
+      "review_status": "machine_checked"
+    },
+    {
+      "id": "demo:evidence-f-conflict",
+      "claim_id": "demo:claim-f-effect",
+      "source_id": "demo:source-conflict",
+      "locator": "fixture conflicting result F-2",
+      "excerpt": "FICTIONAL TEST STATEMENT: a second experiment did not reproduce the Fjord transport effect in the same specified context.",
+      "stance": "contradicts",
+      "review_status": "machine_checked"
+    }
+  ],
+  "coverage": [
+    {
+      "id": "demo:coverage-a",
+      "source_id": "demo:source-mechanisms",
+      "entity_id": "demo:disease-a",
+      "scope": "Included fictional mechanism statements only; no biomedical database has been searched.",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Coverage is restricted to this synthetic fixture. No claim of literature completeness."
+    },
+    {
+      "id": "demo:coverage-b",
+      "source_id": "demo:source-mechanisms",
+      "entity_id": "demo:disease-b",
+      "scope": "Included fictional mechanism statements only; no biomedical database has been searched.",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Coverage is restricted to this synthetic fixture. No claim of literature completeness."
+    },
+    {
+      "id": "demo:coverage-c",
+      "source_id": "demo:source-mechanisms",
+      "entity_id": "demo:disease-c",
+      "scope": "Included fictional mechanism statements only; no biomedical database has been searched.",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Coverage is restricted to this synthetic fixture. No claim of literature completeness."
+    },
+    {
+      "id": "demo:coverage-d",
+      "source_id": "demo:source-mechanisms",
+      "entity_id": "demo:disease-d",
+      "scope": "Included fictional mechanism statements only; no biomedical database has been searched.",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Coverage is restricted to this synthetic fixture. No claim of literature completeness."
+    },
+    {
+      "id": "demo:coverage-e",
+      "source_id": "demo:source-mechanisms",
+      "entity_id": "demo:disease-e",
+      "scope": "Included fictional mechanism statements only; no biomedical database has been searched.",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Coverage is restricted to this synthetic fixture. No claim of literature completeness."
+    },
+    {
+      "id": "demo:coverage-f",
+      "source_id": "demo:source-mechanisms",
+      "entity_id": "demo:disease-f",
+      "scope": "Included fictional mechanism statements only; no biomedical database has been searched.",
+      "status": "searched",
+      "searched_at": "2026-10-03",
+      "notes": "Coverage is restricted to this synthetic fixture. No claim of literature completeness."
+    },
+    {
+      "id": "demo:coverage-d-assets",
+      "source_id": "demo:source-assets",
+      "entity_id": "demo:disease-d",
+      "scope": "Research asset fixture",
+      "status": "not_searched",
+      "searched_at": null,
+      "notes": "Demonstrates a missing search, distinct from an unsuccessful search."
+    }
+  ]
+}

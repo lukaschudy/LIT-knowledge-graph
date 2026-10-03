@@ -1,0 +1,45 @@
+{
+  "source": "grin_primary_xml",
+  "created_at": "2026-10-03T22:11:56.165887+00:00",
+  "artifacts": {
+    "PMC10508039.xml": {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10508039/fullTextXML",
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10508039/fullTextXML",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_primary_xml/PMC10508039.xml",
+      "bytes": 295037,
+      "sha256": "b3f64763933aeaacdd6f313990f956665512702850545902921637c9776176a3",
+      "retrieved_at": "2026-10-03T22:11:56.165786+00:00",
+      "license": "Article-specific terms in XML; individual scholarly source reading; no assumed redistribution permission",
+      "version": null,
+      "http_status": 200,
+      "content_type": "application/xml",
+      "last_modified": null,
+      "etag": null
+    },
+    "PMC10973091.xml": {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10973091/fullTextXML",
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10973091/fullTextXML",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/grin_primary_xml/PMC10973091.xml",
+      "bytes": 333085,
+      "sha256": "b64eeb38dfe2405bc67acdf72da51a5d88f774e1fa95ef943fd0415e75924e78",
+      "retrieved_at": "2026-10-03T22:11:56.299107+00:00",
+      "license": "Article-specific terms in XML; individual scholarly source reading; no assumed redistribution permission",
+      "version": null,
+      "http_status": 200,
+      "content_type": "application/xml",
+      "last_modified": null,
+      "etag": null
+    }
+  },
+  "datasets": {},
+  "status": "partial",
+  "updated_at": "2026-10-03T22:17:59.989676+00:00",
+  "scope": "Individual fullTextXML requests for seven selected papers; two successful; public HTML pages separately acquired for all seven",
+  "limitations": [
+    "Five API requests returned500 after retries. No inaccessible XML content is fabricated."
+  ]
+}

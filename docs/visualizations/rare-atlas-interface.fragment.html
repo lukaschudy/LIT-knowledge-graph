@@ -1,0 +1,173 @@
+<div id="rare-atlas-concept" aria-label="Rare Atlas research workspace concept">
+<style>
+#rare-atlas-concept { --ra-bg:light-dark(#fafbf8,#141d1d); --ra-paper:light-dark(#ffffff,#1c2828); --ra-ink:light-dark(#203333,#e6f0ea); --ra-muted:light-dark(#536661,#b3c6bf); --ra-line:light-dark(#d9e2dc,#435751); --ra-teal:light-dark(#146659,#8cdbc6); --ra-soft:light-dark(#eaf4ef,#253e36); --ra-amber:light-dark(#795219,#f0cc8f); --ra-warn:light-dark(#fff5e3,#3e3424); color:var(--ra-ink); background:var(--ra-bg); font:15px/1.5 system-ui,sans-serif; border:1px solid var(--ra-line); border-radius:14px; overflow:clip; }
+#rare-atlas-concept * {box-sizing:border-box}
+#rare-atlas-concept h2,#rare-atlas-concept h3,#rare-atlas-concept p{margin:0}
+#rare-atlas-concept h2{font-size:25px;line-height:1.25;font-weight:500;letter-spacing:-.6px}
+#rare-atlas-concept h3{font-size:17px;font-weight:500}
+#rare-atlas-concept button,#rare-atlas-concept select{font:inherit;color:inherit;min-height:40px;max-width:100%}
+#rare-atlas-concept button{background:var(--ra-paper);border:1px solid var(--ra-line);border-radius:7px;padding:8px 12px}
+#rare-atlas-concept button:focus-visible,#rare-atlas-concept select:focus-visible{outline:3px solid var(--ra-teal);outline-offset:3px}
+#rare-atlas-concept .ra-top{padding:17px 23px;display:flex;gap:15px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--ra-line);background:var(--ra-paper)}
+#rare-atlas-concept .ra-brand{font-weight:600;letter-spacing:-.5px;font-size:20px;display:flex;gap:9px;align-items:center}
+#rare-atlas-concept .ra-example{margin-left:auto;font-size:12px;color:var(--ra-muted)}
+#rare-atlas-concept .ra-top select{background:var(--ra-bg);border:1px solid var(--ra-line);border-radius:7px;padding:7px 9px}
+#rare-atlas-concept .ra-heading{padding:25px 26px 18px;display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
+#rare-atlas-concept .ra-eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--ra-muted);margin-bottom:7px}
+#rare-atlas-concept .ra-sub{color:var(--ra-muted);margin-top:6px}
+#rare-atlas-concept .ra-tabs{display:flex;gap:6px;padding:0 26px 16px;flex-wrap:wrap}
+#rare-atlas-concept .ra-tabs button{border-color:transparent;background:transparent}
+#rare-atlas-concept .ra-tabs button[aria-pressed="true"]{background:var(--ra-soft);color:var(--ra-teal);border-color:var(--ra-line)}
+#rare-atlas-concept .ra-layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(240px,1fr);border-top:1px solid var(--ra-line)}
+#rare-atlas-concept .ra-main{padding:24px 26px;background:var(--ra-paper);min-width:0}
+#rare-atlas-concept .ra-aside{border-left:1px solid var(--ra-line);padding:24px;min-width:0}
+#rare-atlas-concept .ra-aside p{margin-top:10px}
+#rare-atlas-concept .ra-tag{display:inline-block;font-size:12px;padding:3px 8px;border-radius:5px;background:var(--ra-soft);color:var(--ra-teal);margin-bottom:10px}
+#rare-atlas-concept .ra-caution{background:var(--ra-warn);color:var(--ra-amber);border-radius:6px;padding:11px 13px;margin-top:14px}
+#rare-atlas-concept .ra-path{margin:22px 0 18px;display:grid;grid-template-columns:1fr;justify-items:stretch}
+#rare-atlas-concept .ra-node{border:1px solid var(--ra-line);border-radius:8px;padding:10px 13px;display:flex;justify-content:space-between;gap:10px;align-items:center;background:var(--ra-bg)}
+#rare-atlas-concept .ra-node span{font-size:12px;color:var(--ra-muted);text-align:right}
+#rare-atlas-concept .ra-path .ra-edge{border:0;background:transparent;color:var(--ra-teal);font-size:13px;padding:6px;display:flex;justify-content:center;gap:8px;align-items:center}
+#rare-atlas-concept .ra-path .ra-edge[aria-pressed="true"]{text-decoration:underline;text-underline-offset:4px}
+#rare-atlas-concept .ra-small{font-size:12px;color:var(--ra-muted)}
+#rare-atlas-concept .ra-line{margin:17px 0;border:0;border-top:1px solid var(--ra-line)}
+#rare-atlas-concept .ra-primary{background:var(--ra-teal);color:var(--ra-paper);border-color:var(--ra-teal)}
+#rare-atlas-concept .ra-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+#rare-atlas-concept .ra-row{padding:13px 0;border-bottom:1px solid var(--ra-line)}
+#rare-atlas-concept .ra-row p{margin-top:5px;color:var(--ra-muted)}
+#rare-atlas-concept .ra-brief{margin-top:18px;border-left:3px solid var(--ra-teal);padding-left:16px}
+#rare-atlas-concept .ra-brief p{margin:10px 0}
+#rare-atlas-concept .ra-footer{padding:12px 26px;border-top:1px solid var(--ra-line);font-size:12px;color:var(--ra-muted);display:flex;gap:15px;justify-content:space-between;flex-wrap:wrap}
+#rare-atlas-concept [hidden]{display:none!important}
+#rare-atlas-concept .ra-dense{font-size:13px}
+@media(max-width:680px){#rare-atlas-concept .ra-layout{grid-template-columns:1fr}#rare-atlas-concept .ra-aside{border-left:0;border-top:1px solid var(--ra-line)}#rare-atlas-concept .ra-heading,#rare-atlas-concept .ra-main,#rare-atlas-concept .ra-aside{padding:20px}#rare-atlas-concept .ra-top{padding:14px 20px}#rare-atlas-concept .ra-tabs{padding:0 20px 15px}#rare-atlas-concept .ra-example{margin-left:0;width:100%}#rare-atlas-concept .ra-top select{width:100%}#rare-atlas-concept .ra-node{align-items:flex-start;flex-direction:column}#rare-atlas-concept .ra-node span{text-align:left}#rare-atlas-concept button{min-height:44px}}
+</style>
+<div class="ra-top">
+  <div class="ra-brand"><i data-lucide="waypoints" aria-hidden="true"></i> Rare Atlas</div>
+  <label for="ra-scenario" class="ra-small">Explore example</label>
+  <select id="ra-scenario"><option value="lead">Disease A · candidate connection</option><option value="mismatch">Disease C · mechanism mismatch</option><option value="gap">Disease D · no supported route</option></select>
+  <span class="ra-example">Interface concept · fictional data</span>
+</div>
+<div class="ra-heading">
+  <div><div class="ra-eyebrow">Your research path</div><h2 id="ra-title">A starting point for shared research</h2><p class="ra-sub" id="ra-subtitle">Disease A → related community → a possible shared study design</p></div>
+</div>
+<nav class="ra-tabs" aria-label="Research views">
+  <button type="button" data-view="connection" aria-pressed="true">Understand the connection</button>
+  <button type="button" data-view="assets" aria-pressed="false">Compare the asset</button>
+  <button type="button" data-view="brief" aria-pressed="false">Prepare next step</button>
+</nav>
+<div class="ra-layout">
+  <main class="ra-main" aria-live="polite">
+    <section data-panel="connection">
+      <span class="ra-tag">Candidate for investigation</span>
+      <h3>Could another community’s study design help?</h3>
+      <p class="ra-sub">The proposed route connects two diseases through a shared process. Each relationship needs evidence within its own scope.</p>
+      <div class="ra-path" aria-label="Illustrative research path, with selectable relationships">
+        <div class="ra-node">Disease A <span>Starting diagnosis</span></div>
+        <button type="button" class="ra-edge" data-claim="mechanism" aria-pressed="true">↓ involves a disrupted process · inspect</button>
+        <div class="ra-node">Shared cellular process <span>Variant effect matters</span></div>
+        <button type="button" class="ra-edge" data-claim="overlap" aria-pressed="false">↓ also implicated in · inspect</button>
+        <div class="ra-node">Disease B <span>Related disease, different gene</span></div>
+        <button type="button" class="ra-edge" data-claim="community" aria-pressed="false">↓ represented by · inspect</button>
+        <div class="ra-node">Community B <span>Potential research partner</span></div>
+        <button type="button" class="ra-edge" data-claim="asset" aria-pressed="false">↓ maintains a study resource · inspect</button>
+        <div class="ra-node">Natural-history study design <span>Candidate reusable component</span></div>
+      </div>
+      <p class="ra-small">Arrows show the exploration route; they do not establish a causal chain.</p>
+      <div class="ra-caution">Open question: are the variant effects and study measures compatible?</div>
+      <div class="ra-actions"><button type="button" class="ra-primary" data-go="assets">See what could be reused</button></div>
+    </section>
+    <section data-panel="assets" hidden>
+      <span class="ra-tag">Reuse needs review</span><h3>Adapt the design, check the differences</h3>
+      <div class="ra-row"><strong>Candidate component</strong><p>Community B’s study questionnaire and data dictionary.</p></div>
+      <div class="ra-row"><strong>What might carry across</strong><p>The structure of data collection, if its measures capture outcomes relevant to Disease A.</p></div>
+      <div class="ra-row"><strong>What needs expert review</strong><p>Variant effect, age range, disease-specific outcomes and whether the measures are valid in both groups.</p></div>
+      <div class="ra-row"><strong>Access and owner permission</strong><p>Unknown in this fictional example. Availability cannot be inferred from the existence of a registry.</p></div>
+      <div class="ra-caution">Shared biology does not establish shared eligibility or treatment suitability.</div>
+      <div class="ra-actions"><button type="button" class="ra-primary" data-go="brief">Prepare collaboration brief</button><button type="button" data-claim="reuse">Inspect reuse hypothesis</button></div>
+    </section>
+    <section data-panel="brief" hidden>
+      <span class="ra-tag">Draft for review</span><h3>A focused proposal for a partner</h3>
+      <div class="ra-brief">
+        <p><strong>Research question</strong><br>Could the existing study design be adapted to capture natural-history data for Disease A?</p>
+        <p><strong>Potential partner</strong><br>Community B and its study investigator. Verify public contact and ownership.</p>
+        <p><strong>Before proceeding</strong><br>Review mechanism compatibility, outcome relevance and reuse permissions.</p>
+        <p><strong>First milestone</strong><br>An expert-reviewed decision on whether a shared design is feasible.</p>
+        <p><strong>Evidence package</strong><br>Attach the claim-level sources, disagreements and coverage report.</p>
+      </div>
+      <div class="ra-caution">Concept only: real citations and verified contacts are required before this becomes a usable proposal.</div>
+      <div class="ra-actions"><button type="button" data-go="connection">Review the evidence path</button></div>
+    </section>
+    <section id="ra-mismatch" hidden>
+      <span class="ra-tag">Excluded from this opportunity</span><h3>Same gene. Different effect.</h3>
+      <div class="ra-row"><strong>Disease A context</strong><p>Illustrative loss of function: the protein does less than expected.</p></div>
+      <div class="ra-row"><strong>Disease C context</strong><p>Illustrative gain of function: activity is increased or altered.</p></div>
+      <div class="ra-caution">The shared gene is insufficient to support this reuse proposal.</div>
+      <div class="ra-row"><strong>Next question</strong><p>Which variant-specific findings would support or rule out a shared research strategy?</p></div>
+    </section>
+    <section id="ra-gap" hidden>
+      <span class="ra-tag">No supported route</span><h3>The missing connection is useful to know</h3>
+      <p class="ra-sub">No complete path was found in this example dataset. That does not mean no connection exists.</p>
+      <div class="ra-row"><strong>Coverage</strong><p>Show the actual sources checked, query scope and retrieval dates here.</p></div>
+      <div class="ra-row"><strong>Not checked or unavailable</strong><p>Distinguish unsearched sources from failed retrievals.</p></div>
+      <div class="ra-row"><strong>Missing evidence</strong><p>A supported mechanism link to a community with an applicable asset.</p></div>
+      <div class="ra-caution">Next question: what evidence would establish the variant’s effect on the proposed pathway?</div>
+    </section>
+  </main>
+  <aside class="ra-aside" aria-label="Evidence inspector" aria-live="polite">
+    <div class="ra-eyebrow">Connection evidence</div>
+    <h3 id="ra-claim-title">Disease A involves this process</h3>
+    <p id="ra-claim-body">A reported relationship would appear here with the exact variant context and its source.</p>
+    <hr class="ra-line">
+    <span class="ra-tag" id="ra-claim-kind">Reported · example only</span>
+    <p><strong>Source</strong></p><p id="ra-source" class="ra-small">A real source record and supporting passage are required. No biomedical evidence is asserted by this mockup.</p>
+    <p><strong>What remains uncertain</strong></p><p id="ra-uncertainty">The mechanism must be checked for the specific variant and disease subtype.</p>
+    <div id="ra-extra" hidden><hr class="ra-line"><p class="ra-small">Separate fields: source date · extraction confidence and basis · review status · supporting and contradictory claim IDs.</p></div>
+    <hr class="ra-line"><p class="ra-small">Production behavior: selecting an edge opens its sources, contradictory findings and review history here.</p>
+  </aside>
+</div>
+<div class="ra-footer"><span>One diagnosis. An explained connection. A concrete next question.</span><span>No live medical data</span></div>
+<script>
+(() => {
+  const root = document.getElementById('rare-atlas-concept');
+  const q = s => root.querySelector(s);
+  const claims = {
+    mechanism: ['Disease A involves this process','A reported relationship would appear here with the exact variant context and its source.','Reported · example only','The mechanism must be checked for the specific variant and disease subtype.'],
+    overlap: ['Disease B also involves this process','The second disease requires its own evidence. Similar wording alone cannot establish a shared mechanism.','Reported · example only','The effects may differ in direction, tissue or disease stage.'],
+    community: ['Community B represents Disease B','A verified organization page would establish the exact diagnosis and scope represented.','Reported · example only','An organization’s existence does not establish willingness or capacity to collaborate.'],
+    asset: ['Community B maintains this resource','The resource owner, study record and latest availability check would support this relationship.','Reported · example only','Study design, underlying data and patient samples may have different access conditions.'],
+    reuse: ['This design may be adaptable','This is a proposed inference from the evidence path and asset comparison. It needs independent review.','Inferred · expert review needed','Measure validity, population differences and permission may prevent reuse.']
+  };
+  let currentView='connection';
+  const selectClaim = id => {
+    const c=claims[id]; if(!c)return;
+    q('#ra-claim-title').textContent=c[0];q('#ra-claim-body').textContent=c[1];q('#ra-claim-kind').textContent=c[2];q('#ra-uncertainty').textContent=c[3];
+    root.querySelectorAll('.ra-edge').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.claim===id)));
+  };
+  const showView = view => {
+    currentView=view;
+    root.querySelectorAll('[data-panel]').forEach(p=>p.hidden=p.dataset.panel!==view);
+    root.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
+    selectClaim(view==='connection'?'mechanism':'reuse');
+  };
+  root.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+  root.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.go)));
+  root.querySelectorAll('[data-claim]').forEach(b=>b.addEventListener('click',()=>selectClaim(b.dataset.claim)));
+  q('#ra-scenario').addEventListener('change',e=>{
+    const scenario=e.target.value;const lead=scenario==='lead';
+    q('.ra-tabs').hidden=!lead;
+    q('#ra-mismatch').hidden=scenario!=='mismatch';q('#ra-gap').hidden=scenario!=='gap';
+    q('#ra-title').textContent=lead?'A starting point for shared research':scenario==='mismatch'?'A connection that should be excluded':'A clear account of what is unknown';
+    q('#ra-subtitle').textContent=lead?'Disease A → related community → a possible shared study design':scenario==='mismatch'?'Disease C · shared gene, incompatible effect in this example':'Disease D · search coverage and the next question';
+    if(lead){showView(currentView);}else{
+      root.querySelectorAll('[data-panel]').forEach(p=>p.hidden=true);
+      q('#ra-claim-title').textContent=scenario==='mismatch'?'Why the path stops':'What would change the result';
+      q('#ra-claim-body').textContent=scenario==='mismatch'?'A shared name must not override a mechanism difference.':'A new supported edge could connect the disease to useful work.';
+      q('#ra-claim-kind').textContent='Illustrative state';
+      q('#ra-uncertainty').textContent=scenario==='mismatch'?'Review variant-specific evidence before considering a common strategy.':'No result is a statement about the searched coverage, not all available knowledge.';
+    }
+  });
+  if(globalThis.Tweak){const opts={detail:false};const tweak=new Tweak({container:root,onChange:()=>{q('#ra-extra').hidden=!opts.detail;}});tweak.addToggle(opts,'detail',{label:'Show scientific metadata'});}
+})();
+</script>
+</div>

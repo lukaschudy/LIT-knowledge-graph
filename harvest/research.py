@@ -52,7 +52,10 @@ def _text(el):
 
 
 def _pubmed_record(article):
-    pmid = _text(article.find(".//PMID"))
+    if article.tag == "PubmedBookArticle":
+        pmid = _text(article.find("./BookDocument/PMID"))
+    else:
+        pmid = _text(article.find("./MedlineCitation/PMID"))
     citation = article.find("MedlineCitation")
     art = citation.find("Article") if citation is not None else None
     if art is None:
@@ -72,7 +75,10 @@ def _pubmed_record(article):
                      "descriptor_ui": heading.find("DescriptorName").get("UI") if heading.find("DescriptorName") is not None else None,
                      "qualifiers": [{"name": _text(q), "ui": q.get("UI")} for q in heading.findall("QualifierName")]})
     ids = []
-    for node in article.findall(".//ArticleId"):
+    # Article-wide IDs live in PubmedData/ArticleIdList. A recursive search also
+    # captures PMCIDs of cited papers under ReferenceList and falsely links them
+    # to this PMID.
+    for node in article.findall("./PubmedData/ArticleIdList/ArticleId"):
         ids.append({"type": node.get("IdType"), "value": _text(node)})
     journal = art.find("Journal")
     return {"pmid": pmid, "title": _text(art.find("ArticleTitle")), "abstract_sections": abstract,
@@ -465,7 +471,7 @@ def harvest_preprints():
 
 
 def harvest_pmc_linked(pubmed_path=None, source="pmc_linked_oa", dataset_name="licensed_full_text"):
-    """Download only PubMed-linked PMC full text whose OAI metadata verifies CC rights."""
+    """Use Europe PMC core metadata to license-gate linked PMC full text."""
     pubmed_path=Path(pubmed_path or core.PROCESSED/"pubmed/rare_disease_citations.jsonl.gz")
     if not pubmed_path.exists(): raise FileNotFoundError(f"PubMed citation dataset not found: {pubmed_path}")
     linked={}; missing=0; excluded_nonfocus=0; scanned_citations=0
@@ -485,82 +491,96 @@ def harvest_pmc_linked(pubmed_path=None, source="pmc_linked_oa", dataset_name="l
                 if pmcid.startswith("PMC") and pmcid[3:].isdigit():
                     linked.setdefault(pmcid,[]).append(pmid); found=True
         if not found: missing+=1
-    eligible={}; queued=[]; checked=0
-    oai="https://pmc.ncbi.nlm.nih.gov/api/oai/v1/mh/"
-    for pmcid,pmids in linked.items():
-        numeric=pmcid[3:]
-        url=oai+"?"+urlencode({"verb":"GetRecord","metadataPrefix":"oai_dc","identifier":f"oai:pubmedcentral.nih.gov:{numeric}"})
-        try:
-            path=_get(source,url,f"oai-dc-{pmcid}.xml","PMC OAI metadata","GetRecord/oai_dc")
-            root=ET.parse(path).getroot(); ns={"oai":"http://www.openarchives.org/OAI/2.0/","dc":"http://purl.org/dc/elements/1.1/"}
-            record=root.find(".//oai:record",ns)
-            if record is None:
-                queued.append({"pmcid":pmcid,"pmids":pmids,"status":"metadata_missing","rights":[]}); continue
-            sets=[x.text for x in record.findall("./oai:header/oai:setSpec",ns) if x.text]
-            rights=[x.text.strip() for x in record.findall(".//dc:rights",ns) if x.text and x.text.strip()]
-            cc=[x for x in rights if "creativecommons.org/licenses/" in x.lower()]
-            checked+=1
-            if "pmc-open" in sets and cc:
-                eligible[pmcid]={"pmcid":pmcid,"pmids":pmids,"sets":sets,"rights":rights,"license_uri":cc[-1]}
-            else:
-                queued.append({"pmcid":pmcid,"pmids":pmids,"status":"license_unverified_or_not_pmc_open","sets":sets,"rights":rights})
-        except Exception as exc:
-            queued.append({"pmcid":pmcid,"pmids":pmids,"status":"metadata_fetch_error","error":str(exc)[:500]})
-        time.sleep(.36)
     if not linked: raise RuntimeError("PubMed corpus contains no PMC identifiers; no licensing status can be asserted")
-    fulltexts=[]; retrieval_queue=[]; ids=list(eligible)
-    for pos in range(0,len(ids),10):
-        chunk=ids[pos:pos+10]
-        url="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?"+urlencode({"db":"pmc","id":",".join(x[3:] for x in chunk),"retmode":"xml","tool":"LIT-knowledge-graph"})
+    # Europe PMC's core endpoint accepts an OR of PMCID fields and exposes the
+    # article's isOpenAccess and license values, avoiding one OAI request per ID.
+    ids=sorted(linked); metadata={}; exact_batches=[]; metadata_errors=[]; batch_size=40
+    endpoint="https://www.ebi.ac.uk/europepmc/webservices/rest/search"
+    for offset in range(0,len(ids),batch_size):
+        batch=ids[offset:offset+batch_size]
+        query="PMCID:("+" OR ".join(batch)+")"
+        params={"query":query,"format":"json","resultType":"core","pageSize":1000,"cursorMark":"*"}
+        cursor="*"; returned={}; pages=0; hit_count=None
+        while True:
+            params["cursorMark"]=cursor
+            url=endpoint+"?"+urlencode(params)
+            import hashlib
+            key=hashlib.sha256((query+"|"+cursor).encode()).hexdigest()[:20]
+            try:
+                path=_get(source,url,f"epmc-license-{key}.json","Europe PMC core metadata; article license fields retained","current")
+                payload=_json(path); hit_count=int(payload.get("hitCount",0))
+                rows=payload.get("resultList",{}).get("result",[])
+                for row in rows:
+                    pmcid=(row.get("pmcid") or "").upper()
+                    if pmcid: returned[pmcid]=row
+                pages+=1
+                next_cursor=payload.get("nextCursorMark")
+                if not rows or not next_cursor or next_cursor==cursor: break
+                cursor=next_cursor
+            except Exception as exc:
+                metadata_errors.append({"requested_pmcids":batch,"status":"metadata_fetch_error","error":str(exc)[:500]})
+                break
+        expected=set(batch); actual=set(returned)
+        exact_batches.append({"requested":len(expected),"reported_hits":hit_count,"returned_unique_pmcids":len(actual),
+                             "missing_pmcids":sorted(expected-actual),"unexpected_pmcids":sorted(actual-expected),"pages":pages})
+        metadata.update(returned)
+    eligible={}; queued=[]; focus_linked={}
+    for pmcid,pmids in linked.items():
+        row=metadata.get(pmcid)
+        if not row:
+            queued.append({"pmcid":pmcid,"pmids":pmids,"status":"metadata_missing_from_europe_pmc"}); continue
+        license_id=(row.get("license") or "").strip().lower()
+        # CC BY, CC BY-SA, CC BY-NC, CC BY-NC-SA and CC0 permit the intended
+        # attribution-preserving research copy; ND licenses remain review-only.
+        compatible=license_id in {"cc by","cc by-sa","cc by-nc","cc by-nc-sa","cc0"}
+        item={"pmcid":pmcid,"pmids":pmids,"is_open_access":row.get("isOpenAccess"),
+              "license":row.get("license"),"europe_pmc_source":row.get("source"),"title":row.get("title"),"doi":row.get("doi")}
+        if compatible:
+            eligible[pmcid]=item
+        else:
+            item["status"]="license_unknown_or_incompatible"
+            queued.append(item)
+    # Keep metadata mapping to original IDs and PMID membership for audit.
+    core.emit_records(source,"license_metadata",(
+        {"pmcid":pid,"pmids":linked.get(pid,[]),"is_open_access":row.get("isOpenAccess"),"license":row.get("license"),
+         "europe_pmc_source":row.get("source"),"pmid":row.get("pmid"),"doi":row.get("doi"),"title":row.get("title"),
+         "raw_metadata":row} for pid,row in sorted(metadata.items())),input_paths=[pubmed_path,core.RAW/source],
+        description="Europe PMC core metadata queried by exact PMCID groups. isOpenAccess and source license identifiers retained; no license inferred from PMC membership.")
+    fulltexts=[]; retrieval_queue=[]
+    for pmcid,item in eligible.items():
+        url=f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
         try:
-            path=_get(source,url,f"licensed-jats-{pos:08d}.xml","Per-record Creative Commons license verified from PMC OAI metadata", "queried-"+str(len(chunk)))
-            root=ET.parse(path).getroot()
-        except Exception as exc:
-            retrieval_queue.extend({"pmcid":pid,"pmids":eligible[pid]["pmids"],"status":"efetch_batch_error","error":str(exc)[:500]} for pid in chunk)
-            continue
-        returned={}
-        anonymous=0
-        for article in root.findall(".//article"):
-            pmcid_node=article.find(".//article-id[@pub-id-type='pmc']")
-            pmcid=_text(pmcid_node)
-            if not pmcid:
-                pmcid_node=article.find(".//article-id[@pub-id-type='pmcid']"); pmcid=_text(pmcid_node)
-            if not pmcid:
-                anonymous+=1; continue
-            pmcid=pmcid.upper(); pmcid=pmcid if pmcid.startswith("PMC") else "PMC"+pmcid
-            returned[pmcid]=article
-        for extra in sorted(set(returned)-set(chunk)):
-            retrieval_queue.append({"pmcid":extra,"status":"unexpected_efetch_id","requested_pmcids":chunk})
-        if anonymous:
-            retrieval_queue.append({"status":"efetch_articles_without_pmcid","count":anonymous,"requested_pmcids":chunk})
-        for pmcid in chunk:
-            article=returned.get(pmcid)
-            if article is None:
-                retrieval_queue.append({"pmcid":pmcid,"pmids":eligible[pmcid]["pmids"],"status":"efetch_id_missing_from_response"})
-                continue
-            lic=article.find(".//permissions/license")
-            href=lic.get("{http://www.w3.org/1999/xlink}href") if lic is not None else None
-            body_rights=[href] if href else [_text(x) for x in article.findall(".//permissions/license/license-p")]
-            fulltexts.append({"pmcid":pmcid,"pmids":eligible[pmcid]["pmids"],"license_uri":eligible[pmcid]["license_uri"],
-                "body_license":body_rights,"oai_license_texts":eligible[pmcid]["rights"],"title":_text(article.find("./front/article-meta/title-group/article-title")),
-                "supplementary_links":[{"href":el.get("{http://www.w3.org/1999/xlink}href"),"label":el.get("{http://www.w3.org/1999/xlink}title"),"article_license_uri":eligible[pmcid]["license_uri"]} for el in article.findall(".//supplementary-material") if el.get("{http://www.w3.org/1999/xlink}href")],
+            path=_get(source,url,f"licensed-jats-{pmcid}.xml","Europe PMC full text; compatible explicit CC license verified in core metadata",item["license"])
+            article=ET.parse(path).getroot()
+            found=article.find(".//article-id[@pub-id-type='pmc']")
+            if found is None: found=article.find(".//article-id[@pub-id-type='pmcid']")
+            returned_pmcid=(_text(found) or "").upper()
+            if returned_pmcid and not returned_pmcid.startswith("PMC"): returned_pmcid="PMC"+returned_pmcid
+            if returned_pmcid!=pmcid:
+                retrieval_queue.append({**item,"status":"fulltext_pmcid_mismatch","returned_pmcid":returned_pmcid}); continue
+            item.update({"body_license":[item["license"]],"supplementary_links":[
+                {"href":el.get("{http://www.w3.org/1999/xlink}href"),"label":el.get("{http://www.w3.org/1999/xlink}title"),"article_license":item["license"]}
+                for el in article.findall(".//supplementary-material") if el.get("{http://www.w3.org/1999/xlink}href")],
                 "jats_xml":ET.tostring(article,encoding="unicode")})
-        if pos+10<len(ids): time.sleep(.51)
-    if not fulltexts and eligible: raise RuntimeError("PMC OAI rights were eligible but EFetch returned no linked article XML")
+            fulltexts.append(item)
+        except Exception as exc:
+            retrieval_queue.append({**item,"status":"fulltext_fetch_error","error":str(exc)[:500]})
+        time.sleep(.2)
     if fulltexts:
         core.emit_records(source,dataset_name,fulltexts,input_paths=[pubmed_path,core.RAW/source],
-            description="PMC JATS XML fetched only after OAI GetRecord confirmed pmc-open set membership and an explicit Creative Commons license URI.")
+            description="Europe PMC JATS fetched only after core metadata exposed an explicit compatible Creative Commons license identifier.")
     if queued:
         core.emit_records(source,"rights_review_queue",queued,input_paths=[pubmed_path,core.RAW/source],
-            description="Linked PMC identifiers whose OAI metadata did not establish pmc-open membership plus a Creative Commons URI, or whose metadata fetch failed. No full text fetched for these records.")
+            description="Linked PMC identifiers lacking an explicit compatible license identifier in Europe PMC core metadata. No full text fetched for these records.")
     if retrieval_queue:
-        core.emit_records(source,"efetch_retry_queue",retrieval_queue,input_paths=[pubmed_path,core.RAW/source],description="PMC articles with verified OAI CC rights whose authorized EFetch batch failed or returned an incomplete requested PMCID set.")
-    has_errors=any(x["status"] in {"metadata_fetch_error","efetch_batch_error","efetch_id_missing_from_response"} for x in queued+retrieval_queue)
-    coverage={"pubmed_citations_scanned":scanned_citations,"focus_citations_excluded":excluded_nonfocus,"linked_articles_with_pmcid":len(linked),"oai_metadata_checked":checked,
-        "verified_cc_candidates":len(eligible),"downloaded_jats_records":len(fulltexts),"queued_for_rights_review":len(queued),
-        "queued_for_fetch_retry":len(retrieval_queue),"citations_without_pmcid":missing,"oai_network_errors":sum(x["status"]=="metadata_fetch_error" for x in queued),
-        "license_unknown_or_not_open":sum(x["status"]=="license_unverified_or_not_pmc_open" for x in queued),
-        "limitation":"Only PubMed-linked PMC records in the declared scope were considered. Full text is restricted to pmc-open records with explicit Creative Commons rights in OAI metadata; other candidates are counted and queued without full-text retrieval."}
+        core.emit_records(source,"fulltext_retry_queue",retrieval_queue,input_paths=[pubmed_path,core.RAW/source],description="Europe PMC full-text fetch or identity errors for records with an explicit compatible license.")
+    has_errors=bool(metadata_errors or retrieval_queue or any(x["missing_pmcids"] or x["unexpected_pmcids"] or x["reported_hits"]!=x["returned_unique_pmcids"] for x in exact_batches))
+    coverage={"pubmed_citations_scanned":scanned_citations,"focus_citations_excluded":excluded_nonfocus,"linked_articles_with_pmcid":len(linked),
+        "metadata_pmcids_expected":len(linked),"metadata_pmcids_returned":len(metadata),"metadata_exact_id_set_match":set(linked)==set(metadata),
+        "metadata_batches":exact_batches,"metadata_errors":metadata_errors,"compatible_license_candidates":len(eligible),
+        "downloaded_jats_records":len(fulltexts),"queued_for_rights_review":len(queued),"queued_for_fetch_retry":len(retrieval_queue),
+        "citations_without_pmcid":missing,"license_unknown_or_incompatible":sum(x["status"]=="license_unknown_or_incompatible" for x in queued),
+        "limitation":"The corpus is limited to PubMed-linked PMCIDs in the declared focus query. Exact Europe PMC PMCID search results retain source isOpenAccess and license fields. Full text is fetched only for source-provided CC BY/SA/NC or CC0 identifiers; missing, non-CC, ND, and unknown licenses stay queued. Supplement links are recorded; assets are not fetched unless separately rights-verified."}
     if source=="pmc_grin_oa": coverage["focused_scope"]={"pmids":sorted(GRIN_FULLTEXT_PMIDS),"pmcids":sorted(GRIN_FULLTEXT_PMCIDS),"title_abstract_mesh_regex":GRIN_FULLTEXT_RE.pattern}
     core.update_manifest(source,status="complete_with_fetch_errors" if has_errors else ("complete_with_rights_queue" if queued else "complete"),coverage=coverage)
     return len(fulltexts),len(queued)

@@ -27,6 +27,17 @@ class ResearchParsingTests(unittest.TestCase):
         self.assertEqual(parsed["pmid"],"987")
         self.assertIn("PubmedBookArticle",parsed["raw_xml"])
 
+    def test_pubmed_article_ids_exclude_pmcids_from_references(self):
+        import xml.etree.ElementTree as ET
+        article = ET.fromstring('''<PubmedArticle><MedlineCitation><PMID>123</PMID><Article>
+          <ArticleTitle>Current article</ArticleTitle></Article><ReferenceList><Reference><ArticleIdList>
+          <ArticleId IdType="pmc">PMC999</ArticleId></ArticleIdList></Reference></ReferenceList>
+          </MedlineCitation><PubmedData><ArticleIdList><ArticleId IdType="pmc">PMC123</ArticleId>
+          <ArticleId IdType="doi">10/current</ArticleId></ArticleIdList></PubmedData></PubmedArticle>''')
+        parsed = research._pubmed_record(article)
+        self.assertEqual(parsed["article_ids"], [{"type": "pmc", "value": "PMC123"},
+                                                  {"type": "doi", "value": "10/current"}])
+
     def test_pubmed_id_set_audit_reports_missing_and_unexpected(self):
         audit=research.pubmed_id_coverage({"1","2","3"},{"1","2","4"})
         self.assertEqual(audit["missing_ids"],["3"])

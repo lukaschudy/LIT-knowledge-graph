@@ -1,0 +1,218 @@
+<div id="research-decision-loops">
+  <style>
+    #research-decision-loops .rdl-top {display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+    #research-decision-loops .rdl-controls {display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin:16px 0}
+    #research-decision-loops .rdl-controls label {flex:1;min-width:180px}
+    #research-decision-loops .rdl-key {display:flex;gap:16px;flex-wrap:wrap;margin:12px 0}
+    #research-decision-loops .rdl-key span {display:inline-flex;align-items:center;gap:6px}
+    #research-decision-loops .rdl-swatch {width:16px;height:8px;display:inline-block;background:var(--viz-series-1)}
+    #research-decision-loops .rdl-swatch.return {background:var(--viz-series-2)}
+    #research-decision-loops .rdl-diagram {width:100%;display:block;overflow:visible}
+    #research-decision-loops .rdl-diagram text {fill:var(--foreground);font-family:inherit}
+    #research-decision-loops .rdl-diagram .sub {fill:var(--muted-foreground)}
+    #research-decision-loops .rdl-detail {min-height:2.5em;margin:12px 0;color:var(--muted-foreground)}
+    #research-decision-loops .rdl-comparisons {display:grid;grid-template-columns:1fr 1fr;gap:28px 22px;margin:20px 0}
+    #research-decision-loops .rdl-comparison ol {list-style:none;margin:12px 0;padding:0}
+    #research-decision-loops .rdl-comparison li {padding:8px 0;display:flex;gap:10px;align-items:baseline}
+    #research-decision-loops .rdl-mark {width:6px;min-width:6px;height:20px;background:var(--border);align-self:center}
+    #research-decision-loops .rdl-comparison.proposed .rdl-mark {background:var(--viz-series-1)}
+    #research-decision-loops .rdl-result {padding-top:8px;border-top:1px solid var(--border)}
+    #research-decision-loops .rdl-eval {margin-top:22px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    #research-decision-loops [hidden] {display:none!important}
+    @media(max-width:520px) {#research-decision-loops .rdl-comparisons {grid-template-columns:1fr}}
+  </style>
+  <div class="rdl-top">
+    <h2>From evidence to a defensible next action</h2>
+    <span class="viz-badge">Proposed architecture · not yet benchmarked</span>
+  </div>
+  <div class="nav nav-pills" role="tablist" aria-label="Architecture views">
+    <button type="button" class="nav-link active" id="rdl-loops-tab" role="tab" aria-selected="true" aria-controls="rdl-loops-panel">Explore the loops</button>
+    <button type="button" class="nav-link" id="rdl-compare-tab" role="tab" aria-selected="false" aria-controls="rdl-compare-panel">Compare approaches</button>
+  </div>
+  <div id="rdl-loops-panel" role="tabpanel" aria-labelledby="rdl-loops-tab">
+    <div class="rdl-controls">
+      <label class="form-label" for="rdl-loop">Workflow
+        <select class="form-select" id="rdl-loop">
+          <option value="overview">0 · Whole system</option>
+          <option value="prepare">1 · Prepare and validate evidence</option>
+          <option value="decision">2 · Discover, challenge and recommend</option>
+          <option value="feedback">3 · User and expert feedback</option>
+          <option value="refresh">4 · Evidence changes and revalidation</option>
+          <option value="evaluate">5 · Measure and improve</option>
+          <option value="example">Example · An asset-reuse decision</option>
+        </select>
+      </label>
+      <label class="form-label" for="rdl-case" id="rdl-case-label" hidden>Evidence outcome
+        <select class="form-select" id="rdl-case">
+          <option value="supported">Sufficient for a discussion</option>
+          <option value="unknown">Critical evidence missing</option>
+          <option value="conflict">Incompatible evidence found</option>
+        </select>
+      </label>
+    </div>
+    <div class="rdl-key text-small">
+      <span><i class="rdl-swatch" aria-hidden="true"></i>Forward work</span>
+      <span><i class="rdl-swatch return" aria-hidden="true"></i>Return / update loop</span>
+      <span id="rdl-cadence"></span>
+    </div>
+    <svg class="rdl-diagram" id="rdl-diagram" role="img" aria-labelledby="rdl-svg-title rdl-svg-desc"></svg>
+    <div class="rdl-detail text-small" id="rdl-detail" aria-live="polite"></div>
+  </div>
+  <div id="rdl-compare-panel" role="tabpanel" aria-labelledby="rdl-compare-tab" hidden>
+    <div class="rdl-comparisons">
+      <section class="rdl-comparison">
+        <h3>Search / literature portal</h3>
+        <ol><li><i class="rdl-mark"></i>Query and filters</li><li><i class="rdl-mark"></i>Rank relevant records</li><li><i class="rdl-mark"></i>User compares the evidence</li></ol>
+        <div class="rdl-result">Typical output: papers and records</div>
+      </section>
+      <section class="rdl-comparison">
+        <h3>Basic retrieval + AI chat</h3>
+        <ol><li><i class="rdl-mark"></i>Retrieve relevant passages</li><li><i class="rdl-mark"></i>Generate a cited answer</li><li><i class="rdl-mark"></i>User turns it into a plan</li></ol>
+        <div class="rdl-result">Typical output: an explanation</div>
+      </section>
+      <section class="rdl-comparison">
+        <h3>Graph-assisted retrieval</h3>
+        <ol><li><i class="rdl-mark"></i>Retrieve passages and connected entities</li><li><i class="rdl-mark"></i>Explore relationships across sources</li><li><i class="rdl-mark"></i>Synthesize connected evidence</li></ol>
+        <div class="rdl-result">Typical output: a connected answer</div>
+      </section>
+      <section class="rdl-comparison proposed">
+        <h3>Our proposed research workflow</h3>
+        <ol><li><i class="rdl-mark"></i>Retrieve evidence and candidate actions</li><li><i class="rdl-mark"></i>Check compatibility, access and contradictions</li><li><i class="rdl-mark"></i>Resolve decisive gaps within a budget</li></ol>
+        <div class="rdl-result">Target output: reviewed action + partner + blockers</div>
+      </section>
+    </div>
+    <hr>
+    <div class="text-small">Conceptual baselines; advanced portals and agents can already combine these capabilities.</div>
+    <div class="rdl-eval"><span class="viz-badge">10× hypothesis</span><span>Baseline person-hours ÷ our person-hours to an acceptable proposal</span></div>
+    <div class="rdl-eval text-small">Same corpus + held-out tasks + qualified review + correction time + failure reporting</div>
+  </div>
+  <script>
+  (() => {
+    const root = document.getElementById('research-decision-loops');
+    const selector = root.querySelector('#rdl-loop');
+    const caseSelect = root.querySelector('#rdl-case');
+    const svg = root.querySelector('#rdl-diagram');
+    const ns = 'http://www.w3.org/2000/svg';
+    const definitions = {
+      overview: {
+        title:'Whole system', cadence:'Background work + bounded live work',
+        nodes:[['1 · Prepare evidence','Sources → extraction → validation','Before queries'],['Store two complementary views','TopK passages + structured graph','Versioned records'],['2 · Investigate and recommend','Candidates → checks → targeted search','During a query'],['Return a practical decision','Action + evidence + partner + gaps','User-facing result'],['3 · Capture feedback','Preferences or reviewed new evidence','After a result'],['4 · Revalidate when sources change','Update affected claims and recommendations','Background upkeep'],['5 · Evaluate on held-out tasks','Quality, person-hours, latency and cost','Offline evaluation']],
+        forwards:[[0,1],[1,2],[2,3],[3,4]],
+        backs:[{from:4,to:2,label:'Refine',side:'right'},{from:5,to:0,label:'Refresh',side:'left'},{from:6,to:2,label:'Improve',side:'right'}],
+        detail:'Evaluation and maintenance run outside the live response; these stages are not one long model call.'
+      },
+      prepare: {
+        title:'Evidence preparation loop',cadence:'Background · reuse across queries',
+        nodes:[['Collect permitted source records','Papers, studies, registries and public profiles','Importer'],['Preserve source and identifiers','Snapshot, date, passage and variant identity','Code'],['Extract source-qualified claims','Effect, assay conditions and limitations','Astra'],['Validate and route for review','Schema + quotations + scientific assessment','Code + reviewer'],['Publish eligible evidence','Searchable passages and qualified graph claims','TopK + graph'],['Quarantine unresolved claims','Extraction errors or missing context','Review queue']],
+        forwards:[[0,1],[1,2],[2,3],[3,4]],
+        backs:[{from:3,to:5,label:'Needs review',side:'right'},{from:5,to:2,label:'Correct',side:'left'}],
+        detail:'Unreviewed claims remain separate; a quotation match alone does not prove a scientific claim.'
+      },
+      decision: {
+        title:'Bounded recommendation loop',cadence:'Live · one follow-up round initially',
+        nodes:[['Resolve the research goal','Variant identity, population and desired milestone','Code + user context'],['Retrieve in parallel','TopK passages + bounded graph neighborhood','TopK + graph'],['Propose concrete actions','Reuse an asset, contact a partner, resolve a gap','Astra'],['Check fit and challenge the proposal','Conditions, access, sources and contradictions','Code + Astra'],['Investigate decisive missing evidence','Focused supporting and opposing searches','Only within budget'],['Validate and rank eligible actions','Ready for discussion / needs clarification / unsupported','Code + Astra'],['Return the research handoff','Cited brief, owner, blockers and next step','Frontend']],
+        backs:[{from:4,to:1,label:'Search once',side:'right'}],
+        detail:'Skip follow-up when it cannot change the decision; unknowns remain explicit when the budget is reached.'
+      },
+      feedback: {
+        title:'Feedback loop',cadence:'On explicit user input',
+        nodes:[['Show the recommendation','Proposed action and its evidence','Frontend'],['Capture the reason for feedback','New constraint, factual correction or outcome','User / expert'],['Separate preferences from claims','Preferences adjust ranking; claims need evidence','Backend'],['Validate new factual material','Source grounding and appropriate review','Code + reviewer'],['Reassess affected candidates','Rerank, narrow the proposal or withdraw it','Graph + Astra']],
+        backs:[{from:4,to:0,label:'Update',side:'right'}],
+        detail:'A user accepting a recommendation does not make its scientific assumptions true.'
+      },
+      refresh: {
+        title:'Evidence maintenance loop',cadence:'Background · incremental updates',
+        nodes:[['Detect a changed source','New study, correction, retraction or asset update','Ingestion'],['Locate affected dependencies','Source → claim → graph edge → recommendation','Versioned IDs'],['Re-extract and review changes','Preserve conflicting and superseded evidence','Astra + reviewer'],['Refresh stores and invalidate caches','Update only affected records and results','TopK + graph'],['Reassess affected recommendations','Retain, downgrade or withdraw with a reason','Backend']],
+        backs:[{from:4,to:0,label:'Next change',side:'right'}],
+        detail:'Dependency tracking prevents stale evidence from silently supporting an old recommendation.'
+      },
+      evaluate: {
+        title:'Evaluation and improvement loop',cadence:'Offline · separate from user latency',
+        nodes:[['Define held-out research tasks','Useful lead, misleading neighbor and no-route case','Curated reference set'],['Run comparable workflows','Portal/search, basic RAG, GraphRAG and our loop','Same corpus and model where applicable'],['Blind qualified review','Citation support, fit, omissions and next-action utility','Reviewer'],['Measure acceptable outcomes','Human time including corrections; latency and cost','Measured results'],['Change one component and retest','Prompts, retrieval, gates or follow-up budget','Development set → held-out check']],
+        backs:[{from:4,to:1,label:'Compare',side:'right'}],
+        detail:'10× is a target for proposal preparation; study access, recruitment and treatment timelines remain separate.'
+      }
+    };
+    function example() {
+      const variant=caseSelect.value;
+      const endings={
+        supported:[['Evidence supports an initial discussion','Relevant methods + documented contact route','Not proof of transferability'],['Recommend a feasibility conversation','Prepare a cited brief for the asset maintainer','Ready for discussion']],
+        unknown:[['Critical comparability remains unknown','Follow-up did not resolve the missing condition','Do not infer compatibility'],['Recommend resolving the blocker','Ask a specific methods question before proposing reuse','Needs clarification']],
+        conflict:[['Evidence shows a key incompatibility','Required conditions do not match this use','Reject this reuse candidate'],['Explain the mismatch and next search','Show the reason; seek a compatible alternative','Not supported']]
+      };
+      return {title:'Illustrative asset-reuse decision',cadence:'Synthetic example · no actual scientific recommendation',nodes:[['Goal: prepare an observational proposal','Selected variant and defined research population','User intent'],['Find an existing study asset','Methods, population, maintainer and evidence','TopK + graph'],['Propose reusing a documented component','Treat applicability as a hypothesis','Candidate action'],['Check the decisive condition','Are the populations and measurements comparable?','Bounded follow-up'],...endings[variant]],backs:[{from:3,to:1,label:'Check',side:'right'}],detail:'The output changes with the evidence: useful action, clarification request or an explicit rejection.'};
+    }
+    function element(name, attrs, value) {
+      const node=document.createElementNS(ns,name);
+      Object.entries(attrs||{}).forEach(([k,v])=>node.setAttribute(k,String(v)));
+      if(value!==undefined) node.textContent=value;
+      return node;
+    }
+    function wrap(text,max) {
+      const words=text.split(' '),lines=[];let line='';
+      words.forEach(word=>{if((line+' '+word).trim().length>max&&line){lines.push(line);line=word;}else line=(line+' '+word).trim();});
+      if(line)lines.push(line);return lines;
+    }
+    function draw() {
+      const data=selector.value==='example'?example():definitions[selector.value];
+      const width=Math.max(280,root.querySelector('#rdl-loops-panel').clientWidth||736);
+      const small=width<500;
+      const margin=small?35:80;
+      const nodeWidth=width-margin*2;
+      const maxChars=Math.max(22,Math.floor((nodeWidth-22)/(small?7:7.5)));
+      const cards=data.nodes.map(n=>({n,head:wrap(n[0],maxChars),sub:wrap(n[1],maxChars),role:wrap(n[2],maxChars)}));
+      let y=14;
+      cards.forEach(c=>{c.y=y;c.h=18*(c.head.length+c.sub.length+c.role.length)+22;y+=c.h+28;});
+      svg.replaceChildren();
+      svg.setAttribute('viewBox',`0 0 ${width} ${y-12}`);
+      svg.setAttribute('height',String(y-12));
+      svg.append(element('title',{id:'rdl-svg-title'},data.title));
+      svg.append(element('desc',{id:'rdl-svg-desc'},data.nodes.map(n=>n.join(': ')).join('. ')+'. Return paths: '+data.backs.map(b=>`${b.label} from step ${b.from+1} to ${b.to+1}`).join('; ')));
+      const defs=element('defs');
+      ['forward','return'].forEach((id,i)=>{const mark=element('marker',{id:'rdl-arrow-'+id,viewBox:'0 0 8 8',refX:7,refY:4,markerWidth:6,markerHeight:6,orient:'auto-start-reverse'});mark.append(element('path',{d:'M 0 0 L 8 4 L 0 8 z',fill:`var(--viz-series-${i+1})`}));defs.append(mark);});
+      svg.append(defs);
+      const forwards=data.forwards||cards.slice(0,-1).map((c,i)=>[i,i+1]);
+      forwards.forEach(([i,j])=>{const c=cards[i];svg.append(element('path',{d:`M ${width/2} ${c.y+c.h} V ${cards[j].y-4}`,stroke:'var(--viz-series-1)','stroke-width':1.5,fill:'none','marker-end':'url(#rdl-arrow-forward)'}));});
+      data.backs.forEach((b,i)=>{
+        const from=cards[b.from],to=cards[b.to],right=b.side==='right';
+        const edge=right?width-margin:margin;
+        const gutter=right?width-12-i*8:12+i*8;
+        const fy=from.y+from.h/2,ty=to.y+to.h/2;
+        const path=element('path',{d:`M ${edge} ${fy} H ${gutter} V ${ty} H ${right?edge+4:edge-4}`,stroke:'var(--viz-series-2)','stroke-width':1.5,fill:'none','marker-end':'url(#rdl-arrow-return)'});
+        path.append(element('title',{},b.label));svg.append(path);
+        if(!small){const label=element('text',{x:right?gutter-7:gutter+7,y:(fy+ty)/2,'text-anchor':'middle',transform:`rotate(-90 ${right?gutter-7:gutter+7} ${(fy+ty)/2})`,class:'text-small'},b.label);svg.append(label);}
+      });
+      cards.forEach((c,i)=>{
+        const group=element('g');
+        group.append(element('rect',{x:margin,y:c.y,width:nodeWidth,height:c.h,rx:8,fill:i===cards.length-1?'color-mix(in srgb, var(--viz-series-1) 12%, var(--background))':'var(--background)',stroke:'var(--border)','stroke-width':1}));
+        group.append(element('rect',{x:margin,y:c.y+10,width:3,height:c.h-20,fill:'var(--viz-series-1)'}));
+        let ty=c.y+21;
+        [c.head,c.sub,c.role].forEach((lines,idx)=>{lines.forEach(line=>{group.append(element('text',{x:width/2,y:ty,'text-anchor':'middle',class:idx?'sub text-small':'',...(idx===0?{'font-weight':500}:{})},line));ty+=18;});});svg.append(group);
+      });
+      root.querySelector('#rdl-cadence').textContent=data.cadence;
+      root.querySelector('#rdl-detail').textContent=data.detail;
+      root.querySelector('#rdl-case-label').hidden=selector.value!=='example';
+    }
+    function save() {
+      const active=root.querySelector('[role="tab"][aria-selected="true"]');
+      if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{loop:selector.value,exampleOutcome:caseSelect.value},privateContent:{tab:active?.id||'rdl-loops-tab'}}).catch(()=>{});
+    }
+    function restore(state) {
+      const content=state?.modelContent;
+      if(content&&(definitions[content.loop]||content.loop==='example'))selector.value=content.loop;
+      if(content&&['supported','unknown','conflict'].includes(content.exampleOutcome))caseSelect.value=content.exampleOutcome;
+      const id=state?.privateContent?.tab;
+      if(id==='rdl-compare-tab'||id==='rdl-loops-tab'){
+        root.querySelectorAll('[role="tab"]').forEach(tab=>{const active=tab.id===id;tab.setAttribute('aria-selected',String(active));tab.classList.toggle('active',active);root.querySelector('#'+tab.getAttribute('aria-controls')).hidden=!active;});
+      }
+      draw();
+    }
+    selector.addEventListener('change',()=>{draw();save();});
+    caseSelect.addEventListener('change',()=>{draw();save();});
+    root.querySelectorAll('[role="tab"]').forEach(tab=>tab.addEventListener('click',()=>requestAnimationFrame(()=>{draw();save();})));
+    window.addEventListener('openai:set_globals',event=>{if(event.detail?.globals?.widgetState)restore(event.detail.globals.widgetState);});
+    new ResizeObserver(()=>draw()).observe(root);
+    restore(window.openai?.widgetState);
+  })();
+  </script>
+</div>
