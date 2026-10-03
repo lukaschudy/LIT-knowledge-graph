@@ -1,10 +1,12 @@
 """TopK transport and evidence-preserving reciprocal-rank hybrid retrieval."""
 from __future__ import annotations
 
+from collections import deque
 from concurrent.futures import ThreadPoolExecutor
 import json
 import os
 from pathlib import Path
+import threading
 import time
 
 from .passages import canonical, file_sha, gene_mentions, protein_mentions, read_rows
@@ -13,6 +15,28 @@ DEFAULT_REGION = "aws-us-east-1-elastica"
 FIELDS = ("_id", "title", "content", "source_id", "url", "locator", "kind", "license",
           "genes", "proteins", "node_ids", "claim_id", "evidence_id", "effect",
           "cohort_tier", "review_status", "identity_scope", "stance", "context_json", "snapshot_id")
+_REQUEST_LOCK = threading.Lock()
+_NEXT_REQUEST = 0.0
+
+
+def request(call, *args, **kwargs):
+    """Pace this process to two API requests/second; retry transient limits only."""
+    global _NEXT_REQUEST
+    for attempt in range(6):
+        with _REQUEST_LOCK:
+            now = time.monotonic()
+            slot = max(now, _NEXT_REQUEST)
+            _NEXT_REQUEST = slot + .5
+        time.sleep(max(0, slot - now))
+        try:
+            return call(*args, **kwargs)
+        except Exception as exc:
+            name = type(exc).__name__
+            transient = name in {"SlowDownError", "QueryLsnTimeoutError"} or (
+                name == "QuotaExceededError" and "too many requests" in str(exc).lower())
+            if not transient or attempt == 5:
+                raise
+            time.sleep(2 ** attempt)
 
 
 def settings(env_file=None):
@@ -75,9 +99,11 @@ def save_json(path, value):
     temporary.replace(path)
 
 
-def ingest(client, collection, export_path, state_path, region, *, create=False, progress=None):
+def ingest(client, collection, export_path, state_path, region, *, create=False, progress=None, workers=4):
     """Resume only an identical export/target. Acknowledgements precede checkpoints."""
     export_path, state_path = Path(export_path), Path(state_path)
+    if not 1 <= workers <= 4:
+        raise ValueError("Use one to four bounded upload workers")
     manifest = json.loads(export_path.with_suffix(export_path.suffix + ".manifest.json").read_text())
     if file_sha(export_path) != manifest["export_sha256"]:
         raise ValueError("Export checksum does not match manifest")
@@ -97,24 +123,44 @@ def ingest(client, collection, export_path, state_path, region, *, create=False,
         except CollectionAlreadyExistsError:
             pass
     remote = client.collection(collection)
-    for index, batch in enumerate(batches(read_rows(export_path))):
-        if index < state["acknowledged_batches"]:
-            continue
-        lsn = remote.upsert(wire_documents(batch))
-        state.update(acknowledged_batches=index + 1,
-                     acknowledged_documents=state["acknowledged_documents"] + len(batch),
-                     last_lsn=lsn, status="uploading")
-        save_json(state_path, state)
-        if progress:
-            progress({"uploaded": state["acknowledged_documents"], "total": manifest["documents"]})
+    remaining = ((i, b) for i, b in enumerate(batches(read_rows(export_path)))
+                 if i >= state["acknowledged_batches"])
+    # Checkpoint in source order even if writes finish out of order. On failure,
+    # uncheckpointed successful writes replay safely under the same document IDs.
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        pending = deque()
+        def submit_next():
+            item = next(remaining, None)
+            if item is not None:
+                i, batch = item
+                pending.append((i, len(batch), pool.submit(request, remote.upsert, wire_documents(batch))))
+        for _ in range(workers):
+            submit_next()
+        while pending:
+            index, count, future = pending.popleft()
+            lsn = future.result()
+            state.update(acknowledged_batches=index + 1,
+                         acknowledged_documents=state["acknowledged_documents"] + count,
+                         last_lsn=lsn, status="uploading")
+            save_json(state_path, state)
+            if progress:
+                progress({"uploaded": state["acknowledged_documents"], "total": manifest["documents"]})
+            submit_next()
     if state["acknowledged_documents"] != manifest["documents"]:
         raise ValueError("Acknowledged count does not match manifest")
     state["status"] = "uploaded_not_verified"
     save_json(state_path, state)
+    if not state.get("final_barrier_lsn") and manifest["documents"]:
+        # LSNs are opaque. Rewrite one identical document after all parallel
+        # writes finish to obtain a barrier known to follow every batch.
+        first = next(read_rows(export_path))
+        state["final_barrier_lsn"] = request(remote.upsert, wire_documents([first]))
+        state["last_lsn"] = state["final_barrier_lsn"]
+        save_json(state_path, state)
     # Verify every identifier and its content, not just the global collection count.
     verified = 0
     for batch in batches(read_rows(export_path)):
-        found = remote.get([r["_id"] for r in batch], lsn=state.get("last_lsn"))
+        found = request(remote.get, [r["_id"] for r in batch], lsn=state.get("last_lsn"))
         for expected in batch:
             actual = found.get(expected["_id"])
             if actual is None or any(actual.get(k) != v for k, v in expected.items() if k != "_id"):
@@ -196,7 +242,7 @@ def search(client, collection, query, snapshot, *, k=10, mode="hybrid", gene=Non
     channels = ["semantic", "keyword"] if mode == "hybrid" else [mode]
     def retrieve(channel):
         q = make_query(query, snapshot, channel, max(50, k), gene=gene, protein=protein, kind=kind)
-        return client.collection(collection).query(q, lsn=lsn)
+        return request(client.collection(collection).query, q, lsn=lsn)
     with ThreadPoolExecutor(max_workers=len(channels)) as pool:
         results = dict(zip(channels, pool.map(retrieve, channels)))
     hits = fuse(results, k) if mode == "hybrid" else results[mode][:k]

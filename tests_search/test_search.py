@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 
 from atlas.search.passages import article_documents, bundle_documents, chunks, export, protein_mentions, read_rows, xml_units
-from atlas.search.topk import batches, checked_bundle, fuse, graph_connections, ingest, resolve_filters, settings
+from atlas.search.topk import batches, checked_bundle, fuse, graph_connections, ingest, request, resolve_filters, settings
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -71,6 +71,20 @@ class PassageTests(unittest.TestCase):
 
 
 class TransportTests(unittest.TestCase):
+    def test_only_transient_quota_errors_are_retried(self):
+        QuotaExceededError = type("QuotaExceededError", (Exception,), {})
+        calls = []
+        def limited():
+            calls.append(1)
+            if len(calls) == 1:
+                raise QuotaExceededError("Too many requests")
+            return "ok"
+        with patch("atlas.search.topk.time.sleep"):
+            self.assertEqual(request(limited), "ok")
+            self.assertEqual(len(calls), 2)
+            with self.assertRaises(QuotaExceededError):
+                request(lambda: (_ for _ in ()).throw(QuotaExceededError("Storage quota exceeded")))
+
     def test_changed_bundle_cannot_reuse_old_claim_ids(self):
         with self.assertRaises(ValueError):
             checked_bundle(ROOT / "data/curated/grin_atlas_bundle.json", {"bundle_sha256": "wrong"})
@@ -114,7 +128,7 @@ class TransportTests(unittest.TestCase):
             p, state = Path(td) / "rows.gz", Path(td) / "state.json"
             export(ROOT, p, fulltext=False)
             client = Client()
-            with patch("atlas.search.topk.wire_documents", side_effect=lambda rows: rows):
+            with patch("atlas.search.topk.wire_documents", side_effect=lambda rows: rows), patch("atlas.search.topk.time.sleep"):
                 with self.assertRaises(ConnectionError):
                     ingest(client, "pilot", p, state, "region")
                 self.assertFalse(state.exists())
@@ -122,7 +136,7 @@ class TransportTests(unittest.TestCase):
                 self.assertEqual(result["verified_documents"], 56)
                 self.assertEqual(len(client.remote.docs), 56)
                 ingest(client, "pilot", p, state, "region")
-                self.assertEqual(client.remote.calls, 2)
+                self.assertEqual(client.remote.calls, 3)  # lost ack, replay, final write barrier
                 with self.assertRaises(ValueError):
                     ingest(client, "other", p, state, "region")
                 next(iter(client.remote.docs.values()))["content"] = "corrupted"
