@@ -1,0 +1,274 @@
+{
+  "source": "mgi",
+  "created_at": "2026-10-03T21:48:40.097180+00:00",
+  "artifacts": {
+    "HMD_HumanPhenotype.rpt": {
+      "url": "https://www.informatics.jax.org/downloads/reports/HMD_HumanPhenotype.rpt",
+      "final_url": "https://www.informatics.jax.org/downloads/reports/HMD_HumanPhenotype.rpt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/mgi/HMD_HumanPhenotype.rpt",
+      "bytes": 1989078,
+      "sha256": "fd0c57630216070624d266f709ed79da9d3aed03c988539ff7871635bbffe826",
+      "retrieved_at": "2026-10-03T21:48:40.097141+00:00",
+      "license": "CC BY 4.0 for data and annotations",
+      "version": null,
+      "http_status": 200,
+      "content_type": null,
+      "last_modified": "Mon, 21 Sep 2026 12:00:19 GMT",
+      "etag": "\"1e59d6-65bfcfe7185d3\""
+    },
+    "HOM_AllOrganism.rpt": {
+      "url": "https://www.informatics.jax.org/downloads/reports/HOM_AllOrganism.rpt",
+      "final_url": "https://www.informatics.jax.org/downloads/reports/HOM_AllOrganism.rpt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/mgi/HOM_AllOrganism.rpt",
+      "bytes": 22444944,
+      "sha256": "f8abd68f0f6f0882f048108a8ffa1e0ec55a3a35461221f123b240e27d043ae7",
+      "retrieved_at": "2026-10-03T21:48:43.404865+00:00",
+      "license": "CC BY 4.0 for data and annotations",
+      "version": null,
+      "http_status": 200,
+      "content_type": null,
+      "last_modified": "Mon, 21 Sep 2026 12:00:19 GMT",
+      "etag": "\"1567b90-65bfcfe788785\""
+    },
+    "MGI_PhenotypicAllele.rpt": {
+      "url": "https://www.informatics.jax.org/downloads/reports/MGI_PhenotypicAllele.rpt",
+      "final_url": "https://www.informatics.jax.org/downloads/reports/MGI_PhenotypicAllele.rpt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/mgi/MGI_PhenotypicAllele.rpt",
+      "bytes": 32307545,
+      "sha256": "4939874cf83d5ad08825253156534d0b2e9dd9e9efb697d67d917706ea7c04dc",
+      "retrieved_at": "2026-10-03T21:48:48.706302+00:00",
+      "license": "CC BY 4.0 for data and annotations",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain",
+      "last_modified": "Mon, 21 Sep 2026 12:00:55 GMT",
+      "etag": "\"1ecf959-65bfd009d62e5\""
+    },
+    "MGI_Strain.rpt": {
+      "url": "https://www.informatics.jax.org/downloads/reports/MGI_Strain.rpt",
+      "final_url": "https://www.informatics.jax.org/downloads/reports/MGI_Strain.rpt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/mgi/MGI_Strain.rpt",
+      "bytes": 6862477,
+      "sha256": "05bd9938bd931301de7448b5677a8230be0f65c126f7aa0d6bf0d3b839609a70",
+      "retrieved_at": "2026-10-03T21:48:53.114289+00:00",
+      "license": "CC BY 4.0 for data and annotations",
+      "version": null,
+      "http_status": 200,
+      "content_type": null,
+      "last_modified": "Mon, 21 Sep 2026 12:00:55 GMT",
+      "etag": "\"68b68d-65bfd00a4a63c\""
+    },
+    "MGI_GenePheno.rpt": {
+      "url": "https://www.informatics.jax.org/downloads/reports/MGI_GenePheno.rpt",
+      "final_url": "https://www.informatics.jax.org/downloads/reports/MGI_GenePheno.rpt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/mgi/MGI_GenePheno.rpt",
+      "bytes": 37674049,
+      "sha256": "0f87c5c238a07e8307b86dd82363c9b9581a9b5754b3b745a42236fba8886241",
+      "retrieved_at": "2026-10-03T21:51:48.410114+00:00",
+      "license": "CC BY 4.0 for data and annotations",
+      "version": null,
+      "http_status": 200,
+      "content_type": null,
+      "last_modified": "Mon, 21 Sep 2026 12:00:35 GMT",
+      "etag": "\"23edc41-65bfcff733ac4\""
+    },
+    "MGI_Geno_DiseaseDO.rpt": {
+      "url": "https://www.informatics.jax.org/downloads/reports/MGI_Geno_DiseaseDO.rpt",
+      "final_url": "https://www.informatics.jax.org/downloads/reports/MGI_Geno_DiseaseDO.rpt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/mgi/MGI_Geno_DiseaseDO.rpt",
+      "bytes": 8564161,
+      "sha256": "299595374c216e7f5565d909aa3b1596f65a8be26d02c9b5aad71c79dadbeaad",
+      "retrieved_at": "2026-10-03T21:51:52.151355+00:00",
+      "license": "CC BY 4.0 for data and annotations",
+      "version": null,
+      "http_status": 200,
+      "content_type": null,
+      "last_modified": "Mon, 21 Sep 2026 12:00:36 GMT",
+      "etag": "\"82adc1-65bfcff755da9\""
+    },
+    "MGI_Geno_NotDiseaseDO.rpt": {
+      "url": "https://www.informatics.jax.org/downloads/reports/MGI_Geno_NotDiseaseDO.rpt",
+      "final_url": "https://www.informatics.jax.org/downloads/reports/MGI_Geno_NotDiseaseDO.rpt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/mgi/MGI_Geno_NotDiseaseDO.rpt",
+      "bytes": 192165,
+      "sha256": "201c3ce8f3b61d7d9db584d3b73fe4b3e84607f9bf03340aa44f0aac81bf47b4",
+      "retrieved_at": "2026-10-03T21:51:53.196060+00:00",
+      "license": "CC BY 4.0 for data and annotations",
+      "version": null,
+      "http_status": 200,
+      "content_type": null,
+      "last_modified": "Mon, 21 Sep 2026 12:00:36 GMT",
+      "etag": "\"2eea5-65bfcff75906a\""
+    },
+    "MGI_DiseaseGeneModel.rpt": {
+      "url": "https://www.informatics.jax.org/downloads/reports/MGI_DiseaseGeneModel.rpt",
+      "final_url": "https://www.informatics.jax.org/downloads/reports/MGI_DiseaseGeneModel.rpt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/mgi/MGI_DiseaseGeneModel.rpt",
+      "bytes": 14552731,
+      "sha256": "692db83e5aec52b0fe51fb2c4537420f1936164f05e99c67fa5bbc1bb88f6367",
+      "retrieved_at": "2026-10-03T21:51:55.382635+00:00",
+      "license": "CC BY 4.0 for data and annotations",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain",
+      "last_modified": "Mon, 21 Sep 2026 12:00:31 GMT",
+      "etag": "\"de0e9b-65bfcff2a7d85\""
+    },
+    "MGI_DiseaseMouseModel.rpt": {
+      "url": "https://www.informatics.jax.org/downloads/reports/MGI_DiseaseMouseModel.rpt",
+      "final_url": "https://www.informatics.jax.org/downloads/reports/MGI_DiseaseMouseModel.rpt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/mgi/MGI_DiseaseMouseModel.rpt",
+      "bytes": 14569060,
+      "sha256": "b0b9793984ff0b81e3b1aba46db6cd14c25e51ab0123be5edc2bed789bb625c4",
+      "retrieved_at": "2026-10-03T21:51:58.695422+00:00",
+      "license": "CC BY 4.0 for data and annotations",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain",
+      "last_modified": "Mon, 21 Sep 2026 12:00:31 GMT",
+      "etag": "\"de4e64-65bfcff32d635\""
+    }
+  },
+  "datasets": {
+    "hmd_humanphenotype": {
+      "path": "data/processed/harvest/mgi/hmd_humanphenotype.jsonl.gz",
+      "records": 28880,
+      "bytes": 496911,
+      "sha256": "072e3937ab3382dcca947e54b6701e593d96054fb8e8175b405aa2093c8d6774",
+      "input_paths": [
+        "data/raw/harvest/mgi/HMD_HumanPhenotype.rpt"
+      ],
+      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
+      "created_at": "2026-10-03T21:51:39.683111+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "hom_allorganism": {
+      "path": "data/processed/harvest/mgi/hom_allorganism.jsonl.gz",
+      "records": 96201,
+      "bytes": 3752891,
+      "sha256": "b9e7e8c3f4bf9ab5537cd025a532f6e8415b44d2d859d5831296a31a218a2807",
+      "input_paths": [
+        "data/raw/harvest/mgi/HOM_AllOrganism.rpt"
+      ],
+      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
+      "created_at": "2026-10-03T21:51:40.956928+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "mgi_phenotypicallele": {
+      "path": "data/processed/harvest/mgi/mgi_phenotypicallele.jsonl.gz",
+      "records": 141601,
+      "bytes": 4989172,
+      "sha256": "04dec81330291b88e838f85a04cfe14dba5f8fbead2247efef98b31184620323",
+      "input_paths": [
+        "data/raw/harvest/mgi/MGI_PhenotypicAllele.rpt"
+      ],
+      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
+      "created_at": "2026-10-03T21:51:42.641826+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "mgi_strain": {
+      "path": "data/processed/harvest/mgi/mgi_strain.jsonl.gz",
+      "records": 124519,
+      "bytes": 1574727,
+      "sha256": "f216bf2b53cac446054cd41c2292d68c8768192aab54749a60c9615661a7725f",
+      "input_paths": [
+        "data/raw/harvest/mgi/MGI_Strain.rpt"
+      ],
+      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
+      "created_at": "2026-10-03T21:51:43.325069+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "mgi_genepheno": {
+      "path": "data/processed/harvest/mgi/mgi_genepheno.jsonl.gz",
+      "records": 283275,
+      "bytes": 3912490,
+      "sha256": "c0f146cea5bf6d865e717fcd4a6bcc9e65983dbda9a82e8bef9869b7c7cb9995",
+      "input_paths": [
+        "data/raw/harvest/mgi/MGI_GenePheno.rpt"
+      ],
+      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
+      "created_at": "2026-10-03T21:51:50.384210+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "mgi_geno_diseasedo": {
+      "path": "data/processed/harvest/mgi/mgi_geno_diseasedo.jsonl.gz",
+      "records": 54008,
+      "bytes": 667855,
+      "sha256": "0c4b468ae06bd5531b44793212d4f3704cac2b5a1e4c451ff96b100ac977ac8c",
+      "input_paths": [
+        "data/raw/harvest/mgi/MGI_Geno_DiseaseDO.rpt"
+      ],
+      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
+      "created_at": "2026-10-03T21:51:52.514496+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "mgi_geno_notdiseasedo": {
+      "path": "data/processed/harvest/mgi/mgi_geno_notdiseasedo.jsonl.gz",
+      "records": 1214,
+      "bytes": 18357,
+      "sha256": "d416a59ff615fbb614882fb9029d8a184fff3f3f95aae562e1efaeaae2978ae1",
+      "input_paths": [
+        "data/raw/harvest/mgi/MGI_Geno_NotDiseaseDO.rpt"
+      ],
+      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
+      "created_at": "2026-10-03T21:51:53.204810+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "mgi_diseasegenemodel": {
+      "path": "data/processed/harvest/mgi/mgi_diseasegenemodel.jsonl.gz",
+      "records": 13915,
+      "bytes": 1961210,
+      "sha256": "741438f5754d2e2f9757d31ad03b9ba64ad157270484cb1b82edefecd610b95a",
+      "input_paths": [
+        "data/raw/harvest/mgi/MGI_DiseaseGeneModel.rpt"
+      ],
+      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
+      "created_at": "2026-10-03T21:51:55.894326+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "mgi_diseasemousemodel": {
+      "path": "data/processed/harvest/mgi/mgi_diseasemousemodel.jsonl.gz",
+      "records": 15500,
+      "bytes": 1745113,
+      "sha256": "91356b8c2cb59d63968ba9c02d21f3d13f2e60ad4ab0b2e46c5e78050903dd73",
+      "input_paths": [
+        "data/raw/harvest/mgi/MGI_DiseaseMouseModel.rpt"
+      ],
+      "description": "Complete MGI tab-delimited report; original positional columns retained without unverified semantic labels.",
+      "created_at": "2026-10-03T21:51:59.094519+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "updated_at": "2026-10-03T21:52:09.467190+00:00",
+  "rights": "CC BY 4.0 for data and annotations",
+  "coverage": "Complete official orthology, human phenotype, allele, strain, gene phenotype and disease-model reports. Only positional native report columns emitted; semantic schemas not verified.",
+  "limitations": "Current provider release. Exact retrieval timestamp and SHA-256 are in each artifact record. MGI report rows retain positional native columns only; semantic labels were not assumed."
+}

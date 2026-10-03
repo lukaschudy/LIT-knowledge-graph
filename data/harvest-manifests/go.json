@@ -1,0 +1,71 @@
+{
+  "source": "go",
+  "created_at": "2026-10-03T21:48:27.536356+00:00",
+  "artifacts": {
+    "go-basic.obo": {
+      "url": "https://current.geneontology.org/ontology/go-basic.obo",
+      "final_url": "https://current.geneontology.org/ontology/go-basic.obo",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/go/go-basic.obo",
+      "bytes": 32227785,
+      "sha256": "b08d45b268b8c24ccb2513dbbbc7d4df9f6521c099b413f79eb31e06e0fa3bcc",
+      "retrieved_at": "2026-10-03T21:48:27.536249+00:00",
+      "license": "See release-specific ontology/annotation license",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/obo",
+      "last_modified": "Sat, 08 Aug 2026 22:27:06 GMT",
+      "etag": "\"8c4b8a3bec875862945bb5e31d58e4d6-4\""
+    },
+    "goa_human.gaf.gz": {
+      "url": "https://current.geneontology.org/annotations/goa_human.gaf.gz",
+      "final_url": "https://current.geneontology.org/annotations/goa_human.gaf.gz",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/go/goa_human.gaf.gz",
+      "bytes": 15041996,
+      "sha256": "db472faff1785878521693af62646546cea6af4a386609dd01c72c0554a46a30",
+      "retrieved_at": "2026-10-03T21:48:30.744079+00:00",
+      "license": "See release-specific ontology/annotation license",
+      "version": null,
+      "http_status": 200,
+      "content_type": "application/gzip",
+      "last_modified": "Thu, 28 May 2026 21:18:27 GMT",
+      "etag": "\"49deea57c5b9d36fad9429d2fb761a78-2\""
+    }
+  },
+  "datasets": {
+    "ontology": {
+      "path": "data/processed/harvest/go/ontology.jsonl.gz",
+      "records": 48345,
+      "bytes": 4762781,
+      "sha256": "1b80569c8f272ec05d24734057153cbd069455f988d811ec9865963f66737e8c",
+      "input_paths": [
+        "data/raw/harvest/go/go-basic.obo"
+      ],
+      "description": "Complete GO basic ontology, stanza fields preserved.",
+      "created_at": "2026-10-03T21:48:28.485816+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "human_annotations": {
+      "path": "data/processed/harvest/go/human_annotations.jsonl.gz",
+      "records": 906445,
+      "bytes": 20081661,
+      "sha256": "cd36cc8c6f48d48fa214dd429e878ec1314ac231b101c7594a3148b6174d215b",
+      "input_paths": [
+        "data/raw/harvest/go/goa_human.gaf.gz"
+      ],
+      "description": "Complete GOA human GAF 2.x, preserving evidence, qualifier, references, extensions and taxon.",
+      "created_at": "2026-10-03T21:48:39.109782+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "updated_at": "2026-10-03T21:52:09.467015+00:00",
+  "rights": "See release-specific ontology/annotation license",
+  "coverage": "Current go-basic ontology and complete GOA human GAF annotation file.",
+  "limitations": "Current provider release. Exact retrieval timestamp and SHA-256 are in each artifact record. MGI report rows retain positional native columns only; semantic labels were not assumed."
+}

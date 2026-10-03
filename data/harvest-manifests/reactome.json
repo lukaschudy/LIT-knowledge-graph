@@ -1,0 +1,100 @@
+{
+  "source": "reactome",
+  "created_at": "2026-10-03T21:46:11.389480+00:00",
+  "artifacts": {
+    "UniProt2Reactome_All_Levels.txt": {
+      "url": "https://reactome.org/download/current/UniProt2Reactome_All_Levels.txt",
+      "final_url": "https://reactome.org/download/current/UniProt2Reactome_All_Levels.txt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/reactome/UniProt2Reactome_All_Levels.txt",
+      "bytes": 117823518,
+      "sha256": "d2347cb04d1432f170ee0319283bd6314282909341488e9c33dc85aef663c68a",
+      "retrieved_at": "2026-10-03T21:46:11.389387+00:00",
+      "license": "Reactome license; attribution required",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain",
+      "last_modified": "Fri, 19 Jun 2026 00:12:56 GMT",
+      "etag": "W/\"705d81e-6549027922111-gzip\""
+    },
+    "ReactomePathways.txt": {
+      "url": "https://reactome.org/download/current/ReactomePathways.txt",
+      "final_url": "https://reactome.org/download/current/ReactomePathways.txt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/reactome/ReactomePathways.txt",
+      "bytes": 1592393,
+      "sha256": "f6d7a2bf89b5bcfe0250a0bc7f51bff94641447911712b8ff129f5b55e52df3a",
+      "retrieved_at": "2026-10-03T21:46:18.920397+00:00",
+      "license": "Reactome license; attribution required",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain",
+      "last_modified": "Fri, 19 Jun 2026 00:47:11 GMT",
+      "etag": "W/\"184c49-65490a20e9a02-gzip\""
+    },
+    "ReactomePathwaysRelation.txt": {
+      "url": "https://reactome.org/download/current/ReactomePathwaysRelation.txt",
+      "final_url": "https://reactome.org/download/current/ReactomePathwaysRelation.txt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/reactome/ReactomePathwaysRelation.txt",
+      "bytes": 634259,
+      "sha256": "fd49a624d80c14eb37ae57a02e141d574d5ede3f60022bb99edbd909448a3f1e",
+      "retrieved_at": "2026-10-03T21:46:19.196672+00:00",
+      "license": "Reactome license; attribution required",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain",
+      "last_modified": "Fri, 19 Jun 2026 00:37:28 GMT",
+      "etag": "W/\"9ad93-654907f4ec3f9-gzip\""
+    }
+  },
+  "datasets": {
+    "UniProt2Reactome_All_Levels": {
+      "path": "data/processed/harvest/reactome/UniProt2Reactome_All_Levels.jsonl.gz",
+      "records": 942792,
+      "bytes": 20727816,
+      "sha256": "7de5a31c232c7a13de1f8a60e90a3af8b25386fdbaa639aada5eb05ffade3b65",
+      "input_paths": [
+        "data/raw/harvest/reactome/UniProt2Reactome_All_Levels.txt"
+      ],
+      "description": "Complete headerless Reactome release file; columns labeled from official file specification, full organism/evidence retained.",
+      "created_at": "2026-10-03T21:50:07.068305+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "ReactomePathways": {
+      "path": "data/processed/harvest/reactome/ReactomePathways.jsonl.gz",
+      "records": 23603,
+      "bytes": 524078,
+      "sha256": "b1aaaabd61e7dcd8f8d59f522a903b816934bcf8796974f9232a59869d3cd7fa",
+      "input_paths": [
+        "data/raw/harvest/reactome/ReactomePathways.txt"
+      ],
+      "description": "Complete headerless Reactome release file; columns labeled from official file specification, full organism/evidence retained.",
+      "created_at": "2026-10-03T21:50:07.202675+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "ReactomePathwaysRelation": {
+      "path": "data/processed/harvest/reactome/ReactomePathwaysRelation.jsonl.gz",
+      "records": 23717,
+      "bytes": 208633,
+      "sha256": "ceaaae42625c24bafe0db900adcac296137897d3b6257be8d4f4679731d58462",
+      "input_paths": [
+        "data/raw/harvest/reactome/ReactomePathwaysRelation.txt"
+      ],
+      "description": "Complete headerless Reactome release file; columns labeled from official file specification, full organism/evidence retained.",
+      "created_at": "2026-10-03T21:50:07.299280+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "updated_at": "2026-10-03T21:52:09.466483+00:00",
+  "rights": "Reactome license; attribution required",
+  "coverage": "Current complete pathway, hierarchy and UniProt mapping files; mapping contains all organisms (organism retained; human subset is filterable).",
+  "limitations": "Current provider release. Exact retrieval timestamp and SHA-256 are in each artifact record. MGI report rows retain positional native columns only; semantic labels were not assumed."
+}

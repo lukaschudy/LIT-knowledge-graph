@@ -1,0 +1,129 @@
+{
+  "source": "clingen",
+  "created_at": "2026-10-03T21:46:22.783540+00:00",
+  "artifacts": {
+    "gene_disease_validity.csv": {
+      "url": "https://search.clinicalgenome.org/kb/gene-validity/download",
+      "final_url": "https://search.clinicalgenome.org/kb/gene-validity/download",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/clingen/gene_disease_validity.csv",
+      "bytes": 1127611,
+      "sha256": "e05943eb769968925d8eac7dc8894516444fa4f676efcde9879e921bb3c9b573",
+      "retrieved_at": "2026-10-03T21:46:22.783474+00:00",
+      "license": "ClinGen source terms; see provider download page",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain;charset=UTF-8",
+      "last_modified": "Sat, 03 Oct 2026 21:46:21 GMT",
+      "etag": null
+    },
+    "gene_disease_validity_lumping_splitting.csv": {
+      "url": "https://search.clinicalgenome.org/kb/gene-validity/download/ls",
+      "final_url": "https://search.clinicalgenome.org/kb/gene-validity/download/ls",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/clingen/gene_disease_validity_lumping_splitting.csv",
+      "bytes": 1970560,
+      "sha256": "99ed17cee2071237fc8ca3c2fd996407158d3d933b5f06c6cb5b6546bd1f029b",
+      "retrieved_at": "2026-10-03T21:47:31.832987+00:00",
+      "license": "ClinGen source terms; see provider download page",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain;charset=UTF-8",
+      "last_modified": "Sat, 03 Oct 2026 21:47:29 GMT",
+      "etag": null
+    },
+    "gene_dosage.csv": {
+      "url": "https://search.clinicalgenome.org/kb/gene-dosage/download",
+      "final_url": "https://search.clinicalgenome.org/kb/gene-dosage/download",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/clingen/gene_dosage.csv",
+      "bytes": 326682,
+      "sha256": "338a8fff7947354e2a493219230561bbb01c3d322251d23258d97495b6538725",
+      "retrieved_at": "2026-10-03T21:47:33.931637+00:00",
+      "license": "ClinGen source terms; see provider download page",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain;charset=UTF-8",
+      "last_modified": "Sat, 03 Oct 2026 21:47:33 GMT",
+      "etag": null
+    },
+    "gene_dosage_all.csv": {
+      "url": "https://search.clinicalgenome.org/kb/gene-dosage/downloadall",
+      "final_url": "https://search.clinicalgenome.org/kb/gene-dosage/downloadall",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/clingen/gene_dosage_all.csv",
+      "bytes": 553207,
+      "sha256": "662a222ba748201dd002db2d1f3aa3011848ef2cc61bb330559e4057a07d0b37",
+      "retrieved_at": "2026-10-03T21:47:37.353953+00:00",
+      "license": "ClinGen source terms; see provider download page",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain;charset=UTF-8",
+      "last_modified": "Sat, 03 Oct 2026 21:47:36 GMT",
+      "etag": null
+    }
+  },
+  "datasets": {
+    "gene_disease_validity": {
+      "path": "data/processed/harvest/clingen/gene_disease_validity.jsonl.gz",
+      "records": 3695,
+      "bytes": 248259,
+      "sha256": "34cee9d8016ed6b059bacdf4d5b3a16de050e2783ffb424639383f0247fc782c",
+      "input_paths": [
+        "data/raw/harvest/clingen/gene_disease_validity.csv"
+      ],
+      "description": "Complete official ClinGen CSV export; metadata and separator rows excluded, native labeled columns retained.",
+      "created_at": "2026-10-03T21:50:07.347298+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "gene_disease_validity_lumping_splitting": {
+      "path": "data/processed/harvest/clingen/gene_disease_validity_lumping_splitting.jsonl.gz",
+      "records": 3695,
+      "bytes": 269878,
+      "sha256": "8de92c83bbb492c98d53a71bc66b1451565e7e2ca04b0d1120bd3f7d2f393542",
+      "input_paths": [
+        "data/raw/harvest/clingen/gene_disease_validity_lumping_splitting.csv"
+      ],
+      "description": "Complete official ClinGen CSV export; metadata and separator rows excluded, native labeled columns retained.",
+      "created_at": "2026-10-03T21:50:07.404740+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "gene_dosage": {
+      "path": "data/processed/harvest/clingen/gene_dosage.jsonl.gz",
+      "records": 1715,
+      "bytes": 39000,
+      "sha256": "9aabd965254859e6b96947988dc03e918616d6cfc3f896d3face21749df46972",
+      "input_paths": [
+        "data/raw/harvest/clingen/gene_dosage.csv"
+      ],
+      "description": "Complete official ClinGen CSV export; metadata and separator rows excluded, native labeled columns retained.",
+      "created_at": "2026-10-03T21:50:07.419858+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "gene_dosage_all": {
+      "path": "data/processed/harvest/clingen/gene_dosage_all.jsonl.gz",
+      "records": 2233,
+      "bytes": 106726,
+      "sha256": "52da5b2f01020ebdd582399229f02bc3af5cc35a6157986df00135e1ecfaac7b",
+      "input_paths": [
+        "data/raw/harvest/clingen/gene_dosage_all.csv"
+      ],
+      "description": "Complete official ClinGen CSV export; metadata and separator rows excluded, native labeled columns retained.",
+      "created_at": "2026-10-03T21:50:07.446956+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "updated_at": "2026-10-03T21:52:09.466664+00:00",
+  "rights": "ClinGen source terms; see provider download page",
+  "coverage": "Complete current Gene-Disease Validity (standard and lumping/splitting), Gene Dosage and all Gene Dosage CSV exports.",
+  "limitations": "Current provider release. Exact retrieval timestamp and SHA-256 are in each artifact record. MGI report rows retain positional native columns only; semantic labels were not assumed."
+}

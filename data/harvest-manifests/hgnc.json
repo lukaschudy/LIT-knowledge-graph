@@ -1,0 +1,71 @@
+{
+  "source": "hgnc",
+  "created_at": "2026-10-03T21:45:54.250530+00:00",
+  "artifacts": {
+    "hgnc_complete_set.txt": {
+      "url": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt",
+      "final_url": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/hgnc/hgnc_complete_set.txt",
+      "bytes": 16963116,
+      "sha256": "2b4224ea847df2fc6982f5b2a52804c5d92fbb8810b134afb636f6029452dc03",
+      "retrieved_at": "2026-10-03T21:45:54.250438+00:00",
+      "license": "HGNC data use unrestricted; attribution retained",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain;charset=utf-8",
+      "last_modified": "Fri, 02 Oct 2026 13:45:08 GMT",
+      "etag": "\"3bdce13d47e6265f39fab7d989874ea5\""
+    },
+    "withdrawn.txt": {
+      "url": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/withdrawn.txt",
+      "final_url": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/withdrawn.txt",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/hgnc/withdrawn.txt",
+      "bytes": 258994,
+      "sha256": "9328a7361ed5149bf7901cae52c6c30b832b8ec55af22146ea296081278a3140",
+      "retrieved_at": "2026-10-03T21:45:56.047647+00:00",
+      "license": "HGNC data use unrestricted; attribution retained",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/plain;charset=utf-8",
+      "last_modified": "Fri, 02 Oct 2026 13:45:12 GMT",
+      "etag": "\"c07eabebfc7284c708cc096bb782df51\""
+    }
+  },
+  "datasets": {
+    "hgnc_complete_set": {
+      "path": "data/processed/harvest/hgnc/hgnc_complete_set.jsonl.gz",
+      "records": 45187,
+      "bytes": 4926909,
+      "sha256": "ba48ee2c8d1eed29665e9f42f1d56552c6e7dd8c80567d9be2d629a4ab359c13",
+      "input_paths": [
+        "data/raw/harvest/hgnc/hgnc_complete_set.txt"
+      ],
+      "description": "Complete current HGNC TSV; all native columns retained.",
+      "created_at": "2026-10-03T21:45:55.972816+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "withdrawn": {
+      "path": "data/processed/harvest/hgnc/withdrawn.jsonl.gz",
+      "records": 5291,
+      "bytes": 81850,
+      "sha256": "d26bf58309cfddd23335c92270ab2237aefe517f6e34cd58411de59a43cf47db",
+      "input_paths": [
+        "data/raw/harvest/hgnc/withdrawn.txt"
+      ],
+      "description": "Complete current HGNC TSV; all native columns retained.",
+      "created_at": "2026-10-03T21:45:56.081348+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "updated_at": "2026-10-03T21:52:09.458005+00:00",
+  "rights": "HGNC data use unrestricted; attribution retained",
+  "coverage": "Current complete approved HGNC gene dataset plus complete withdrawn symbol report.",
+  "limitations": "Current provider release. Exact retrieval timestamp and SHA-256 are in each artifact record. MGI report rows retain positional native columns only; semantic labels were not assumed."
+}

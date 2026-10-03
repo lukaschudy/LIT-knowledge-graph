@@ -1,0 +1,42 @@
+{
+  "source": "gencc",
+  "created_at": "2026-10-03T21:47:37.556843+00:00",
+  "artifacts": {
+    "assertions.csv": {
+      "url": "https://thegencc.org/download/action/submissions-export-csv?format=new",
+      "final_url": "https://thegencc.org/download/action/submissions-export-csv?format=new",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/gencc/assertions.csv",
+      "bytes": 26919595,
+      "sha256": "97fca07b2819478c38514ee7e8140aa7926dab98db681a532ff6f6cfa63a3cf9",
+      "retrieved_at": "2026-10-03T21:50:33.837190+00:00",
+      "license": "CC0 1.0; attribution requested",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/csv; charset=UTF-8",
+      "last_modified": "Sun, 27 Sep 2026 06:00:29 GMT",
+      "etag": "\"9f6f8b4d0a8a69820b89cc0b721f02ad\""
+    }
+  },
+  "datasets": {
+    "assertions": {
+      "path": "data/processed/harvest/gencc/assertions.jsonl.gz",
+      "records": 30328,
+      "bytes": 5901164,
+      "sha256": "9350df7d21a90a6734d2f8c88f89b0992598010b3da5e9745ac339b79bb99f6f",
+      "input_paths": [
+        "data/raw/harvest/gencc/assertions.csv"
+      ],
+      "description": "Complete GenCC CSV export; all source assertions retained.",
+      "created_at": "2026-10-03T21:50:34.997846+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "rights": "CC0 1.0; attribution requested",
+  "updated_at": "2026-10-03T21:52:09.466795+00:00",
+  "coverage": "Current complete versioned SGC assertion CSV export (new format).",
+  "limitations": "Current provider release. Exact retrieval timestamp and SHA-256 are in each artifact record. MGI report rows retain positional native columns only; semantic labels were not assumed."
+}

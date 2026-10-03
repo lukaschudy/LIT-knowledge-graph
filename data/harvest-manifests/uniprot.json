@@ -1,0 +1,42 @@
+{
+  "source": "uniprot",
+  "created_at": "2026-10-03T21:48:14.953226+00:00",
+  "artifacts": {
+    "reviewed_human.json.gz": {
+      "url": "https://rest.uniprot.org/uniprotkb/stream?query=%28reviewed%3Atrue%29+AND+%28organism_id%3A9606%29&format=json&compressed=true",
+      "final_url": "https://rest.uniprot.org/uniprotkb/stream?query=%28reviewed%3Atrue%29+AND+%28organism_id%3A9606%29&format=json&compressed=true",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/uniprot/reviewed_human.json.gz",
+      "bytes": 167501908,
+      "sha256": "9309de1cd243df3703feaec07e1a197b7007e6af550461c0010a69dc71f50915",
+      "retrieved_at": "2026-10-03T21:48:14.953130+00:00",
+      "license": "CC BY 4.0",
+      "version": null,
+      "http_status": 200,
+      "content_type": "application/json",
+      "last_modified": null,
+      "etag": null
+    }
+  },
+  "datasets": {
+    "reviewed_human": {
+      "path": "data/processed/harvest/uniprot/reviewed_human.jsonl.gz",
+      "records": 20431,
+      "bytes": 164152191,
+      "sha256": "f3a1d0f9a0abab9031304dbc053e6c90e9d8804fbf726a54b6817a266463a8f1",
+      "input_paths": [
+        "data/raw/harvest/uniprot/reviewed_human.json.gz"
+      ],
+      "description": "Complete reviewed human UniProtKB records from stream API, with native JSON objects and evidence retained.",
+      "created_at": "2026-10-03T21:51:10.934223+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "updated_at": "2026-10-03T21:52:09.466903+00:00",
+  "rights": "CC BY 4.0",
+  "coverage": "All reviewed UniProtKB human (taxon 9606) records returned by current release stream.",
+  "limitations": "Current provider release. Exact retrieval timestamp and SHA-256 are in each artifact record. MGI report rows retain positional native columns only; semantic labels were not assumed."
+}

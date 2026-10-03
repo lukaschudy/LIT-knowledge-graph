@@ -1,0 +1,42 @@
+{
+  "source": "ror",
+  "created_at": "2026-10-03T21:48:55.381276+00:00",
+  "artifacts": {
+    "ror-data.zip": {
+      "url": "https://zenodo.org/api/records/22902037/files/v2.13-2026-09-22-ror-data.zip/content",
+      "final_url": "https://zenodo.org/api/records/22902037/files/v2.13-2026-09-22-ror-data.zip/content",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/ror/ror-data.zip",
+      "bytes": 37540961,
+      "sha256": "476988542f1bdd185f779386f90149371f58cb4ebdba326db3b7b428a468d4a5",
+      "retrieved_at": "2026-10-03T21:51:18.743446+00:00",
+      "license": "CC0 1.0",
+      "version": "22902037",
+      "http_status": 200,
+      "content_type": "application/octet-stream, application/octet-stream",
+      "last_modified": null,
+      "etag": null
+    }
+  },
+  "datasets": {
+    "organizations": {
+      "path": "data/processed/harvest/ror/organizations.jsonl.gz",
+      "records": 141528,
+      "bytes": 18639861,
+      "sha256": "fb121ff55d2614cb3d44a779c32167b688b50bb57b3e0ceaee217d263da804c4",
+      "input_paths": [
+        "data/raw/harvest/ror/ror-data.zip"
+      ],
+      "description": "Complete versioned ROR JSON data dump including inactive and withdrawn records.",
+      "created_at": "2026-10-03T21:51:24.156397+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "rights": "CC0 1.0",
+  "updated_at": "2026-10-03T21:52:09.467335+00:00",
+  "coverage": "Current complete versioned ROR data dump ZIP, including inactive and withdrawn organizations.",
+  "limitations": "Current provider release. Exact retrieval timestamp and SHA-256 are in each artifact record. MGI report rows retain positional native columns only; semantic labels were not assumed."
+}
