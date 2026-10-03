@@ -1,0 +1,57 @@
+{
+  "source": "raresource",
+  "created_at": "2026-10-03T21:50:10.935663+00:00",
+  "artifacts": {
+    "diseases.csv": {
+      "url": "https://raresource.nih.gov/diseases/",
+      "method": "browser_export",
+      "path": "data/raw/harvest/raresource/diseases.csv",
+      "bytes": 3621615,
+      "sha256": "4562c91cf1aafdefb3de492550c00066e920c0ff54345c7e9b6f5676b97b5263",
+      "retrieved_at": "2026-10-03T21:50:10.935633+00:00",
+      "license": "Public table export; upstream integrated rights apply; redistribution not established",
+      "expected_records": 7200
+    },
+    "genes.csv": {
+      "url": "https://raresource.nih.gov/genes/",
+      "method": "browser_export",
+      "path": "data/raw/harvest/raresource/genes.csv",
+      "bytes": 1253953,
+      "sha256": "9eb467dc79ca4e8d5c785676849fc2616a3f42272cd91528d376956aacc9ea01",
+      "retrieved_at": "2026-10-03T21:50:21.792135+00:00",
+      "license": "Public table export; upstream integrated rights apply; redistribution not established",
+      "expected_records": 4512
+    }
+  },
+  "datasets": {
+    "diseases": {
+      "path": "data/processed/harvest/raresource/diseases.jsonl.gz",
+      "records": 7200,
+      "bytes": 720660,
+      "sha256": "d6272643219ad6e22436e1ef3cb12f2b4aa825a0babfe346b873d310c65daf6a",
+      "input_paths": [
+        "data/raw/harvest/raresource/diseases.csv"
+      ],
+      "description": "All rows from the public table export; UI count matched exactly. Native fields retained.",
+      "created_at": "2026-10-03T21:50:11.090574+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    },
+    "genes": {
+      "path": "data/processed/harvest/raresource/genes.jsonl.gz",
+      "records": 4512,
+      "bytes": 329002,
+      "sha256": "4bf0d7960a5e60d55777ce6fd2ab16fe70c2caeabdee2fbaa3228aa3b7cf02fb",
+      "input_paths": [
+        "data/raw/harvest/raresource/genes.csv"
+      ],
+      "description": "All rows from the public table export; UI count matched exactly. Native fields retained.",
+      "created_at": "2026-10-03T21:50:21.871995+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete_for_scope",
+  "updated_at": "2026-10-03T21:50:21.872271+00:00",
+  "scope": "Public disease and gene tables; curated literature annotations and variants are separate products, not yet included."
+}

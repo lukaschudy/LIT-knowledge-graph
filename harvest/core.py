@@ -51,7 +51,11 @@ def download(source,url,filename,*,license_name,version=None,refresh=False,metho
     """
     dest=RAW/source/filename; dest.parent.mkdir(parents=True,exist_ok=True)
     data=manifest(source); previous=data['artifacts'].get(filename)
-    if dest.exists() and previous and not refresh and digest(dest)==previous.get('sha256'):
+    if (dest.exists() and previous and not refresh
+            and previous.get('url')==safe_url(url)
+            and previous.get('method','GET')==method
+            and previous.get('request_body')==json_body
+            and digest(dest)==previous.get('sha256')):
         return dest
     part=dest.with_suffix(dest.suffix+'.part')
     resume_info=part.with_suffix(part.suffix+'.json')
@@ -127,3 +131,15 @@ def read_records(path):
     with open_text(path) as f:
         for line in f:
             yield json.loads(line)
+
+def import_export(source, input_path, filename, *, url, license_name, expected_records=None):
+    """Register a file obtained through a provider's public export control."""
+    original=Path(input_path)
+    dest=RAW/source/filename; dest.parent.mkdir(parents=True,exist_ok=True)
+    if original.resolve()!=dest.resolve():shutil.copy2(original,dest)
+    data=manifest(source)
+    data['artifacts'][filename]={'url':url,'method':'browser_export','path':str(dest.relative_to(ROOT)),
+        'bytes':dest.stat().st_size,'sha256':digest(dest),'retrieved_at':now(),
+        'license':license_name,'expected_records':expected_records}
+    update_manifest(source,artifacts=data['artifacts'])
+    return dest

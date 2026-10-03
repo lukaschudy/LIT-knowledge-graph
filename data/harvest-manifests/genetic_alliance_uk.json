@@ -1,0 +1,40 @@
+{
+  "source": "genetic_alliance_uk",
+  "created_at": "2026-10-03T21:50:22.010912+00:00",
+  "artifacts": {
+    "members.html": {
+      "url": "https://geneticalliance.org.uk/membership/a-z-members-directory/",
+      "final_url": "https://geneticalliance.org.uk/membership/a-z-members-directory/",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/genetic_alliance_uk/members.html",
+      "bytes": 121273,
+      "sha256": "87aec895e73309a5751c13597f36e9e17d1eada3d78fff7b4ec01c25a2a3d153",
+      "retrieved_at": "2026-10-03T21:50:22.010879+00:00",
+      "license": "Genetic Alliance UK website terms; attribution, noncommercial unmodified reuse; verify permission for redistribution",
+      "version": null,
+      "http_status": 200,
+      "content_type": "text/html; charset=UTF-8",
+      "last_modified": "Sat, 03 Oct 2026 21:45:47 GMT",
+      "etag": null
+    }
+  },
+  "datasets": {
+    "member_organizations": {
+      "path": "data/processed/harvest/genetic_alliance_uk/member_organizations.jsonl.gz",
+      "records": 260,
+      "bytes": 6759,
+      "sha256": "354eee957bf72380d6bb1a3197a9c7936f3a02535f5a97f2c9e32a5d8756a640",
+      "input_paths": [
+        "data/raw/harvest/genetic_alliance_uk/members.html"
+      ],
+      "description": "All external organization links within the A–Z member lists. Attribution: Genetic Alliance UK.",
+      "created_at": "2026-10-03T21:50:22.018307+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete_for_scope",
+  "updated_at": "2026-10-03T21:50:22.018494+00:00",
+  "scope": "Entire public A–Z directory snapshot; membership is not endorsement or disease-association evidence."
+}
