@@ -23,6 +23,7 @@ def run():
         ('gencc','assertions',['gene_curie'],HGNC),
         ('reactome','UniProt2Reactome_All_Levels',['uniprot_accession'],PROTEINS),
         ('go','human_annotations',['db_object_id'],PROTEINS),
+        ('uniprot','reviewed_human',['primaryAccession'],PROTEINS),
     ]
     disease_ids=set()
     for source,name,keys,values in jobs:

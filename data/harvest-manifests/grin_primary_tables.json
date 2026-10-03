@@ -6,8 +6,8 @@
     "table_rows": {
       "path": "data/processed/harvest/grin_primary_tables/table_rows.jsonl.gz",
       "records": 687,
-      "bytes": 25848,
-      "sha256": "b98de0028e850ecc6dee2930d6f42af0a09f97f67406ce3f3fdfbab70546a7f8",
+      "bytes": 30623,
+      "sha256": "726fa56dfa28e79867c6e5ad32f2f767e655afe5cc0b07b7b2dce7840bd5222e",
       "input_paths": [
         "data/raw/harvest/grin_primary_pages/PMC5142120.html",
         "data/raw/harvest/grin_primary_pages/PMC5656050.html",
@@ -17,13 +17,17 @@
         "data/raw/harvest/grin_primary_pages/PMC10973091.html",
         "data/raw/harvest/grin_primary_pages/PMC11046977.html"
       ],
-      "description": "All HTML table cells of seven selected primary papers; includes headers/footers and preserves source table boundaries. Not automatic scientific interpretation.",
-      "created_at": "2026-10-03T22:17:25.026208+00:00",
+      "description": "HTML table text and cell image references from seven selected primary papers. Image-based values remain untranscribed and flagged; blank text does not establish missing data. Row/column spans preserved, not expanded.",
+      "created_at": "2026-10-03T22:28:37.952942+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
     }
   },
   "status": "complete_for_scope",
-  "updated_at": "2026-10-03T22:17:25.026448+00:00",
-  "scope": "Tables present in selected seven primary article HTML pages; supplemental files not included here"
+  "updated_at": "2026-10-03T22:28:37.953232+00:00",
+  "scope": "Table text and image references present in seven selected primary article HTML pages; supplemental files and image transcription excluded",
+  "rows_with_untranscribed_images": 31,
+  "limitations": [
+    "Cells containing images may encode measured values or classifications absent from the text. Use cell_metadata images and inspect the source; do not interpret a blank string as absent data."
+  ]
 }

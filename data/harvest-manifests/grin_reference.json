@@ -145,10 +145,23 @@
       "created_at": "2026-10-03T21:57:56.811824+00:00",
       "format": "gzip-jsonl",
       "parser_version": "harvest-v1"
+    },
+    "uniprot_reviewed_human": {
+      "path": "data/processed/harvest/grin_reference/uniprot_reviewed_human.jsonl.gz",
+      "records": 2,
+      "bytes": 48565,
+      "sha256": "5d854624233825d25d374c9e9781b303eecea789690f142147b5a93d8e521f64",
+      "input_paths": [
+        "data/processed/harvest/uniprot/reviewed_human.jsonl.gz"
+      ],
+      "description": "Exact GRIN2A/GRIN2B protein identifier slice; reference annotations are not variant functional evidence.",
+      "created_at": "2026-10-03T22:27:54.681233+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
     }
   },
   "status": "complete_for_scope",
-  "updated_at": "2026-10-03T21:57:56.812089+00:00",
+  "updated_at": "2026-10-03T22:27:54.681250+00:00",
   "scope": "Exact gene/protein identifier slices of acquired reference snapshots; full native records retained. Independent curated functional evidence is required for demo inclusion.",
   "gene_symbols": [
     "GRIN2A",

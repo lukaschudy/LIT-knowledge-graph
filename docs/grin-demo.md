@@ -35,7 +35,7 @@ Use `--replace` only when intentionally refreshing this demo database. Restart i
 
 ## Browser walkthrough
 
-1. Open <http://127.0.0.1:18766> and search **GRIN2B**.
+1. Open <http://127.0.0.1:18766/explore> and search **GRIN2B**.
 2. Select **GRIN2B-related neurodevelopmental disorder — selected Likely LoF variants**.
 3. Inspect the GRIN2A connection and select a biological relationship to see primary source links, exact locators and measurements.
 4. Check that provisional and unresolved cases say **Needs review**, while the opposing-function cohort says **Not supported** for this particular route.
