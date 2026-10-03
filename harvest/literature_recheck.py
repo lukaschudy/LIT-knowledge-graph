@@ -40,5 +40,23 @@ def run(qid):
         update_manifest(SOURCE,status='complete_for_scope',comparison=report,comparisons=comparisons,limitations=['An independently sorted ID set can diagnose pagination gaps; it does not establish complete literature recall.','Recovery records explicitly document any later additions to the main corpus.'])
     print(json.dumps(report),flush=True)
 
+def run_all(workers=3):
+    from concurrent.futures import ThreadPoolExecutor
+    from harvest.literature_repair import collect_and_merge
+    progress=json.loads((RAW/'europe_pmc_diseases/progress.json').read_text())['completed']
+    prior=manifest(SOURCE)
+    known=dict(prior.get('comparisons',{}))
+    if prior.get('comparison'):known.setdefault(prior['comparison']['query_id'],prior['comparison'])
+    pending=[qid for qid,row in progress.items() if row['reported_hits']!=row['unique_retrieved'] and qid not in known]
+    with ThreadPoolExecutor(max_workers=workers) as pool:list(pool.map(run,pending))
+    collect_and_merge()
+
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('query_id');run(parser.parse_args().query_id)
+    parser=argparse.ArgumentParser()
+    parser.add_argument('query_id',nargs='?')
+    parser.add_argument('--all',action='store_true')
+    parser.add_argument('--workers',type=int,choices=range(1,4),default=3)
+    args=parser.parse_args()
+    if args.all:run_all(args.workers)
+    elif args.query_id:run(args.query_id)
+    else:parser.error('Provide a query ID or --all')

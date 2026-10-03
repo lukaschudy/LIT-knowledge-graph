@@ -4,7 +4,7 @@ Retrieval matches are candidates, never asserted disease/publication relations.
 Uses disk-backed deduplication to keep memory bounded across large corpora.
 """
 from __future__ import annotations
-import argparse, hashlib, json, re, sqlite3, time, threading
+import argparse, hashlib, json, re, sqlite3, time, threading, os
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urlencode
 from harvest.core import ROOT, RAW, PROCESSED, download, emit_records, read_records, update_manifest, atomic_json, now, manifest
@@ -41,7 +41,7 @@ def batches(terms,max_chars=5500):
         group.append(term);size+=added
     if group:yield group
 
-def run(workers=4):
+def run(workers=4, wait_for_rechecks=False):
     source_path=PROCESSED/'raresource/diseases.jsonl.gz'
     terms=vocabulary(read_records(source_path))
     groups=list(batches(terms))
@@ -105,6 +105,19 @@ def run(workers=4):
                 print(json.dumps({'event':'query_error','query_index':item[0]+1,'error':str(exc)}),flush=True)
     with ThreadPoolExecutor(max_workers=workers) as pool:
         list(pool.map(guarded_group,enumerate(groups)))
+    if wait_for_rechecks:
+        # The independent worker merges recovered IDs into SQLite. Wait before
+        # opening export cursors, otherwise their snapshot can miss late merges.
+        job_path=RAW/'literature-recheck-job.json'
+        if not job_path.exists():raise RuntimeError('No independent recheck job to wait for')
+        print(json.dumps({'event':'waiting_for_independent_rechecks'}),flush=True)
+        while True:
+            job=json.loads(job_path.read_text())
+            if job['state']=='finished':break
+            if job['state']!='running':raise RuntimeError('Independent recheck job failed: '+str(job))
+            try:os.kill(job['pid'],0)
+            except ProcessLookupError:raise RuntimeError('Independent recheck worker exited without completion')
+            time.sleep(10)
     emit_records(SOURCE,'queries',queries,input_paths=[source_path],description='Exact query definitions linking vocabulary batches to retrieval membership.')
     emit_records(SOURCE,'articles',(json.loads(r[0]) for r in connection.execute('SELECT data FROM records ORDER BY key')),description='Deduplicated complete Europe PMC core metadata per source:id; abstracts, authors, affiliations, grants, identifiers and available rights retained. Raw input artifacts and per-query progress establish provenance.')
     emit_records(SOURCE,'query_membership',({'query_id':q,'article_id':k} for q,k in connection.execute('SELECT query_id,key FROM matches ORDER BY query_id,key')),description='Search batch membership only; an article need not match every term in a batch.')
@@ -116,4 +129,4 @@ def run(workers=4):
         finalize()
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--workers',type=int,choices=range(1,9),default=4);run(p.parse_args().workers)
+    p=argparse.ArgumentParser();p.add_argument('--workers',type=int,choices=range(1,9),default=4);p.add_argument('--wait-for-rechecks',action='store_true');a=p.parse_args();run(a.workers,a.wait_for_rechecks)

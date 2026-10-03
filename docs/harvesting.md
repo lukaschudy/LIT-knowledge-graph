@@ -36,3 +36,9 @@ Connector commands and the final coverage report will identify partial/failing s
 The literature collector limits new requests to two per second and can use up to eight concurrent workers. It keeps a disk-backed identifier index and explicit per-query checkpoints. `--reuse-verified` still hashes every stored artifact and dataset; it only reuses the structural record scan when the manifest and all file bytes match the earlier successful audit.
 
 Read [the coverage report](harvest-coverage.md) for current source counts and access limitations, and [the GRIN demonstration](grin-demo.md) for the selected functional cohort and reproducible graph. Full acquisition datasets and the small curated demonstration are separate layers.
+
+## Literature count reconciliation
+
+If the literature manifest records count discrepancies, run `python3 -m harvest.literature_recheck --all` to independently traverse those queries in publication-date order and retrieve any missing core records. Then rerun `python3 -m harvest.literature --workers 8` to re-emit normalized outputs from the corrected index. Completed query downloads are reused. The finalizer checks both exported article IDs and per-query membership counts before resolving a discrepancy; original response snapshots remain preserved.
+
+The alias “the syndrome,” supplied for Trichohepatoenteric syndrome, is excluded as a non-discriminating query phrase. Its preferred name and specific aliases remain searchable. The source vocabulary, excluded-alias reason, superseded query and retained raw responses are recorded in the manifest. Other search hits remain retrieval candidates requiring relevance review.
