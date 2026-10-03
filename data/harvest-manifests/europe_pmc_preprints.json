@@ -1,0 +1,78 @@
+{
+  "source": "europe_pmc_preprints",
+  "created_at": "2026-10-03T21:49:29.759811+00:00",
+  "artifacts": {
+    "page-00000.json": {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=SRC%3APPR+AND+%28TITLE_ABS%3A%22rare+disease%22+OR+TITLE_ABS%3A%22orphan+disease%22+OR+TITLE_ABS%3A%22neurodevelopmental+disorder%22+OR+TITLE_ABS%3A%22inherited+disorder%22%29&format=json&resultType=core&pageSize=1000&cursorMark=%2A",
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=SRC%3APPR+AND+%28TITLE_ABS%3A%22rare+disease%22+OR+TITLE_ABS%3A%22orphan+disease%22+OR+TITLE_ABS%3A%22neurodevelopmental+disorder%22+OR+TITLE_ABS%3A%22inherited+disorder%22%29&format=json&resultType=core&pageSize=1000&cursorMark=%2A",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/europe_pmc_preprints/page-00000.json",
+      "bytes": 4478203,
+      "sha256": "ae1b62c9a56f417949c2b6bac59c83cb418ad27ef3fc4d3f026907b972e91d4b",
+      "retrieved_at": "2026-10-03T21:49:29.759727+00:00",
+      "license": "Europe PMC preprint metadata; underlying server license controls full text",
+      "version": "REST 6.9",
+      "http_status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "page-00001.json": {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=SRC%3APPR+AND+%28TITLE_ABS%3A%22rare+disease%22+OR+TITLE_ABS%3A%22orphan+disease%22+OR+TITLE_ABS%3A%22neurodevelopmental+disorder%22+OR+TITLE_ABS%3A%22inherited+disorder%22%29&format=json&resultType=core&pageSize=1000&cursorMark=AoIIP5hKhSg0ODcwNzA5OQ%3D%3D",
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=SRC%3APPR+AND+%28TITLE_ABS%3A%22rare+disease%22+OR+TITLE_ABS%3A%22orphan+disease%22+OR+TITLE_ABS%3A%22neurodevelopmental+disorder%22+OR+TITLE_ABS%3A%22inherited+disorder%22%29&format=json&resultType=core&pageSize=1000&cursorMark=AoIIP5hKhSg0ODcwNzA5OQ%3D%3D",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/europe_pmc_preprints/page-00001.json",
+      "bytes": 4231550,
+      "sha256": "8f59450d48cf0f473c6db98cbea9e1ae854232591e2dc2358fc86e1934ac4952",
+      "retrieved_at": "2026-10-03T21:49:50.261267+00:00",
+      "license": "Europe PMC preprint metadata; underlying server license controls full text",
+      "version": "REST 6.9",
+      "http_status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "last_modified": null,
+      "etag": null
+    },
+    "page-00002.json": {
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=SRC%3APPR+AND+%28TITLE_ABS%3A%22rare+disease%22+OR+TITLE_ABS%3A%22orphan+disease%22+OR+TITLE_ABS%3A%22neurodevelopmental+disorder%22+OR+TITLE_ABS%3A%22inherited+disorder%22%29&format=json&resultType=core&pageSize=1000&cursorMark=AoIIPyi91ig0NDA5MzIwMA%3D%3D",
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=SRC%3APPR+AND+%28TITLE_ABS%3A%22rare+disease%22+OR+TITLE_ABS%3A%22orphan+disease%22+OR+TITLE_ABS%3A%22neurodevelopmental+disorder%22+OR+TITLE_ABS%3A%22inherited+disorder%22%29&format=json&resultType=core&pageSize=1000&cursorMark=AoIIPyi91ig0NDA5MzIwMA%3D%3D",
+      "method": "GET",
+      "request_body": null,
+      "path": "data/raw/harvest/europe_pmc_preprints/page-00002.json",
+      "bytes": 2506476,
+      "sha256": "18888f04c939e77097140c2c571c4ed14256607763ae68bdc68ca1db67bbe349",
+      "retrieved_at": "2026-10-03T21:50:05.920850+00:00",
+      "license": "Europe PMC preprint metadata; underlying server license controls full text",
+      "version": "REST 6.9",
+      "http_status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "last_modified": null,
+      "etag": null
+    }
+  },
+  "datasets": {
+    "rare_disease_related_preprints": {
+      "path": "data/processed/harvest/europe_pmc_preprints/rare_disease_related_preprints.jsonl.gz",
+      "records": 2579,
+      "bytes": 2854426,
+      "sha256": "a57014b0e928df019a15e56b61ee186c7d41ba28510b7f2a7538a6bd5ccb46d3",
+      "input_paths": [
+        "data/raw/harvest/europe_pmc_preprints"
+      ],
+      "description": "Europe PMC PPR full-metadata search: SRC:PPR AND (TITLE_ABS:\"rare disease\" OR TITLE_ABS:\"orphan disease\" OR TITLE_ABS:\"neurodevelopmental disorder\" OR TITLE_ABS:\"inherited disorder\"). Current indexed record versions only; original server is retained only when explicit in a repository URL and otherwise left unknown.",
+      "created_at": "2026-10-03T21:59:21.988538+00:00",
+      "format": "gzip-jsonl",
+      "parser_version": "harvest-v1"
+    }
+  },
+  "status": "complete",
+  "updated_at": "2026-10-03T21:59:21.988939+00:00",
+  "query": "SRC:PPR AND (TITLE_ABS:\"rare disease\" OR TITLE_ABS:\"orphan disease\" OR TITLE_ABS:\"neurodevelopmental disorder\" OR TITLE_ABS:\"inherited disorder\")",
+  "coverage": {
+    "unique_preprint_ids": 2579,
+    "reported_hit_count": 2579,
+    "pages": 3,
+    "limitation": "Searches title/abstract wording, so disease-name-only preprints may be missed. Europe PMC indexes current preprint records; preserve PPR IDs and DOI/version strings where supplied. The source does not always expose the originating server; none is inferred from DOI alone. Full text remains governed by each server's license."
+  }
+}
