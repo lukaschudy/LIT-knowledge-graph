@@ -2,7 +2,7 @@
 import argparse, json, sqlite3
 from datetime import datetime
 from urllib.parse import urlencode
-from harvest.core import ROOT, RAW, PROCESSED, MANIFESTS, download, emit_records, manifest, update_manifest, atomic_json, now
+from harvest.core import ROOT, RAW, PROCESSED, MANIFESTS, download, emit_records, manifest, update_manifest, atomic_json, now, read_records
 from harvest.literature import ENDPOINT
 
 def comparisons_and_recoveries(recheck):
@@ -52,6 +52,19 @@ def finalize():
     if main['status']=='in_progress':raise ValueError('Wait for the main collector to finish before finalizing provenance')
     comparisons,recoveries=comparisons_and_recoveries(manifest('europe_pmc_recheck'))
     entries=dict(main.get('independent_rechecks',{}));gaps=main.get('count_discrepancies',{})
+    # Database writes may happen while gzip emission is underway. Timestamps
+    # alone cannot prove that an export's SQLite snapshot included a recovery.
+    normalized_counts={qid:0 for qid in comparisons}
+    recovered_ids={key for recovery in recoveries.values() for key in recovery.get('identifiers',[])}
+    exported_recovered=set()
+    for row in read_records(PROCESSED/'europe_pmc_diseases/query_membership.jsonl.gz'):
+        qid=row['query_id']
+        if qid in normalized_counts:normalized_counts[qid]+=1
+    for row in read_records(PROCESSED/'europe_pmc_diseases/articles.jsonl.gz'):
+        key=str(row['source'])+':'+str(row['id'])
+        if key in recovered_ids:exported_recovered.add(key)
+    if recovered_ids-exported_recovered:
+        raise ValueError('Re-emit normalized outputs: recovered article IDs missing '+str(sorted(recovered_ids-exported_recovered)))
     for qid,comparison in comparisons.items():
         recovery=recoveries.get(qid,{})
         merged_at=recovery.get('merged_to_main_database_at')
@@ -62,6 +75,8 @@ def finalize():
                     raise ValueError('Normalized outputs must be emitted after the recovery merge')
         with sqlite3.connect(PROCESSED/'europe_pmc_diseases/dedup.sqlite') as db:
             count=db.execute('SELECT COUNT(*) FROM matches WHERE query_id=?',(qid,)).fetchone()[0]
+        if normalized_counts[qid]!=count:
+            raise ValueError(f'Re-emit normalized outputs: membership count differs for {qid}')
         resolved=reconciled(comparison,count)
         entry={**comparison,'normalized_query_membership':count,'recovery':recovery,'recheck_manifest':'data/harvest-manifests/europe_pmc_recheck.json','resolution':'count_reconciled_with_independent_snapshot' if resolved else 'unresolved'}
         entries[qid]=entry

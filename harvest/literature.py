@@ -11,6 +11,13 @@ from harvest.core import ROOT, RAW, PROCESSED, download, emit_records, read_reco
 
 SOURCE='europe_pmc_diseases'
 ENDPOINT='https://www.ebi.ac.uk/europepmc/webservices/rest/search'
+# Preserve the source vocabulary and stable batch boundaries, but do not send
+# a non-discriminating alias as a standalone exact-phrase literature search.
+EXCLUDED_ALIASES={'the syndrome':'Non-discriminating generic phrase; does not identify the source disease.'}
+
+def query_for_group(group):
+    included=[t['term'] for t in group if t['term'] not in EXCLUDED_ALIASES]
+    return '('+' OR '.join('TITLE_ABS:"'+term+'"' for term in included)+')'
 
 def vocabulary(rows):
     terms={}
@@ -38,7 +45,7 @@ def run(workers=4):
     source_path=PROCESSED/'raresource/diseases.jsonl.gz'
     terms=vocabulary(read_records(source_path))
     groups=list(batches(terms))
-    emit_records(SOURCE,'search_vocabulary',terms,input_paths=[source_path],description='All preferred names and multiword aliases of >=10 characters; exact phrase retrieval terms, not validated relationships.')
+    emit_records(SOURCE,'search_vocabulary',({**t,'query_eligible':t['term'] not in EXCLUDED_ALIASES,'exclusion_reason':EXCLUDED_ALIASES.get(t['term'])} for t in terms),input_paths=[source_path],description='All preferred names and multiword aliases of >=10 characters; exact phrase retrieval terms, not validated relationships.')
     work=RAW/SOURCE;work.mkdir(parents=True,exist_ok=True)
     connection=sqlite3.connect(PROCESSED/SOURCE/'dedup.sqlite')
     connection.execute('CREATE TABLE IF NOT EXISTS records (key TEXT PRIMARY KEY, data TEXT NOT NULL)')
@@ -48,12 +55,12 @@ def run(workers=4):
     connection.execute('PRAGMA journal_mode=WAL')
     queries=[]; progress_lock=threading.RLock(); request_lock=threading.Lock(); next_request=[0.0]
     for group in groups:
-        query='('+' OR '.join('TITLE_ABS:"'+t['term']+'"' for t in group)+')'
-        queries.append({'query_id':hashlib.sha256(query.encode()).hexdigest()[:20],'query':query,'terms':[x['term'] for x in group]})
+        query=query_for_group(group)
+        queries.append({'query_id':hashlib.sha256(query.encode()).hexdigest()[:20],'query':query,'terms':[x['term'] for x in group if x['term'] not in EXCLUDED_ALIASES],'excluded_aliases':[{'term':x['term'],'reason':EXCLUDED_ALIASES[x['term']],'disease_source_ids':x['disease_source_ids']} for x in group if x['term'] in EXCLUDED_ALIASES]})
     def harvest_group(item):
         index,group=item
         connection=sqlite3.connect(PROCESSED/SOURCE/'dedup.sqlite',timeout=60)
-        query='('+' OR '.join('TITLE_ABS:"'+t['term']+'"' for t in group)+')'
+        query=query_for_group(group)
         qid=hashlib.sha256(query.encode()).hexdigest()[:20]
         if qid in progress['completed']:
             connection.close();return
@@ -85,7 +92,7 @@ def run(workers=4):
             status='count_verified' if len(seen)==expected else 'count_discrepancy'
             progress['completed'][qid]={'reported_hits':expected,'last_reported_hits':int(obj['hitCount']),'unique_retrieved':len(seen),'pages':page,'input_paths':paths,'completed_at':now(),'status':status}
             atomic_json(progress_path,progress)
-            update_manifest(SOURCE,status='in_progress',coverage={'vocabulary_terms':len(terms),'total_queries':len(groups),'completed_queries':len(progress['completed']),'unique_articles':connection.execute('SELECT COUNT(*) FROM records').fetchone()[0]},scope='Exhaustive cursor results for recorded rare-disease name phrases in titles/abstracts; retrieval candidates, not biological evidence.')
+            update_manifest(SOURCE,status='in_progress',coverage={'vocabulary_terms':len(terms),'eligible_search_terms':sum(t['term'] not in EXCLUDED_ALIASES for t in terms),'excluded_aliases':EXCLUDED_ALIASES,'total_queries':len(groups),'completed_queries':len(progress['completed']),'unique_articles':connection.execute('SELECT COUNT(*) FROM records').fetchone()[0]},scope='Exhaustive cursor results for recorded rare-disease name phrases in titles/abstracts; retrieval candidates, not biological evidence.')
             print(json.dumps({'event':'query_complete','query_index':index+1,'queries':len(groups),'hits':len(seen)}),flush=True)
         connection.close()
     errors={}
@@ -102,7 +109,7 @@ def run(workers=4):
     emit_records(SOURCE,'articles',(json.loads(r[0]) for r in connection.execute('SELECT data FROM records ORDER BY key')),description='Deduplicated complete Europe PMC core metadata per source:id; abstracts, authors, affiliations, grants, identifiers and available rights retained. Raw input artifacts and per-query progress establish provenance.')
     emit_records(SOURCE,'query_membership',({'query_id':q,'article_id':k} for q,k in connection.execute('SELECT query_id,key FROM matches ORDER BY query_id,key')),description='Search batch membership only; an article need not match every term in a batch.')
     discrepancies={k:v for k,v in progress['completed'].items() if v['reported_hits']!=v['unique_retrieved']}
-    update_manifest(SOURCE,status='complete_with_query_gaps' if errors or discrepancies else 'complete_for_scope',queries=progress['completed'],query_errors=errors,count_discrepancies=discrepancies,limitations=['Preferred name and multiword alias matches are discovery candidates, not proven disease associations.','Short or single-word aliases excluded to reduce ambiguity; preferred names all included.','No source search guarantees complete recall; title/abstract search misses full-text-only mentions.','Europe PMC updates during traversal may change counts; acquired pages remain reproducible snapshots.'])
+    update_manifest(SOURCE,status='complete_with_query_gaps' if errors or discrepancies else 'complete_for_scope',queries=progress['completed'],query_errors=errors,count_discrepancies=discrepancies,limitations=['Preferred name and multiword alias matches are discovery candidates, not proven disease associations.','Short or single-word aliases and the non-discriminating alias the syndrome are excluded to reduce ambiguity; preferred names all included.','No source search guarantees complete recall; title/abstract search misses full-text-only mentions.','Europe PMC updates during traversal may change counts; acquired pages remain reproducible snapshots.'])
     connection.close()
     if manifest('europe_pmc_recheck').get('recovery'):
         from harvest.literature_repair import finalize
