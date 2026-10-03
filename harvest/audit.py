@@ -1,5 +1,5 @@
 """Verify all acquired bytes and normalized records; no network activity."""
-import argparse, json
+import argparse, hashlib, json
 from pathlib import Path
 from harvest.core import ROOT, MANIFESTS, digest, read_records, atomic_json, now
 
@@ -15,7 +15,7 @@ REQUIRED={
 }
 
 def audit_source(manifest_path,deep=True):
-    m=json.loads(manifest_path.read_text());source=m['source'];errors=[];warnings=[];datasets=[]
+    manifest_bytes=manifest_path.read_bytes();m=json.loads(manifest_bytes);source=m['source'];errors=[];warnings=[];datasets=[]
     if m.get('status') not in ('complete','complete_for_scope'):warnings.append('Source acquisition is not marked complete for its declared scope')
     for name,a in m.get('artifacts',{}).items():
         p=ROOT/a['path']
@@ -44,7 +44,7 @@ def audit_source(manifest_path,deep=True):
                 if count!=d['records']:raise ValueError(f'Record count {count} != manifest {d["records"]}')
             except Exception as e:errors.append(f'{name}: {e}')
         datasets.append({'dataset':name,'records':d['records'],'bytes':d['bytes'],'verified_records':count if deep else None,'negative_qualifier_records':negative if deep else None})
-    return {'source':source,'manifest_sha256':digest(manifest_path),'manifest_updated_at':m.get('updated_at'),'status':m.get('status'),'scope':m.get('scope',m.get('coverage')),'artifacts':len(m.get('artifacts',{})),'raw_bytes':sum(x['bytes'] for x in m.get('artifacts',{}).values()),'datasets':datasets,'errors':errors,'warnings':warnings}
+    return {'source':source,'manifest_sha256':hashlib.sha256(manifest_bytes).hexdigest(),'manifest_updated_at':m.get('updated_at'),'status':m.get('status'),'scope':m.get('scope',m.get('coverage')),'artifacts':len(m.get('artifacts',{})),'raw_bytes':sum(x['bytes'] for x in m.get('artifacts',{}).values()),'datasets':datasets,'errors':errors,'warnings':warnings}
 
 def run(deep=True):
     results=[]

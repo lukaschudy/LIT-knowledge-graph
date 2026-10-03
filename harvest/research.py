@@ -7,12 +7,15 @@ from __future__ import annotations
 
 import argparse
 import calendar
+from collections import Counter
 import json
 import hashlib
 import os
 import re
+import threading
 import time
 import xml.etree.ElementTree as ET
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, timedelta
 from pathlib import Path
 from urllib.parse import urlencode, urlsplit, parse_qs
@@ -95,6 +98,18 @@ def pubmed_id_coverage(expected_ids, retrieved_ids):
     expected=set(expected_ids); retrieved=set(retrieved_ids)
     return {"expected_unique_ids":len(expected),"retrieved_unique_ids":len(retrieved),
             "missing_ids":sorted(expected-retrieved),"unexpected_ids":sorted(retrieved-expected)}
+
+
+def _pmc_jats_error(article, expected_pmcid):
+    """Reject metadata-only responses, mismatched article IDs, and empty full-text bodies."""
+    found=article.find(".//article-id[@pub-id-type='pmc']")
+    if found is None: found=article.find(".//article-id[@pub-id-type='pmcid']")
+    returned=(_text(found) or "").upper()
+    if returned and not returned.startswith("PMC"): returned="PMC"+returned
+    if returned!=expected_pmcid: return "fulltext_pmcid_mismatch",returned
+    body=article.find(".//body")
+    if body is None or not _text(body): return "fulltext_body_missing",returned
+    return None,returned
 
 
 def _esearch(term, retstart, retmax, email, tool, source="pubmed"):
@@ -271,6 +286,158 @@ def _disease_batches(path, max_chars=400, max_names=4):
     if names: yield names
 
 
+def _ctg_condition(names):
+    clean=[]
+    table=str.maketrans({"(":" ",")":" ","[":" ","]":" ","{":" ","}":" ","\"":" ","\\":" "})
+    for name in names:
+        clean.append('"'+' '.join(name.translate(table).split())+'"')
+    return " OR ".join(clean)
+
+
+def _ctg_name_key(value):
+    return re.sub(r"[^a-z0-9]+"," ",value.casefold()).strip()
+
+
+def audit_ctg_disease_names(path=None, source="clinicaltrials_gov"):
+    """Audit cached CTG leaf queries, response counts, page exhaustion and name coverage."""
+    path=Path(path or core.PROCESSED/"raresource/diseases.jsonl.gz")
+    studies_path=core.PROCESSED/source/"rare_disease_studies.jsonl.gz"
+    if studies_path.exists():
+        core.emit_records(source,"rare_disease_studies",core.read_records(studies_path),input_paths=[core.RAW/source,path],
+            description="Union of generic rare/orphan/neurodevelopmental/inherited condition searches and exhaustively paged RareSource preferred disease-name OR batches. Membership records the complete batch term list; API response does not reveal which OR operand matched each study.")
+    expected_names=[]
+    for row in core.read_records(path):
+        name=(row.get("Rare Disease Name") or "").strip()
+        if name: expected_names.append(name)
+    groups={}; bad_artifacts=[]; rawdir=core.RAW/source; manifest=core.manifest(source)
+    for filename,entry in manifest.get("artifacts",{}).items():
+        if not filename.startswith("disease-names-") or not filename.endswith(".json"): continue
+        params=parse_qs(urlsplit(entry.get("url","")).query)
+        conditions=params.get("query.cond",[])
+        m=re.search(r"-page-(\d+)\.json$",filename)
+        if not conditions or not m: continue
+        condition=conditions[0]; index=int(m.group(1))
+        group=groups.setdefault(condition,{"condition":condition,"terms":re.findall(r'"([^"]+)"',condition),"pages":{}})
+        try:
+            payload=_json(rawdir/filename); rows=payload.get("studies",[])
+            ids=[r.get("protocolSection",{}).get("identificationModule",{}).get("nctId") for r in rows]
+            group["pages"][index]={"rows":len(rows),"ids":[x for x in ids if x],"total":payload.get("totalCount"),
+                                    "next_token":payload.get("nextPageToken"),"request_token":(params.get("pageToken") or [None])[0],"artifact":filename}
+        except Exception as exc:
+            bad_artifacts.append({"artifact":filename,"error":str(exc)[:300]})
+            group["pages"][index]={"rows":0,"ids":[],"total":None,"next_token":None,"request_token":(params.get("pageToken") or [None])[0],"artifact":filename,"error":str(exc)[:300]}
+    terminal=[]; query_details=[]; covered=set()
+    for condition,g in groups.items():
+        pages=g["pages"]; indexes=sorted(pages); rows=sum(x["rows"] for x in pages.values())
+        ids=[i for p in indexes for i in pages[p]["ids"]]; distinct=len(set(ids))
+        totals=[p["total"] for p in pages.values() if p["total"] is not None]
+        total=totals[0] if totals else None; inconsistent=any(x!=total for x in totals)
+        missing_pages=sorted(set(range(indexes[0],indexes[-1]+1))-set(indexes)) if indexes else []
+        exhausted=bool(indexes) and not pages[indexes[-1]]["next_token"]
+        token_chain=bool(indexes) and pages[indexes[0]]["request_token"] in (None,"") and all(
+            pages[b]["request_token"]==pages[a]["next_token"] for a,b in zip(indexes,indexes[1:]))
+        count_ok=total is not None and total==rows and total==distinct and not inconsistent
+        detail={"condition":condition,"terms":g["terms"],"reported_total_count":total,"raw_returned_rows":rows,
+                "distinct_nct_ids":distinct,"pages":indexes,"missing_pages":missing_pages,"next_token_exhausted":exhausted,
+                "token_chain_matches":token_chain,"counts_match":count_ok,
+                "status":"complete_terminal_leaf" if count_ok and not missing_pages and exhausted and token_chain else "incomplete"}
+        if detail["status"]=="complete_terminal_leaf":
+            terminal.append(detail); covered.update(_ctg_name_key(x) for x in g["terms"])
+        query_details.append(detail)
+    query_errors=[]
+    manifest_coverage=manifest.get("disease_name_coverage",manifest.get("coverage",{}))
+    for err in manifest_coverage.get("query_errors",[]):
+        for name in err.get("terms",[]):
+            query_errors.append({"name":name,"error":err.get("error"),"batch":err.get("batch"),"page":err.get("page")})
+    fallback_rows=manifest.get("disease_name_fallbacks",[])
+    fallback_covered={_ctg_name_key(x.get("preferred_name","")) for x in fallback_rows if x.get("status")=="complete"}
+    fallback_errors=[x for x in fallback_rows if x.get("status")!="complete"]
+    exact_covered=set(covered)
+    missing_names=[n for n in expected_names if _ctg_name_key(n) not in exact_covered|fallback_covered]
+    incomplete=[d for d in query_details if d["status"]!="complete_terminal_leaf"]
+    unresolved_errors=[x for x in query_errors if _ctg_name_key(x["name"]) not in exact_covered|fallback_covered]
+    result={"expected_preferred_names":len(expected_names),"unique_terminal_leaf_queries":len(terminal),
+            "terminal_leaf_query_count_errors":len(incomplete),"terminal_leaf_queries":query_details,
+            "names_covered_by_successful_terminal_queries":len({n for n in expected_names if _ctg_name_key(n) in exact_covered}),
+            "names_covered_by_successful_fallbacks":len({n for n in expected_names if _ctg_name_key(n) in fallback_covered}),
+            "names_with_explicit_query_errors":len({x["name"] for x in query_errors}),"names_unresolved":missing_names,
+            "explicit_query_errors":query_errors,"unresolved_explicit_errors":unresolved_errors,
+            "fallback_errors":fallback_errors,"bad_raw_artifacts":bad_artifacts,
+            "complete_for_all_preferred_names":not missing_names and not incomplete and not bad_artifacts,
+            "limitation":"A successful OR query verifies the complete terminal expression, not which operand matched each trial. Split parents never count as terminal coverage."}
+    status=("complete_with_fallbacks" if query_errors and not missing_names and not incomplete and not bad_artifacts else
+            ("complete" if not missing_names and not incomplete and not bad_artifacts else "partial_with_query_gaps"))
+    core.update_manifest(source,status=status,
+                         disease_name_expansion_audit=result)
+    return result
+
+
+def retry_ctg_preferred_name_errors(path=None, source="clinicaltrials_gov"):
+    """Retry failed complex single-name CTG conditions with bounded, documented phrase fallbacks."""
+    path=Path(path or core.PROCESSED/"raresource/diseases.jsonl.gz")
+    manifest=core.manifest(source); coverage=manifest.get("disease_name_coverage",{})
+    errors=coverage.get("query_errors",[]); names=sorted({n for e in errors for n in e.get("terms",[])})
+    if not names: return []
+    fallback_map={
+        "Brain abnormalities-severe developmental delay-facial dysmorphism-intellectual disability syndrome due to MEF2C mutation": '"MEF2C mutation"',
+        "Cognitive impairment - coarse facies - heart defects - obesity - pulmonary involvement - short stature - skeletal dysplasia syndrome": '"coarse facies" OR "skeletal dysplasia"',
+        "Congenital adrenal insufficiency with 46, XY sex reversal OR 46,XY disorder of sex development-adrenal insufficiency due to CYP11A1 deficiency": '"CYP11A1 deficiency"',
+        "Congenital anomalies of kidney and urinary tract syndrome with or without hearing loss, abnormal ears, or developmental delay": '"congenital anomalies of kidney"',
+        "Developmental delay-language impairment-dopa responsive dystonia-parkinsonism syndrome due to a NR4A2 point mutation": '"NR4A2 mutation" OR "dopa responsive dystonia"',
+        "Glycogen storage disease due to glycogen branching enzyme deficiency, childhood combined hepatic and myopathic form": '"glycogen branching enzyme"',
+        "Intrauterine growth restriction-congenital multiple café-au-lait macules-increased sister chromatid exchange syndrome": '"cafe au lait macules" OR "sister chromatid exchange"',
+        "NRXN1-related severe neurodevelopmental disorder-motor stereotypies-chronic constipation-sleep-wake cycle disturbance": 'NRXN1',
+        "Severe combined immunodeficiency, autosomal recessive, T cell-negative, B cell-negative, NK cell-negative, due to adenosine deaminase deficiency": '"adenosine deaminase deficiency"',
+        "Severe combined immunodeficiency, autosomal recessive, T cell-negative, B cell-negative, NK cell-positive": '"NK cell positive" OR "severe combined immunodeficiency"',
+        "X-linked external auditory canal atresia-dilated internal auditory canal-facial dysmorphism syndrome": '"external auditory canal atresia"',
+        "X-linked keloid scarring-reduced joint mobility-increased optic cup-to-disc ratio syndrome": '"keloid scarring" OR "optic cup to disc ratio"',
+    }
+    existing_path=core.PROCESSED/source/"rare_disease_studies.jsonl.gz"; studies={}
+    for row in core.read_records(existing_path):
+        ident=row.get("protocolSection",{}).get("identificationModule",{}).get("nctId")
+        if ident: studies[ident]=row
+    previous={x.get("preferred_name"):x for x in manifest.get("disease_name_fallbacks",[])}
+    out=[]
+    for name in names:
+        condition=fallback_map.get(name)
+        if not condition:
+            out.append({"preferred_name":name,"status":"fallback_expression_unavailable"}); continue
+        ident=hashlib.sha256((name+"|"+condition).encode()).hexdigest()[:12]
+        token=None; page=0; seen=0; ids=set(); total=None; query_error=None
+        while True:
+            params={"query.cond":condition,"pageSize":1000,"format":"json","countTotal":"true"}
+            if token: params["pageToken"]=token
+            url=CTG_BASE+"?"+urlencode(params)
+            try:
+                raw=_get(source,url,f"disease-fallback-{ident}-page-{page:05d}.json","U.S. federal public registry data","API v2 phrase fallback")
+                payload=_json(raw); total=int(payload.get("totalCount",0)); rows=payload.get("studies",[])
+            except Exception as exc:
+                query_error=str(exc)[:500]; break
+            seen+=len(rows)
+            for row in rows:
+                ident_value=row.get("protocolSection",{}).get("identificationModule",{}).get("nctId")
+                if not ident_value: continue
+                ids.add(ident_value)
+                previous_row=studies.get(ident_value,row)
+                member={"query_set":"raresource_preferred_name_phrase_fallback","preferred_name":name,"query_condition":condition}
+                memberships=previous_row.setdefault("query_membership",[])
+                if member not in memberships: memberships.append(member)
+                studies[ident_value]=previous_row
+            page+=1; token=payload.get("nextPageToken")
+            if not token: break
+            time.sleep(.15)
+        complete=(query_error is None and total is not None and seen==total and len(ids)==total and token is None)
+        row={"preferred_name":name,"query_condition":condition,"reported_total_count":total,"raw_returned_rows":seen,
+             "distinct_nct_ids":len(ids),"pages":page,"status":"complete" if complete else "query_error_or_count_mismatch"}
+        if query_error: row["error"]=query_error
+        previous[name]=row; out.append(row)
+    core.emit_records(source,"rare_disease_studies",studies.values(),input_paths=[core.RAW/source,path],
+        description="Union of generic CTG terms, exhaustively paged preferred-name queries, and explicitly labeled phrase fallbacks for complex rejected names.")
+    core.update_manifest(source,status="in_progress",disease_name_fallbacks=list(previous.values()))
+    audit_ctg_disease_names(path,source)
+    return out
+
+
 def harvest_ctg_disease_names(path=None, page_size=1000):
     """Expand ClinicalTrials.gov condition searches using RareSource preferred names."""
     source="clinicaltrials_gov"
@@ -285,7 +452,7 @@ def harvest_ctg_disease_names(path=None, page_size=1000):
     batch_stats=[]; query_errors=[]; pending=list(_disease_batches(path)); batch_count=0
     while pending:
         batch_count+=1; names=pending.pop(0)
-        condition=" OR ".join(f'"{re.sub(r"[()\\[\\]{{}}]", " ", n).replace(chr(34), "")}"' for n in names)
+        condition=_ctg_condition(names)
         condition_hash=hashlib.sha256(condition.encode()).hexdigest()[:12]
         token=None; page=0; seen=0
         while True:
@@ -318,9 +485,10 @@ def harvest_ctg_disease_names(path=None, page_size=1000):
         batch_stats.append({"batch":batch_count,"terms":len(names),"records_seen":seen,"pages":page,"query_hash":condition_hash})
         time.sleep(.15)
     if not studies: raise RuntimeError("No ClinicalTrials.gov studies remain after RareSource query expansion")
-    out=core.emit_records(source,"rare_disease_studies",studies.values(),input_paths=[existing_path,path],
+    out=core.emit_records(source,"rare_disease_studies",studies.values(),input_paths=[core.RAW/source,path],
         description="Union of generic rare/orphan/neurodevelopmental/inherited condition searches and exhaustively paged RareSource preferred disease-name OR batches. Membership records the complete batch term list; API response does not reveal which OR operand matched each study.")
     core.update_manifest(source,status="complete_with_query_errors" if query_errors else "complete",disease_name_source=str(path.relative_to(core.ROOT)),disease_name_coverage={"preferred_names":sum(len(x) for x in _disease_batches(path)),"batches":batch_count,"batches_detail":batch_stats,"query_errors":query_errors,"unique_studies_after_union":len(studies),"limitation":"A study returned for an OR batch is linked to that batch's full list of candidate names because the API does not identify which operand matched. Source query recall remains spelling and condition-index dependent."})
+    audit_ctg_disease_names(path,source)
     return out
 
 
@@ -336,11 +504,16 @@ def harvest_reporter(start_year=1985, end_year=None, page_size=500):
                 while total is None or offset < total:
                     body={"criteria":{"advanced_text_search":{"operator":"and","search_field":field,"search_text":term},"fiscal_years":[year]},"offset":offset,"limit":page_size}
                     filename=f"fy-{year}-{field}-{term.replace(' ','-')}-offset-{offset:07d}.json"
-                    path=core.download(source,REPORTER_URL,filename,license_name="NIH RePORTER public project metadata",version="v2",method="POST",json_body=body)
-                    payload=_json(path); meta=payload.get("meta",{}); rows=payload.get("results",[])
+                    try:
+                        path=core.download(source,REPORTER_URL,filename,license_name="NIH RePORTER public project metadata",version="v2",method="POST",json_body=body)
+                        payload=_json(path); meta=payload.get("meta",{}); rows=payload.get("results",[])
+                    except Exception as exc:
+                        query_errors.append({"query":query_id,"offset":offset,"expected":total,"seen":seen,"error":str(exc)[:500]})
+                        break
                     if total is None: total=int(meta.get("total",0))
                     if total>12000:
-                        raise RuntimeError(f"RePORTER FY{year} {field}/{term} has {total} matches, above documented offset range; needs a finer source-supported partition")
+                        query_errors.append({"query":query_id,"expected":total,"seen":seen,"error":"exceeds documented offset range; query partition required"})
+                        break
                     if not rows:
                         if total is not None and offset<total: query_errors.append({"query":query_id,"expected":total,"seen":seen,"error":"empty page before reported total"})
                         break
@@ -373,8 +546,12 @@ def harvest_reporter_grin(start_year=1985,end_year=None,page_size=500):
         offset=0; total=None; seen=0; keys=set()
         while total is None or offset<total:
             body={"criteria":{"advanced_text_search":{"operator":"or","search_field":"All","search_text":search_text},"fiscal_years":[year]},"offset":offset,"limit":page_size}
-            path=core.download(source,REPORTER_URL,f"grin-fy-{year}-offset-{offset:07d}.json",license_name="NIH RePORTER public project metadata",version="v2",method="POST",json_body=body)
-            payload=_json(path); meta=payload.get("meta",{}); rows=payload.get("results",[])
+            try:
+                path=core.download(source,REPORTER_URL,f"grin-fy-{year}-offset-{offset:07d}.json",license_name="NIH RePORTER public project metadata",version="v2",method="POST",json_body=body)
+                payload=_json(path); meta=payload.get("meta",{}); rows=payload.get("results",[])
+            except Exception as exc:
+                errors.append({"fiscal_year":year,"offset":offset,"expected":total,"seen":seen,"error":str(exc)[:500]})
+                break
             if total is None: total=int(meta.get("total",0))
             if total>12000:
                 errors.append({"fiscal_year":year,"expected":total,"seen":seen,"error":"FY query exceeds documented offset range; must split alias groups"}); break
@@ -396,16 +573,21 @@ def harvest_reporter_grin(start_year=1985,end_year=None,page_size=500):
     if not unique: raise RuntimeError("Focused RePORTER GRIN2A/B query returned no records")
     out=core.emit_records(source,"grin_projects",unique.values(),input_paths=[core.RAW/source],
         description=f"Focused NIH RePORTER v2 all-fields text search: {search_text}; fiscal years {start_year}-{end_year}.")
-    core.update_manifest(source,status="complete_with_query_errors" if errors else "complete",grin_query=search_text,grin_coverage={"aliases":list(aliases),"unique_project_application_fy_subprojects":len(unique),"fiscal_years":fiscal,"query_errors":errors,"limitation":"Text search is source-indexed and alias-based; it does not imply project relevance or experimental validation."})
+    broad_errors=(core.manifest(source).get("broad_cache_audit",{}).get("query_errors",[])
+                  or core.manifest(source).get("coverage",{}).get("query_errors",[]))
+    core.update_manifest(source,status="complete_with_query_errors" if errors or broad_errors else "complete",grin_query=search_text,grin_coverage={"aliases":list(aliases),"unique_project_application_fy_subprojects":len(unique),"fiscal_years":fiscal,"query_errors":errors,"limitation":"Text search is source-indexed and alias-based; it does not imply project relevance or experimental validation."})
     return out
 
 
 def audit_reporter_cache():
     """Offline integrity audit of all cached RePORTER query pages in the manifest."""
     source="nih_reporter"; m=core.manifest(source); groups={}; rawdir=core.RAW/source
+    broad_records={}; grin_records={}
     for filename,entry in m.get("artifacts",{}).items():
         body=entry.get("request_body")
         if not isinstance(body,dict) or not filename.endswith(".json"): continue
+        if body.get("sort_field"):
+            continue
         criteria=body.get("criteria",{}); years=criteria.get("fiscal_years",[])
         search=criteria.get("advanced_text_search",{})
         if not years or not search: continue
@@ -416,17 +598,116 @@ def audit_reporter_cache():
         if group["expected"] is not None and group["expected"]!=total:
             group["inconsistent_totals"]=[group["expected"],total]
         group["expected"]=total; group["rows"]+=len(rows); group["offsets"].append(int(body.get("offset",0)))
-        group["keys"].update((x.get("appl_id"),x.get("subproject_id"),x.get("fiscal_year")) for x in rows)
+        for original in rows:
+            row=dict(original); app_key=(row.get("appl_id"),row.get("subproject_id"),row.get("fiscal_year"))
+            group["keys"].add(app_key)
+            member={"search_field":search.get("search_field"),"search_text":search.get("search_text"),
+                    "operator":search.get("operator"),"fiscal_year":years[0]}
+            dest=grin_records if search.get("search_field")=="All" else broad_records
+            previous=dest.get(app_key)
+            if previous:
+                if member not in previous.setdefault("query_membership",[]): previous["query_membership"].append(member)
+            else:
+                row["query_membership"]=[member]; dest[app_key]=row
+    for filename,entry in m.get("artifacts",{}).items():
+        body=entry.get("request_body")
+        if not isinstance(body,dict) or not body.get("sort_field") or not filename.endswith(".json"): continue
+        criteria=body.get("criteria",{}); years=criteria.get("fiscal_years",[])
+        search=criteria.get("advanced_text_search",{})
+        if not years or not search: continue
+        key=(years[0],search.get("search_field"),search.get("search_text"),search.get("operator"))
+        group=groups.setdefault(key,{"expected":None,"rows":0,"keys":set(),"offsets":[]})
+        check=group.setdefault("recheck",{"expected":None,"rows":0,"keys":set(),"offsets":[]})
+        payload=_json(rawdir/filename); meta=payload.get("meta",{}); rows=payload.get("results",[])
+        total=int(meta.get("total",0)); check["expected"]=total; check["rows"]+=len(rows); check["offsets"].append(int(body.get("offset",0)))
+        for original in rows:
+            row=dict(original); app_key=(row.get("appl_id"),row.get("subproject_id"),row.get("fiscal_year")); check["keys"].add(app_key)
+            member={"query_set":"NIH duplicate-partition sort recheck","search_field":search.get("search_field"),"search_text":search.get("search_text"),
+                    "operator":search.get("operator"),"fiscal_year":years[0],"sort_field":body.get("sort_field"),"sort_order":body.get("sort_order")}
+            dest=grin_records if search.get("search_field")=="All" else broad_records
+            previous=dest.get(app_key)
+            if previous:
+                if member not in previous.setdefault("query_membership",[]): previous["query_membership"].append(member)
+            else:
+                row["query_membership"]=[member]; dest[app_key]=row
     audit=[]
     for (year,field,term,operator),g in groups.items():
         row={"fiscal_year":year,"field":field,"term":term,"operator":operator,"reported_total":g["expected"],"records_seen":g["rows"],
              "unique_application_keys":len(g["keys"]),"offsets":sorted(g["offsets"])}
+        check=g.get("recheck")
+        if check:
+            row["sort_recheck"]={"reported_total":check["expected"],"records_seen":check["rows"],"unique_application_keys":len(check["keys"]),"offsets":sorted(check["offsets"]),
+                                 "sort_field":"project_start_date","sort_order":"asc"}
+            row["recheck_recovered"]=(check["expected"]==check["rows"]==len(check["keys"]))
         if "inconsistent_totals" in g: row["inconsistent_totals"]=g["inconsistent_totals"]
-        if g["rows"]!=g["expected"] or len(g["keys"])!=g["expected"] or "inconsistent_totals" in g: row["error"]="reported total, row count, or unique-key count mismatch"
+        if (g["rows"]!=g["expected"] or len(g["keys"])!=g["expected"] or "inconsistent_totals" in g) and not row.get("recheck_recovered"):
+            row["error"]="reported total, row count, or unique-key count mismatch"
+        elif row.get("recheck_recovered"):
+            row["baseline_duplicate_key_discrepancy"]={"records_seen":g["rows"],"unique_application_keys":len(g["keys"]),"reported_total":g["expected"]}
         audit.append(row)
     errors=[x for x in audit if x.get("error")]
-    core.update_manifest(source,status="complete_with_query_errors" if errors else m.get("status","complete"),broad_cache_audit={"queries":len(audit),"query_errors":errors,"queries_detail":audit,"all_cached_queries_complete":not errors})
+    if broad_records:
+        core.emit_records(source,"rare_disease_projects",broad_records.values(),input_paths=[rawdir],
+            description="Deduplicated NIH RePORTER public projects for rare/orphan disease title, abstract, and terms searches. Cached request bodies preserve query membership; failed/incomplete queries remain explicit in the manifest audit.")
+    if grin_records:
+        core.emit_records(source,"grin_projects",grin_records.values(),input_paths=[rawdir],
+            description="Deduplicated NIH RePORTER projects matching focused GRIN2A/GRIN2B and GluN2A/B/NR2A/B aliases; query membership is retained per fiscal-year request.")
+    focused_errors=m.get("grin_coverage",{}).get("query_errors",[])
+    core.update_manifest(source,status="complete_with_query_errors" if errors or focused_errors else "complete",broad_cache_audit={"queries":len(audit),"query_errors":errors,"queries_detail":audit,"all_cached_queries_complete":not errors})
     return audit
+
+
+def retry_reporter_duplicate_queries(page_size=500):
+    """Re-traverse only cached NIH partitions whose row count matched but keys did not."""
+    source="nih_reporter"; manifest=core.manifest(source)
+    prior=manifest.get("broad_cache_audit",{}).get("queries_detail",[])
+    targets=[x for x in prior if x.get("records_seen")==x.get("reported_total")
+             and x.get("unique_application_keys")!=x.get("reported_total")]
+    results=[]; rawdir=core.RAW/source; rows_by_key={}
+    for row in core.read_records(core.PROCESSED/source/"rare_disease_projects.jsonl.gz"):
+        rows_by_key[(row.get("appl_id"),row.get("subproject_id"),row.get("fiscal_year"))]=row
+    for target in targets:
+        year=int(target["fiscal_year"]); field=target["field"]; term=target["term"]
+        offset=0; total=None; seen=0; keys=set(); rows_all=[]; error=None
+        while total is None or offset<total:
+            body={"criteria":{"advanced_text_search":{"operator":"and","search_field":field,"search_text":term},"fiscal_years":[year]},
+                  "offset":offset,"limit":page_size,"sort_field":"project_start_date","sort_order":"asc"}
+            safe_field=re.sub(r"[^A-Za-z0-9]+","-",field).strip("-")
+            safe_term=re.sub(r"[^A-Za-z0-9]+","-",term).strip("-")
+            filename=f"recheck-fy-{year}-{safe_field}-{safe_term}-start-date-asc-offset-{offset:07d}.json"
+            try:
+                path=core.download(source,REPORTER_URL,filename,license_name="NIH RePORTER public project metadata",version="v2",method="POST",json_body=body)
+                payload=_json(path); meta=payload.get("meta",{}); rows=payload.get("results",[])
+            except Exception as exc:
+                error=str(exc)[:500]; break
+            if total is None: total=int(meta.get("total",0))
+            if not rows:
+                if offset<total: error="empty page before reported total"
+                break
+            for row in rows:
+                keys.add((row.get("appl_id"),row.get("subproject_id"),row.get("fiscal_year")))
+                rows_all.append(row)
+            seen+=len(rows); offset+=len(rows)
+            if len(rows)<page_size and offset<total: error="short page before reported total"; break
+            if offset<total: time.sleep(.2)
+        complete=error is None and total==seen==len(keys)
+        results.append({"fiscal_year":year,"field":field,"term":term,"reported_total":total,"records_seen":seen,
+                        "unique_application_keys":len(keys),"complete":complete,"error":error,
+                        "sort_field":"project_start_date","sort_order":"asc"})
+        if rows_all:
+            # Cached re-traversals remain separate audit artifacts; their rows also fill gaps
+            # in the emitted deduplicated corpus and retain explicit recheck provenance.
+            for row in rows_all:
+                member={"query_set":"NIH duplicate-partition sort recheck","search_field":field,"search_text":term,
+                        "operator":"and","fiscal_year":year,"sort_field":"project_start_date","sort_order":"asc"}
+                row.setdefault("query_membership",[]).append(member)
+                rawkey=(row.get("appl_id"),row.get("subproject_id"),row.get("fiscal_year"))
+                rows_by_key[rawkey]=row
+    core.update_manifest(source,status="in_progress",reporter_duplicate_rechecks=results)
+    if rows_by_key:
+        core.emit_records(source,"rare_disease_projects",rows_by_key.values(),input_paths=[rawdir],
+                          description="NIH RePORTER broad rare/orphan disease corpus with separately labeled stable-sort rechecks for duplicate-key discrepancies.")
+    return results
 
 
 def _month_intervals(start=date(1990,1,1), end=None):
@@ -474,7 +755,7 @@ def harvest_pmc_linked(pubmed_path=None, source="pmc_linked_oa", dataset_name="l
     """Use Europe PMC core metadata to license-gate linked PMC full text."""
     pubmed_path=Path(pubmed_path or core.PROCESSED/"pubmed/rare_disease_citations.jsonl.gz")
     if not pubmed_path.exists(): raise FileNotFoundError(f"PubMed citation dataset not found: {pubmed_path}")
-    linked={}; missing=0; excluded_nonfocus=0; scanned_citations=0
+    linked={}; missing=0; excluded_nonfocus=0; scanned_citations=0; missing_citations=[]
     for article in core.read_records(pubmed_path):
         scanned_citations+=1
         pmid=article.get("pmid")
@@ -490,7 +771,11 @@ def harvest_pmc_linked(pubmed_path=None, source="pmc_linked_oa", dataset_name="l
             if pmcid:
                 if pmcid.startswith("PMC") and pmcid[3:].isdigit():
                     linked.setdefault(pmcid,[]).append(pmid); found=True
-        if not found: missing+=1
+        if not found:
+            missing+=1
+            missing_citations.append({"pmid":pmid,"title":article.get("title"),
+                                      "doi":next((x.get("value") for x in article.get("article_ids",[]) if x.get("type")=="doi"),None),
+                                      "status":"no_linked_pmc_identifier"})
     if not linked: raise RuntimeError("PubMed corpus contains no PMC identifiers; no licensing status can be asserted")
     # Europe PMC's core endpoint accepts an OR of PMCID fields and exposes the
     # article's isOpenAccess and license values, avoiding one OAI request per ID.
@@ -538,7 +823,8 @@ def harvest_pmc_linked(pubmed_path=None, source="pmc_linked_oa", dataset_name="l
         if compatible:
             eligible[pmcid]=item
         else:
-            item["status"]="license_unknown_or_incompatible"
+            item["status"]=("license_unknown" if not license_id else
+                            ("license_no_derivatives_review" if license_id in {"cc by-nc-nd","cc by-nc-nd 4.0"} else "license_other_incompatible"))
             queued.append(item)
     # Keep metadata mapping to original IDs and PMID membership for audit.
     core.emit_records(source,"license_metadata",(
@@ -547,42 +833,107 @@ def harvest_pmc_linked(pubmed_path=None, source="pmc_linked_oa", dataset_name="l
          "raw_metadata":row} for pid,row in sorted(metadata.items())),input_paths=[pubmed_path,core.RAW/source],
         description="Europe PMC core metadata queried by exact PMCID groups. isOpenAccess and source license identifiers retained; no license inferred from PMC membership.")
     fulltexts=[]; retrieval_queue=[]
-    for pmcid,item in eligible.items():
-        url=f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
+    progress_path=core.RAW/source/"fulltext_progress.json"
+    completed=[]; ncbi_request_lock=threading.Lock(); last_ncbi_request=[0.0]
+    prior_progress={}
+    if progress_path.exists():
+        try: prior_progress=json.loads(progress_path.read_text(encoding="utf-8"))
+        except Exception: prior_progress={}
+    prior_errors=prior_progress.get("errors",[])
+    prior_completed={row.get("pmcid"):row for row in prior_progress.get("completed",[]) if row.get("pmcid")}
+    prior_500=sum("500 Server Error" in x.get("error","") for x in prior_errors)
+    epmc_fulltext_systemic_failure=prior_500>=3 and prior_500>=len(prior_errors)/2
+    def fetch_epmc_fulltext(pmcid,item):
+        epmc_url=f"https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
+        fulltext_source="europe_pmc_fullTextXML"; url=epmc_url; epmc_error=None
         try:
-            path=_get(source,url,f"licensed-jats-{pmcid}.xml","Europe PMC full text; compatible explicit CC license verified in core metadata",item["license"])
+            if epmc_fulltext_systemic_failure or prior_completed.get(pmcid,{}).get("fulltext_source")=="ncbi_pmc_efetch":
+                raise RuntimeError("Europe PMC fullTextXML showed repeated HTTP 500 responses in prior bounded probes")
+            path=_get(source,epmc_url,f"licensed-jats-{pmcid}.xml","Europe PMC full text; compatible explicit CC license verified in core metadata",item["license"])
             article=ET.parse(path).getroot()
-            found=article.find(".//article-id[@pub-id-type='pmc']")
-            if found is None: found=article.find(".//article-id[@pub-id-type='pmcid']")
-            returned_pmcid=(_text(found) or "").upper()
-            if returned_pmcid and not returned_pmcid.startswith("PMC"): returned_pmcid="PMC"+returned_pmcid
-            if returned_pmcid!=pmcid:
-                retrieval_queue.append({**item,"status":"fulltext_pmcid_mismatch","returned_pmcid":returned_pmcid}); continue
+        except Exception as exc:
+            epmc_error=str(exc)[:500]
+            # Switch away from a repeatedly failing EPMC XML route to the
+            # official NCBI EFetch API; license verification still precedes it.
+            ncbi_url="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?"+urlencode({"db":"pmc","id":pmcid[3:],"retmode":"xml","tool":"LIT-knowledge-graph"})
+            try:
+                url=ncbi_url
+                cached_ncbi=core.RAW/source/f"licensed-jats-ncbi-{pmcid}.xml"
+                if cached_ncbi.exists():
+                    path=cached_ncbi
+                else:
+                    with ncbi_request_lock:
+                        delay=.51-(time.monotonic()-last_ncbi_request[0])
+                        if delay>0: time.sleep(delay)
+                        path=_get(source,ncbi_url,f"licensed-jats-ncbi-{pmcid}.xml","NCBI PMC EFetch full text; compatible explicit CC license verified in Europe PMC core",item["license"])
+                        last_ncbi_request[0]=time.monotonic()
+                fulltext_source="ncbi_pmc_efetch"
+                article=ET.parse(path).getroot()
+            except Exception as ncbi_exc:
+                return None,{**item,"status":"fulltext_fetch_error","europe_pmc_endpoint":epmc_url,
+                             "europe_pmc_error":epmc_error,"ncbi_efetch_endpoint":ncbi_url,"error":str(ncbi_exc)[:500]}
+        try:
+            validation_error,returned_pmcid=_pmc_jats_error(article,pmcid)
+            if validation_error:
+                return None,{**item,"status":validation_error,"returned_pmcid":returned_pmcid,
+                             "fulltext_source":fulltext_source,"fulltext_endpoint":url,"europe_pmc_endpoint":epmc_url}
             item.update({"body_license":[item["license"]],"supplementary_links":[
                 {"href":el.get("{http://www.w3.org/1999/xlink}href"),"label":el.get("{http://www.w3.org/1999/xlink}title"),"article_license":item["license"]}
                 for el in article.findall(".//supplementary-material") if el.get("{http://www.w3.org/1999/xlink}href")],
+                "fulltext_source":fulltext_source,"fulltext_endpoint":url,
+                "europe_pmc_error":epmc_error,"returned_pmcid":returned_pmcid,
                 "jats_xml":ET.tostring(article,encoding="unicode")})
-            fulltexts.append(item)
+            return item,None
         except Exception as exc:
-            retrieval_queue.append({**item,"status":"fulltext_fetch_error","error":str(exc)[:500]})
-        time.sleep(.2)
+            return None,{**item,"status":"fulltext_parse_error","fulltext_source":fulltext_source,
+                         "fulltext_endpoint":url,"europe_pmc_endpoint":epmc_url,"error":str(exc)[:500]}
+    core.atomic_json(progress_path,{"expected_compatible_pmcids":sorted(eligible),"completed":[],"errors":[],"status":"in_progress"})
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures={pool.submit(fetch_epmc_fulltext,pmcid,item):(pmcid,item) for pmcid,item in eligible.items()}
+        for future in as_completed(futures):
+            pmcid,item=futures[future]
+            try: record,error=future.result()
+            except Exception as exc: record,error=None,{**item,"status":"fulltext_fetch_error","error":str(exc)[:500]}
+            if record is not None: fulltexts.append(record)
+            if error is not None: retrieval_queue.append(error)
+            completed.append({"pmcid":pmcid,"status":"downloaded" if record is not None else error["status"],
+                              "fulltext_source":record.get("fulltext_source") if record else error.get("fulltext_source"),
+                              "endpoint":record.get("fulltext_endpoint") if record else error.get("fulltext_endpoint",error.get("ncbi_efetch_endpoint",error.get("europe_pmc_endpoint"))),
+                              "license":item.get("license"),"error":error.get("error") if error else None})
+            core.atomic_json(progress_path,{"expected_compatible_pmcids":sorted(eligible),"completed":completed,
+                                            "errors":retrieval_queue,"downloaded_jats_records":len(fulltexts),"status":"in_progress"})
     if fulltexts:
         core.emit_records(source,dataset_name,fulltexts,input_paths=[pubmed_path,core.RAW/source],
             description="Europe PMC JATS fetched only after core metadata exposed an explicit compatible Creative Commons license identifier.")
     if queued:
         core.emit_records(source,"rights_review_queue",queued,input_paths=[pubmed_path,core.RAW/source],
             description="Linked PMC identifiers lacking an explicit compatible license identifier in Europe PMC core metadata. No full text fetched for these records.")
+    if missing_citations:
+        core.emit_records(source,"no_pmcid_queue",missing_citations,input_paths=[pubmed_path],
+            description="Focused PubMed citations without a primary-article PMCID in PubmedData/ArticleIdList; citation metadata is retained, but no PMC full-text license lookup is possible.")
     if retrieval_queue:
         core.emit_records(source,"fulltext_retry_queue",retrieval_queue,input_paths=[pubmed_path,core.RAW/source],description="Europe PMC full-text fetch or identity errors for records with an explicit compatible license.")
     has_errors=bool(metadata_errors or retrieval_queue or any(x["missing_pmcids"] or x["unexpected_pmcids"] or x["reported_hits"]!=x["returned_unique_pmcids"] for x in exact_batches))
+    license_counts=Counter((row.get("license") or "missing").strip().lower() for row in metadata.values())
+    queue_counts=Counter(row.get("status") for row in queued)
     coverage={"pubmed_citations_scanned":scanned_citations,"focus_citations_excluded":excluded_nonfocus,"linked_articles_with_pmcid":len(linked),
         "metadata_pmcids_expected":len(linked),"metadata_pmcids_returned":len(metadata),"metadata_exact_id_set_match":set(linked)==set(metadata),
-        "metadata_batches":exact_batches,"metadata_errors":metadata_errors,"compatible_license_candidates":len(eligible),
+        "metadata_pmcids_missing":len(set(linked)-set(metadata)),"metadata_batches":exact_batches,"metadata_errors":metadata_errors,"compatible_license_candidates":len(eligible),
+        "license_counts":dict(sorted(license_counts.items())),"rights_queue_status_counts":dict(sorted(queue_counts.items())),
+        "all_656_target_accounting":{"expected_linked_pmcs":len(linked),"metadata_returned":len(metadata),
+            "eligible_explicit_licenses":len(eligible),"queued_metadata_missing":queue_counts.get("metadata_missing_from_europe_pmc",0),
+            "queued_unknown_license":queue_counts.get("license_unknown",0),"queued_nd_license":queue_counts.get("license_no_derivatives_review",0),
+            "queued_other_incompatible_license":queue_counts.get("license_other_incompatible",0),
+            "partition_sum":len(eligible)+queue_counts.get("metadata_missing_from_europe_pmc",0)+queue_counts.get("license_unknown",0)+
+                queue_counts.get("license_no_derivatives_review",0)+queue_counts.get("license_other_incompatible",0)},
         "downloaded_jats_records":len(fulltexts),"queued_for_rights_review":len(queued),"queued_for_fetch_retry":len(retrieval_queue),
-        "citations_without_pmcid":missing,"license_unknown_or_incompatible":sum(x["status"]=="license_unknown_or_incompatible" for x in queued),
-        "limitation":"The corpus is limited to PubMed-linked PMCIDs in the declared focus query. Exact Europe PMC PMCID search results retain source isOpenAccess and license fields. Full text is fetched only for source-provided CC BY/SA/NC or CC0 identifiers; missing, non-CC, ND, and unknown licenses stay queued. Supplement links are recorded; assets are not fetched unless separately rights-verified."}
+        "citations_without_pmcid":missing,
+        "limitation":"The corpus is limited to PubMed-linked PMCIDs in the declared focus query. All returned source-provided CC BY, CC BY-SA, CC BY-NC, CC BY-NC-SA, and CC0 identifiers are eligible for research-copy retrieval; the noncommercial restriction is retained on each record. CC BY-NC-ND is excluded from copying and queued separately. Missing/unknown and non-CC licenses are separately queued. Supplement links are recorded; assets are not fetched unless separately rights-verified."}
     if source=="pmc_grin_oa": coverage["focused_scope"]={"pmids":sorted(GRIN_FULLTEXT_PMIDS),"pmcids":sorted(GRIN_FULLTEXT_PMCIDS),"title_abstract_mesh_regex":GRIN_FULLTEXT_RE.pattern}
-    core.update_manifest(source,status="complete_with_fetch_errors" if has_errors else ("complete_with_rights_queue" if queued else "complete"),coverage=coverage)
+    status="partial_fulltext_retrieval" if retrieval_queue else ("partial_metadata" if has_errors else ("complete_with_rights_queue" if queued else "complete"))
+    core.atomic_json(progress_path,{"expected_compatible_pmcids":sorted(eligible),"completed":completed,"errors":retrieval_queue,
+                                    "downloaded_jats_records":len(fulltexts),"status":status})
+    core.update_manifest(source,status=status,coverage=coverage)
     return len(fulltexts),len(queued)
 
 

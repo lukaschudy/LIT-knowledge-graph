@@ -8,6 +8,15 @@ from harvest import research
 
 
 class ResearchParsingTests(unittest.TestCase):
+    def test_pmc_jats_validation_requires_exact_id_and_body(self):
+        import xml.etree.ElementTree as ET
+        wrong=ET.fromstring('<article><front><article-meta><article-id pub-id-type="pmcid">PMC2</article-id></article-meta></front><body>Text</body></article>')
+        metadata_only=ET.fromstring('<article><front><article-meta><article-id pub-id-type="pmcid">PMC1</article-id></article-meta></front></article>')
+        full=ET.fromstring('<article><front><article-meta><article-id pub-id-type="pmcid">1</article-id></article-meta></front><body>Text</body></article>')
+        self.assertEqual(research._pmc_jats_error(wrong,"PMC1"),("fulltext_pmcid_mismatch","PMC2"))
+        self.assertEqual(research._pmc_jats_error(metadata_only,"PMC1"),("fulltext_body_missing","PMC1"))
+        self.assertEqual(research._pmc_jats_error(full,"PMC1"),(None,"PMC1"))
+
     def test_pubmed_parser_preserves_sections_identifiers_and_mesh(self):
         import xml.etree.ElementTree as ET
         article = ET.fromstring('''<PubmedArticle><MedlineCitation><PMID>123</PMID>
@@ -56,6 +65,10 @@ class ResearchParsingTests(unittest.TestCase):
                     out.write(json.dumps({"Rare Disease Name":name})+"\n")
             batches=list(research._disease_batches(path,max_chars=14))
         self.assertEqual(batches,[["Disease A"],["Disease B"],["Disease C"]])
+
+    def test_ctg_condition_strips_grouping_punctuation_safely(self):
+        self.assertEqual(research._ctg_condition(["Disease (type 1)", "A \"quoted\" disorder"]),
+                         '"Disease type 1" OR "A quoted disorder"')
 
 
 class PagedSourceTests(unittest.TestCase):
