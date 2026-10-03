@@ -4,10 +4,10 @@ Retrieval matches are candidates, never asserted disease/publication relations.
 Uses disk-backed deduplication to keep memory bounded across large corpora.
 """
 from __future__ import annotations
-import hashlib, json, re, sqlite3, time, threading
+import argparse, hashlib, json, re, sqlite3, time, threading
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urlencode
-from harvest.core import ROOT, RAW, PROCESSED, download, emit_records, read_records, update_manifest, atomic_json, now
+from harvest.core import ROOT, RAW, PROCESSED, download, emit_records, read_records, update_manifest, atomic_json, now, manifest
 
 SOURCE='europe_pmc_diseases'
 ENDPOINT='https://www.ebi.ac.uk/europepmc/webservices/rest/search'
@@ -34,7 +34,7 @@ def batches(terms,max_chars=5500):
         group.append(term);size+=added
     if group:yield group
 
-def run():
+def run(workers=4):
     source_path=PROCESSED/'raresource/diseases.jsonl.gz'
     terms=vocabulary(read_records(source_path))
     groups=list(batches(terms))
@@ -46,7 +46,7 @@ def run():
     progress_path=work/'progress.json'
     progress=json.loads(progress_path.read_text()) if progress_path.exists() else {'started_at':now(),'completed':{}}
     connection.execute('PRAGMA journal_mode=WAL')
-    queries=[]; progress_lock=threading.RLock()
+    queries=[]; progress_lock=threading.RLock(); request_lock=threading.Lock(); next_request=[0.0]
     for group in groups:
         query='('+' OR '.join('TITLE_ABS:"'+t['term']+'"' for t in group)+')'
         queries.append({'query_id':hashlib.sha256(query.encode()).hexdigest()[:20],'query':query,'terms':[x['term'] for x in group]})
@@ -62,6 +62,11 @@ def run():
             params={'query':query,'format':'json','resultType':'core','pageSize':1000,'cursorMark':cursor}
             url=ENDPOINT+'?'+urlencode(params)
             fname=f'{qid}-{page:05d}-{hashlib.sha256(cursor.encode()).hexdigest()[:8]}.json'
+            if not (work/fname).exists():
+                with request_lock:
+                    delay=max(0,next_request[0]-time.monotonic())
+                    next_request[0]=time.monotonic()+delay+.5
+                if delay:time.sleep(delay)
             p=download(SOURCE,url,fname,license_name='Europe PMC metadata/abstract terms; article-specific licenses retained; no assumed full-text reuse permission')
             obj=json.loads(p.read_text());paths.append(str(p.relative_to(ROOT)))
             if 'hitCount' not in obj:raise ValueError('Europe PMC returned no hitCount')
@@ -91,7 +96,7 @@ def run():
                 errors[queries[item[0]]['query_id']]=str(exc)
                 atomic_json(work/'query_errors.json',errors)
                 print(json.dumps({'event':'query_error','query_index':item[0]+1,'error':str(exc)}),flush=True)
-    with ThreadPoolExecutor(max_workers=4) as pool:
+    with ThreadPoolExecutor(max_workers=workers) as pool:
         list(pool.map(guarded_group,enumerate(groups)))
     emit_records(SOURCE,'queries',queries,input_paths=[source_path],description='Exact query definitions linking vocabulary batches to retrieval membership.')
     emit_records(SOURCE,'articles',(json.loads(r[0]) for r in connection.execute('SELECT data FROM records ORDER BY key')),description='Deduplicated complete Europe PMC core metadata per source:id; abstracts, authors, affiliations, grants, identifiers and available rights retained. Raw input artifacts and per-query progress establish provenance.')
@@ -99,5 +104,9 @@ def run():
     discrepancies={k:v for k,v in progress['completed'].items() if v['reported_hits']!=v['unique_retrieved']}
     update_manifest(SOURCE,status='complete_with_query_gaps' if errors or discrepancies else 'complete_for_scope',queries=progress['completed'],query_errors=errors,count_discrepancies=discrepancies,limitations=['Preferred name and multiword alias matches are discovery candidates, not proven disease associations.','Short or single-word aliases excluded to reduce ambiguity; preferred names all included.','No source search guarantees complete recall; title/abstract search misses full-text-only mentions.','Europe PMC updates during traversal may change counts; acquired pages remain reproducible snapshots.'])
     connection.close()
+    if manifest('europe_pmc_recheck').get('recovery'):
+        from harvest.literature_repair import finalize
+        finalize()
 
-if __name__=='__main__':run()
+if __name__=='__main__':
+    p=argparse.ArgumentParser();p.add_argument('--workers',type=int,choices=range(1,9),default=4);run(p.parse_args().workers)
