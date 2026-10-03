@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 
 from atlas.search.passages import article_documents, bundle_documents, chunks, export, protein_mentions, read_rows, xml_units
-from atlas.search.topk import batches, fuse, graph_connections, ingest, resolve_filters, settings
+from atlas.search.topk import batches, checked_bundle, fuse, graph_connections, ingest, resolve_filters, settings
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -71,6 +71,10 @@ class PassageTests(unittest.TestCase):
 
 
 class TransportTests(unittest.TestCase):
+    def test_changed_bundle_cannot_reuse_old_claim_ids(self):
+        with self.assertRaises(ValueError):
+            checked_bundle(ROOT / "data/curated/grin_atlas_bundle.json", {"bundle_sha256": "wrong"})
+
     def test_rank_fusion_uses_rank_not_raw_score(self):
         ranks = {"keyword": [{"_id": "a", "retrieval_score": 999}, {"_id": "b", "retrieval_score": 1}],
                  "semantic": [{"_id": "b", "retrieval_score": .9}, {"_id": "c", "retrieval_score": .8}]}

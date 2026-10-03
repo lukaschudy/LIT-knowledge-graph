@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 
 from .passages import export
-from .topk import DEFAULT_REGION, client_from_settings, graph_connections, ingest, search, settings
+from .topk import DEFAULT_REGION, checked_bundle, client_from_settings, graph_connections, ingest, search, settings
 
 
 def main():
@@ -30,6 +30,7 @@ def main():
     query.add_argument("--kind")
     query.add_argument("--k", type=int, default=10)
     query.add_argument("--bundle", type=Path, default=Path("data/curated/grin_atlas_bundle.json"))
+    query.add_argument("--checkpoint", type=Path, help="Enables graph linking after validating the indexed bundle revision")
     args = parser.parse_args()
     if args.command == "prepare":
         result = export(args.root, args.output, fulltext=not args.curated_only)
@@ -47,7 +48,13 @@ def main():
         else:
             result = search(client, collection, args.text, args.snapshot, k=args.k,
                             mode=args.mode, gene=args.gene, protein=args.variant, kind=args.kind)
-            result["connections"] = graph_connections(result["hits"], json.loads(args.bundle.read_text()))
+            result["connections"] = []
+            if args.checkpoint:
+                state = json.loads(args.checkpoint.read_text())
+                if (state["snapshot_id"] != args.snapshot or state["collection"] != collection
+                        or state["region"] != (config.get("TOPK_REGION") or DEFAULT_REGION)):
+                    raise ValueError("Checkpoint does not match search target")
+                result["connections"] = graph_connections(result["hits"], checked_bundle(args.bundle, state))
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
 

@@ -88,6 +88,7 @@ def ingest(client, collection, export_path, state_path, region, *, create=False,
         state = json.loads(state_path.read_text())
         if any(state.get(k) != v for k, v in target.items()):
             raise ValueError("Checkpoint belongs to a different export or target; use a new checkpoint")
+    state["bundle_sha256"] = manifest["input_sha256"]["data/curated/grin_atlas_bundle.json"]
     if create:
         # Never mask a permission/schema error as 'already exists'.
         from topk_sdk.error import CollectionAlreadyExistsError
@@ -158,10 +159,13 @@ def make_query(query, snapshot, mode, limit, *, gene=None, protein=None, kind=No
         score = fn.semantic_similarity("content", query)
     elif mode == "keyword":
         score = fn.bm25_score()
-        filters = filters & match(query)
     else:
         raise ValueError("Unknown retrieval channel")
-    return select(*FIELDS, retrieval_score=score).filter(filters).sort(field("retrieval_score"), asc=False).limit(limit)
+    result = select(*FIELDS, retrieval_score=score).filter(filters)
+    if mode == "keyword":
+        # SDK text expressions and logical expressions are different types.
+        result = result.filter(match(query))
+    return result.sort(field("retrieval_score"), asc=False).limit(limit)
 
 
 def fuse(rankings, k=10):
@@ -217,3 +221,10 @@ def graph_connections(hits, bundle):
                                   "status": "existing_claim; scientific review status retained"}
         result[claim["id"]]["matched_evidence"].append(e)
     return list(result.values())
+
+
+def checked_bundle(path, state):
+    """Sequential claim/evidence IDs are valid only within the same bundle revision."""
+    if not state.get("bundle_sha256") or file_sha(path) != state["bundle_sha256"]:
+        raise ValueError("Graph bundle differs from the indexed revision; re-export before linking claims")
+    return json.loads(Path(path).read_text())
