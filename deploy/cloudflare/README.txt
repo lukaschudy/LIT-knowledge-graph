@@ -104,9 +104,9 @@ remain available, and the chat retains its paper and evidence links.
 Dense rendering uses a 1x pixel budget, GPU buffer reuse and lazy pointer indexing;
 SVG labels and controls remain at native display resolution.
 
-Active dense-graph version: 24aab8f1-e9d8-4bc3-8c12-de0b767bdef9 (100% traffic).
+Active dense-graph version: f5421d3f-af17-4290-bb1d-754623c07994 (100% traffic).
 Verified release: deploy/cloudflare/dense-release.json
-Rollback: uv run pywrangler versions deploy ab5a8ebd-8a82-48d4-ad4c-36f767beb089@100% --yes
+Rollback: uv run pywrangler versions deploy 24aab8f1-e9d8-4bc3-8c12-de0b767bdef9@100% --yes
 
 Nodes keep fixed world positions during pointer gestures; dragging orbits the camera.
 The current theme uses a white background, dark lotus-green branding and the original
@@ -118,3 +118,7 @@ Audit findings and remaining limits: docs/research/reliability-review-2026-10-04
 
 The fixed GRIN demo answer scope and global search release is recorded in
 demo-scope-release.json, with the exact deployed manifest in demo-scope-build-manifest.json.
+
+The globe layout release is recorded in globe-release.json with its sealed manifest
+in globe-build-manifest.json. Dense nodes occupy a stable 3D sphere. The opening
+view leaves whitespace on the left on wide screens and centers the globe on mobile.

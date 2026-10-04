@@ -1,19 +1,19 @@
 {
   "schema_version": "atlas-dense-production-release-v1",
-  "deployed_at": "2026-10-04T08:17:20.578566+00:00",
+  "deployed_at": "2026-10-04T08:26:08.606462+00:00",
   "worker": "varentik-atlas",
-  "version": "24aab8f1-e9d8-4bc3-8c12-de0b767bdef9",
+  "version": "f5421d3f-af17-4290-bb1d-754623c07994",
   "traffic_percent": 100,
   "url": "https://atlas.varentik.com/explore",
-  "previous_version": "ab5a8ebd-8a82-48d4-ad4c-36f767beb089",
-  "frontend_source_commit": "01f88d6",
+  "previous_version": "24aab8f1-e9d8-4bc3-8c12-de0b767bdef9",
+  "frontend_source_commit": "a19ce47",
   "production_nodes": 10035,
   "public_hgnc_nodes": 10000,
   "reviewed_grin_nodes": 35,
   "validation": {
-    "application_tests": 160,
     "production_browser_checks": 56,
-    "live_search_and_scoped_chat_verified": true,
+    "local_browser_checks": 28,
+    "live_globe_verified": true,
     "production_dom_count": 10035,
     "vendor_files_verified": 29,
     "sealed_generated_files": 37,
@@ -24,7 +24,7 @@
     "Ask Atlas retains the reviewed GRIN annotation lookup; local Codex/TopK and Whisper services are not deployed."
   ],
   "sha256": {
-    "atlas/web/graph.js": "1c32bc73df09ca48ace25af4c9b80f8478b024d7766f35c8213328e002c0b465",
+    "atlas/web/graph.js": "5e6cce4299e36d001a8ed73da87cbe4264bc39ce845fc36c39a88d34bf1d244f",
     "atlas/web/graph-renderer.js": "2e2a7ad40836d79bbf49dfbbe472cc3dbdbb1b95a082f1b193fb34211a1a102a",
     "atlas/web/graph.css": "3652af5307e676360f0c5ccfcfbccf4889501c2f7cd4ee8a510d021cf5e80dcf",
     "atlas/web/explore.html": "aeba219007049cc68623a3fa1726fe2a4befdd88c06e1ac9d3f0b7d2f227c0d8",
@@ -34,5 +34,5 @@
     "deploy/cloudflare/wrangler.jsonc": "5e8bff3396e73538e545e63878d16e5393fbf9479e65ee8f8264eb17a080ab0e",
     "atlas/proposals.py": "4e5f51ea6444ded88869ab31a877abf64d452b09383ed99a8dfb6db075568534"
   },
-  "release_receipt": "deploy/cloudflare/demo-scope-release.json"
+  "release_receipt": "deploy/cloudflare/globe-release.json"
 }
