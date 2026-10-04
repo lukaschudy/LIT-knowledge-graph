@@ -1,0 +1,93 @@
+{
+  "schema_version": "grin-benchmark-v1",
+  "benchmark_id": "grin-development-seed-v1",
+  "state": "draft",
+  "synthetic": false,
+  "scope": "Seven previously curated development papers with normalized source snapshots; visual/supplement coverage, study grouping and independent annotations remain pending.",
+  "documents": [
+    {
+      "document_id": "PMC10508039",
+      "study_id": "UNREVIEWED-PMC10508039",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": "2ef6b232ec9af7298cedce1aa0a87b400832a050ad24a53fede4e5ce9fa344ca",
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC10641759",
+      "study_id": "UNREVIEWED-PMC10641759",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": "6aeb4fc433c113ecaaf8dd412a0dd3499e4c2884152f09e33c4520cdb9cbd14d",
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC10973091",
+      "study_id": "UNREVIEWED-PMC10973091",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": "5088eb6fbe892bf00edfc8fb234c7543d57b9726f7d4e51c8ec93965e4920a97",
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC11046977",
+      "study_id": "UNREVIEWED-PMC11046977",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": "d197d538f8d2a4242a372bdc9bf67d8c71ab6a2607ab3cda897fb7934975d6fd",
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC5142120",
+      "study_id": "UNREVIEWED-PMC5142120",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": "6157bc5024ae752795120eedf80c70e99ce2a18c37637aaf05817bc349597621",
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC5656050",
+      "study_id": "UNREVIEWED-PMC5656050",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": "b6981ba5c7e3797d14dd914568d88b73d5d8c4501edd6803825e208a31b174ba",
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC7554152",
+      "study_id": "UNREVIEWED-PMC7554152",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": "ae828b60d1b597bf61900b2c51fd0ee706b6f7e624ce68fc7ef933cc921defbb",
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    }
+  ]
+}
