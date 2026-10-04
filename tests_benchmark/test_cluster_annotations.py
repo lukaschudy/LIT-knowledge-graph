@@ -1,7 +1,7 @@
 from copy import deepcopy
 import unittest
 
-from atlas.benchmark.cluster_annotations import compare, validate
+from atlas.benchmark.cluster_annotations import audit_table_cells, compare, validate
 from atlas.benchmark.contracts import digest
 from atlas.cluster_demo import build, ratio, tier_for
 from tests_benchmark.fixtures import example
@@ -14,7 +14,10 @@ def fixture():
                     uncertainty_value=None, ci_lower=None, ci_upper=None, n=5, n_unit=None, qualitative=None)
     observations = []
     for index, doc in enumerate(reference["documents"]):
-        spans = doc["observations"][0]["evidence_sets"][0]
+        cell = dict(unit_id=f"synthetic-cell-{index}", document_id=doc["document_id"],
+                    kind="table_cell", locator="synthetic table cell", text="30")
+        sources["units"].append(cell)
+        spans = [dict(unit_id=cell["unit_id"], start=0, end=2, quote="30")]
         observations.append(dict(id=f"o{index}", document_id=doc["document_id"], gene="GRIN2B", protein="p.Ser541Arg",
              table_id=f"{doc['document_id']}:table:1", row=2, column=2, endpoint="peak_current_density",
              assay="whole_cell_voltage_clamp", measurement_type="measured", sequence_context=None,
@@ -27,6 +30,21 @@ def fixture():
 
 
 class ClusterAnnotationTests(unittest.TestCase):
+    def test_table_audit_rejects_real_quote_with_wrong_coordinates_or_raw_value(self):
+        a, _ = fixture()
+        a["observations"] = a["observations"][:1]
+        o = a["observations"][0]
+        span = o["evidence"][0]
+        o["measurement"]["raw"] = span["quote"]
+        ledger = {"documents": [{"document_id": o["document_id"], "tables": [{"table_id": o["table_id"],
+                  "cells": [{"row": 2, "column": 2, "text": span["quote"], "unit_id": span["unit_id"]}]}]}]}
+        self.assertEqual(audit_table_cells(a, ledger)["verified_table_cells"], 1)
+        o["row"] = 3
+        with self.assertRaisesRegex(ValueError, "coordinates"): audit_table_cells(a, ledger)
+        o["row"] = 2
+        o["measurement"]["raw"] = "40"
+        with self.assertRaisesRegex(ValueError, "Raw measurement"): audit_table_cells(a, ledger)
+
     def test_intervals_and_censoring_survive_validation(self):
         a, s = fixture()
         a["observations"][0]["measurement"].update(uncertainty_type="95%CI", ci_lower="20", ci_upper="40")
@@ -100,7 +118,9 @@ class ClusterAnnotationTests(unittest.TestCase):
     def test_demo_requires_audit_and_retains_citation_coordinates(self):
         a, s = fixture()
         curated = {"variants": [dict(gene="GRIN2B", reported_protein="p.Ser541Arg", variant_id="GRIN2B:p.Ser541Arg", cohort_tier="core_likely_reduced")]}
-        ledger = {"documents": [dict(document_id=d["document_id"], title="Synthetic source", url="https://example.invalid") for d in a["coverage"]]}
+        ledger = {"documents": [dict(document_id=o["document_id"], title="Synthetic source", url="https://example.invalid",
+                  tables=[dict(table_id=o["table_id"], cells=[dict(row=o["row"], column=o["column"],
+                  text="30", unit_id=o["evidence"][0]["unit_id"])])]) for o in a["observations"]]}
         with self.assertRaisesRegex(ValueError, "source-audited"): build(a, s, curated, ledger)
         a["review_type"] = "source_audited_ai_reference"
         result = build(a, s, curated, ledger)

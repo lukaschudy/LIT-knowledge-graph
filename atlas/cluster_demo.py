@@ -11,7 +11,7 @@ from pathlib import Path
 import re
 from urllib.parse import parse_qs, urlsplit
 
-from .benchmark.cluster_annotations import validate
+from .benchmark.cluster_annotations import audit_table_cells, validate
 from .benchmark.contracts import digest
 
 INTRINSIC = {"glutamate_ec50", "glycine_ec50", "magnesium_ic50", "zinc_ic50", "proton_response_ratio",
@@ -55,6 +55,7 @@ def tier_for(claims, observations):
 
 def build(reference, sources, curated, ledger):
     validation = validate(reference, sources)
+    validation.update(audit_table_cells(reference, ledger))
     if reference["review_type"] != "source_audited_ai_reference":
         raise ValueError("Cluster requires a source-audited reference, not an independent draft")
     data = {"schema_version": "grin-cluster-demo-v2", "title": "GRIN functional evidence", "synthetic": False,

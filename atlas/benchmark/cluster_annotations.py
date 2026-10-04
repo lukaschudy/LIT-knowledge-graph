@@ -97,7 +97,7 @@ def validate(data, sources):
         keys(row, {"id", "document_id", "gene", "protein", "predicate", "statement", "category", "evidence_type", "evidence"}, "claim")
         identity(row)
         text(row["id"], "claim id")
-        require(row["id"] not in claim_ids, "Duplicate claim id")
+        require(row["id"] not in claim_ids and row["id"] not in ids, "Duplicate claim id")
         claim_ids.add(row["id"])
         require(row["predicate"] in {"author_functional_classification", "reported_functional_effect", "identity_conflict"}, "Invalid claim predicate")
         require(row["category"] in CATEGORIES, "Invalid author category")
@@ -122,6 +122,29 @@ def validate(data, sources):
 
 def anchor(row):
     return (row["document_id"], row["table_id"], row["row"], row["column"], row["gene"], row["protein"])
+
+
+def audit_table_cells(data, ledger):
+    """Bind declared table coordinates and raw measurements to frozen source cells.
+
+    Quote validation alone cannot detect a genuine quote attributed to the wrong
+    table cell. This additional check does not certify semantic interpretation.
+    """
+    cells = {(d["document_id"], t["table_id"], c["row"], c["column"]): c
+             for d in ledger["documents"] for t in d["tables"] for c in t["cells"]}
+    checked = 0
+    for row in data["observations"]:
+        if row["table_id"] is None:
+            continue
+        key = (row["document_id"], row["table_id"], row["row"], row["column"])
+        require(key in cells, "Observation coordinates absent from source ledger")
+        cell = cells[key]
+        require(row["measurement"]["raw"] == cell["text"], "Raw measurement differs from source cell")
+        require(any(s["unit_id"] == cell["unit_id"] and s["start"] == 0
+                    and s["end"] == len(cell["text"]) and s["quote"] == cell["text"]
+                    for s in row["evidence"]), "Full declared measurement cell is not cited")
+        checked += 1
+    return {"verified_table_cells": checked, "prose_supplement_observations": len(data["observations"]) - checked}
 
 
 def compare(a, b, sources):
