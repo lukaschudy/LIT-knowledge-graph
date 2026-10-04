@@ -14,6 +14,8 @@ Install the `topk` and `graph` extras and prepare the verified local passage exp
 
 **Default graph:** the dense full-harvest view, starting at 10,000 entities. The optional resolved neuro view starts at 120 entities and supports neighborhood expansion, canonical identity inspection and quoted evidence. [Entity ingestion and resolution](docs/neuro-entity-resolution.md) explains identity rules, model extraction, setup and current coverage.
 
+**Voice:** Ask Atlas supports local microphone transcription into an editable question. No speech API key is needed. [Setup and controls](docs/research-workspace.md#voice-in-ask-atlas).
+
 The planning scope is **EPG5 / Vici syndrome**, with WDR45 / BPAN and AP4B1 / SPG47 as candidate comparators. New extracted claims stay unreviewed; unresolved scientific, maintainer and access gates remain visible. No real candidate is made ready by an AI-generated answer alone.
 
 The original six-page PDF is [`Knowledge graph`](Knowledge%20graph) (its filename has no extension). Its text is preserved in [`data/source/challenge-brief.txt`](data/source/challenge-brief.txt).

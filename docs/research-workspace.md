@@ -8,7 +8,7 @@ From the repository root with Python 3.11 or later:
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install -e '.[topk,graph]'
+.venv/bin/pip install -e '.[topk,graph,voice]'
 .venv/bin/python -m atlas app --env-file .env --search topk --provider codex
 ```
 
@@ -67,3 +67,27 @@ To explicitly index the four neuro snapshots into their dedicated collection:
 ```
 
 This is a remote write; ordinary app startup and search do not call it. See [decision-engine details](architecture/decision-engine.md) and the [architecture loops](architecture/recommendation-loops.md).
+
+
+## Voice in Ask Atlas
+
+Open **Ask Atlas**, press the microphone and allow browser microphone access. Press it again to stop (or let the 60-second limit stop it). The transcript is appended to the editable question; review gene names and identifiers, then press Send. Pressing Send or Enter while recording finishes dictation first. Cancel, closing the chat, and navigation release the microphone; cancelled transcripts cannot overwrite the draft. This is dictation, not a continuous spoken conversation.
+
+The server uses [faster-whisper](https://github.com/SYSTRAN/faster-whisper) with `small.en`, CPU int8 and four threads. Install it into the same Python environment as Atlas:
+
+```bash
+pip install -e '.[topk,graph,voice]'
+python -m atlas app --provider codex --search topk
+```
+
+The first transcription downloads the model into the normal Hugging Face cache. To prepare it before a demo:
+
+```bash
+python -c "from faster_whisper import WhisperModel; WhisperModel('small.en', device='cpu', compute_type='int8', cpu_threads=4)"
+```
+
+`ATLAS_VOICE_MODEL` can override the model name or point to an installed compatible model directory. The default dictation language is English. Model weights are downloaded, but microphone audio is processed locally in memory and is not retained or sent to a speech API. Only the reviewed text goes through the normal Ask Atlas model pipeline when submitted. No additional API key is required. Microphone capture requires localhost or HTTPS and browser permission.
+
+`GET /api/voice/status` reports availability. `POST /api/voice/transcribe` accepts audio WebM/Opus, Ogg, MP4 or WAV with the workspace's `X-Atlas-Token` and same-origin checks. Uploads are limited to 4 MB, decoded audio to approximately 60 seconds, and transcription to one recording at a time. Missing dependencies, denied permission, silence, malformed audio, busy transcription and timeout all leave the draft editable.
+
+Validation: `python -m unittest discover -s tests -p 'test_voice.py'`. With Playwright and Chromium installed, `ATLAS_TEST_AUDIO=/absolute/path/to/question.wav node scripts/check_voice_browser.cjs` tests real microphone recording and local transcription using synthetic audio. The sample must ask about evidence for neurodevelopmental disease. The browser check stubs the Ask Atlas model response; it verifies the submitted transcript, permissions, cancellation and microphone cleanup without model calls or workspace writes.

@@ -111,9 +111,6 @@
 .send-question:hover { background:#236047; }
 .send-question:disabled { opacity:.5; }
 #voice-button.listening { background:#e8d9cc; color:#994c33; }
-.voice-consent { padding:0 20px 18px; }
-.voice-consent p { font-size:11px; color:#78846e; }
-.voice-consent button { border:1px solid #d3dfc9; background:#f2f7ec; padding:7px 10px; font-size:11px; border-radius:7px; margin-right:8px; }
 .record-dialog, .graph-help { border:1px solid #dce4d3; border-radius:18px; background:#fffefb; color:#35482f; padding:26px; width:min(540px,calc(100vw - 30px)); max-height:85dvh; }
 .record-dialog::backdrop, .graph-help::backdrop { background:#263e2840; backdrop-filter:blur(3px); }
 .record-dialog header, .graph-help header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }

@@ -30,7 +30,6 @@
   let expandedFocusId = null, expandedFocusNextOffset = 0, expandedFocusDone = false;
   let harvestDatasets = [], selectedDatasetId = '', recordPage = 0, recordRequest = 0;
   let view = { x:0,y:0,k:1 }, width = innerWidth, height = innerHeight, busy = false, claimRequest = 0;
-  let recognition = null, listening = false;
   let lastAnswer = null, searchTerm = '', searchMatches = new Set(), searchLead = null;
   let needsProjection = true, needsPaint = true, overlayDirty = true, labelScale = 0;
   let depthOrder = [], edgeBatches = [], pixelRatio = 1, lastOverlay = 0;
@@ -979,7 +978,7 @@
   $('record-dialog').addEventListener('cancel',()=>{claimRequest++;});
 
   function openChat(){ $('workspace-panel').hidden=true;$('workspace-toggle').setAttribute('aria-expanded','false');$('chat-panel').hidden=false;$('chat-toggle').setAttribute('aria-expanded','true');$('question').focus(); }
-  function closeChat(){ $('chat-panel').hidden=true;$('chat-toggle').setAttribute('aria-expanded','false');$('voice-consent').hidden=true;recognition?.abort();$('chat-toggle').focus(); }
+  function closeChat(){ $('chat-panel').hidden=true;$('chat-toggle').setAttribute('aria-expanded','false');window.dispatchEvent(new Event('atlas:voice-cancel'));$('chat-toggle').focus(); }
   $('chat-toggle').onclick=()=>$('chat-panel').hidden?openChat():closeChat();$('chat-close').onclick=closeChat;
   $('ask-selected').onclick=()=>{openChat();$('question').value=selected?`What is connected to ${label(byId.get(selected))}?`:'';};
   $('chat-panel').addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closeChat();}});
@@ -989,7 +988,7 @@
     const question=$('question').value.trim();if(!question||busy)return;
     const selectedNode=byId.get(selected),selectedHarvest=isHarvestNode(selectedNode),workspaceId=workspaceNodeId(selected),selectedInWorkspace=!!workspaceId&&workspaceState?.nodes?.some(node=>node.id===workspaceId);
     const selectedContext=(selectedHarvest||isResolvedNode(selectedNode)&&!selectedInWorkspace)?`Selected ${selectedHarvest?'harvest':'resolved neuro'} graph entity: ${label(selectedNode)}. The cited-source assistant searches its configured source corpus, which is narrower than the full graph. User question: ${question}`:question;
-    busy=true;$('send-question').disabled=true;recognition?.abort();
+    busy=true;$('send-question').disabled=true;window.dispatchEvent(new Event('atlas:voice-cancel'));
     const box=$('chat-messages');
     box.append(make('div','chat-message user',question));$('question').value='';
     if(selectedHarvest||isResolvedNode(selectedNode)&&!selectedInWorkspace)box.append(make('p','harvest-ask-scope',`Selected ${selectedHarvest?'harvest':'resolved neuro'} entity: ${label(selectedNode)}. The question is sent as text context; the configured cited-source search does not cover the full graph.`));
@@ -1005,24 +1004,6 @@
     finally{busy=false;$('send-question').disabled=false;box.scrollTop=box.scrollHeight;}
   }
 
-  const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-  $('voice-button').onclick=()=>{
-    if(listening){recognition?.stop();return;}
-    if(!Recognition){$('voice-status').textContent='Voice unavailable in this browser. Please type.';return;}
-    $('voice-consent').hidden=false;
-  };
-  $('cancel-voice').onclick=()=>{$('voice-consent').hidden=true;$('question').focus();};
-  $('start-voice').onclick=()=>{
-    $('voice-consent').hidden=true;
-    recognition=new Recognition();recognition.lang='en-GB';recognition.continuous=false;recognition.interimResults=true;
-    const draft=$('question').value;
-    recognition.onstart=()=>{listening=true;$('voice-button').classList.add('listening');$('voice-button').setAttribute('aria-label','Stop dictation');$('voice-status').textContent='Listening… tap to stop';};
-    recognition.onresult=e=>{const transcript=Array.from(e.results).map(r=>r[0].transcript).join(' ');$('question').value=(draft+(draft?' ':'')+transcript).slice(0,1000);};
-    recognition.onerror=e=>{$('voice-status').textContent=e.error==='not-allowed'?'Microphone access was not granted.':'Voice could not connect. Please type your question.';};
-    recognition.onend=()=>{listening=false;$('voice-button').classList.remove('listening');$('voice-button').setAttribute('aria-label','Dictate a question');if($('voice-status').textContent.startsWith('Listening'))$('voice-status').textContent='Review your words, then send.';};
-    try{recognition.start();}catch(_){$('voice-status').textContent='Voice unavailable. Please type your question.';}
-  };
-  window.addEventListener('pagehide',()=>recognition?.abort());
   document.addEventListener('click',e=>{if(!e.target.closest('.graph-search'))hideResults();if(!e.target.closest('#graph-options')&&!e.target.closest('#options-toggle')){$('graph-options').hidden=true;$('options-toggle').setAttribute('aria-expanded','false');}});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('graph-options').hidden=true;$('options-toggle').setAttribute('aria-expanded','false');hideResults();}});
 

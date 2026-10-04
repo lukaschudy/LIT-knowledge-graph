@@ -23,6 +23,7 @@ _ASSETS = {
     "/explore": ("explore.html", "text/html; charset=utf-8"),
     "/records": ("records.html", "text/html; charset=utf-8"),
     "/graph.css": ("graph.css", "text/css; charset=utf-8"),
+    "/voice.js": ("voice.js", "text/javascript; charset=utf-8"),
     "/graph.js": ("graph.js", "text/javascript; charset=utf-8"),
     "/transition.css": ("transition.css", "text/css; charset=utf-8"),
     "/transition.js": ("transition.js", "text/javascript; charset=utf-8"),
@@ -63,7 +64,7 @@ def _references(row: dict[str, Any], *keys: str) -> list[str]:
     return list(dict.fromkeys(result))
 
 
-def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None, harvest=None, resolved=None) -> ThreadingHTTPServer:
+def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None, harvest=None, resolved=None, transcriber=None) -> ThreadingHTTPServer:
     """Create a testable threaded server around a startup snapshot of ``store``.
 
     The store and reasoner are only touched on this calling thread. Requests are
@@ -72,6 +73,9 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
     """
     if workspace is not None and host not in ("127.0.0.1", "localhost"):
         raise ValueError("The writable research workspace binds to loopback only; multi-user hosting requires authentication.")
+    if workspace is not None and transcriber is None:
+        from .voice import LocalTranscriber
+        transcriber = LocalTranscriber()
     bundle = store.bundle()
     stats = store.stats()
     reasoner = AtlasReasoner(bundle)
@@ -152,6 +156,9 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
             return value or None
 
         def _api(self, path: str, query: dict[str, list[str]]) -> None:
+            if path == "/api/voice/status":
+                self._json(200, transcriber.status() if transcriber is not None else {"available": False, "message": "Voice requires the local research workspace."})
+                return
             if path.startswith("/api/resolved/"):
                 self._resolved_api(path, query)
                 return
@@ -298,6 +305,9 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
             if not secrets.compare_digest(self.headers.get("X-Atlas-Token", ""), workspace.token):
                 self._error(403, "invalid_token", "Reload the research workspace before applying changes.")
                 return
+            if urlsplit(self.path).path == "/api/voice/transcribe":
+                self._transcribe_audio()
+                return
             from .workflow import WorkflowError
             try:
                 if self.headers.get("Content-Type", "").split(";")[0] != "application/json":
@@ -343,6 +353,34 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
                 return
             except Exception:
                 self._error(500, "workspace_error", "The action could not be saved. Reload the workspace to check its current state.")
+
+        def _transcribe_audio(self):
+            from .voice import AUDIO_TYPES, MAX_AUDIO_BYTES, VoiceError
+            try:
+                content_type = self.headers.get('Content-Type', '').split(';')[0].lower()
+                if content_type not in AUDIO_TYPES:
+                    raise VoiceError('Use a supported audio recording format.', 415)
+                if self.headers.get('Transfer-Encoding'):
+                    raise VoiceError('Chunked uploads are not supported.')
+                try:
+                    size = int(self.headers.get('Content-Length', '0'))
+                except ValueError:
+                    raise VoiceError('Invalid audio size.')
+                if not 0 < size <= MAX_AUDIO_BYTES:
+                    raise VoiceError('The recording must contain 1 byte to 4 MB.', 413)
+                self.connection.settimeout(20)
+                payload = self.rfile.read(size)
+                if len(payload) != size:
+                    raise VoiceError('The recording upload was incomplete.')
+                self._json(200, transcriber.transcribe(payload, content_type))
+            except VoiceError as exc:
+                self._error(exc.status, exc.code, str(exc))
+            except (BrokenPipeError, ConnectionResetError):
+                return
+            except TimeoutError:
+                self._error(408, 'upload_timeout', 'The recording upload timed out. Try again.')
+            except Exception:
+                self._error(500, 'transcription_failed', 'The recording could not be transcribed. Try again.')
 
         def _resolved_api(self, path, query):
             if resolved is None:
