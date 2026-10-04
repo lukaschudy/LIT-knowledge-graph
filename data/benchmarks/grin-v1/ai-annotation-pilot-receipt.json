@@ -1,0 +1,236 @@
+{
+  "schema_version": "grin-ai-annotation-pilot-receipt-v1",
+  "scope_id": "grin-ai-annotation-pilot-table2-v1",
+  "annotation_provenance": "Two fresh-context AI annotators followed by a separate fresh-context AI adjudicator; no expert review",
+  "model_configuration": {
+    "override": null,
+    "inherited_model": true,
+    "exact_deployment_id": null,
+    "token_usage": null,
+    "cost_usd": null
+  },
+  "input_isolation": {
+    "fork_turns": "none",
+    "same_source_packets": true,
+    "no_prior_graph_or_conclusions_supplied": true,
+    "access_boundary": "Agent instructions, not an OS security sandbox"
+  },
+  "scope": {
+    "documents": 1,
+    "published_table": "Swanger 2016 Table 2",
+    "source_cells": 100,
+    "variant_rows": 25,
+    "functional_decisions": 0
+  },
+  "counts": {
+    "variant_rows": 25,
+    "endpoint_cells": 100,
+    "quantitative_observations": 88,
+    "not_reported": 12,
+    "quantitative_by_gene": {
+      "GRIN2A": 64,
+      "GRIN2B": 24
+    },
+    "quantitative_by_endpoint": {
+      "glutamate_ec50": 22,
+      "glycine_ec50": 22,
+      "peak_current_density": 25,
+      "weighted_deactivation_tau": 19
+    },
+    "not_reported_by_marker": {
+      "c": 6,
+      "d": 6
+    },
+    "decisions": 0,
+    "shared_sequence_context_omissions_corrected": 88,
+    "source_numeric_or_identity_discrepancies": 0
+  },
+  "initial_agreement": {
+    "coverage_states": {
+      "a": {
+        "annotated": 88,
+        "not_reported": 12
+      },
+      "b": {
+        "annotated": 88,
+        "not_reported": 12
+      }
+    },
+    "coverage_state_agreement": {
+      "agree": 100,
+      "total": 100
+    },
+    "paired_observations": 88,
+    "exact_observation_agreement": {
+      "agree": 0,
+      "total": 88
+    },
+    "field_agreement": {
+      "gene": {
+        "agree": 88,
+        "total": 88
+      },
+      "variant": {
+        "agree": 88,
+        "total": 88
+      },
+      "sequence_context": {
+        "agree": 88,
+        "total": 88
+      },
+      "assay": {
+        "agree": 88,
+        "total": 88
+      },
+      "property": {
+        "agree": 88,
+        "total": 88
+      },
+      "measurement_type": {
+        "agree": 88,
+        "total": 88
+      },
+      "value": {
+        "agree": 88,
+        "total": 88
+      },
+      "unit": {
+        "agree": 88,
+        "total": 88
+      },
+      "comparator": {
+        "agree": 88,
+        "total": 88
+      },
+      "conditions": {
+        "agree": 0,
+        "total": 88
+      },
+      "uncertainty": {
+        "agree": 88,
+        "total": 88
+      },
+      "sample_size": {
+        "agree": 88,
+        "total": 88
+      }
+    }
+  },
+  "adjudication": {
+    "status": "completed_ai_provisional",
+    "sequence_context_corrections": 88,
+    "canonical_protocol_keys": [
+      "construct",
+      "expression",
+      "recording_delay",
+      "temperature",
+      "holding_potential",
+      "external_solution",
+      "internal_solution",
+      "glutamate_concentration",
+      "glycine_concentration",
+      "application_duration",
+      "solution_exchange",
+      "analysis",
+      "series_resistance_correction"
+    ],
+    "unresolved_issue_count": 7
+  },
+  "validation": {
+    "contract_passed": true,
+    "source_hashes_passed": true,
+    "coverage_100_cells_passed": true,
+    "exact_source_spans_checked": 7087,
+    "original_drafts_unchanged": true
+  },
+  "files": {
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/agreement.json": {
+      "sha256": "1fefa7f2127ada062f335675f4e3eaf4fef14cf81729689bfde64dbab18cfa8a",
+      "bytes": 129711
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-a/manifest.json": {
+      "sha256": "4de624cf12b775f420ad4cca7967fd5bdab8da08c0212f6f6c43bd309c33fc5b",
+      "bytes": 744
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-a/sources.json": {
+      "sha256": "d1042741f70d86ab8cf6206135ad49bd030007add85c784f16239f2c52e6f5b1",
+      "bytes": 360384
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-a/source-ledger.json": {
+      "sha256": "434fd2e13b767e29eab562e0c454078f64235d30e4a4c57ed60d6d708a1298af",
+      "bytes": 486205
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-a/contract.py": {
+      "sha256": "05b60b373917ab2bfab611184c5c32408b5acccc8a32c10ae1b1d31fa2c704b1",
+      "bytes": 13271
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-a/annotations.json": {
+      "sha256": "0cdbd4e26dba2feafeeff92407dc90a04d4e4c41e288972f5b7d1c363e6db8a5",
+      "bytes": 512200
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-a/coverage.json": {
+      "sha256": "81f73e8e442d11c44d274f6639baf8e468aabe64b8b10bc9c4469439d7e96678",
+      "bytes": 228527
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-a/reviewer-notes.md": {
+      "sha256": "a951ad86a25a3c063fb33fb8c9e67213da0fa73909564f6c852b80ddbbba698f",
+      "bytes": 3036
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-b/manifest.json": {
+      "sha256": "4de624cf12b775f420ad4cca7967fd5bdab8da08c0212f6f6c43bd309c33fc5b",
+      "bytes": 744
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-b/sources.json": {
+      "sha256": "d1042741f70d86ab8cf6206135ad49bd030007add85c784f16239f2c52e6f5b1",
+      "bytes": 360384
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-b/source-ledger.json": {
+      "sha256": "434fd2e13b767e29eab562e0c454078f64235d30e4a4c57ed60d6d708a1298af",
+      "bytes": 486205
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-b/contract.py": {
+      "sha256": "05b60b373917ab2bfab611184c5c32408b5acccc8a32c10ae1b1d31fa2c704b1",
+      "bytes": 13271
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-b/annotations.json": {
+      "sha256": "17cf2dc8c2c34431c7764ed8e485231680c5ff81387c8c85204380b7e224cab1",
+      "bytes": 497470
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-b/coverage.json": {
+      "sha256": "d63acf4a8626e58f5bf16457520af4aff55899295678e051309283af99102a65",
+      "bytes": 285594
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/reviewer-b/reviewer-notes.md": {
+      "sha256": "0834efbed07bd41f864872a2b6db8f842404dfcb6692cc244a3e6cbd02e79ab1",
+      "bytes": 2758
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/adjudicator/adjudicated-reference.json": {
+      "sha256": "03142475c945da97bdcf02692561f03536237df0b302d542e92eb8f0f688fb57",
+      "bytes": 569665
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/adjudicator/adjudication.json": {
+      "sha256": "3d4b79b050a6946b928c6b9e31244b55ab0c0cd1359c242f87325486f2dbc281",
+      "bytes": 3166642
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/adjudicator/structured-protocols.json": {
+      "sha256": "7e20a1d8c725a7fe0a8ac66add6e419bc909851df01dd79ca7995e28507a10bf",
+      "bytes": 215860
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/adjudicator/adjudicator-notes.md": {
+      "sha256": "e8423f7f72ab1b33c6a3925a4cc76e0fff9d9a267dc8dc425b818cfbb8ac9f77",
+      "bytes": 7183
+    },
+    "data/processed/benchmarks/grin-ai-annotation-pilot-v1/adjudicator/build_adjudication.py": {
+      "sha256": "0744a340cab04763e54700487326c120ff6a394725d2b302b25e1ad3710cf04f",
+      "bytes": 30382
+    }
+  },
+  "scientifically_validated": false,
+  "held_out_model_accuracy_measured": false,
+  "limitations": [
+    "Development calibration only; one table, not all seven papers.",
+    "Agreement is not accuracy and shared omissions were found.",
+    "Unknown conditions and source conflicts remain unresolved.",
+    "Original source and quotation-heavy annotation artifacts remain local, outside Git."
+  ]
+}

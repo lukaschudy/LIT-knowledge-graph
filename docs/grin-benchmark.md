@@ -1,6 +1,6 @@
 # GRIN extraction benchmark
 
-This repository now contains an offline benchmark foundation for source-grounded observations and functional decisions. It validates study splits, source snapshots, reference annotations and run metadata, then scores predictions without an LLM judge. It does not yet contain an independently reviewed GRIN answer set or a model runner. The synthetic example demonstrates software behavior only.
+This repository contains an offline benchmark foundation for source-grounded observations and functional decisions. It validates study splits, source snapshots, reference annotations and run metadata, then scores predictions without an LLM judge. Real seven-paper source snapshots and a separate-context AI annotation pilot are described in [the annotation report](grin-ai-annotation.md). There is no expert-validated GRIN answer set or production model runner yet. The synthetic example demonstrates software behavior only.
 
 ## What is ready
 
@@ -108,7 +108,7 @@ To reproduce the candidate metadata in a new directory:
 .venv/bin/python -m atlas.benchmark.prepare --root . --output /tmp/grin-benchmark-candidates
 ```
 
-The seven-paper development manifest intentionally cannot be scored yet: normalized source units, reviewed study grouping and independent annotations are missing. No held-out answers are stored in this repository. Keep real reference sets and reports in a separate evaluator directory and out of any TopK collection/model context used by the runner.
+The original seven-paper development manifest remains a seed. The generated snapshot manifest and sources now live in `data/processed/benchmarks/grin-development-v1/`; its blank reference is a template, not an answer set. The first real AI annotation pilot covers one defined table, not all seven papers. Reviewed study grouping and expert validation remain pending. No held-out answers are stored in this repository. Keep reference sets and reports out of any TopK collection/model context used by an extraction runner.
 
 ## What comes next
 
