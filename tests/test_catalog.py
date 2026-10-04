@@ -28,6 +28,15 @@ class EvidenceCatalogTests(unittest.TestCase):
     def tearDownClass(cls):
         cls._tmp.cleanup()
 
+    def test_fixed_chat_scope_has_separate_cache_from_global_search(self):
+        scoped = self.catalog.search('evidence', scope='grin')
+        global_result = self.catalog.search('evidence')
+        self.assertEqual([s['id'] for s in scoped['scopes']], ['grin'])
+        self.assertEqual({s['id'] for s in global_result['scopes']}, {'grin', 'neuro'})
+        self.assertTrue(all(hit['scope'] == 'grin' for hit in scoped['hits']))
+        with self.assertRaises(CatalogError):
+            self.catalog.search('evidence', scope='unknown')
+
     @staticmethod
     def _copy_inputs(root):
         for relative in ("data/curated/neuro_documents.json", "data/curated/neuro_bundle.json",

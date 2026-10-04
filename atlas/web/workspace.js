@@ -102,7 +102,7 @@
     const reply = target || el('div', 'chat-message answer'); if (!target) $('#chat-messages').append(reply); reply.replaceChildren();
     const data = result && typeof result === 'object' ? result : {};
     if(answerGeneration===workspace.answerGeneration)workspace.lastAskClaimIds = rows(data.claim_ids);
-    reply.append(el('div', 'answer-label', 'Atlas'));
+    reply.append(el('div', 'answer-label', data.answer_scope ? `Atlas · ${data.answer_scope.label}` : 'Atlas'));
     reply.append(el('p', '', safe(data.answer, 'The model returned no answer text.')));
     const sources = rows(data.sources); if (!sources.length) reply.append(el('p', 'workspace-muted', 'No passage citations were returned.'));
     sources.forEach(source => {

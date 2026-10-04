@@ -27,6 +27,17 @@ const delay = ms => new Promise(resolve=>setTimeout(resolve,ms));
  }
  try{
  if(!process.env.ATLAS_ENDURANCE_ONLY&&!process.env.ATLAS_PROFILE_ONLY){
+ await fixture('search remains global while viewing a resolved cluster',async(page,routes)=>{
+  routes.set('/api/harvest/search',route=>route.fulfill({json:{results:[node('outside','other')]}}));
+  routes.set('/api/harvest/graph',(route,url)=>route.fulfill({json:url.searchParams.get('focus')?{...graph(1),nodes:[node('outside','other')]}:graph()}));
+  await page.evaluate(()=>window.__graphTest.switchDataMode('resolved'));
+  await page.locator('#node-search').fill('outside');
+  const result=page.locator('[data-node-id="outside"]');await result.waitFor();await result.click();
+  await page.waitForFunction(()=>window.__graphTest.snapshot().selected==='outside');
+  assert.equal(await page.evaluate(()=>window.__graphTest.snapshot().dataMode),'harvest');
+  await page.locator('#chat-toggle').click();
+  assert.equal(await page.locator('.chat-scope').innerText(),'GRIN2A / GRIN2B');
+ });
  await fixture('append retains existing world positions',async page=>{const before=await page.evaluate(()=>window.__graphTest.snapshot().world);await page.evaluate(()=>window.__graphTest.append());const after=await page.evaluate(()=>window.__graphTest.snapshot().world.slice(0,-1));assert.deepEqual(after,before);});
  await fixture('graph refresh retains search highlighting',async page=>{await page.locator('#node-search').fill('Entity n12');const before=await page.evaluate(()=>window.__graphTest.snapshot().matches);await page.evaluate(()=>window.__graphTest.compose());assert.deepEqual(await page.evaluate(()=>window.__graphTest.snapshot().matches),before);});
  await fixture('scope switch clears stale selection and context',async page=>{await page.evaluate(()=>window.__graphTest.select('n1'));await page.evaluate(()=>window.__graphTest.switchDataMode('resolved'));assert.equal(await page.locator('#selection').isVisible(),false);assert.equal(await page.evaluate(()=>window.__graphTest.snapshot().selected),null);});

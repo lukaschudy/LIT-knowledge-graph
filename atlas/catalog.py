@@ -205,16 +205,18 @@ class EvidenceCatalog:
         neuro = bool(re.search(r'\b(?:EPG5|Vici|WDR45|BPAN|AP4B1|SPG47|AP-?4|autophag)', query, re.I))
         return (['grin', 'neuro'] if grin and neuro or not grin and not neuro else ['grin'] if grin else ['neuro'])
 
-    def search(self, query: str, top_k: int = 8):
+    def search(self, query: str, top_k: int = 8, *, scope: str | None = None):
         if not isinstance(query, str) or not 1 <= len(query.strip()) <= 2000 or type(top_k) is not int or not 1 <= top_k <= 20:
             raise CatalogError('Search needs 1–2,000 characters and a result limit between 1 and 20.')
-        key = (query.strip(), top_k)
+        if scope not in (None, 'grin', 'neuro'):
+            raise CatalogError('Unknown evidence scope.')
+        key = (query.strip(), top_k, scope)
         with self._lock:
             cached = self._cache.get(key)
             if cached and time.monotonic() - cached[0] < 120:
                 return deepcopy(cached[1]) | {'cached': True}
         started = time.monotonic()
-        selected_scopes = self._query_scopes(query)
+        selected_scopes = [scope] if scope else self._query_scopes(query)
         rankings = {}
         try:
             for scope in selected_scopes:

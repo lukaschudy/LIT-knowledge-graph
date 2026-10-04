@@ -27,7 +27,7 @@
     <a class="brand" href="/" aria-label="Atlas home"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span class="brand-name">atlas<span class="brand-period">.</span></span></a>
     <div class="graph-search">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
-      <input id="node-search" type="search" autocomplete="off" placeholder="Find" aria-label="Find a graph node" aria-controls="node-results" aria-expanded="false">
+      <input id="node-search" type="search" autocomplete="off" placeholder="Search all nodes" aria-label="Search all graph nodes" aria-controls="node-results" aria-expanded="false">
       <div id="node-results" class="node-results" hidden></div>
     </div>
     <button id="options-toggle" class="graph-icon" aria-label="Graph options" aria-expanded="false" aria-controls="graph-options"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="16" cy="17" r="3"/></svg></button>
@@ -63,11 +63,11 @@
   </section>
   <button id="chat-toggle" class="chat-toggle" aria-expanded="false" aria-controls="chat-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4m4-7v10m4-13v16m4-13v10m4-7v4"/></svg><span>Ask Atlas</span></button>
   <section id="chat-panel" class="chat-panel" role="dialog" aria-label="Ask Atlas" hidden>
-    <header class="chat-head"><h2>Atlas</h2><button id="chat-close" class="graph-icon" aria-label="Close chat">×</button></header>
+    <header class="chat-head"><h2>Atlas <span class="chat-scope">GRIN2A / GRIN2B</span></h2><button id="chat-close" class="graph-icon" aria-label="Close chat">×</button></header>
     <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>
     <form id="chat-form" class="chat-form">
-      <label class="sr-only" for="question">Ask a question about the graph</label>
-      <textarea id="question" rows="2" maxlength="1000" placeholder="Ask about evidence, connections or next steps…" required></textarea>
+      <label class="sr-only" for="question">Ask about the GRIN2A/GRIN2B demo cluster</label>
+      <textarea id="question" rows="2" maxlength="1000" placeholder="Ask about GRIN evidence or next steps…" required></textarea>
       <div class="chat-actions"><button id="voice-button" type="button" class="graph-icon" aria-label="Dictate a question"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 11v1a6 6 0 0 0 12 0v-1m-6 7v4m-3 0h6"/></svg></button><span id="voice-status" role="status" aria-live="polite"></span><button id="cancel-recording" type="button" class="graph-text-button" hidden>Cancel</button><button id="send-question" class="send-question" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div>
     </form>
   </section>

@@ -344,7 +344,8 @@ class ResearchWorkspace:
             brief['stale'] = (brief['snapshot_id'] != analysis['snapshot_id'] or brief.get('request_id') != digest(self.data['request'])
                               or brief.get('policy_version') != analysis['policy_version'])
             return deepcopy({'workspace_id': self.data['workspace_id'], 'revision': self.data['revision'],
-                             'dataset': bundle['dataset'], 'request': self.data['request'], 'nodes': bundle['nodes'],
+                             'dataset': bundle['dataset'], 'answer_scope': getattr(self.assistant, 'answer_scope', None),
+                             'request': self.data['request'], 'nodes': bundle['nodes'],
                              'sources': bundle['sources'], 'documents': self.data['documents'], 'model': self.model_status,
                              'catalog': self.catalog.status() if self.catalog is not None and callable(getattr(self.catalog, 'status', None)) else None,
                              'coverage': {'acquired_records': None, 'loaded_documents': len(self.data['documents']),

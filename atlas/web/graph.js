@@ -882,20 +882,29 @@
       b.addEventListener('click',()=>{select(n.id,true);n.el.focus();});
       b.addEventListener('focus',()=>{searchLead=n.id;highlight();});results.append(b);
     });
-    if(!matches.length)results.append(make('p','',dataMode==='resolved'?'Searching the loaded resolved neuro graph…':'Searching the loaded graph and full harvest index…'));
+    if(!matches.length)results.append(make('p','','Searching all available graph indexes…'));
     results.hidden=false;$('node-search').setAttribute('aria-expanded','true');
     if(searchTerm){const query=searchTerm,mode=dataMode;searchTimer=setTimeout(()=>searchHarvest(query,requestId,mode),220);}
   }
   async function searchHarvest(query,requestId,mode){
     const resultsElement=$('node-results');
     try{
-      const resolved=mode==='resolved',endpoint=resolved?'/api/resolved/search':'/api/harvest/search';
-      const response=await fetch(`${endpoint}?${new URLSearchParams({q:query,limit:'40'})}`);if(!response.ok)throw new Error('');
-      const data=await response.json();if(requestId!==searchRequest||mode!==dataMode||query!==$('node-search').value.toLowerCase().trim())return;
-      const results=resultsElement,matches=Array.isArray(data.results)?data.results:Array.isArray(data.nodes)?data.nodes:[];
+      const indexes=mode==='resolved'?['resolved','harvest']:['harvest'];
+      const pages=await Promise.all(indexes.map(async index=>{
+        try{
+          const response=await fetch(`/api/${index}/search?${new URLSearchParams({q:query,limit:'40'})}`);
+          if(!response.ok)return null;
+          const data=await response.json();
+          return {index,data};
+        }catch(_){return null;}
+      }));
+      if(requestId!==searchRequest||mode!==dataMode||query!==$('node-search').value.toLowerCase().trim())return;
+      if(!pages.some(Boolean))throw new Error('');
+      const results=resultsElement,matches=pages.filter(Boolean).flatMap(({index,data})=>
+        (Array.isArray(data.results)?data.results:Array.isArray(data.nodes)?data.nodes:[]).map(result=>({...result,searchIndex:index})));
       const existing=new Set([...results.querySelectorAll('[data-node-id]')].map(button=>button.dataset.nodeId));
       if(matches.length){const pending=results.querySelector('p');if(pending)pending.remove();}
-      if(matches.length)results.append(make('p','harvest-search-heading',`${resolved?'Resolved neuro index':'Harvest index'} · ${Number(data.total||matches.length).toLocaleString()} matches`));
+      if(matches.length)results.append(make('p','harvest-search-heading',`All graph indexes · ${matches.length.toLocaleString()} results`));
       matches.forEach(result=>{
         const node=result.node||result,id=node.id||result.node_id;if(!id||existing.has(id))return;existing.add(id);
         if(!searchLead)searchLead=id;
@@ -905,13 +914,19 @@
           hideResults();$('node-search').blur();
           if(byId.has(id)){select(id,true);byId.get(id)?.el.focus({preventScroll:true});return;}
           $('node-search').value='';searchTerm='';searchMatches.clear();searchLead=null;
+          const targetMode=result.searchIndex;
+          if(targetMode!==dataMode){
+            const switching=switchDataMode(targetMode),switchGeneration=scopeGeneration,switchSearch=searchRequest;
+            await switching;
+            if(switchGeneration!==scopeGeneration||switchSearch!==searchRequest||dataMode!==targetMode)return;
+          }
           const generation=scopeGeneration,selectionRequest=++searchRequest;
           try{
-            if(mode==='resolved')await loadResolvedGraph({focus:id,offset:0,append:false,limit:resolvedLimit,isCurrent:()=>generation===scopeGeneration&&selectionRequest===searchRequest});
+            if(targetMode==='resolved')await loadResolvedGraph({focus:id,offset:0,append:false,limit:resolvedLimit,isCurrent:()=>generation===scopeGeneration&&selectionRequest===searchRequest});
             else await loadHarvestGraph({focus:id,append:true,limit:harvestLimit,isCurrent:()=>generation===scopeGeneration&&selectionRequest===searchRequest});
-            if(generation!==scopeGeneration||mode!==dataMode||selectionRequest!==searchRequest)return;
+            if(generation!==scopeGeneration||targetMode!==dataMode||selectionRequest!==searchRequest)return;
             if(byId.has(id)){select(id,true);byId.get(id)?.el?.focus({preventScroll:true});}
-            else if(mode==='harvest'){const raw=await fetchHarvestNode(id);if(generation!==scopeGeneration||selectionRequest!==searchRequest)return;if(raw?.node){appendHarvestNode(raw.node);select(id,true);}}
+            else if(targetMode==='harvest'){const raw=await fetchHarvestNode(id);if(generation!==scopeGeneration||selectionRequest!==searchRequest)return;if(raw?.node){appendHarvestNode(raw.node);select(id,true);}}
           }catch(error){if(generation===scopeGeneration&&selectionRequest===searchRequest){resultsElement.replaceChildren(make('p','',error.message||'This search result could not be loaded. Try again.'));resultsElement.hidden=false;$('node-search').setAttribute('aria-expanded','true');}}
         });
         results.append(button);
@@ -1070,7 +1085,7 @@
   function openChat(){ $('chat-panel').hidden=false;$('chat-toggle').setAttribute('aria-expanded','true');$('question').focus(); }
   function closeChat(){ $('chat-panel').hidden=true;$('chat-toggle').setAttribute('aria-expanded','false');window.dispatchEvent(new Event('atlas:voice-cancel'));$('chat-toggle').focus(); }
   $('chat-toggle').onclick=()=>$('chat-panel').hidden?openChat():closeChat();$('chat-close').onclick=closeChat;
-  $('ask-selected').onclick=()=>{openChat();$('question').value=selected?`What is connected to ${label(byId.get(selected))}?`:'';};
+  $('ask-selected').onclick=()=>{openChat();$('question').value=selected?`How does ${label(byId.get(selected))} relate to the GRIN2A/GRIN2B demo cluster?`:'';};
   $('chat-panel').addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closeChat();}});
   $('chat-form').onsubmit=e=>{e.preventDefault();ask();};
   $('question').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();ask();}};
@@ -1080,7 +1095,6 @@
     busy=true;$('send-question').disabled=true;window.dispatchEvent(new Event('atlas:voice-cancel'));
     const box=$('chat-messages');
     box.append(make('div','chat-message user',question));$('question').value='';
-    if(selectedHarvest||isResolvedNode(selectedNode)&&!selectedInWorkspace)box.append(make('p','harvest-ask-scope',`Selected ${selectedHarvest?'harvest':'resolved neuro'} entity: ${label(selectedNode)}. The assistant checks this selection against its reviewed source coverage, which does not cover the full graph.`));
     const reply=make('div','chat-message answer');reply.append(make('p','','Looking through the graph…'));box.append(reply);box.scrollTop=box.scrollHeight;
     const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),30000),answerSelection=selectionGeneration;
     try{
@@ -1088,7 +1102,7 @@
       if(!selectedHarvest&&lastAnswer?.claim_ids?.length&&/\b(this|that|these|those)\b/i.test(question)&&/\b(evidence|sources?|support|proof|papers?)\b/i.test(question))lastAnswer.claim_ids.slice(0,100).forEach(id=>params.append('claim',id));
       const response=await fetch(`/api/ask?${params}`,{signal:controller.signal}),data=await response.json();if(!response.ok)throw new Error(data.error?.message||'The graph could not answer just now.');
       if(answerSelection===selectionGeneration)lastAnswer=data;
-      reply.replaceChildren(make('div','answer-label',data.synthetic?'Atlas · fictional demo records':'Atlas · graph records'),make('p','',data.answer));
+      reply.replaceChildren(make('div','answer-label',data.answer_scope?`Atlas · ${data.answer_scope.label}`:data.synthetic?'Atlas · fictional demo records':'Atlas · graph records'),make('p','',data.answer));
       if(data.claim_ids?.length){const refs=make('div','chat-citations');data.claim_ids.forEach((id,i)=>{const claim=bundle.claims.find(c=>c.id===id);if(!claim)return;const b=make('button','',`[${i+1}] ${claim.predicate.replaceAll('_',' ').toLowerCase()}`);b.type='button';b.title=`${byId.get(claim.subject)?.label} → ${byId.get(claim.object)?.label}`;b.onclick=()=>openClaim(id);refs.append(b);});reply.append(refs);}
     }catch(error){reply.replaceChildren(make('p','',error.name==='AbortError'?'The answer request timed out. Please try again.':error.message||'The answer could not be loaded. Try again.'));if(!$('question').value)$('question').value=question;}
     finally{clearTimeout(timeout);busy=false;$('send-question').disabled=false;box.scrollTop=box.scrollHeight;}

@@ -177,3 +177,5 @@
 .graph-page .brand { color:#164e38; }
 .graph-page .skip-link { background:#ffffff; color:#164e38; border:1px solid #dfe5db; border-radius:8px; }
 .graph-page .skip-link:not(:focus) { top:0; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); }
+
+.chat-scope { display:block; margin-top:3px; color:#496956; font-size:11px; font-weight:400; letter-spacing:0; }

@@ -132,6 +132,7 @@ def main(argv=None):
         if args.command in ('app', 'research'):
             from atlas.ai import ModelClient
             from atlas.assistant import AtlasAssistant
+            from atlas.demo_scope import DemoScope, DemoRetriever
             from atlas.catalog import EvidenceCatalog, combined_bundle
             from atlas.workflow import ResearchWorkspace
             from atlas.server import serve
@@ -149,8 +150,10 @@ def main(argv=None):
                         os.environ[name] = value.strip().strip('\"\'')
             client = ModelClient(args.provider, args.model, args.model_timeout)
             catalog = EvidenceCatalog(ROOT, env_file=args.env_file, mode=args.search)
+            demo_scope = DemoScope(json.loads((ROOT / 'data/curated/grin_atlas_bundle.json').read_text())) if not args.bundle else None
+            assistant = AtlasAssistant(client, DemoRetriever(catalog) if demo_scope else catalog, scope=demo_scope)
             workspace = ResearchWorkspace(bundle, documents, request, path=args.workspace, client=client,
-                retrieval=args.retrieval, catalog=catalog, assistant=AtlasAssistant(client, catalog))
+                retrieval=args.retrieval, catalog=catalog, assistant=assistant)
             harvest = None
             if args.graph_db.is_file():
                 from atlas.harvest_graph.store import HarvestGraph
