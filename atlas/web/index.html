@@ -9,14 +9,29 @@
   <link rel="preload" href="/images/connected-biology.png" as="image" fetchpriority="high">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/cover.css">
+  <script src="/transition.js" defer></script>
 </head>
 <body class="cover-page">
   <main class="cover" aria-label="Atlas">
     <img class="cover-art" src="/images/connected-biology.png" alt="Conceptual illustration of connected, branching cellular forms." width="1448" height="1086" fetchpriority="high">
-    <a class="brand cover-brand" href="/explore" aria-label="Open the Atlas research explorer">
+    <a class="brand cover-brand" href="/" aria-label="Atlas home">
       <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
       <span class="brand-name">atlas<span class="brand-period">.</span></span>
     </a>
+    <div class="cover-entry">
+      <a class="cover-enter" href="/explore?view=graph" data-enter-atlas>
+        <span>Enter Atlas</span>
+        <span class="enter-symbol" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" focusable="false">
+            <path d="M6.6 6.6l3.8 3.8m3.6.3 4.1-3.4m-4.7 6.4 4.3 4.5"/>
+            <circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/>
+            <circle cx="5" cy="5" r="2.2"/>
+            <circle cx="20" cy="6" r="2.2"/>
+            <circle cx="19" cy="20" r="2.2"/>
+          </svg>
+        </span>
+      </a>
+    </div>
   </main>
 </body>
 </html>

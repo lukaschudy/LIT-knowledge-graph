@@ -4,53 +4,101 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <title>Atlas — research connections</title>
+  <title>Atlas — Graph</title>
   <link rel="preload" href="/fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css">
-  <script src="/app.js" defer></script>
+  <link rel="stylesheet" href="/graph.css">
+  <link rel="stylesheet" href="/workspace.css">
+  <link rel="stylesheet" href="/transition.css">
+  <script src="/transition.js"></script>
+  <script src="/graph.js" defer></script>
+  <script src="/workspace.js" defer></script>
 </head>
-<body>
-  <a href="#workspace" class="skip-link">Skip to research</a>
-  <header class="masthead">
-    <div class="masthead-inner">
-      <a class="brand" href="/" aria-label="Atlas home">
-        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span class="brand-name">atlas<span class="brand-period">.</span></span>
-      </a>
-      <nav class="main-nav" aria-label="Main">
-        <button type="button" data-view="explore" aria-current="page">Explore</button>
-        <button type="button" data-view="assets">Research assets</button>
-        <button type="button" data-view="sources">Sources</button>
-      </nav>
-      <section class="search-section" aria-label="Search the atlas">
-        <form class="search-form" id="search-form" autocomplete="off">
-          <span class="search-icon" aria-hidden="true"></span>
-          <label class="sr-only" for="search-input">Search diseases, genes, phenotypes, or synonyms</label>
-          <input id="search-input" type="search" placeholder="Search the atlas" aria-autocomplete="list" aria-controls="search-results" aria-expanded="false">
-          <button class="search-submit" type="submit" aria-label="Search atlas">↵</button>
-          <div class="search-results" id="search-results" role="listbox" aria-label="Search results" hidden></div>
-        </form>
-      </section>
-      <button class="method-button" type="button" id="method-button">Guide</button>
+<body class="graph-page">
+  <a class="skip-link" href="#node-search">Search graph nodes</a>
+  <main class="graph-stage" aria-label="Knowledge graph">
+    <canvas id="graph-paint" aria-hidden="true"></canvas>
+    <svg id="network" role="group" aria-label="Atlas knowledge graph. Drag to rotate; scroll to zoom. Shift-drag to pan. Select a node to highlight its connections." tabindex="0"><g id="camera"><g id="links"></g><g id="nodes"></g></g></svg>
+    <p id="graph-status" class="graph-status" role="status">Opening the atlas…</p>
+  </main>
+  <header class="graph-header">
+    <a class="brand" href="/" aria-label="Atlas home"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span class="brand-name">atlas<span class="brand-period">.</span></span></a>
+    <div class="graph-search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+      <input id="node-search" type="search" autocomplete="off" placeholder="Find" aria-label="Find a graph node" aria-controls="node-results" aria-expanded="false">
+      <div id="node-results" class="node-results" hidden></div>
     </div>
+    <button id="options-toggle" class="graph-icon" aria-label="Graph options" aria-expanded="false" aria-controls="graph-options"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="16" cy="17" r="3"/></svg></button>
   </header>
-  <div class="app-shell">
-    <div class="demo-ribbon" id="demo-ribbon" hidden><span class="demo-ribbon__dot" aria-hidden="true"></span><strong>Demonstration</strong><span id="dataset-title">Fictional data for exploring the interface.</span></div>
-    <main>
-      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
-      <section id="workspace" class="workspace" aria-live="polite" tabindex="-1"><div class="loading-state"><span class="spinner" aria-hidden="true"></span>Opening the atlas…</div></section>
-    </main>
-    <footer class="footer"><span>Atlas <span class="footer-divider">/</span> Rare disease research</span><span id="footer-dataset">Local research collection</span></footer>
-  </div>
-  <dialog id="method-dialog" class="method-dialog" aria-labelledby="method-title">
-    <div class="dialog-head"><div><p class="eyebrow">Using Atlas</p><h2 id="method-title">Follow the evidence.</h2></div><button class="icon-button" type="button" id="close-method" aria-label="Close">×</button></div>
-    <p class="dialog-lede">A connection is a research lead. Inspect the biological context and the underlying sources before deciding what deserves a closer look.</p>
-    <div class="method-grid"><div><span class="method-index">01</span><h3>Compare</h3><p>Related diseases are ordered for review. The order is not a probability of success.</p></div><div><span class="method-index">02</span><h3>Inspect</h3><p>Select a relationship to see its exact supporting evidence, context, and any conflicting findings.</p></div><div><span class="method-index">03</span><h3>Connect</h3><p>Find a research asset, its maintainer, and the questions to resolve before reuse.</p></div></div>
-    <p class="dialog-caution">Research leads, not diagnoses or treatment recommendations. Machine-checked evidence is not the same as expert scientific review.</p>
-  </dialog>
-  <dialog id="evidence-dialog" class="evidence-dialog" aria-labelledby="evidence-title">
-    <div class="dialog-head"><div><p class="eyebrow">Evidence record</p><h2 id="evidence-title">Claim details</h2></div><button class="icon-button" type="button" id="close-evidence" aria-label="Close evidence">×</button></div>
-    <div id="evidence-content"></div>
-  </dialog>
+  <section id="graph-options" class="graph-options" aria-label="Graph options" hidden>
+    <h2>Graph</h2>
+    <div class="graph-option-controls">
+    <label><input id="ambient-motion" type="checkbox" checked> Gentle motion</label>
+    <label><input id="all-labels" type="checkbox"> Show all labels</label>
+    <label><input id="show-connections" type="checkbox" checked> Show connections</label>
+    <label><input id="local-view" type="checkbox"> Selected neighborhood</label>
+    </div>
+    <div class="graph-legend"><span class="legend-disease">Diseases</span><span class="legend-variant">Variants</span><span class="legend-gene">Genes</span><span class="legend-biology">Mechanisms & traits</span><span class="legend-research">Research & people</span></div>
+    <button id="help-button" class="graph-text-button">How to explore</button>
+  </section>
+  <section id="selection" class="selection" aria-label="Selected node" hidden>
+    <div><span id="selection-type"></span><h1 id="selection-name"></h1></div>
+    <button id="ask-selected" class="graph-text-button">Ask about this</button>
+    <button id="clear-selection" class="graph-icon" aria-label="Clear selection">×</button>
+  </section>
+  <button id="chat-toggle" class="chat-toggle" aria-expanded="false" aria-controls="chat-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4m4-7v10m4-13v16m4-13v10m4-7v4"/></svg><span>Ask Atlas</span></button>
+  <button id="workspace-toggle" class="workspace-toggle" aria-expanded="false" aria-controls="workspace-panel">Research <span aria-hidden="true">↗</span></button>
+  <section id="chat-panel" class="chat-panel" role="dialog" aria-label="Ask Atlas" hidden>
+    <header class="chat-head"><h2>Atlas</h2><button id="chat-close" class="graph-icon" aria-label="Close chat">×</button></header>
+    <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>
+    <form id="chat-form" class="chat-form">
+      <label class="sr-only" for="question">Ask a question about the graph</label>
+      <textarea id="question" rows="2" maxlength="1000" placeholder="Message Atlas…" required></textarea>
+      <div class="chat-actions"><button id="voice-button" type="button" class="graph-icon" aria-label="Dictate a question"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 11v1a6 6 0 0 0 12 0v-1m-6 7v4m-3 0h6"/></svg></button><span id="voice-status" role="status"></span><button id="send-question" class="send-question" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div>
+    </form>
+    <div id="voice-consent" class="voice-consent" hidden><p>Your browser may send audio to its speech service. The transcript stays a draft until you send it.</p><button id="start-voice">Start dictation</button><button id="cancel-voice">Cancel</button></div>
+  </section>
+  <section id="workspace-panel" class="workspace-panel" aria-label="Research workspace" hidden>
+    <header class="workspace-head"><div><p class="workspace-kicker">Atlas / Evidence workspace</p><h2>Research</h2><p id="workspace-status" class="workspace-status" role="status">Checking the loaded workspace…</p></div><button id="workspace-close" class="graph-icon" type="button" aria-label="Close research workspace">×</button></header>
+    <div class="workspace-coverage" id="workspace-coverage" aria-label="Research coverage"></div>
+    <div class="workspace-tabs" role="tablist" aria-label="Research workflow tabs">
+      <button id="tab-literature" type="button" role="tab" aria-selected="true" aria-controls="panel-literature" tabindex="0" data-workspace-tab="literature">Literature</button>
+      <button id="tab-evidence" type="button" role="tab" aria-selected="false" aria-controls="panel-evidence" tabindex="-1" data-workspace-tab="evidence">Evidence / review</button>
+      <button id="tab-plan" type="button" role="tab" aria-selected="false" aria-controls="panel-plan" tabindex="-1" data-workspace-tab="plan">Plan</button>
+      <button id="tab-brief" type="button" role="tab" aria-selected="false" aria-controls="panel-brief" tabindex="-1" data-workspace-tab="brief">Brief</button>
+    </div>
+    <div id="panel-literature" class="workspace-tab-panel" role="tabpanel" aria-labelledby="tab-literature">
+      <p class="workspace-intro">Search the currently loaded source corpus. A matching passage is a lead to inspect, not an established graph claim.</p>
+      <form id="literature-search-form" class="workspace-search-form"><label class="sr-only" for="literature-query">Search literature</label><input id="literature-query" type="search" maxlength="500" placeholder="Search a topic, readout, or method" required><button class="workspace-button workspace-button-primary" type="submit">Search</button></form>
+      <p id="literature-meta" class="workspace-muted" aria-live="polite"></p><div id="literature-results" class="workspace-results"></div>
+    </div>
+    <div id="panel-evidence" class="workspace-tab-panel" role="tabpanel" aria-labelledby="tab-evidence" hidden>
+      <div id="selection-context" class="selection-context"><strong>No graph node selected</strong><span>Choose a node to narrow the evidence list.</span></div>
+      <div class="workspace-list-heading"><h3>Claims in this evidence slice</h3><label class="workspace-filter-label"><input id="show-all-claims" type="checkbox"> Show all claims</label></div>
+      <div id="workspace-claims" class="workspace-claims"></div>
+    </div>
+    <div id="panel-plan" class="workspace-tab-panel" role="tabpanel" aria-labelledby="tab-plan" hidden>
+      <form id="workspace-request-form" class="workspace-request-form">
+        <label>Disease<select id="workspace-disease" name="disease_id" required></select></label>
+        <label>Mechanism<select id="workspace-mechanism" name="mechanism_id" required></select></label>
+        <label>Biological step<input name="mechanism_step" required maxlength="300"></label>
+        <label>Readout<input name="readout" required maxlength="300"></label>
+        <label>Species<input name="species" required maxlength="200"></label>
+        <label>Tissue or cell context<input name="tissue" required maxlength="200"></label>
+        <label>Developmental stage<input name="stage" maxlength="200" placeholder="Optional"></label>
+        <button class="workspace-button workspace-button-primary" type="submit">Reassess plan</button>
+      </form>
+      <div class="workspace-plan-intro"><p>A broad pathway baseline can help locate candidates. It does not establish assay eligibility. Every unresolved gate stays visible.</p><button id="workspace-investigate" class="workspace-button" type="button">Investigate evidence gaps</button></div>
+      <div id="workspace-analysis" class="workspace-analysis"></div><div id="workspace-neighborhood" class="workspace-neighborhood"></div>
+    </div>
+    <div id="panel-brief" class="workspace-tab-panel" role="tabpanel" aria-labelledby="tab-brief" hidden>
+      <p id="brief-status" class="workspace-intro">A cited discussion draft; verify the source and interpretation before use.</p><p id="brief-stale" class="workspace-stale" hidden>Source or review evidence has changed since this brief was prepared.</p>
+      <label class="sr-only" for="workspace-brief">Working brief in Markdown</label><textarea id="workspace-brief" class="workspace-brief" spellcheck="false" placeholder="Your cited research brief will appear here."></textarea>
+      <div class="workspace-brief-actions"><button id="brief-regenerate" class="workspace-button" type="button">Regenerate</button><button id="brief-ai" class="workspace-button" type="button">Draft with AI</button><button id="brief-save" class="workspace-button workspace-button-primary" type="button">Save</button><button id="brief-download" class="workspace-button workspace-button-text" type="button">Download .md</button></div>
+      <p class="workspace-muted">A saved draft stays in this workspace; it is not sent to anyone or automatically approved.</p>
+    </div>
+  </section>
+  <dialog id="record-dialog" class="record-dialog" aria-labelledby="record-title"><header><div><p id="record-kind"></p><h2 id="record-title">Evidence</h2></div><button id="record-close" class="graph-icon" aria-label="Close evidence">×</button></header><div id="record-content"></div></dialog>
+  <dialog id="graph-help" class="graph-help" aria-labelledby="help-title"><header><h2 id="help-title">Follow the evidence.</h2><button id="help-close" class="graph-icon" aria-label="Close guide">×</button></header><p>Drag to rotate. Shift-drag to pan. Scroll or pinch to zoom. Select a node to follow its connections; select a line to inspect its evidence.</p><p>Search makes every node keyboard-accessible. On the canvas, arrow keys rotate, + / − zoom, and 0 fits the graph. Colors distinguish record types. Their positions and distances are a layout choice, not an embedding or a measure of biological similarity.</p><p>Lines are recorded assertions. Dashed lines are inferred; rust lines have counter-evidence or negative assertions. <button id="help-research-button" type="button" class="graph-text-button">Research</button> opens source search, claim review, and plan gates.</p><p>Ask Atlas uses the configured model and loaded corpus to answer with citations. Search results are leads, not approved graph claims. It is not a general-purpose AI or clinical advice service.</p></dialog>
 </body>
 </html>

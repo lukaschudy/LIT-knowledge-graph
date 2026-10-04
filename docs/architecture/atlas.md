@@ -1,5 +1,7 @@
 # Atlas: evidence to shared research
 
+**Action assessment update:** the [assay-reuse decision engine](decision-engine.md) adds stricter, task-specific gates and explicit reassessment. This page describes the original evidence graph and legacy disease-neighbour explorer; its `supported_route` status is not the new engine's `ready_for_discussion` status.
+
 This is a runnable knowledge-graph skeleton for the AI Atlas challenge. It demonstrates the data model, provenance, conservative research-lead discovery, source-span validation, interchange formats, and a read-only local explorer. It is not a populated clinical knowledge base, a trained link predictor, or a treatment recommendation system.
 
 ## Research translated into design

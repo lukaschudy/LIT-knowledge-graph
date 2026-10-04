@@ -1,0 +1,445 @@
+{
+  "schema_version": "1.0",
+  "dataset": {
+    "id": "demo:recommendations-v1",
+    "title": "Fictional assay reuse decisions",
+    "description": "Entirely invented software acceptance fixture. Biology, organizations, access and human review states are simulated, not real scientific evidence.",
+    "synthetic": true,
+    "created_at": "2026-10-04"
+  },
+  "nodes": [
+    {
+      "id": "demo:anchor",
+      "type": "Disease",
+      "label": "Aurora syndrome (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:neighbor",
+      "type": "Disease",
+      "label": "Boreal syndrome (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:transport",
+      "type": "Mechanism",
+      "label": "Intracellular transport (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:lab",
+      "type": "Organization",
+      "label": "Example methods laboratory (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:assay-fit",
+      "type": "Asset",
+      "label": "Fusion assay (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:assay-wrong-step",
+      "type": "Asset",
+      "label": "Early-stage assay (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:assay-gap",
+      "type": "Asset",
+      "label": "Assay with missing context (fictional)",
+      "aliases": [],
+      "properties": {}
+    },
+    {
+      "id": "demo:assay-excluded",
+      "type": "Asset",
+      "label": "Assay with an exclusion (fictional)",
+      "aliases": [],
+      "properties": {}
+    }
+  ],
+  "sources": [
+    {
+      "id": "demo:source-biology",
+      "title": "Fictional biology record",
+      "url": "https://example.org/fictional/biology",
+      "published_at": "2026-10-03",
+      "retrieved_at": "2026-10-04",
+      "kind": "fixture",
+      "synthetic": true,
+      "license": "CC0 fictional fixture",
+      "version": "fixture-v1",
+      "status": "active"
+    },
+    {
+      "id": "demo:source-protocols",
+      "title": "Fictional protocols record",
+      "url": "https://example.org/fictional/protocols",
+      "published_at": "2026-10-03",
+      "retrieved_at": "2026-10-04",
+      "kind": "fixture",
+      "synthetic": true,
+      "license": "CC0 fictional fixture",
+      "version": "fixture-v1",
+      "status": "active"
+    },
+    {
+      "id": "demo:source-access",
+      "title": "Fictional access record",
+      "url": "https://example.org/fictional/access",
+      "published_at": "2026-10-03",
+      "retrieved_at": "2026-10-04",
+      "kind": "fixture",
+      "synthetic": true,
+      "license": "CC0 fictional fixture",
+      "version": "fixture-v1",
+      "status": "active"
+    }
+  ],
+  "claims": [
+    {
+      "id": "demo:anchor-step",
+      "subject": "demo:anchor",
+      "predicate": "INVOLVES",
+      "object": "demo:transport",
+      "assertion_type": "reported",
+      "context": {
+        "mechanism_step": "vesicle-fusion",
+        "effect": "loss_of_function"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:neighbor-step",
+      "subject": "demo:neighbor",
+      "predicate": "INVOLVES",
+      "object": "demo:transport",
+      "assertion_type": "reported",
+      "context": {
+        "mechanism_step": "vesicle-formation",
+        "effect": "loss_of_function"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-fit-relevance",
+      "subject": "demo:assay-fit",
+      "predicate": "RELEVANT_TO",
+      "object": "demo:neighbor",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-fit-capability",
+      "subject": "demo:assay-fit",
+      "predicate": "MEASURES",
+      "object": "demo:transport",
+      "assertion_type": "reported",
+      "context": {
+        "mechanism_step": "vesicle-fusion",
+        "readout": "fusion-events",
+        "species": "human",
+        "tissue": "fibroblast"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-fit-owner",
+      "subject": "demo:lab",
+      "predicate": "MAINTAINS",
+      "object": "demo:assay-fit",
+      "assertion_type": "reported",
+      "context": {
+        "access_status": "on_request",
+        "contact_url": "https://example.org/fictional/lab"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-wrong-step-relevance",
+      "subject": "demo:assay-wrong-step",
+      "predicate": "RELEVANT_TO",
+      "object": "demo:neighbor",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-wrong-step-capability",
+      "subject": "demo:assay-wrong-step",
+      "predicate": "MEASURES",
+      "object": "demo:transport",
+      "assertion_type": "reported",
+      "context": {
+        "mechanism_step": "vesicle-formation",
+        "readout": "fusion-events",
+        "species": "human",
+        "tissue": "fibroblast"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-wrong-step-owner",
+      "subject": "demo:lab",
+      "predicate": "MAINTAINS",
+      "object": "demo:assay-wrong-step",
+      "assertion_type": "reported",
+      "context": {
+        "access_status": "on_request",
+        "contact_url": "https://example.org/fictional/lab"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-gap-relevance",
+      "subject": "demo:assay-gap",
+      "predicate": "RELEVANT_TO",
+      "object": "demo:neighbor",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-gap-capability",
+      "subject": "demo:assay-gap",
+      "predicate": "MEASURES",
+      "object": "demo:transport",
+      "assertion_type": "reported",
+      "context": {
+        "mechanism_step": "vesicle-fusion",
+        "readout": "fusion-events",
+        "species": "human"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-gap-owner",
+      "subject": "demo:lab",
+      "predicate": "MAINTAINS",
+      "object": "demo:assay-gap",
+      "assertion_type": "reported",
+      "context": {
+        "access_status": "on_request",
+        "contact_url": "https://example.org/fictional/lab"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-excluded-relevance",
+      "subject": "demo:assay-excluded",
+      "predicate": "RELEVANT_TO",
+      "object": "demo:neighbor",
+      "assertion_type": "reported",
+      "context": {},
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-excluded-capability",
+      "subject": "demo:assay-excluded",
+      "predicate": "MEASURES",
+      "object": "demo:transport",
+      "assertion_type": "reported",
+      "context": {
+        "mechanism_step": "vesicle-fusion",
+        "readout": "fusion-events",
+        "species": "human",
+        "tissue": "fibroblast"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-excluded-owner",
+      "subject": "demo:lab",
+      "predicate": "MAINTAINS",
+      "object": "demo:assay-excluded",
+      "assertion_type": "reported",
+      "context": {
+        "access_status": "on_request",
+        "contact_url": "https://example.org/fictional/lab"
+      },
+      "extraction_confidence": null
+    },
+    {
+      "id": "demo:assay-excluded-exclusion",
+      "subject": "demo:assay-excluded",
+      "predicate": "CONTRAINDICATED_FOR",
+      "object": "demo:anchor",
+      "assertion_type": "reported",
+      "context": {
+        "action_type": "assay_reuse"
+      },
+      "extraction_confidence": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "demo:anchor-step-evidence",
+      "claim_id": "demo:anchor-step",
+      "source_id": "demo:source-biology",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph anchor-step",
+      "excerpt": "FICTIONAL: Aurora involves impaired vesicle fusion.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:neighbor-step-evidence",
+      "claim_id": "demo:neighbor-step",
+      "source_id": "demo:source-biology",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph neighbor-step",
+      "excerpt": "FICTIONAL: Boreal involves impaired vesicle formation, a different step in the same broad pathway.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-fit-relevance-evidence",
+      "claim_id": "demo:assay-fit-relevance",
+      "source_id": "demo:source-protocols",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-fit-relevance",
+      "excerpt": "FICTIONAL: This assay was used in Boreal research. That does not establish transfer to Aurora.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-fit-capability-evidence",
+      "claim_id": "demo:assay-fit-capability",
+      "source_id": "demo:source-protocols",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-fit-capability",
+      "excerpt": "FICTIONAL: Assay capability: {\"mechanism_step\": \"vesicle-fusion\", \"readout\": \"fusion-events\", \"species\": \"human\", \"tissue\": \"fibroblast\"}.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-fit-owner-evidence",
+      "claim_id": "demo:assay-fit-owner",
+      "source_id": "demo:source-access",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-fit-owner",
+      "excerpt": "FICTIONAL: Example laboratory maintains this asset; protocol access is on request via its professional webpage.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-wrong-step-relevance-evidence",
+      "claim_id": "demo:assay-wrong-step-relevance",
+      "source_id": "demo:source-protocols",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-wrong-step-relevance",
+      "excerpt": "FICTIONAL: This assay was used in Boreal research. That does not establish transfer to Aurora.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-wrong-step-capability-evidence",
+      "claim_id": "demo:assay-wrong-step-capability",
+      "source_id": "demo:source-protocols",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-wrong-step-capability",
+      "excerpt": "FICTIONAL: Assay capability: {\"mechanism_step\": \"vesicle-formation\", \"readout\": \"fusion-events\", \"species\": \"human\", \"tissue\": \"fibroblast\"}.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-wrong-step-owner-evidence",
+      "claim_id": "demo:assay-wrong-step-owner",
+      "source_id": "demo:source-access",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-wrong-step-owner",
+      "excerpt": "FICTIONAL: Example laboratory maintains this asset; protocol access is on request via its professional webpage.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-gap-relevance-evidence",
+      "claim_id": "demo:assay-gap-relevance",
+      "source_id": "demo:source-protocols",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-gap-relevance",
+      "excerpt": "FICTIONAL: This assay was used in Boreal research. That does not establish transfer to Aurora.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-gap-capability-evidence",
+      "claim_id": "demo:assay-gap-capability",
+      "source_id": "demo:source-protocols",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-gap-capability",
+      "excerpt": "FICTIONAL: Assay capability: {\"mechanism_step\": \"vesicle-fusion\", \"readout\": \"fusion-events\", \"species\": \"human\"}.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-gap-owner-evidence",
+      "claim_id": "demo:assay-gap-owner",
+      "source_id": "demo:source-access",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-gap-owner",
+      "excerpt": "FICTIONAL: Example laboratory maintains this asset; protocol access is on request via its professional webpage.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-excluded-relevance-evidence",
+      "claim_id": "demo:assay-excluded-relevance",
+      "source_id": "demo:source-protocols",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-excluded-relevance",
+      "excerpt": "FICTIONAL: This assay was used in Boreal research. That does not establish transfer to Aurora.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-excluded-capability-evidence",
+      "claim_id": "demo:assay-excluded-capability",
+      "source_id": "demo:source-protocols",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-excluded-capability",
+      "excerpt": "FICTIONAL: Assay capability: {\"mechanism_step\": \"vesicle-fusion\", \"readout\": \"fusion-events\", \"species\": \"human\", \"tissue\": \"fibroblast\"}.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-excluded-owner-evidence",
+      "claim_id": "demo:assay-excluded-owner",
+      "source_id": "demo:source-access",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-excluded-owner",
+      "excerpt": "FICTIONAL: Example laboratory maintains this asset; protocol access is on request via its professional webpage.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    },
+    {
+      "id": "demo:assay-excluded-exclusion-evidence",
+      "claim_id": "demo:assay-excluded-exclusion",
+      "source_id": "demo:source-protocols",
+      "source_version": "fixture-v1",
+      "locator": "Fictional fixture paragraph assay-excluded-exclusion",
+      "excerpt": "FICTIONAL: This assay cannot be used for the proposed Aurora measurement under the documented protocol.",
+      "stance": "supports",
+      "review_status": "human_reviewed"
+    }
+  ],
+  "coverage": [
+    {
+      "id": "demo:coverage",
+      "source_id": "demo:source-protocols",
+      "entity_id": "demo:anchor",
+      "scope": "Fictional acceptance dataset only; no real literature or access search.",
+      "status": "searched",
+      "searched_at": "2026-10-04",
+      "notes": "Simulated search and review states."
+    }
+  ]
+}

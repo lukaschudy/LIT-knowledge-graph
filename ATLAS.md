@@ -1,13 +1,15 @@
-# Run the Atlas skeleton
+# Run Atlas
 
 A dependency-free Python 3.11+ knowledge-graph core and local explorer for the AI Atlas rare-disease challenge. Run these commands from the repository checkout.
+
+For the connected graph, TopK search, Astra answers/extraction, review, recommendations and editable briefs, run `python3 -m atlas app --env-file .env --search topk --provider codex`. See the [connected workspace guide](docs/research-workspace.md) for dependencies and corpus setup. The main interface is `/explore`; `/research` redirects there. The commands below describe the explicit legacy explorer and fictional fixture.
 
 ```bash
 python3 -m atlas demo
 python3 -m atlas serve
 ```
 
-Open **http://127.0.0.1:8765** for the full-screen artwork cover. Select the Atlas logo or visit **http://127.0.0.1:8765/explore** to use the research explorer. Search **Aurora** or its alias **AS-demo** to inspect the complete research route. Search **Delta** for the honest-gap case. All bundled biomedical statements, people, organizations and assets are explicitly fictional software fixtures.
+Open **http://127.0.0.1:8765** for the full-screen artwork cover. Select the Atlas logo or visit **http://127.0.0.1:8765/explore** to use the research explorer. Search **Aurora** or its alias **AS-demo** to inspect the complete research route. Search **Delta** for the honest-gap case. The `demo` command's biomedical statements, people, organizations and assets are explicitly fictional software fixtures.
 
 If `data/atlas.sqlite` already exists, `demo` stops to protect its contents. Use a separate database (`--db /tmp/atlas-demo.sqlite`) or explicitly replace the existing dataset (`demo --replace`). `serve`, `search`, `explore`, `stats` and `export` accept the same `--db` option.
 
@@ -23,13 +25,9 @@ If `data/atlas.sqlite` already exists, `demo` stops to protect its contents. Use
 
 ## Explorer
 
-The homepage is an edge-to-edge biological illustration with only the Atlas logo. The logo opens `/explore`, which retains the illustrated introduction and research index. The split introduction and focused navigation draw on TopK, with earlier green visual direction from Definite and Halmos Labs. The original Atlas mark is preserved. Instrument Sans, found in the user's `thinkingsquared` project, is bundled locally with its OFL license; Plex Mono remains for technical identifiers.
+The homepage is a full-screen biological illustration. Enter Atlas to open the interactive graph at `/explore`: search nodes, rotate/pan/zoom, select an edge to inspect its evidence, or ask Atlas about the selected context. The Research drawer contains literature search, review, planning and briefs. `/records` retains the record browser.
 
-The introductory artwork is conceptual, not microscopy or evidence. Its built-in image generation prompt and provenance are saved in `atlas/web/images/connected-biology.txt`. The primary button moves keyboard focus to the disease index; “How it works” opens the guide.
-
-Select a disease, then a candidate in the connection list. **Connection map**, **Evidence**, and **Research assets** stay synchronized with that selection. Map relationships open the claim's evidence sheet; map entities open their linked records. Source and asset libraries are available in the masthead. In narrower windows, candidates form a horizontal strip; the map scrolls horizontally on phones.
-
-Graph paths come from the reasoner's recorded claim IDs. A displayed path is not automatically supported: unknown effects, inferred claims and contradictory evidence retain their review or rejection state. The disease index summarizes recorded mechanisms, effects and evidence counts; these are source assertions, not clinical compatibility judgments.
+Graph positions are a layout choice, not a biological similarity measure. Lines remain recorded assertions with visible inference, contradiction and review status. The cover artwork is conceptual; its provenance is saved in `atlas/web/images/connected-biology.txt`.
 
 ## Command line
 
@@ -75,4 +73,4 @@ The Python tests use `unittest` from the standard library. Tests validate source
 - [Extraction prompt](prompts/claim-extraction.txt)
 - [Existing challenge review](docs/pdf-review.md)
 
-The skeleton has no live model call, biomedical bulk dataset, credentials, calibrated clinical predictions or production deployment. The next milestone is a small real disease cluster with expert-reviewed claims, an actual research asset and verified organizations. An OpenAI extraction integration is a separate next increment; the current prompt alone does not satisfy the challenge's OpenAI prize requirement.
+The connected local app uses real model calls and a focused, verified TopK index. Qualified scientific review, broader entity extraction, multi-user hosting and a held-out evaluation remain necessary. The working corpus is smaller than the harvested data; its coverage is explicit in the interface.

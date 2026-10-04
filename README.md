@@ -1,11 +1,16 @@
 # LIT rare-disease knowledge graph
 
-**Current data and search:** the completed accessible harvest contains 21,746,825 normalized records across 40 collections; see the [coverage report](docs/harvest-coverage.md) for scope and remaining access gaps. The real GRIN pilot now has a [TopK search integration](docs/topk-search.md) for traceable evidence passages and existing graph connections. Its focused index is separate from the full harvest. The architecture diagrams below describe the wider planned system, including literature claim extraction that is not yet implemented.
+The main graph now connects **TopK search → Astra answers and extraction → evidence review → deterministic recommendations → editable brief**. Open `/explore`; the former `/research` page redirects there. See [setup and demo instructions](docs/research-workspace.md).
 
-> **Runnable graph skeleton:** See [ATLAS.md](ATLAS.md) for the local explorer, schema, ingestion boundary, commands, tests and research-backed architecture. The bundled demo is explicitly synthetic.
+```bash
+python3 -m atlas app --env-file .env --search topk --provider codex
+```
 
+Install the `topk` extra and prepare the verified local passage export first, as described in the setup guide. This local app uses the signed-in Codex CLI or an OpenAI API key; credentials stay on the server.
 
-Research and extraction planning for the **AI Atlas for the World’s Rare Diseases** challenge.
+**Connected data:** 45 real entities and 53 curated assertions, plus **15,502 GRIN passages and 19 neuro passages** in separate verified TopK collections. Search results retain source URLs, exact text, locators and review status. The wider harvest contains 21,746,825 normalized records across 40 collections; [harvest coverage](docs/harvest-coverage.md) is distinct from the focused [TopK pilot](docs/topk-search.md).
+
+The planning scope is **EPG5 / Vici syndrome**, with WDR45 / BPAN and AP4B1 / SPG47 as candidate comparators. New extracted claims stay unreviewed; unresolved scientific, maintainer and access gates remain visible. No real candidate is made ready by an AI-generated answer alone.
 
 The original six-page PDF is [`Knowledge graph`](Knowledge%20graph) (its filename has no extension). Its text is preserved in [`data/source/challenge-brief.txt`](data/source/challenge-brief.txt).
 
@@ -13,7 +18,7 @@ The original six-page PDF is [`Knowledge graph`](Knowledge%20graph) (its filenam
 
 The challenge asks for a journey from diagnosis to a justified connection, reusable asset, partner and practical next step. Read the architecture in three stages: **prepare evidence → find opportunities → recommend an action**. Feedback, source updates and evaluation keep those stages useful over time.
 
-These diagrams describe the proposed architecture; the full loops are not yet implemented.
+The preparation, discovery and decision loop runs in the local graph interface. Source maintenance and comparative evaluation below remain target workflows. Live TopK retrieval and Astra calls have been exercised; comparative scientific performance is not yet measured.
 
 ### 1. Prepare the evidence once
 
@@ -31,7 +36,7 @@ flowchart LR
 
 ### 2. Find relevant opportunities
 
-Resolve the exact variant and the user's research goal. Search TopK and a small graph neighborhood in parallel, then combine their evidence into candidate assets, partners and actions.
+Resolve the exact variant and the user's research goal. Retrieve TopK passages and a small graph neighborhood, then combine their evidence into candidate assets, partners and actions.
 
 ```mermaid
 flowchart LR
@@ -45,7 +50,7 @@ flowchart LR
 
 ### 3. Check the opportunity and recommend a next step
 
-Astra assesses scientific fit, access conditions and contradictory evidence. If a missing fact could change the decision, make one targeted follow-up round through step 2. Otherwise, return the best justified action with its partner, sources and unresolved blockers.
+Astra proposes source-grounded claims and drafts cited explanations. The deterministic decision engine checks source-qualified scientific fit, access and contradictions before an action can become ready for discussion. If a searchable missing fact could change the decision, request one bounded follow-up round; new extracted evidence stays unreviewed. Return a cited next step with its partner and unresolved blockers.
 
 ```mermaid
 flowchart TD
@@ -56,7 +61,7 @@ flowchart TD
     Gap -->|No, or budget reached| Action[Action + partner + evidence + blockers]
 ```
 
-**Why it matters:** the system can recommend a feasibility discussion, ask for clarification or reject a candidate. It does not have to produce a positive recommendation. Precomputed evidence, parallel retrieval and a bounded follow-up keep live work limited.
+**Why it matters:** the system can recommend a feasibility discussion, ask for clarification or reject a candidate. It does not have to produce a positive recommendation. Precomputed evidence, cached retrieval and a bounded follow-up keep live work limited.
 
 ### 4. Refine the result with user and expert feedback
 
@@ -111,11 +116,12 @@ Download the interactive files and open them in a browser; GitHub displays their
 - [Source-by-source extraction guide](docs/source-extraction-guide.md)
 - [Additional sources and ingestion priorities](docs/additional-sources.md)
 - [Graph design and implementation sequence](docs/ingestion-plan.md)
-- [GRIN cluster, demo and evaluation plan](docs/grin-cluster-plan.md)
+- [Earlier GRIN cluster, demo and evaluation plan](docs/grin-cluster-plan.md)
 - [Frontend strategy](docs/frontend-strategy.md)
 - [Proposed recommendation loops and model architecture](docs/architecture/recommendation-loops.md)
+- [Implemented decision engine, critical review and assay-reuse demo](docs/architecture/decision-engine.md)
 
-This repository documents how to acquire and model the sources. The runnable skeleton includes a synthetic acceptance graph and an offline HPOA converter; it does not yet contain a populated biomedical graph or production ingestion connectors. Access and reuse conditions vary by provider; evidence and unresolved dependencies are recorded per source.
+This repository documents how to acquire and model the sources. It includes a selected curated biomedical source slice, a synthetic acceptance graph and an offline HPOA converter; it does not contain a comprehensive graph across rare diseases or production-wide ingestion connectors. Access and reuse conditions vary by provider; evidence and unresolved dependencies are recorded per source.
 
 ## Reproduce the PDF extraction
 
