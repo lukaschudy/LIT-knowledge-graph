@@ -1,4 +1,5 @@
 """Bounded read-only API tests for the harvested graph projection."""
+from contextlib import closing
 import json
 from pathlib import Path
 import sqlite3
@@ -17,7 +18,7 @@ class HarvestGraphTests(unittest.TestCase):
         source_root = root / 'sources'
         source_root.mkdir()
         (source_root / 'input.jsonl.gz').write_bytes(b'not read by the graph projection')
-        with sqlite3.connect(self.db_path) as conn:
+        with closing(sqlite3.connect(self.db_path)) as conn, conn:
             initialize(conn)
             conn.execute('''INSERT INTO datasets(id,key,path,sha256,expected_rows,processed_rows,status,metadata)
                             VALUES(3,?,?,?,?,?,?,?)''',
@@ -53,7 +54,7 @@ class HarvestGraphTests(unittest.TestCase):
         self.temp.cleanup()
 
     def test_initialize_creates_agreed_tables_and_column_contract(self):
-        with sqlite3.connect(self.db_path) as conn:
+        with closing(sqlite3.connect(self.db_path)) as conn, conn:
             initialize(conn)
             expected = {
                 'datasets': ['id', 'key', 'path', 'sha256', 'expected_rows', 'processed_rows', 'status', 'metadata'],
@@ -124,14 +125,14 @@ class HarvestGraphTests(unittest.TestCase):
     def test_offset_sidecar_is_used_without_scanning_mapped_rows(self):
         # If lookup still probes nodes/edges first, deleting these mapped rows
         # would make the valid virtual source pointer unavailable.
-        with sqlite3.connect(self.db_path) as conn:
+        with closing(sqlite3.connect(self.db_path)) as conn, conn:
             conn.execute('DELETE FROM edges')
             conn.execute('DELETE FROM nodes')
         pointer = self.graph.record_pointer(3, 3)
         self.assertEqual(pointer['offset'], 200)
 
     def test_focus_expansion_uses_edge_id_cursor_and_returns_next_page(self):
-        with sqlite3.connect(self.db_path) as conn:
+        with closing(sqlite3.connect(self.db_path)) as conn, conn:
             conn.executemany('INSERT INTO nodes(nid,id,type,label,dataset,record,offset) VALUES(?,?,?,?,?,?,?)', [
                 (i, f'GENE:{i}', 'Gene', f'Gene {i}', 3, 3, 200) for i in range(4, 10)
             ])
@@ -157,6 +158,26 @@ class HarvestGraphTests(unittest.TestCase):
         self.assertEqual(self.graph.record_pointer(3, 3)['offset'], 200)
         self.assertIsNone(self.graph.record_pointer(3, 4))
         self.assertEqual(len(page['records']) + len(self.graph.records(3, page=1, limit=2)['records']), 3)
+
+    def test_focus_requires_a_usable_page_and_large_cursors_are_bounded(self):
+        with self.assertRaises(ValueError):
+            self.graph.graph(limit=1, focus='HGNC:123')
+        self.assertEqual(self.graph.graph(offset=10**100)['nodes'], [])
+
+    def test_uppercase_z_prefix_uses_sqlite_nocase_order(self):
+        with closing(sqlite3.connect(self.db_path)) as connection, connection:
+            connection.execute("INSERT INTO nodes(id,type,label,dataset,record,offset) VALUES('gene:z','Gene','ZFY',3,1,0)")
+        for query in ['Z', 'z', 'ZF', 'zf']:
+            with self.subTest(query=query):
+                self.assertEqual([n['id'] for n in self.graph.search(query)['results']], ['gene:z'])
+
+    def test_oversized_or_nonascii_numeric_ids_return_missing(self):
+        for suffix in ['9' * 5000, str(2**63), '²', '0']:
+            with self.subTest(suffix=suffix[:30]):
+                self.assertIsNone(self.graph.claim('harvest:edge:' + suffix))
+                self.assertIsNone(self.graph.dataset('dataset:' + suffix))
+        with self.assertRaises(ValueError):
+            self.graph.search('bad\ud800query')
 
 
 if __name__ == '__main__':

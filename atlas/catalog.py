@@ -117,6 +117,9 @@ class EvidenceCatalog:
         expected = input_hashes['data/curated/grin_atlas_bundle.json']
         if file_sha(graph_path) != expected:
             raise CatalogError('GRIN graph differs from the verified passage export. Rebuild before connecting it.')
+        graph_bundle = json.loads(graph_path.read_text())
+        graph_evidence = {row['id']: row for row in graph_bundle['evidence']}
+        graph_sources = {row['id']: row for row in graph_bundle['sources']}
         export_path = self.root/'data/processed/search/grin-passages.jsonl.gz'
         self.grin_rows = {}
         if export_path.exists():
@@ -128,11 +131,12 @@ class EvidenceCatalog:
         elif self.remote:
             raise CatalogError('Download or prepare the verified local GRIN passage export before enabling remote search; citations must be checked locally.')
         else:
-            for row in bundle_documents(json.loads(graph_path.read_text())):
+            for row in bundle_documents(graph_bundle):
                 row['_id'] = 'local-' + sha256(canonical(row).encode()).hexdigest()
                 self.grin_rows[row['_id']] = row
         for row in self.grin_rows.values():
-            self.rows[row['_id']] = self._normalize_grin(row)
+            self.rows[row['_id']] = self._normalize_grin(row,
+                evidence=graph_evidence.get(row.get('evidence_id')), source=graph_sources.get(row['source_id']))
         self.scopes.append({'id': 'grin', 'label': 'GRIN published evidence and licensed literature',
             'loaded_passages': len(self.grin_rows), 'indexed_passages': self.grin_manifest['verified_documents'],
             'index_status': 'verified_snapshot', 'collection': self.grin_manifest['collection'],
@@ -142,8 +146,22 @@ class EvidenceCatalog:
                        for scope in ('neuro', 'grin')}
 
     @staticmethod
-    def _normalize_grin(row):
+    def _normalize_grin(row, *, evidence=None, source=None):
         curated = row.get('kind') == 'curated_evidence'
+        # Older verified exports do not contain a source_version field. Bind it
+        # from the hash-verified local graph, never from an unverified remote hit.
+        # The assistant independently checks the visible quote before review use.
+        version = None
+        if curated and evidence and source:
+            if (evidence.get('source_id') == row.get('source_id') == source.get('id')
+                    and evidence.get('claim_id') == row.get('claim_id')
+                    and evidence.get('locator') == row.get('locator')
+                    and source.get('url') == row.get('url')
+                    and isinstance(evidence.get('excerpt'), str) and evidence['excerpt']
+                    and evidence['excerpt'] in row.get('content', '')
+                    and isinstance(source.get('version'), str) and source['version']
+                    and evidence.get('source_version') == source['version']):
+                version = source['version']
         return {'id': row['_id'], 'source_id': row['source_id'], 'title': row['title'], 'url': row['url'],
                 'text': row['content'], 'locator': row['locator'], 'original_locator': row['locator'],
                 'license': row['license'], 'kind': row['kind'], 'review_status': row['review_status'],
@@ -151,7 +169,7 @@ class EvidenceCatalog:
                 'claim_id': row.get('claim_id') if curated else None,
                 'evidence_id': row.get('evidence_id') if curated else None,
                 'node_ids': row.get('node_ids', []) if curated else [], 'scope': 'grin',
-                'snapshot_id': row.get('snapshot_id'), 'stance': row.get('stance'),
+                'snapshot_id': row.get('snapshot_id'), 'source_version': version, 'stance': row.get('stance'),
                 'context': row.get('context_json')}
 
     def status(self):

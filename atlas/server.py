@@ -8,6 +8,7 @@ import threading
 import secrets
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from time import monotonic
 from typing import Any
 from urllib.parse import parse_qs, urlsplit
 
@@ -17,6 +18,7 @@ from .recommendations import RecommendationEngine, ResearchRequest
 
 
 WEB_DIR = Path(__file__).with_name("web")
+REQUEST_BODY_TIMEOUT_SECONDS = 20
 _ASSETS = {
     "/": ("index.html", "text/html; charset=utf-8"),
     "/index.html": ("index.html", "text/html; charset=utf-8"),
@@ -115,6 +117,21 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
 
         def _error(self, status: int, code: str, message: str) -> None:
             self._json(status, {"error": {"code": code, "message": message}})
+
+        def _read_body(self, size: int) -> bytes:
+            deadline = monotonic() + REQUEST_BODY_TIMEOUT_SECONDS
+            chunks, received = [], 0
+            while received < size:
+                remaining = deadline - monotonic()
+                if remaining <= 0:
+                    raise TimeoutError
+                self.connection.settimeout(remaining)
+                chunk = self.rfile.read1(min(65536, size - received))
+                if not chunk:
+                    break
+                chunks.append(chunk)
+                received += len(chunk)
+            return b''.join(chunks)
 
         def do_GET(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
             try:
@@ -318,7 +335,10 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
                 size = int(self.headers.get("Content-Length", "0"))
                 if not 0 < size <= 100000:
                     raise WorkflowError("Request body must contain 1–100,000 bytes.", status=413)
-                body = json.loads(self.rfile.read(size))
+                payload = self._read_body(size)
+                if len(payload) != size:
+                    raise WorkflowError("The request upload was incomplete.")
+                body = json.loads(payload)
                 if not isinstance(body, dict):
                     raise WorkflowError("Request body must be a JSON object.")
                 path = urlsplit(self.path).path
@@ -348,6 +368,8 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
                     self._error(404, "api_not_found", "Unknown research endpoint.")
             except WorkflowError as exc:
                 self._error(exc.status, exc.code, str(exc))
+            except TimeoutError:
+                self._error(408, "upload_timeout", "The request upload timed out. Try again.")
             except (ValueError, TypeError, KeyError):
                 self._error(400, "invalid_request", "Malformed or incomplete research request.")
             except (BrokenPipeError, ConnectionResetError):
@@ -369,8 +391,7 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
                     raise VoiceError('Invalid audio size.')
                 if not 0 < size <= MAX_AUDIO_BYTES:
                     raise VoiceError('The recording must contain 1 byte to 4 MB.', 413)
-                self.connection.settimeout(20)
-                payload = self.rfile.read(size)
+                payload = self._read_body(size)
                 if len(payload) != size:
                     raise VoiceError('The recording upload was incomplete.')
                 self._json(200, transcriber.transcribe(payload, content_type))
@@ -422,6 +443,8 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
                 if not low <= value <= high: raise ValueError(f"{name} is outside the supported range.")
                 return value
             try:
+                if any(len(values) != 1 for values in query.values()):
+                    raise ValueError('Query parameters must occur once.')
                 route = path.removeprefix('/api/harvest/')
                 if route == 'status': result = harvest.status()
                 elif route == 'graph': result = harvest.graph(limit=integer('limit',3000,100,10000), offset=integer('offset',0,0,10**10), focus=self._one(query,'focus'))
@@ -447,6 +470,8 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
                         result = {**result,'record':read_record(harvest.path,harvest.source_root,pointer)}
                 else:
                     self._error(404,'api_not_found','Unknown harvested graph endpoint.'); return
+                if result is None:
+                    raise KeyError('missing_record')
                 self._json(200,result)
             except KeyError:
                 self._error(404,'record_not_found','That entity or source record is not present in the imported graph.')

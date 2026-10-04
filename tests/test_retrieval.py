@@ -149,6 +149,46 @@ class TopKRetrieverTests(unittest.TestCase):
             self.client.rows = [chunk | {"passage": "altered quote", "score": 1}]
             with self.assertRaises(TopKError): self.retriever.search("Aurora")
 
+    def test_failed_query_cannot_reuse_previous_success_verification(self):
+        row = {**self.retriever._chunks[0], 'score': .9}
+        with patch.dict(sys.modules, topk_sdk_modules()):
+            for failure in ('foreign', 'altered', 'transport'):
+                with self.subTest(failure=failure):
+                    self.client.rows = [row]
+                    self.retriever.search('successful query')
+                    self.assertTrue(self.retriever.status()['query_verified'])
+                    if failure == 'transport':
+                        with patch.object(self.client, 'query', side_effect=RuntimeError('offline')):
+                            with self.assertRaises(TopKError): self.retriever.search('new query')
+                    else:
+                        self.client.rows = [{**row, **({'_id': 'foreign'} if failure == 'foreign' else {'passage': 'changed'})}]
+                        with self.assertRaises(TopKError): self.retriever.search('new query')
+                    for status in (self.retriever.status(), self.retriever.last_metadata):
+                        self.assertIsNone(status['query_verified'])
+                        self.assertIsNone(status['verified_hit_count'])
+            self.client.rows = [row]
+            self.retriever.search('recovered query')
+            self.assertTrue(self.retriever.status()['query_verified'])
+
+    def test_sdk_initialization_failure_is_safe_retrieval_error(self):
+        with patch.dict(sys.modules, topk_sdk_modules()), patch.object(
+                self.retriever, '_get_client', side_effect=RuntimeError('private credentials detail')):
+            with self.assertRaises(TopKError) as caught:
+                self.retriever.search('Aurora')
+        self.assertNotIn('private', str(caught.exception))
+
+    def test_malformed_identifiers_and_excess_result_count_are_rejected(self):
+        with patch.dict(sys.modules, topk_sdk_modules()):
+            for identifier in ([], {}, None, 1):
+                with self.subTest(identifier=identifier):
+                    self.client.rows = [{'_id': identifier}]
+                    with self.assertRaises(TopKError):
+                        self.retriever.search('Aurora')
+            row = dict(self.retriever._chunks[0], score=.5)
+            self.client.rows = [row, row]
+            with self.assertRaisesRegex(TopKError, 'requested limit'):
+                self.retriever.search('Aurora', top_k=1)
+
     def test_empty_existing_snapshot_is_readable_and_invalid_version_rejected(self):
         with patch.dict(sys.modules, topk_sdk_modules()):
             self.assertEqual(self.retriever.search("Aurora"), [])

@@ -1,5 +1,7 @@
 """HTTP integration checks for provenance pointers into original harvest rows."""
 import gzip
+from contextlib import closing
+from hashlib import sha256
 import importlib.util
 import json
 from pathlib import Path
@@ -48,11 +50,11 @@ class HarvestAPITests(unittest.TestCase):
         metadata = {'name': 'tiny fixture', 'source_urls': ['https://example.org/source'],
                     'licenses': ['CC0'], 'bytes': source.stat().st_size,
                     'mtime_ns': source.stat().st_mtime_ns}
-        with sqlite3.connect(self.db_path) as db:
+        with closing(sqlite3.connect(self.db_path)) as db, db:
             initialize(db)
             db.execute('''INSERT INTO datasets(id,key,path,sha256,expected_rows,processed_rows,status,metadata)
-                          VALUES(3,'fixture/unmapped','sources/two-rows.jsonl.gz','fixturehash',2,2,'complete',?)''',
-                       (json.dumps(metadata),))
+                          VALUES(3,'fixture/unmapped','sources/two-rows.jsonl.gz',?,2,2,'complete',?)''',
+                       (sha256(source.read_bytes()).hexdigest(), json.dumps(metadata)))
             db.executemany('INSERT INTO nodes(id,type,label,dataset,record,offset) VALUES(?,?,?,?,?,?)', [
                 ('gene:1', 'Gene', 'GENE1', 3, 1, offsets[0]),
                 ('disease:1', 'Disease', 'Fixture condition', 3, 1, offsets[0]),

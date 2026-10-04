@@ -81,6 +81,21 @@ class EvidenceCatalogTests(unittest.TestCase):
         graph_hash = manifest["input_sha256"]["data/curated/grin_atlas_bundle.json"]
         self.assertEqual(file_sha(self.root / "data/curated/grin_atlas_bundle.json"), graph_hash)
 
+    def test_source_version_binding_requires_exact_local_evidence_metadata(self):
+        row = next(row for row in self.catalog.grin_rows.values() if row['kind']=='curated_evidence').copy()
+        graph=json.loads((self.root/'data/curated/grin_atlas_bundle.json').read_text())
+        evidence=next(e for e in graph['evidence'] if e['id']==row['evidence_id']).copy()
+        source=next(s for s in graph['sources'] if s['id']==evidence['source_id']).copy()
+        source['version']='test-source-v1';evidence['source_version']='test-source-v1'
+        normalized=EvidenceCatalog._normalize_grin(row,evidence=evidence,source=source)
+        self.assertEqual(normalized['source_version'],'test-source-v1')
+        for changed in ({'locator':'unrelated'}, {'url':'https://example.org/other'},
+                        {'claim_id':'other'}, {'content':'Not the source excerpt.'}):
+            with self.subTest(changed=changed):
+                self.assertIsNone(EvidenceCatalog._normalize_grin({**row,**changed},evidence=evidence,source=source)['source_version'])
+        evidence['source_version']='older-version'
+        self.assertIsNone(EvidenceCatalog._normalize_grin(row,evidence=evidence,source=source)['source_version'])
+
     def test_scope_selection_keeps_neuro_and_grin_evidence_distinct(self):
         neuro = self.catalog.search("WDR45 BPAN autophagy", top_k=4)
         self.assertEqual(neuro["provider"], "local_lexical")

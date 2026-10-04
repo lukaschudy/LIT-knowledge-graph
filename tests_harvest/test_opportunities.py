@@ -1,4 +1,6 @@
 import unittest
+from unittest.mock import patch
+from harvest import core
 from harvest.opportunities import TERMS, grants_search_body, _ot_query_batch, _association_page_query, _association_full_query, _association_prefix_query, _initial_association_records, _association_audit_complete, _association_prefix_children, _prefix_partition_complete, grin_disease_mondo_ids
 
 class OpportunityHarvestTests(unittest.TestCase):
@@ -66,7 +68,23 @@ class OpportunityHarvestTests(unittest.TestCase):
         self.assertIn('ENSG0000010',observed)
 
     def test_grin_curated_disease_ids_include_clingen_complex_ndd(self):
-        ids=grin_disease_mondo_ids()
+        # These are curated source shapes, not a dependency on an ignored local
+        # multi-million-record harvest. Include an unrelated gene as a negative.
+        fixtures={
+            'mondo/obo_stanzas.jsonl.gz': [{'tags': {'id':['MONDO:0100038'], 'xref':['OMIM:613970']}}],
+            'clingen/gene_disease_validity.jsonl.gz': [
+                {'GENE ID (HGNC)':'HGNC:4585','DISEASE ID (MONDO)':'MONDO:0100038'},
+                {'GENE ID (HGNC)':'HGNC:4586','DISEASE ID (MONDO)':'MONDO:0100038'},
+                {'GENE ID (HGNC)':'HGNC:9999','DISEASE ID (MONDO)':'MONDO:9999999'},
+            ],
+            'gencc/assertions.jsonl.gz': [{'gene_curie':'HGNC:4585','disease_curie':'OMIM:613970'}],
+        }
+        def read_fixture(path):
+            return iter(fixtures.get(str(path.relative_to(core.PROCESSED)),[]))
+        with patch.object(core,'read_records',side_effect=read_fixture):
+            ids=grin_disease_mondo_ids()
+        self.assertNotIn('MONDO_9999999',ids)
+        self.assertTrue(any(x['provider']=='gencc' and x['native_disease_id']=='OMIM:613970' for x in ids['MONDO_0100038']))
         self.assertIn('MONDO_0100038',ids)
         self.assertTrue(any(x['gene']=='GRIN2A' for x in ids['MONDO_0100038']))
         self.assertTrue(any(x['gene']=='GRIN2B' for x in ids['MONDO_0100038']))

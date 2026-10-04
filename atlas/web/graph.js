@@ -49,7 +49,7 @@
   let harvestLimit = 10000, resolvedLimit = 120, harvestOffset = 0, harvestLoading = false, harvestError = '', resolvedError = '', nextHarvestOffset = null, resolvedNextOffset = null, scopeGeneration=0;
   let expandedFocusId = null, expandedFocusNextOffset = 0, expandedFocusDone = false;
   let harvestDatasets = [], selectedDatasetId = '', recordPage = 0, recordRequest = 0;
-  let view = { x:0,y:0,k:1 }, width = innerWidth, height = innerHeight, busy = false, claimRequest = 0;
+  let view = { x:0,y:0,k:1 }, width = innerWidth, height = innerHeight, busy = false, claimRequest = 0, selectionGeneration = 0;
   let lastAnswer = null, searchTerm = '', searchMatches = new Set(), searchLead = null;
   let needsProjection = true, needsPaint = true, overlayDirty = true, labelScale = 0;
   let depthOrder = [], edgeBatches = [], pixelRatio = 1, lastOverlay = 0;
@@ -95,9 +95,9 @@
     queueHover(nodeAt(e));
   }
   function transitionScene() {
-    const focused=!!(selected||searchTerm),showConnections=$('show-connections').checked;
+    const focused=!!(selected||searchTerm),showConnections=$('show-connections').checked,activeElement=document.activeElement;
     for(const n of nodes){
-      const active=(n.id===selected||n.id===hovered)&&!n.dimmed,matched=searchMatches.has(n.id);
+      const active=((n.id===selected||n.id===hovered)&&!n.dimmed)||activeElement===n.el,matched=searchMatches.has(n.id);
       n.fromWeight=n.weight??1;n.toWeight=n.hidden?0:n.dimmed?.16:1;
       n.fromRing=n.ring??0;n.toRing=!n.hidden&&(active||matched)?1:0;
     }
@@ -402,19 +402,25 @@
     transitionScene();overlayDirty=true;needsPaint=true;
   }
   function select(id,center=false) {
+    ++selectionGeneration;
     clearTimeout(hoverTimer);hoverCandidate=null;
     cameraTransition=null;
-    selected=id; hovered=null; lastAnswer=null;searchTerm='';searchMatches.clear();searchLead=null;$('node-search').value='';
-    const node=byId.get(id);
+    clearTimeout(searchTimer);++searchRequest;
+    selected=byId.has(id)?id:null; hovered=null; lastAnswer=null;searchTerm='';searchMatches.clear();searchLead=null;$('node-search').value='';
+    updateSelection();
+    const node=byId.get(selected);
+    if(node&&center)cameraTransition={start:performance.now(),x:view.x,y:view.y,toX:width/2-node.x*view.k,toY:height/2-node.y*view.k};
+    highlight();hideResults();
+  }
+  function updateSelection(){
+    const id=selected,node=byId.get(id);
     $('selection').hidden=!node;
     $('inspect-selected').hidden=!(isHarvestNode(node)||isResolvedNode(node));
     $('inspect-selected').textContent=isResolvedNode(node)?'Inspect identity and sources':'Inspect harvested record';
     $('harvest-expand').disabled=harvestLoading||!(isHarvestNode(node)||isResolvedNode(node))||(expandedFocusId===id&&expandedFocusDone);
     if (node) {
       $('selection-name').textContent=label(node); $('selection-type').textContent=node.type;
-      if (center) { cameraTransition={start:performance.now(),x:view.x,y:view.y,toX:width/2-node.x*view.k,toY:height/2-node.y*view.k}; }
     }
-    highlight(); hideResults();
     const workspaceId=workspaceNodeId(id);
     window.dispatchEvent(new CustomEvent('atlas:node-select',{detail:{node_id:workspaceId,graph_node_id:id,node:node?{id:workspaceId,graph_id:id,label:label(node),type:node.type}:null}}));
   }
@@ -478,16 +484,27 @@
     needsPaint=true;
   }
   function render() {
+    clearTimeout(hoverTimer);hoverCandidate=null;hovered=null;
+    $('node-search').disabled=false;$('chat-toggle').disabled=false;
+    $('graph-status').hidden=!!nodes.length;if(!nodes.length)$('graph-status').textContent='No entities are available in this view.';
     $('links').replaceChildren();nodeLayer.replaceChildren();
     const contestedClaims=new Set(bundle.evidence.filter(r=>r.stance==='contradicts').map(r=>r.claim_id));
     edges=bundle.claims.filter(c=>byId.has(c.subject)&&byId.has(c.object)).map(c=>({claim:c,a:byId.get(c.subject),b:byId.get(c.object)}));
-    layout();sizeCanvas();
+    // Recomposition may add records or update evidence, but existing entities
+    // retain their world positions across pages and workspace refreshes.
+    const positions=new Map(nodes.filter(n=>[n.wx,n.wy,n.wz].every(Number.isFinite)).map(n=>[n.id,[n.wx,n.wy,n.wz]]));
+    layout();
+    for(const n of nodes){const position=positions.get(n.id);if(position){[n.wx,n.wy,n.wz]=position;project(n);}}
+    sizeCanvas();
     overlayNodes=[];overlayEdges=[];hitGrid.clear();
     edges.forEach(e=>{const contested=e.claim.context?.negated===true||contestedClaims.has(e.claim.id);e.kind=contested?'contested':e.claim.assertion_type==='inferred'?'inferred':'normal';});
     nodes.forEach(n=>{n.radius=2+Math.min(3.3,Math.sqrt(n.degree)*.66);n.el=n.hit=n.text=null;});
     overlayAnchors=[...nodes].sort((a,b)=>b.degree-a.degree||a.id.localeCompare(b.id)).slice(0,32);
     svg.dataset.nodeCount=String(nodes.length);svg.dataset.claimCount=String(edges.length);
     svg.setAttribute('aria-label',`Atlas knowledge graph: ${nodes.length.toLocaleString()} nodes. Drag to rotate; scroll to zoom. Shift-drag to pan. Search to select any entity and inspect its connections.`);
+    const dense=nodes.length>DENSE_GRAPH_THRESHOLD;
+    $('all-labels').disabled=dense;if(dense)$('all-labels').checked=false;
+    $('all-labels').title=dense?'Showing every label is disabled for a dense graph view. Search or select a node to reveal its label.':'';
     assignColors();
     svg.classList.toggle('show-connections',$('show-connections').checked);svg.classList.toggle('all-labels',$('all-labels').checked);
     paintPositions();fit(true);highlight();
@@ -534,14 +551,12 @@
     bundle={...base,dataset:base.dataset||workspaceState?.dataset,nodes:allNodes,claims:allClaims,evidence:[...evidenceByKey.values()],sources:[...sourcesById.values()]};
     nodes=allNodes;byId=new Map(nodes.map(node=>[node.id,node]));
     nodes.forEach(node=>{const old=previous.get(node.id);if(old){for(const key of ['wx','wy','wz'])if(Number.isFinite(old[key]))node[key]=old[key];}});
-    if(selected&&!byId.has(selected))selected=null;
-    const currentSearch=$('node-search').value;searchMatches.clear();searchLead=null;searchTerm='';
-    const keepSelection=selected;
+    if(selected&&!byId.has(selected)){selected=null;lastAnswer=null;++selectionGeneration;}
+    const currentSearch=$('node-search').value,searchWasOpen=!$('node-results').hidden;searchMatches.clear();searchLead=null;searchTerm='';
     render();
     if(hadGraph&&preserveCamera){view=previousView;applyCamera();paintPositions();}
-    highlight();
-    if(keepSelection){selected=keepSelection;highlight();}
-    if(currentSearch)$('node-search').value=currentSearch;
+    updateSelection();highlight();
+    if(currentSearch){$('node-search').value=currentSearch;searchNodes();if(!searchWasOpen)hideResults();}
   }
   function currentBase(){return dataMode==='resolved'?resolvedBase:harvestBase;}
   function canonicalNodeId(id){return (currentBase()?.resolution?.alias_map||{})[id]||id;}
@@ -585,16 +600,22 @@
     if(mode==='resolved')resolvedNextOffset=cursor;else nextHarvestOffset=cursor;
     expandedFocusId=focus;expandedFocusNextOffset=focus?cursor:null;expandedFocusDone=!!focus&&cursor==null;
   }
+  async function initialGraphJSON(path,message){
+    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),30000);
+    try{const response=await fetch(path,{signal:controller.signal});if(!response.ok)throw new Error(message);return await response.json();}
+    catch(error){if(error.name==='AbortError')throw new Error('The graph request timed out. Reload to try again.');throw error;}
+    finally{clearTimeout(timeout);}
+  }
   async function loadHarvestStatus(){
-    try{const response=await fetch('/api/harvest/status');if(!response.ok)throw new Error('Harvest coverage is unavailable.');harvestCoverage=await response.json();updateHarvestControls();}
+    try{harvestCoverage=await initialGraphJSON('/api/harvest/status','Harvest coverage is unavailable.');updateHarvestControls();}
     catch(_){updateHarvestControls('Harvest coverage is not available on this server. The currently loaded graph may be a curated subset.');}
   }
-  async function loadResolvedGraph({offset=0,focus=null,append=false,limit=resolvedLimit}={}){
-    const requestId=++harvestRequest;harvestLoading=true;resolvedError='';updateHarvestControls(focus?'Loading the selected neuro neighborhood…':'Loading the resolved neuro overview…');
+  async function loadResolvedGraph({offset=0,focus=null,append=false,limit=resolvedLimit,isCurrent=()=>true}={}){
+    const requestId=++harvestRequest,controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),30000);harvestLoading=true;resolvedError='';updateHarvestControls(focus?'Loading the selected neuro neighborhood…':'Loading the resolved neuro overview…');
     try{
       const params=new URLSearchParams({limit:String(limit),offset:String(offset)});if(focus)params.set('focus',focus);
-      const response=await fetch(`/api/resolved/graph?${params}`);if(!response.ok)throw new Error(`Resolved neuro graph unavailable (${response.status}).`);
-      const incoming=await response.json();if(requestId!==harvestRequest)return false;
+      const response=await fetch(`/api/resolved/graph?${params}`,{signal:controller.signal});if(!response.ok)throw new Error(`Resolved neuro graph unavailable (${response.status}).`);
+      const incoming=await response.json();if(requestId!==harvestRequest||!isCurrent())return false;
       if(!Array.isArray(incoming.nodes)||!Array.isArray(incoming.claims))throw new Error('Resolved graph returned an unexpected shape.');
       if(append&&resolvedBase){resolvedBase={...resolvedBase,...incoming,nodes:unionRows(resolvedBase.nodes,incoming.nodes,'id'),claims:unionRows(resolvedBase.claims,incoming.claims,'id'),evidence:unionRows(resolvedBase.evidence,incoming.evidence,'id'),sources:unionRows(resolvedBase.sources,incoming.sources,'id'),resolution:incoming.resolution||resolvedBase.resolution};}
       else resolvedBase=incoming;
@@ -604,22 +625,22 @@
       $('all-labels').disabled=nodes.length>1200;if(nodes.length>1200)$('all-labels').checked=false;
       $('all-labels').title=nodes.length>1200?'Showing every label is disabled for a dense graph view. Search or select a node to reveal its label.':'';
       $('graph-status').hidden=!!nodes.length;return true;
-    }catch(error){if(requestId===harvestRequest){resolvedError=error.message;updateHarvestControls();}return false;}
-    finally{if(requestId===harvestRequest){harvestLoading=false;updateHarvestControls();}}
+    }catch(error){if(requestId===harvestRequest&&isCurrent()){resolvedError=error.name==='AbortError'?'The graph request timed out. Try loading this view again.':error.message;updateHarvestControls();}return false;}
+    finally{clearTimeout(timeout);if(requestId===harvestRequest){harvestLoading=false;updateHarvestControls();}}
   }
   async function loadResolvedStatus(){
-    try{const response=await fetch('/api/resolved/status');if(!response.ok)throw new Error();const data=await response.json();resolvedError=data.available===false?'Resolved neuro view is not available yet.': '';if(data.resolution)resolvedBase={...(resolvedBase||{}),resolution:data.resolution};else if(data.alias_map||data.stats)resolvedBase={...(resolvedBase||{}),resolution:{scope:data.scope||'neuro',alias_map:data.alias_map||{},stats:data.stats||{},default_focus:data.default_focus}};updateHarvestControls();return data;}
+    try{const data=await initialGraphJSON('/api/resolved/status','Resolved coverage is unavailable.');resolvedError=data.available===false?'Resolved neuro view is not available yet.': '';if(data.resolution)resolvedBase={...(resolvedBase||{}),resolution:data.resolution};else if(data.alias_map||data.stats)resolvedBase={...(resolvedBase||{}),resolution:{scope:data.scope||'neuro',alias_map:data.alias_map||{},stats:data.stats||{},default_focus:data.default_focus}};updateHarvestControls();return data;}
     catch(_){resolvedError='Resolved neuro view is not available on this server yet.';updateHarvestControls();return null;}
   }
   function unionRows(oldRows,newRows,key){const rowKey=row=>row[key]??row.evidence_id??(row.claim_id?`${row.claim_id}:${row.source_id}:${row.locator}`:JSON.stringify(row));const map=new Map((oldRows||[]).map(row=>[rowKey(row),row]));for(const row of newRows||[])map.set(rowKey(row),row);return [...map.values()];}
-  async function loadHarvestGraph({offset=0,focus=null,append=false,limit=harvestLimit}={}){
-    const requestId=++harvestRequest;
+  async function loadHarvestGraph({offset=0,focus=null,append=false,limit=harvestLimit,isCurrent=()=>true}={}){
+    const requestId=++harvestRequest,controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),30000);
     harvestLoading=true;harvestError='';updateHarvestControls(focus?'Expanding the selected neighborhood…':'Loading a bounded graph view…');
     try{
       const params=new URLSearchParams({limit:String(limit),offset:String(offset)});if(focus)params.set('focus',focus);
-      const response=await fetch(`/api/harvest/graph?${params}`);if(!response.ok)throw new Error(`Harvest graph request failed (${response.status}).`);
+      const response=await fetch(`/api/harvest/graph?${params}`,{signal:controller.signal});if(!response.ok)throw new Error(`Harvest graph request failed (${response.status}).`);
       const incoming=await response.json();
-      if(requestId!==harvestRequest)return false;
+      if(requestId!==harvestRequest||!isCurrent())return false;
       if(!Array.isArray(incoming.nodes)||!Array.isArray(incoming.claims))throw new Error('The harvest graph returned an unexpected shape.');
       if(append&&harvestBase){
         harvestBase={...harvestBase,...incoming,
@@ -636,30 +657,31 @@
       $('all-labels').title=nodes.length>1200?'Showing every label is disabled for a dense graph view. Search or select a node to reveal its label.':'';
       $('graph-status').hidden=!!nodes.length;
       return true;
-    }catch(error){if(requestId===harvestRequest){harvestError=error.message;updateHarvestControls(error.message);}return false;}
-    finally{if(requestId===harvestRequest){harvestLoading=false;updateHarvestControls();}}
+    }catch(error){if(requestId===harvestRequest&&isCurrent()){harvestError=error.name==='AbortError'?'The graph request timed out. Try loading this view again.':error.message;updateHarvestControls();}return false;}
+    finally{clearTimeout(timeout);if(requestId===harvestRequest){harvestLoading=false;updateHarvestControls();}}
   }
   async function switchDataMode(mode){
     const generation=++scopeGeneration;
+    select(null);
     ++harvestRequest;harvestLoading=false;
     dataMode=mode;$('graph-scope').value=mode;harvestError='';resolvedError='';updateHarvestControls();
     if(mode==='resolved'){
       if(resolvedBase?.nodes?.length){restorePageState(resolvedBase,'resolved');composeGraph(false);updateHarvestControls();return;}
       const ok=await loadResolvedGraph({offset:0,limit:resolvedLimit});
       if(generation!==scopeGeneration)return;
-      if(!ok){dataMode='harvest';$('graph-scope').value='harvest';if(!harvestBase)await loadHarvestGraph({limit:harvestLimit,offset:0});harvestError='Resolved neuro view is unavailable; showing harvested graph data.';updateHarvestControls();}
+      if(!ok){dataMode='harvest';$('graph-scope').value='harvest';if(!harvestBase)await loadHarvestGraph({limit:harvestLimit,offset:0});else{restorePageState(harvestBase,'harvest');composeGraph(false);}if(generation!==scopeGeneration)return;harvestError='Resolved neuro view is unavailable; showing harvested graph data.';updateHarvestControls();}
     }else{
       if(harvestBase){restorePageState(harvestBase,'harvest');composeGraph(false);updateHarvestControls();}else await loadHarvestGraph({limit:harvestLimit,offset:0});
     }
   }
   $('graph-scope').addEventListener('change',()=>switchDataMode($('graph-scope').value));
   $('harvest-reload').addEventListener('click',()=>{
-    if(dataMode==='resolved'){resolvedBase=null;resolvedNextOffset=null;loadResolvedGraph({limit:Number($('harvest-limit').value)||120});}
-    else{harvestBase=null;harvestOffset=0;nextHarvestOffset=null;loadHarvestGraph({limit:Number($('harvest-limit').value)||10000});}
+    if(dataMode==='resolved'){loadResolvedGraph({limit:Number($('harvest-limit').value)||120});}
+    else{loadHarvestGraph({limit:Number($('harvest-limit').value)||10000});}
   });
   $('harvest-limit').addEventListener('change',()=>{
-    if(dataMode==='resolved'){resolvedBase=null;resolvedNextOffset=null;resolvedLimit=Number($('harvest-limit').value)||120;loadResolvedGraph({limit:resolvedLimit});}
-    else{harvestBase=null;harvestOffset=0;nextHarvestOffset=null;harvestLimit=Number($('harvest-limit').value)||10000;loadHarvestGraph({limit:harvestLimit});}
+    if(dataMode==='resolved'){resolvedLimit=Number($('harvest-limit').value)||120;loadResolvedGraph({limit:resolvedLimit});}
+    else{harvestLimit=Number($('harvest-limit').value)||10000;loadHarvestGraph({limit:harvestLimit});}
   });
   $('harvest-next').addEventListener('click',()=>{
     if(dataMode==='resolved'){
@@ -671,7 +693,6 @@
     if(!selected||!(isHarvestNode(byId.get(selected))||isResolvedNode(byId.get(selected))))return;
     if(dataMode==='resolved'){
       const same=expandedFocusId===selected,offset=same?expandedFocusNextOffset:0;
-      if(!same)resolvedBase=null;
       loadResolvedGraph({focus:selected,offset,append:same,limit:resolvedLimit});return;
     }
     if(expandedFocusId===selected&&expandedFocusDone)return;
@@ -691,13 +712,15 @@
   function datasetId(dataset){const raw=dataset.dataset_id??dataset.id??'';const match=String(raw).match(/(\d+)$/);return match?.[1]||String(raw);}
   function datasetLabel(dataset){return dataset.label||dataset.key||dataset.path||`Dataset ${datasetId(dataset)}`;}
   function renderDatasetOptions(){
+    ++recordRequest;
     const select=$('harvest-dataset-select'),query=$('harvest-dataset-filter').value.trim().toLowerCase(),current=selectedDatasetId;
     const filtered=harvestDatasets.filter(dataset=>`${datasetLabel(dataset)} ${dataset.key||''} ${dataset.path||''} ${datasetId(dataset)}`.toLowerCase().includes(query));
     select.replaceChildren();filtered.forEach(dataset=>{
       const count=Number(dataset.processed_rows??dataset.expected_rows??0),option=new Option(`${datasetLabel(dataset)} · ${count.toLocaleString()} rows`,datasetId(dataset));select.add(option);
     });
     selectedDatasetId=filtered.some(dataset=>datasetId(dataset)===current)?current:(filtered[0]?datasetId(filtered[0]):'');select.value=selectedDatasetId;
-    if(selectedDatasetId)loadHarvestRecords();else{$('harvest-record-list').replaceChildren();$('harvest-record-status').textContent='No dataset matches this filter.';}
+    if(selectedDatasetId!==current)recordPage=0;
+    if(selectedDatasetId)loadHarvestRecords();else{$('harvest-record-previous').disabled=true;$('harvest-record-next').disabled=true;$('harvest-record-list').replaceChildren();$('harvest-record-status').textContent='No dataset matches this filter.';}
   }
   async function loadHarvestDatasets(){
     $('harvest-record-status').textContent='Loading dataset catalog…';
@@ -846,6 +869,7 @@
   window.addEventListener('atlas:open-claim',event=>{const id=event.detail?.claim_id;if(id)openClaim(id);});
   function hideResults() { $('node-results').hidden=true;$('node-search').setAttribute('aria-expanded','false'); }
   function searchNodes() {
+    clearTimeout(searchTimer);const requestId=++searchRequest;
     searchTerm=$('node-search').value.toLowerCase().trim();
     const results=$('node-results');results.replaceChildren();
     const matches=searchTerm?nodes.filter(n=>[label(n),n.id,...(n.aliases||[])].some(t=>t.toLowerCase().includes(searchTerm))):[];
@@ -860,15 +884,14 @@
     });
     if(!matches.length)results.append(make('p','',dataMode==='resolved'?'Searching the loaded resolved neuro graph…':'Searching the loaded graph and full harvest index…'));
     results.hidden=false;$('node-search').setAttribute('aria-expanded','true');
-    clearTimeout(searchTimer);const requestId=++searchRequest;
-    if(searchTerm)searchTimer=setTimeout(()=>searchHarvest(searchTerm,requestId),220);
+    if(searchTerm){const query=searchTerm,mode=dataMode;searchTimer=setTimeout(()=>searchHarvest(query,requestId,mode),220);}
   }
-  async function searchHarvest(query,requestId){
+  async function searchHarvest(query,requestId,mode){
     const resultsElement=$('node-results');
     try{
-      const resolved=dataMode==='resolved',endpoint=resolved?'/api/resolved/search':'/api/harvest/search';
+      const resolved=mode==='resolved',endpoint=resolved?'/api/resolved/search':'/api/harvest/search';
       const response=await fetch(`${endpoint}?${new URLSearchParams({q:query,limit:'40'})}`);if(!response.ok)throw new Error('');
-      const data=await response.json();if(requestId!==searchRequest||query!==$('node-search').value.toLowerCase().trim())return;
+      const data=await response.json();if(requestId!==searchRequest||mode!==dataMode||query!==$('node-search').value.toLowerCase().trim())return;
       const results=resultsElement,matches=Array.isArray(data.results)?data.results:Array.isArray(data.nodes)?data.nodes:[];
       const existing=new Set([...results.querySelectorAll('[data-node-id]')].map(button=>button.dataset.nodeId));
       if(matches.length){const pending=results.querySelector('p');if(pending)pending.remove();}
@@ -881,10 +904,15 @@
         button.addEventListener('click',async()=>{
           hideResults();$('node-search').blur();
           if(byId.has(id)){select(id,true);byId.get(id)?.el.focus({preventScroll:true});return;}
-          if(dataMode==='resolved')await loadResolvedGraph({focus:id,offset:0,append:false,limit:resolvedLimit});
-          else await loadHarvestGraph({focus:id,append:true,limit:harvestLimit});
-          if(byId.has(id)){select(id,true);byId.get(id)?.el.focus({preventScroll:true});}
-          else if(dataMode==='harvest'){const raw=await fetchHarvestNode(id);if(raw?.node){appendHarvestNode(raw.node);select(id,true);}}
+          $('node-search').value='';searchTerm='';searchMatches.clear();searchLead=null;
+          const generation=scopeGeneration,selectionRequest=++searchRequest;
+          try{
+            if(mode==='resolved')await loadResolvedGraph({focus:id,offset:0,append:false,limit:resolvedLimit,isCurrent:()=>generation===scopeGeneration&&selectionRequest===searchRequest});
+            else await loadHarvestGraph({focus:id,append:true,limit:harvestLimit,isCurrent:()=>generation===scopeGeneration&&selectionRequest===searchRequest});
+            if(generation!==scopeGeneration||mode!==dataMode||selectionRequest!==searchRequest)return;
+            if(byId.has(id)){select(id,true);byId.get(id)?.el?.focus({preventScroll:true});}
+            else if(mode==='harvest'){const raw=await fetchHarvestNode(id);if(generation!==scopeGeneration||selectionRequest!==searchRequest)return;if(raw?.node){appendHarvestNode(raw.node);select(id,true);}}
+          }catch(error){if(generation===scopeGeneration&&selectionRequest===searchRequest){resultsElement.replaceChildren(make('p','',error.message||'This search result could not be loaded. Try again.'));resultsElement.hidden=false;$('node-search').setAttribute('aria-expanded','true');}}
         });
         results.append(button);
       });
@@ -895,7 +923,7 @@
   $('node-search').addEventListener('keydown',e=>{
     if(e.key==='Escape'){$('node-search').value='';searchNodes();}
     if(e.key==='ArrowDown'){e.preventDefault();$('node-results').querySelector('button')?.focus();}
-    if(e.key==='Enter'&&searchLead){e.preventDefault();const id=searchLead;if(byId.has(id)){select(id,true);byId.get(id)?.el.focus();}else $('node-results').querySelector(`[data-node-id="${CSS.escape(id)}"]`)?.click();}
+    if(e.key==='Enter'&&!e.isComposing&&searchLead){e.preventDefault();const id=searchLead;if(byId.has(id)){select(id,true);byId.get(id)?.el.focus();}else $('node-results').querySelector(`[data-node-id="${CSS.escape(id)}"]`)?.click();}
   });
   $('node-results').addEventListener('keydown',e=>{const items=[...$('node-results').querySelectorAll('button')],i=items.indexOf(document.activeElement);if(e.key==='ArrowDown'){e.preventDefault();items[(i+1)%items.length]?.focus();}if(e.key==='ArrowUp'){e.preventDefault();items[(i-1+items.length)%items.length]?.focus();}if(e.key==='Escape'){$('node-search').focus();hideResults();}});
 
@@ -905,14 +933,14 @@
     e.preventDefault();svg.classList.add('pointer-focus');svg.focus({preventScroll:true});
     cameraTransition=null;wheelZoom=null;setHover(null);
     pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});svg.setPointerCapture(e.pointerId);
-    if(pointers.size===2){const p=[...pointers.values()];pinchDistance=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);if(gesture)gesture.moved=true;return;}
+    if(pointers.size>1){const p=[...pointers.values()];pinchDistance=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);if(gesture)gesture.moved=true;return;}
     svg.classList.add('interacting');
     gesture={id,claim:e.target.closest('[data-claim]')?.dataset.claim,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,pan:e.shiftKey,moved:false};
   });
   svg.addEventListener('pointermove',e=>{
     if(!pointers.has(e.pointerId)||!gesture){hoverAt(e);return;}
     pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-    if(pointers.size===2){const p=[...pointers.values()],d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);if(pinchDistance)zoom(d/pinchDistance,(p[0].x+p[1].x)/2,(p[0].y+p[1].y)/2);pinchDistance=d;return;}
+    if(pointers.size>1){const p=[...pointers.values()],d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);if(pinchDistance){const rect=svg.getBoundingClientRect();zoom(d/pinchDistance,(p[0].x+p[1].x)/2-rect.left,(p[0].y+p[1].y)/2-rect.top);}pinchDistance=d;return;}
     const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;
     if(Math.hypot(e.clientX-gesture.startX,e.clientY-gesture.startY)>(e.pointerType==='touch'?9:6))gesture.moved=true;
     if(gesture.moved){if(gesture.pan){view.x+=dx;view.y+=dy;applyCamera();}else{yaw+=dx*.005;pitch=Math.max(-1.2,Math.min(1.2,pitch+dy*.005));paintPositions();}}
@@ -920,11 +948,14 @@
   });
   svg.addEventListener('pointerleave',()=>queueHover(null));
   function release(e,cancel=false){
+    if(!pointers.has(e.pointerId))return;
     pointers.delete(e.pointerId);
     if(!pointers.size&&gesture){const g=gesture;gesture=null;svg.classList.remove('interacting');overlayDirty=true;needsPaint=true;pinchDistance=0;if(!g.moved&&!cancel){if(g.id)select(g.id);else if(g.claim)openClaim(g.claim);else select(null);}highlight();}
-    else if(gesture){gesture.moved=true;const p=[...pointers.values()][0];gesture.x=p.x;gesture.y=p.y;}
+    else if(gesture){gesture.moved=true;const remaining=[...pointers.values()],p=remaining[0];gesture.x=p.x;gesture.y=p.y;pinchDistance=remaining.length>1?Math.hypot(p.x-remaining[1].x,p.y-remaining[1].y):0;}
   }
   svg.addEventListener('pointerup',e=>release(e));svg.addEventListener('pointercancel',e=>release(e,true));
+  svg.addEventListener('lostpointercapture',e=>release(e,true));
+  window.addEventListener('blur',()=>{pointers.clear();gesture=null;pinchDistance=0;svg.classList.remove('interacting');overlayDirty=true;needsPaint=true;});
   svg.addEventListener('click',e=>{
     // Assistive-technology activation can issue a click without pointer events.
     if(e.detail!==0)return;
@@ -958,7 +989,7 @@
   $('graph-colors').onchange=assignColors;
   $('show-connections').onchange=e=>{svg.classList.toggle('show-connections',e.target.checked);highlight();};
   $('options-toggle').onclick=()=>{const open=$('graph-options').hidden;$('graph-options').hidden=!open;$('options-toggle').setAttribute('aria-expanded',String(open));};
-  window.addEventListener('resize',()=>{width=innerWidth;height=innerHeight;sizeCanvas();fit(true);});
+  window.addEventListener('resize',()=>{const oldWidth=width,oldHeight=height;width=innerWidth;height=innerHeight;cameraTransition=null;wheelZoom=null;view.x+=(width-oldWidth)/2;view.y+=(height-oldHeight)/2;sizeCanvas();applyCamera();});
 
   async function openResolvedClaim(id){
     const request=++claimRequest,dialog=$('record-dialog');$('record-kind').textContent='Resolved graph assertion · source review status';$('record-title').textContent='Loading assertion…';$('record-content').replaceChildren(make('p','','Loading source-scoped claim details…'));if(!dialog.open)dialog.showModal();
@@ -1042,25 +1073,25 @@
   $('ask-selected').onclick=()=>{openChat();$('question').value=selected?`What is connected to ${label(byId.get(selected))}?`:'';};
   $('chat-panel').addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closeChat();}});
   $('chat-form').onsubmit=e=>{e.preventDefault();ask();};
-  $('question').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask();}};
+  $('question').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();ask();}};
   async function ask() {
     const question=$('question').value.trim();if(!question||busy)return;
     const selectedNode=byId.get(selected),selectedHarvest=isHarvestNode(selectedNode),workspaceId=workspaceNodeId(selected),selectedInWorkspace=!!workspaceId&&workspaceState?.nodes?.some(node=>node.id===workspaceId);
-    const selectedContext=(selectedHarvest||isResolvedNode(selectedNode)&&!selectedInWorkspace)?`Selected ${selectedHarvest?'harvest':'resolved neuro'} graph entity: ${label(selectedNode)}. The cited-source assistant searches its configured source corpus, which is narrower than the full graph. User question: ${question}`:question;
     busy=true;$('send-question').disabled=true;window.dispatchEvent(new Event('atlas:voice-cancel'));
     const box=$('chat-messages');
     box.append(make('div','chat-message user',question));$('question').value='';
-    if(selectedHarvest||isResolvedNode(selectedNode)&&!selectedInWorkspace)box.append(make('p','harvest-ask-scope',`Selected ${selectedHarvest?'harvest':'resolved neuro'} entity: ${label(selectedNode)}. The question is sent as text context; the configured cited-source search does not cover the full graph.`));
+    if(selectedHarvest||isResolvedNode(selectedNode)&&!selectedInWorkspace)box.append(make('p','harvest-ask-scope',`Selected ${selectedHarvest?'harvest':'resolved neuro'} entity: ${label(selectedNode)}. The assistant checks this selection against its reviewed source coverage, which does not cover the full graph.`));
     const reply=make('div','chat-message answer');reply.append(make('p','','Looking through the graph…'));box.append(reply);box.scrollTop=box.scrollHeight;
+    const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),30000),answerSelection=selectionGeneration;
     try{
-      const params=new URLSearchParams({q:selectedContext});if(selectedInWorkspace&&!selectedHarvest)params.set('node',workspaceId);
+      const params=new URLSearchParams({q:question});if(selectedNode)params.set('node',selectedHarvest?selected:workspaceId||selected);
       if(!selectedHarvest&&lastAnswer?.claim_ids?.length&&/\b(this|that|these|those)\b/i.test(question)&&/\b(evidence|sources?|support|proof|papers?)\b/i.test(question))lastAnswer.claim_ids.slice(0,100).forEach(id=>params.append('claim',id));
-      const response=await fetch(`/api/ask?${params}`),data=await response.json();if(!response.ok)throw new Error(data.error?.message||'The graph could not answer just now.');
-      lastAnswer=data;
+      const response=await fetch(`/api/ask?${params}`,{signal:controller.signal}),data=await response.json();if(!response.ok)throw new Error(data.error?.message||'The graph could not answer just now.');
+      if(answerSelection===selectionGeneration)lastAnswer=data;
       reply.replaceChildren(make('div','answer-label',data.synthetic?'Atlas · fictional demo records':'Atlas · graph records'),make('p','',data.answer));
       if(data.claim_ids?.length){const refs=make('div','chat-citations');data.claim_ids.forEach((id,i)=>{const claim=bundle.claims.find(c=>c.id===id);if(!claim)return;const b=make('button','',`[${i+1}] ${claim.predicate.replaceAll('_',' ').toLowerCase()}`);b.type='button';b.title=`${byId.get(claim.subject)?.label} → ${byId.get(claim.object)?.label}`;b.onclick=()=>openClaim(id);refs.append(b);});reply.append(refs);}
-    }catch(error){reply.replaceChildren(make('p','',error.message||'The answer could not be loaded. Try again.'));}
-    finally{busy=false;$('send-question').disabled=false;box.scrollTop=box.scrollHeight;}
+    }catch(error){reply.replaceChildren(make('p','',error.name==='AbortError'?'The answer request timed out. Please try again.':error.message||'The answer could not be loaded. Try again.'));if(!$('question').value)$('question').value=question;}
+    finally{clearTimeout(timeout);busy=false;$('send-question').disabled=false;box.scrollTop=box.scrollHeight;}
   }
 
   document.addEventListener('click',e=>{if(!e.target.closest('.graph-search'))hideResults();if(!e.target.closest('#graph-options')&&!e.target.closest('#options-toggle')){$('graph-options').hidden=true;$('options-toggle').setAttribute('aria-expanded','false');}});
@@ -1069,21 +1100,20 @@
   async function init() {
     const initialScopeGeneration=scopeGeneration;
     try{
-      const statusRequest=Promise.all([loadHarvestStatus(),loadResolvedStatus()]);
+      loadHarvestStatus();loadResolvedStatus();
       const loaded=await loadHarvestGraph({limit:harvestLimit,offset:0});
       if(!loaded&&scopeGeneration===initialScopeGeneration){
         const fallback=await loadResolvedGraph({limit:resolvedLimit,offset:0});
         if(!fallback&&scopeGeneration===initialScopeGeneration){
-          const response=await fetch('/api/graph');if(!response.ok)throw new Error('The graph could not be loaded. Refresh to try again.');
+          const fallbackBundle=await initialGraphJSON('/api/graph','The graph could not be loaded. Refresh to try again.');if(scopeGeneration!==initialScopeGeneration)return;
           dataMode='harvest';$('graph-scope').value='harvest';harvestBase=null;harvestError='The harvest projection is unavailable. Showing the smaller curated graph view.';
-          bundle=await response.json();nodes=bundle.nodes.map(node=>({...node}));byId=new Map(nodes.map(node=>[node.id,node]));render();updateHarvestControls();
+          bundle=fallbackBundle;nodes=bundle.nodes.map(node=>({...node}));byId=new Map(nodes.map(node=>[node.id,node]));render();updateHarvestControls();
         }
       }
-      await statusRequest;
       if(pendingWorkspaceState){const pending=pendingWorkspaceState;pendingWorkspaceState=null;setWorkspaceState(pending);}
       document.fonts.ready.then(placeLabels);
       $('graph-status').hidden=!!nodes.length;if(!nodes.length)$('graph-status').textContent='No entities have been added yet.';
-    }catch(error){$('graph-status').textContent=error.message;$('chat-toggle').disabled=true;$('node-search').disabled=true;}
+    }catch(error){if(scopeGeneration===initialScopeGeneration&&!nodes.length){$('graph-status').textContent=error.message;$('chat-toggle').disabled=true;$('node-search').disabled=true;}}
     finally{window.dispatchEvent(new Event('atlas:ready'));}
   }
   init();

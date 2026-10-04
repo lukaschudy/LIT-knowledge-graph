@@ -23,6 +23,8 @@ def to_jsonld(bundle: dict[str, Any]) -> dict[str, Any]:
         "kind": "atlas:sourceKind",
         "synthetic": "atlas:synthetic",
         "license": "atlas:license",
+        "version": "atlas:version",
+        "sourceVersion": "atlas:sourceVersion",
         "subject": {"@id": "atlas:subject", "@type": "@id"},
         "predicate": {"@id": "atlas:predicate", "@type": "@id"},
         "object": {"@id": "atlas:object", "@type": "@id"},
@@ -63,6 +65,7 @@ def to_jsonld(bundle: dict[str, Any]) -> dict[str, Any]:
             "source": {"@id": evidence["source_id"]},
             "locator": evidence["locator"], "excerpt": evidence["excerpt"],
             "stance": evidence["stance"], "reviewStatus": evidence["review_status"],
+            **({"sourceVersion": evidence["source_version"]} if "source_version" in evidence else {}),
         })
     for coverage in bundle.get("coverage", []):
         graph.append({

@@ -5,12 +5,14 @@ from copy import deepcopy
 from dataclasses import asdict
 from datetime import datetime, timezone
 from hashlib import sha256
+import fcntl
 import json
 import os
 from pathlib import Path
 import re
 import secrets
 import threading
+import tempfile
 from time import perf_counter
 from typing import Any
 from urllib.parse import urlsplit
@@ -20,11 +22,21 @@ from .discovery import discover
 from .model import require_valid_bundle
 from .recommendations import RecommendationEngine, ResearchRequest, digest
 
+RETRIEVAL_FAILURE_RETRY_SECONDS = 60
+
 
 class WorkflowError(ValueError):
     def __init__(self, message: str, *, status: int = 400, code: str = 'invalid_request'):
         super().__init__(message)
         self.status, self.code = status, code
+
+
+class WorkspaceDurabilityError(WorkflowError):
+    """The new snapshot is visible, but its persistence through power loss is unconfirmed."""
+    def __init__(self):
+        super().__init__('The updated workspace was saved, but disk durability could not be confirmed. '
+                         'Reload the current state before retrying; do not repeat the action with its old revision.',
+                         status=503, code='workspace_durability_unconfirmed')
 
 
 def _now() -> str:
@@ -66,6 +78,7 @@ class ResearchWorkspace:
         self.jobs: dict[str, dict] = {}
         self._analysis_cache = None
         self._retrieval_cache = {}
+        self._retrieval_retry_after = {}
         self.retrieval_mode = retrieval
         self.assistant, self.catalog = assistant, catalog
         require_valid_bundle(bundle)
@@ -76,6 +89,7 @@ class ResearchWorkspace:
                      'revision': 0, 'seed_id': seed, 'bundle': deepcopy(bundle),
                      'documents': deepcopy(documents), 'request': deepcopy(request),
                      'reviews': [], 'runs': [], 'brief': None, 'ask_history': []}
+        self._disk_snapshot = None
         if self.path and self.path.exists():
             saved = json.loads(self.path.read_text(encoding='utf-8'))
             if saved.get('format') != 'atlas-research-v1' or saved.get('seed_id') != seed:
@@ -83,8 +97,11 @@ class ResearchWorkspace:
             require_valid_bundle(saved['bundle'])
             self._validate_documents(saved['bundle'], saved['documents'])
             ResearchRequest.from_dict(saved['request'])
+            self._disk_snapshot = deepcopy(saved)
             self.data = saved
             self.data.setdefault('ask_history', [])
+        self._managed_retriever = retriever is None
+        self._retrieval_snapshot_changed = self.data['documents'] != documents
         self.retriever = retriever or (TopKRetriever(self.data['documents']) if retrieval == 'topk' else SourceRetriever(self.data['documents']))
         self._persist()
 
@@ -114,17 +131,44 @@ class ResearchWorkspace:
         if not self.path:
             return
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        temporary = self.path.with_name(self.path.name + '.tmp')
-        try:
-            with temporary.open('w', encoding='utf-8') as handle:
-                os.chmod(temporary, 0o600)
-                json.dump(self.data, handle, ensure_ascii=False, indent=2, allow_nan=False)
-                handle.write('\n')
-                handle.flush()
-                os.fsync(handle.fileno())
-            temporary.replace(self.path)
-        finally:
-            temporary.unlink(missing_ok=True)
+        # Separate server instances must not overwrite each other's review
+        # history. Keep the lock file stable across atomic snapshot replacements.
+        lock_path = self.path.with_name(self.path.name + '.lock')
+        with lock_path.open('a') as lock:
+            os.chmod(lock_path, 0o600)
+            fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+            try:
+                saved = json.loads(self.path.read_text(encoding='utf-8')) if self.path.exists() else None
+                if saved != self._disk_snapshot:
+                    raise WorkflowError('Another process changed this workspace. Restart this server to load the saved evidence before retrying.',
+                                        status=409, code='workspace_file_changed')
+                # Allocate before the commit point; after rename this snapshot
+                # identifies the disk state even if the directory sync fails.
+                committed_snapshot = deepcopy(self.data)
+                directory_fd = os.open(self.path.parent, os.O_RDONLY | os.O_DIRECTORY)
+                temporary = None
+                try:
+                    with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', dir=self.path.parent,
+                                                     prefix=self.path.name + '.', suffix='.tmp', delete=False) as handle:
+                        temporary = Path(handle.name)
+                        json.dump(self.data, handle, ensure_ascii=False, indent=2, allow_nan=False)
+                        handle.write('\n')
+                        handle.flush()
+                        os.fsync(handle.fileno())
+                    temporary.replace(self.path)
+                    self._disk_snapshot = committed_snapshot
+                    try:
+                        os.fsync(directory_fd)
+                    except OSError:
+                        raise WorkspaceDurabilityError() from None
+                finally:
+                    try:
+                        if temporary is not None:
+                            temporary.unlink(missing_ok=True)
+                    finally:
+                        os.close(directory_fd)
+            finally:
+                fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
 
     def _check_revision(self, revision: int) -> None:
         if type(revision) is not int or revision != self.data['revision']:
@@ -132,14 +176,36 @@ class ResearchWorkspace:
 
     def _commit(self, update: dict) -> None:
         previous = self.data
+        documents_changed = update['documents'] != previous['documents']
+        replacement = None
+        if documents_changed and self._managed_retriever:
+            from .retrieval import SourceRetriever, TopKRetriever
+            # Preparing a new search snapshot performs no remote writes. TopK
+            # still requires a matching, explicitly indexed corpus snapshot.
+            replacement = (TopKRetriever(update['documents']) if self.retrieval_mode == 'topk'
+                           else SourceRetriever(update['documents']))
         update['revision'] = previous['revision'] + 1
         self.data = update
+        persistence_error = None
         try:
             self._persist()
         except Exception:
-            self.data = previous
-            raise
+            if self.path and self._disk_snapshot == update:
+                # Rename already committed. Rolling memory back here would
+                # diverge from disk and allow misleading revision responses.
+                persistence_error = WorkspaceDurabilityError()
+            else:
+                self.data = previous
+                raise
+        if replacement is not None:
+            self.retriever = replacement
+        if documents_changed:
+            self._retrieval_cache.clear()
+            self._retrieval_retry_after.clear()
+            self._retrieval_snapshot_changed = True
         self._analysis_cache = None
+        if persistence_error is not None:
+            raise persistence_error from None
 
     @staticmethod
     def _claim_binding(bundle: dict, claim_id: str) -> str:
@@ -169,6 +235,11 @@ class ResearchWorkspace:
         return bundle
 
     def _analysis(self) -> dict:
+        if self._analysis_cache is not None:
+            cached = self._analysis_cache.get('retrieval', {})
+            retry_after = self._retrieval_retry_after.get(cached.get('query'))
+            if cached.get('status') == 'failed' and retry_after is not None and perf_counter() >= retry_after:
+                self._analysis_cache = None
         if self._analysis_cache is None:
             bundle = self._active_bundle()
             engine = RecommendationEngine(bundle)
@@ -189,8 +260,12 @@ class ResearchWorkspace:
         return deepcopy(self._analysis_cache)
 
     def _retrieve(self, query: str) -> dict:
-        from .retrieval import TopKError
+        from .retrieval import TopKError, TopKRetriever
         # Review and brief edits reuse an unchanged query; no repeated paid search.
+        retry_after = self._retrieval_retry_after.get(query)
+        if retry_after is not None and perf_counter() >= retry_after:
+            self._retrieval_cache.pop(query, None)
+            self._retrieval_retry_after.pop(query, None)
         if query not in self._retrieval_cache:
             remote = self.retrieval_mode == 'topk'
             result = {'provider': 'topk' if remote else 'local_lexical', 'query': query,
@@ -204,6 +279,14 @@ class ResearchWorkspace:
                 result['metadata'] = deepcopy(getattr(self.retriever, 'last_metadata', {}))
             except TopKError as exc:
                 result.update(status='failed', error=str(exc), note=str(exc) + ' Graph assessment remains available. No local fallback is labeled as TopK.')
+                self._retrieval_retry_after[query] = perf_counter() + RETRIEVAL_FAILURE_RETRY_SECONDS
+                result['retry_after_seconds'] = RETRIEVAL_FAILURE_RETRY_SECONDS
+            if isinstance(self.retriever, TopKRetriever):
+                result['snapshot'] = self.retriever.status()
+                result['snapshot']['changed_since_seed'] = self._retrieval_snapshot_changed
+                if self._retrieval_snapshot_changed:
+                    result['note'] += (' The source corpus changed. Prior TopK index receipts do not verify this corpus; '
+                                       'index coverage remains unknown until explicit indexing and verification. No index writes were made.')
             self._retrieval_cache[query] = result
         return deepcopy(self._retrieval_cache[query])
 
@@ -327,6 +410,7 @@ class ResearchWorkspace:
             parsed = ResearchRequest.from_dict(request)
             RecommendationEngine(self._active_bundle()).assess(parsed)
             self._retrieval_cache.clear()
+            self._retrieval_retry_after.clear()
             update = deepcopy(self.data)
             update['request'] = asdict(parsed)
             update['request']['preferred_asset_ids'] = list(parsed.preferred_asset_ids)
@@ -489,13 +573,18 @@ class ResearchWorkspace:
                                'Preparing a cited answer from the active graph.' if kind == 'ask' else
                                'Extracting source-grounded claims.'),
                    'started_at': _now(), 'metadata': {}}
-            self.jobs[jid] = job
             captured = deepcopy(self.data)
             if ask_input is not None:
                 captured['_ask_input'] = ask_input
                 captured['bundle'] = active
             analysis = self._analysis()
-            threading.Thread(target=self._run_job, args=(jid, kind, captured, deepcopy(document), analysis), daemon=True).start()
+            worker = threading.Thread(target=self._run_job, args=(jid, kind, captured, deepcopy(document), analysis), daemon=True)
+            self.jobs[jid] = job
+            try:
+                worker.start()
+            except Exception:
+                del self.jobs[jid]
+                raise WorkflowError('The model task could not start. Try again.', status=503, code='job_start_failed') from None
             return deepcopy(job)
 
     def _run_job(self, jid: str, kind: str, captured: dict, document: dict | None, analysis: dict) -> None:
@@ -639,6 +728,14 @@ class ResearchWorkspace:
         except Exception as exc:
             with self.lock:
                 metadata = getattr(exc, 'metadata', None) or metadata
+                if isinstance(exc, WorkspaceDurabilityError):
+                    # The completed model outcome is already in the saved
+                    # snapshot. Do not append a contradictory failure run or
+                    # repeat the mutation; retain a known terminal UI status.
+                    self.jobs[jid].update(status='failed', message=str(exc), metadata=metadata,
+                                          outcome=outcome, state_saved=True, durability_confirmed=False,
+                                          finished_at=_now())
+                    return
                 if isinstance(exc, (WorkflowError, ModelError)):
                     message = str(exc)
                 else:
@@ -650,7 +747,10 @@ class ResearchWorkspace:
                                        'duration_ms': round((perf_counter() - started) * 1000)})
                 try:
                     self._commit(update)
-                except OSError:
+                except WorkspaceDurabilityError:
+                    self.jobs[jid].update(state_saved=True, durability_confirmed=False)
+                    self.jobs[jid]['message'] += ' The failure audit was saved, but disk durability could not be confirmed.'
+                except Exception:
                     self.jobs[jid]['message'] += ' The failure audit could not be saved.'
 
     def _explain(self, captured: dict, analysis: dict) -> dict:

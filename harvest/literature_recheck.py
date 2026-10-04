@@ -14,7 +14,7 @@ SOURCE = 'europe_pmc_recheck'
 def run(qid, wait_for_completion=False):
     original = sorted((RAW/'europe_pmc_diseases').glob(qid+'-*.json'))
     query = json.loads(original[0].read_text())['request']['queryString']
-    cursor='*'; seen=set(); paths=[]; raw_count=0; reported=[]; page=0
+    cursor='*'; seen=set(); paths=[]; raw_count=0; reported=[]; page=0;visited_cursors={cursor}
     while True:
         url=ENDPOINT+'?'+urlencode({'query':query+' sort_date:y','format':'json','resultType':'idlist','pageSize':1000,'cursorMark':cursor})
         path=download(SOURCE,url,f'{qid}-{page:05d}-{hashlib.sha256(cursor.encode()).hexdigest()[:8]}.json',license_name='Europe PMC bibliographic identifiers and metadata terms')
@@ -23,6 +23,9 @@ def run(qid, wait_for_completion=False):
         seen.update(str(r['source'])+':'+str(r['id']) for r in rows)
         nxt=obj.get('nextCursorMark'); page+=1
         if not rows or not nxt or nxt==cursor:break
+        if not isinstance(nxt,str) or nxt in visited_cursors:
+            raise ValueError('Europe PMC cursor cycle or invalid cursor; acquisition is incomplete')
+        visited_cursors.add(nxt)
         cursor=nxt
     if wait_for_completion:
         # Prefetch a long query's independent ID traversal while its slower core

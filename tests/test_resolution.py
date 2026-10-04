@@ -120,6 +120,24 @@ class EntityResolutionTests(unittest.TestCase):
         self.assertEqual(len(result['nodes']), 2)
         self.assertEqual(result['decisions'][0]['status'], 'rejected_missing_provenance')
 
+    def test_malformed_provenance_never_authorizes_an_identity_merge(self):
+        nodes = [{'id': identifier, 'type': 'Gene', 'label': 'A'} for identifier in ('HGNC:10', 'source:10')]
+        for provenance in (False, True, 0, 1, '   ', None, [], {}):
+            with self.subTest(provenance=provenance):
+                result = resolve_entities(nodes, [{'subject': 'HGNC:10', 'object': 'source:10',
+                    'rule': 'registry_same_as', 'provenance': provenance}])
+                self.assertEqual(len(result['nodes']), 2)
+                self.assertEqual(result['decisions'][0]['status'], 'rejected_missing_provenance')
+
+    def test_nonstring_rule_is_rejected_without_crashing_resolution(self):
+        nodes = [{'id': identifier, 'type': 'Gene', 'label': 'A'} for identifier in ('HGNC:10', 'source:10')]
+        for rule in ([], {}, None, 1):
+            with self.subTest(rule=rule):
+                result = resolve_entities(nodes, [{'subject': 'HGNC:10', 'object': 'source:10',
+                    'rule': rule, 'provenance': {'row': 1}}])
+                self.assertEqual(len(result['nodes']), 2)
+                self.assertEqual(result['decisions'][0]['status'], 'rejected_untrusted_rule')
+
     def test_output_is_deterministic_under_node_and_link_reordering(self):
         nodes = [
             {'id': 'source:gene:z', 'type': 'Gene', 'label': 'WDR45', 'aliases': ['old name'], 'properties': {}},

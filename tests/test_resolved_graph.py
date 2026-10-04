@@ -1,5 +1,10 @@
 """Resolved artifact traversal and read-only API integration tests."""
+from contextlib import closing
 import json
+from copy import deepcopy
+from hashlib import sha256
+import sqlite3
+from types import SimpleNamespace
 from pathlib import Path
 import tempfile
 import threading
@@ -75,6 +80,14 @@ def resolved_artifact(path):
          "excerpt": "EPG5 was linked to Vici syndrome.", "locator": "section 3", "stance": "supports",
          "review_status": "unreviewed", "source_version": "support-v1"},
     ]
+    # The loader verifies source versions and exact quotations on every reload.
+    for source in sources:
+        excerpts = [row['excerpt'] for row in evidence if row['source_id'] == source['id']]
+        source['text'] = '\n'.join(excerpts) if excerpts else source['text']
+        source['version'] = sha256(source['text'].encode()).hexdigest()
+        for row in evidence:
+            if row['source_id'] == source['id']:
+                row['source_version'] = source['version']
     artifact = {"schema_version": "1.0", "dataset": {"id": "resolved-fixture", "title": "Resolved fixture"},
                 "nodes": resolution["nodes"], "claims": claims, "evidence": evidence, "sources": sources,
                 "resolution": {**resolution, "seeds": [disease], "stats": {"nodes": len(resolution["nodes"]), "claims": len(claims)}}}
@@ -146,6 +159,78 @@ class ResolvedGraphTests(unittest.TestCase):
         self.assertEqual([row["id"] for row in detail["contradictions"]], ["evidence:conflict"])
         self.assertEqual({row["id"] for row in detail["sources"]}, {"source:support", "source:conflict"})
         self.assertIsNone(self.graph.claim("claim:missing"))
+
+    def test_invalid_artifacts_are_rejected_before_becoming_available(self):
+        mutations = [
+            lambda a: a['nodes'].append(deepcopy(a['nodes'][0])),
+            lambda a: a['claims'].append(deepcopy(a['claims'][0])),
+            lambda a: a['claims'][0].update(subject='missing'),
+            lambda a: a['evidence'][0].update(source_id='missing'),
+            lambda a: a['evidence'][0].update(claim_id='missing'),
+            lambda a: a['evidence'][0].update(excerpt='Invented quotation'),
+            lambda a: a['evidence'][0].update(start=999, end=1000),
+            lambda a: a['evidence'][0].update(locator='characters [999,1000)'),
+            lambda a: a['evidence'][0].update(stance='invented'),
+            lambda a: a['sources'][0].update(text='Changed source snapshot'),
+            lambda a: a['resolution']['alias_map'].update({'forged-alias': self.disease}),
+            lambda a: a['resolution']['alias_map'].update({'source:disease-vici': 'missing'}),
+            lambda a: a['resolution']['alias_map'].update({'source:disease-vici': 'HGNC:17465'}),
+            lambda a: a['resolution']['seeds'].append(self.disease),
+            lambda a: a.update(schema_version='future-version'),
+        ]
+        for index, mutate in enumerate(mutations):
+            artifact = deepcopy(self.artifact); mutate(artifact)
+            self.path.write_text(json.dumps(artifact))
+            with self.subTest(index=index), self.assertRaises(ValueError):
+                ResolvedGraph(self.path)
+
+    def test_loaded_snapshot_receipt_must_match_complete_harvest(self):
+        database = self.path.with_suffix('.sqlite')
+        with closing(sqlite3.connect(database)) as connection, connection:
+            connection.execute('CREATE TABLE metadata(key TEXT PRIMARY KEY,value TEXT)')
+            connection.executemany('INSERT INTO metadata VALUES (?,?)', [
+                ('source_root', str(self.path.parent)), ('build_id', 'snapshot-a'),
+                ('stats', json.dumps({'status': 'complete', 'processed_records': 10})),
+            ])
+        self.artifact['resolution']['harvest_snapshot_id'] = 'snapshot-a'
+        self.artifact['resolution']['harvest_state'] = {'processed_records': 10,
+            'completed_datasets': None, 'total_records': None, 'total_datasets': None, 'version': None}
+        self.path.write_text(json.dumps(self.artifact))
+        self.assertTrue(ResolvedGraph(self.path, harvest=SimpleNamespace(path=database)).status()['available'])
+        for stats in [{'status': 'paused', 'processed_records': 10}, {'status': 'complete', 'processed_records': 11}]:
+            with closing(sqlite3.connect(database)) as connection, connection:
+                connection.execute("UPDATE metadata SET value=? WHERE key='stats'", (json.dumps(stats),))
+            with self.subTest(stats=stats), self.assertRaises(ValueError):
+                ResolvedGraph(self.path, harvest=SimpleNamespace(path=database))
+
+    def test_public_results_cannot_mutate_loaded_identity_or_dataset(self):
+        result = self.graph.status()
+        result['alias_map']['source:disease-vici'] = 'missing'
+        page = self.graph.graph()
+        page['dataset']['title'] = 'Changed title'
+        page['resolution']['seeds'].clear()
+        self.assertEqual(self.graph.node('source:disease-vici')['id'], self.disease)
+        self.assertEqual(self.graph.graph()['dataset']['title'], 'Resolved fixture')
+        self.assertEqual(self.graph.status()['seeds'], [self.disease])
+
+    def test_self_loop_does_not_duplicate_focus_in_neighborhood(self):
+        self.artifact['claims'].append({'id':'claim:self-loop', 'subject': self.disease,
+            'object': self.disease, 'predicate': 'RELATED_TO'})
+        self.path.write_text(json.dumps(self.artifact))
+        graph = ResolvedGraph(self.path)
+        page = graph.graph(focus=self.disease, limit=100)
+        ids = [node['id'] for node in page['nodes']]
+        self.assertEqual(len(ids), len(set(ids)))
+
+    def test_overlapping_quotes_are_ambiguous_even_when_count_returns_one(self):
+        source = self.artifact['sources'][0]
+        source['text'] = 'AAA'; source['version'] = sha256(b'AAA').hexdigest()
+        for row in self.artifact['evidence']:
+            if row['source_id'] == source['id']:
+                row['excerpt'] = 'AA'; row['source_version'] = source['version']
+        self.path.write_text(json.dumps(self.artifact))
+        with self.assertRaisesRegex(ValueError, 'does not match its source snapshot'):
+            ResolvedGraph(self.path)
 
 
 class ResolvedGraphAPITests(unittest.TestCase):

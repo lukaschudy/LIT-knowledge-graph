@@ -2,13 +2,14 @@
 from __future__ import annotations
 
 import json
+import math
 from hashlib import sha256
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
-import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import Any
@@ -18,6 +19,7 @@ from atlas.model import PREDICATE_ENDPOINTS, ValidationError
 
 DEFAULT_MODEL = "gpt-6-astra"
 RESPONSES_URL = "https://api.openai.com/v1/responses"
+MAX_RESPONSE_BYTES = 4 * 1024 * 1024
 
 
 class ModelError(RuntimeError):
@@ -28,6 +30,43 @@ class ModelError(RuntimeError):
         self.proposals = None
         self.metadata = None
         super().__init__(message)
+
+
+def _openai_http(request: urllib.request.Request, timeout: int) -> bytes:
+    """Bound every transport phase, including DNS and partial HTTP headers.
+
+    A subprocess can be killed and reaped; timed-out background threads cannot.
+    The helper emits at most MAX_RESPONSE_BYTES and never emits provider errors.
+    """
+    payload = {"url": request.full_url, "data": request.data.decode("utf-8"),
+               "headers": dict(request.header_items()), "timeout": timeout,
+               "max_response_bytes": MAX_RESPONSE_BYTES}
+    env = {key: value for key, value in os.environ.items()
+           if key.upper() in {"PATH", "SYSTEMROOT", "WINDIR", "TMP", "TEMP", "TMPDIR",
+                              "SSL_CERT_FILE", "SSL_CERT_DIR", "HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "NO_PROXY"}}
+    try:
+        result = subprocess.run(
+            [sys.executable, "-I", str(Path(__file__).with_name("_model_http.py"))],
+            input=json.dumps(payload).encode("utf-8"), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            timeout=timeout, check=False, shell=False, env=env)
+    except subprocess.TimeoutExpired:
+        raise ModelError("timeout", "OpenAI request timed out.") from None
+    except OSError:
+        raise ModelError("connection", "Could not start the OpenAI request transport.") from None
+    if result.returncode == 2:
+        status = result.stderr.decode("ascii", errors="ignore").strip()
+        if status in ("401", "403"):
+            raise ModelError("authentication", "OpenAI authentication failed.")
+        # Only display a validated numeric status, never child stderr verbatim.
+        suffix = f" (HTTP {status})" if len(status) == 3 and status.isdigit() else ""
+        raise ModelError("provider_error", f"OpenAI request failed{suffix}.")
+    if result.returncode == 3:
+        raise ModelError("timeout", "OpenAI request timed out.")
+    if result.returncode == 5 or len(result.stdout) > MAX_RESPONSE_BYTES:
+        raise ModelError("invalid_response", "OpenAI response exceeded the supported size.")
+    if result.returncode:
+        raise ModelError("connection", "Could not reach the OpenAI Responses API.")
+    return result.stdout
 
 
 class ModelClient:
@@ -108,15 +147,7 @@ class ModelClient:
         request = urllib.request.Request(RESPONSES_URL, data=json.dumps(payload).encode(),
                     headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"}, method="POST")
         try:
-            with urllib.request.urlopen(request, timeout=self.timeout) as response:
-                body = json.loads(response.read())
-        except urllib.error.HTTPError as exc:
-            if exc.code in (401, 403): raise ModelError("authentication", "OpenAI authentication failed.") from None
-            raise ModelError("provider_error", f"OpenAI request failed (HTTP {exc.code}).") from None
-        except (TimeoutError, urllib.error.URLError) as exc:
-            if isinstance(exc, urllib.error.URLError) and isinstance(exc.reason, TimeoutError):
-                raise ModelError("timeout", "OpenAI request timed out.") from None
-            raise ModelError("connection", "Could not reach the OpenAI Responses API.") from None
+            body = json.loads(_openai_http(request, self.timeout))
         except (json.JSONDecodeError, UnicodeDecodeError):
             raise ModelError("invalid_response", "OpenAI returned an invalid response.") from None
         return _validate_output(_response_data(body), schema), body.get("usage"), body.get("model")
@@ -151,8 +182,12 @@ class ModelClient:
             if run.returncode:
                 raise ModelError("provider_error", "Codex model request failed.")
             try:
-                data = json.loads(output_file.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
+                with output_file.open('rb') as handle:
+                    raw = handle.read(MAX_RESPONSE_BYTES + 1)
+                if len(raw) > MAX_RESPONSE_BYTES:
+                    raise ModelError("invalid_response", "Codex response exceeded the supported size.")
+                data = json.loads(raw)
+            except (OSError, json.JSONDecodeError, UnicodeDecodeError):
                 raise ModelError("invalid_response", "Codex returned an invalid JSON response.") from None
             return _validate_output(data, schema), None, model
 
@@ -166,14 +201,24 @@ def _response_data(body: dict) -> dict:
         raise ModelError("truncated", "Model response was incomplete.")
     if body.get("status") not in (None, "completed"):
         raise ModelError("provider_error", "Model request did not complete successfully.")
-    for item in body.get("output", []):
+    output = body.get("output", [])
+    if not isinstance(output, list):
+        raise ModelError("invalid_response", "Model response has invalid output records.")
+    for item in output:
+        if not isinstance(item, dict):
+            raise ModelError("invalid_response", "Model response has invalid output records.")
         if item.get("type") == "message":
-            for content in item.get("content", []):
+            contents = item.get("content", [])
+            if not isinstance(contents, list):
+                raise ModelError("invalid_response", "Model response has invalid message content.")
+            for content in contents:
+                if not isinstance(content, dict):
+                    raise ModelError("invalid_response", "Model response has invalid message content.")
                 if content.get("type") == "refusal":
                     raise ModelError("refusal", "Model declined the extraction request.")
                 if content.get("type") == "output_text":
                     try: data = json.loads(content["text"])
-                    except (KeyError, json.JSONDecodeError):
+                    except (KeyError, TypeError, json.JSONDecodeError):
                         raise ModelError("invalid_response", "Model returned invalid JSON.") from None
                     if not isinstance(data, dict): raise ModelError("invalid_response", "Model response must be a JSON object.")
                     return data
@@ -183,6 +228,8 @@ def _response_data(body: dict) -> dict:
 def _validate_output(value: Any, schema: dict) -> Any:
     """Validate the JSON Schema subset used by these strict structured responses."""
     def check(item: Any, spec: dict, path: str) -> None:
+        if isinstance(item, float) and not math.isfinite(item):
+            raise ModelError("invalid_response", f"Model output has an invalid number at {path}.")
         types = spec.get("type")
         options = types if isinstance(types, list) else [types] if types else []
         def matches(name: str) -> bool:
@@ -202,11 +249,11 @@ def _validate_output(value: Any, schema: dict) -> Any:
             if spec.get("additionalProperties") is False and any(key not in props for key in item):
                 raise ModelError("invalid_response", f"Model output has unknown fields at {path}.")
             for key, child in item.items():
-                if key in props: check(child, props[key], f"{path}.{key}")
-        if isinstance(item, list) and "items" in spec:
+                check(child, props.get(key, {}), f"{path}.{key}")
+        if isinstance(item, list):
             if len(item) > spec.get("maxItems", 10000) or len(item) < spec.get("minItems", 0):
                 raise ModelError("invalid_response", f"Model output exceeds array bounds at {path}.")
-            for idx, child in enumerate(item): check(child, spec["items"], f"{path}[{idx}]")
+            for idx, child in enumerate(item): check(child, spec.get("items", {}), f"{path}[{idx}]")
     check(value, schema, "$" )
     return value
 
@@ -289,9 +336,5 @@ def extract_source(bundle: dict, source_id: str, source_text: str, client: Model
     except (ValueError, ValidationError) as exc:
         try: reject("invalid_proposal", "One or more model proposals failed local bundle validation.")
         except ModelError as error: raise error from exc
-    # Attach the exact bytes' digest only to evidence created by this call.
-    old_ids = {e["id"] for e in bundle.get("evidence", [])}
-    for evidence in final_bundle["evidence"]:
-        if evidence["id"] not in old_ids:
-            evidence["source_version"] = snapshot
+    # ground_proposals binds every new evidence row to the exact source snapshot.
     return {"bundle": final_bundle, "proposals": raw, "metadata": result["metadata"]}

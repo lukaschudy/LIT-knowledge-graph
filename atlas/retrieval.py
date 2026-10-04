@@ -234,6 +234,13 @@ class TopKRetriever:
             raise ValueError("query must be nonempty text")
         if type(top_k) is not int or not 1 <= top_k <= 10000:
             raise ValueError("top_k must be an integer in [1, 10000]")
+        # Verification describes this attempt, never a previous successful
+        # query when the current transport or grounding checks fail.
+        self._verified = None
+        self._last_verified_hit_count = None
+        self.last_metadata = {"provider": "topk", "mode": "unverified", "collection": self.collection_name,
+                              "corpus_id": self._corpus_id, "query_verified": None,
+                              "verified_hit_count": None, "indexed_documents": None, "searched_documents": None}
         if not self._chunks:
             return []
         try:
@@ -242,8 +249,8 @@ class TopKRetriever:
             if not self._is_injected:
                 raise TopKError("TopK search needs the optional SDK; install it with `pip install topk-sdk`.") from exc
             raise TopKError("TopK query helpers are required for search.") from exc
-        client = self._get_client()
         try:
+            client = self._get_client()
             # Strong consistency includes fresh corpus writes; indexed-only reads
             # can return an empty snapshot while a small new collection catches up.
             rows = client.collection(self.collection_name).query(
@@ -252,15 +259,21 @@ class TopKRetriever:
                 .filter(field("corpus_id") == self._corpus_id)
                 .sort(field("score"), asc=False).limit(top_k),
                 **({"lsn": self._lsn} if self._lsn else {}), consistency="strong")
-        except Exception as exc:
+        except TopKError:
+            raise
+        except Exception:
             raise TopKError("TopK semantic search failed.") from None
         if not isinstance(rows, list):
             raise TopKError("TopK returned a malformed result list.")
+        if len(rows) > top_k:
+            raise TopKError("TopK returned more passages than the requested limit.")
         hits = []
         for row in rows:
             if not isinstance(row, dict):
                 raise TopKError("TopK returned a malformed result.")
             chunk_id = row.get("_id")
+            if not isinstance(chunk_id, str):
+                raise TopKError("TopK returned a malformed passage identifier.")
             expected = self._manifest.get(chunk_id)
             if expected is None:
                 raise TopKError("TopK returned a result outside the supplied corpus snapshot.")

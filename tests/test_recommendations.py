@@ -184,6 +184,70 @@ class RecommendationTests(unittest.TestCase):
         exclusion['context'] = {}
         self.assertEqual(record(self.assess(), 'assay-excluded')['status'], 'needs_clarification')
 
+    def test_unknown_exclusion_scope_cannot_silently_disappear(self):
+        for key, value in (('species', ''), ('tissue', 'unknown'), ('action_type', ''),
+                           ('readout', 'n/a'), ('stage', 'not reported'), ('variant_id', 'specific-variant')):
+            with self.subTest(key=key, value=value):
+                b = fixture()
+                claim(b, 'assay-excluded-exclusion')['context'] = {'action_type': 'assay_reuse', key: value}
+                result = record(RecommendationEngine(b).assess(self.request), 'assay-excluded')
+                self.assertEqual(result['status'], 'needs_clarification')
+                self.assertEqual(next(g for g in result['gates'] if g['code'] == 'exclusion')['state'], 'unknown')
+
+    def test_capability_scope_and_null_like_values_cannot_promote_readiness(self):
+        for key, value in (('variant_id', 'specific-variant'), ('variant_id', ''), ('action_type', 'therapy'),
+                           ('action_type', 'unknown'), ('species', 'unknown'), ('tissue', 'null'), ('stage', '')):
+            with self.subTest(key=key, value=value):
+                b = fixture()
+                claim(b, 'assay-fit-capability')['context'][key] = value
+                self.assertEqual(record(RecommendationEngine(b).assess(self.request))['status'], 'needs_clarification')
+        b = fixture()
+        claim(b, 'assay-fit-capability')['context']['species'] = 'unknown'
+        self.assertEqual(record(RecommendationEngine(b).assess(replace(self.request, species='unknown')))['status'], 'needs_clarification')
+
+    def test_access_is_bound_to_the_requested_context(self):
+        for key, value in (('species', 'mouse'), ('species', ''), ('action_type', 'therapy'),
+                           ('variant_id', 'specific-variant'), ('stage', 'mature')):
+            with self.subTest(key=key, value=value):
+                b = fixture()
+                claim(b, 'assay-fit-owner')['context'][key] = value
+                result = record(RecommendationEngine(b).assess(self.request))
+                self.assertEqual(result['status'], 'needs_clarification')
+                self.assertIsNone(result['partner']['contact_url'])
+        claim(self.bundle, 'assay-fit-owner')['context']['species'] = self.request.species
+        self.assertEqual(record(self.assess())['status'], 'ready_for_discussion')
+
+    def test_pending_access_counterevidence_is_retained_but_inactive_scope_is_not(self):
+        for status, expected in (('active', 'needs_clarification'), ('retracted', 'ready_for_discussion'),
+                                 ('superseded', 'ready_for_discussion')):
+            with self.subTest(status=status):
+                b = fixture()
+                c, e = clone_claim(b, 'assay-fit-owner', 'pending-unavailable',
+                                  context={**claim(b, 'assay-fit-owner')['context'], 'access_status': 'unavailable'})
+                source = deepcopy(next(s for s in b['sources'] if s['id'] == e['source_id']))
+                source.update(id='demo:pending-source', status=status)
+                b['sources'].append(source)
+                e.update(source_id=source['id'], review_status='unreviewed')
+                self.assertEqual(record(RecommendationEngine(b).assess(self.request))['status'], expected)
+        clone_claim(self.bundle, 'assay-fit-owner', 'mouse-unavailable',
+                    context={**claim(self.bundle, 'assay-fit-owner')['context'], 'access_status': 'unavailable', 'species': 'mouse'})
+        self.assertEqual(record(self.assess())['status'], 'ready_for_discussion')
+
+    def test_unknown_qualifier_cannot_hide_separate_negated_counterclaim(self):
+        context = {**claim(self.bundle, 'assay-fit-capability')['context'], 'species': 'unknown', 'negated': True}
+        clone_claim(self.bundle, 'assay-fit-capability', 'pending-scope-negation', context=context)
+        self.assertEqual(record(self.assess())['status'], 'needs_clarification')
+
+    def test_unusable_contact_urls_cannot_make_assay_ready(self):
+        for url in ('https://:secret@example.org', 'https://example.org:bad',
+                    'https://example .org', 'https://example.org/path\nnext'):
+            with self.subTest(url=url):
+                claim(self.bundle, 'assay-fit-owner')['context']['contact_url'] = url
+                assessment = record(self.assess())
+                self.assertEqual(assessment['status'], 'needs_clarification')
+                self.assertIsNone(assessment['partner']['contact_url'])
+                self.assertEqual(next(g for g in assessment['gates'] if g['code']=='contact')['state'], 'unknown')
+
     def test_conflicting_availability_does_not_cherry_pick_open_access(self):
         clone_claim(self.bundle, 'assay-fit-owner', 'owner-unavailable',
                     context={**claim(self.bundle, 'assay-fit-owner')['context'], 'access_status': 'unavailable'})

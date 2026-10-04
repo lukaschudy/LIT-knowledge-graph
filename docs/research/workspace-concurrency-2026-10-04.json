@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "workers": 12,
+  "successful_writes": 1,
+  "stale_writes_rejected": 11,
+  "persisted_revision": 1,
+  "temporary_files_remaining": 0,
+  "duration_seconds": 0.058,
+  "scope": "12 forked processes race on one temporary workspace at the same revision; no real workspace, model, or index writes"
+}

@@ -20,14 +20,19 @@ def hpoa_to_bundle(text, *, source_url, retrieved_at, source_version, license):
     records = [(i + 1, line) for i, line in enumerate(lines) if i > header_index and line and not line.startswith('#')]
     reader = csv.DictReader(io.StringIO('\n'.join([header] + [line for _, line in records])), delimiter='\t')
     normalize = lambda key: key.lower().replace('_','').replace('-','')
+    normalized_fields = [normalize(key) for key in reader.fieldnames or []]
+    if len(normalized_fields) != len(set(normalized_fields)):
+        raise ValueError('HPOA column names must be unique after normalization; duplicate columns can change annotation meaning.')
     required = {'databaseid','diseasename','qualifier','hpoid','reference','evidence'}
     if not required.issubset({normalize(k) for k in reader.fieldnames or []}):
         raise ValueError('HPOA columns missing: '+', '.join(sorted(required-{normalize(k) for k in reader.fieldnames or []})))
     source_id='source:hpoa:'+sha256((source_url+'|'+source_version).encode()).hexdigest()[:16]
-    bundle={'schema_version':'1.0','dataset':{'id':'dataset:hpoa:'+source_version,'title':'HPO disease–phenotype annotations','description':'Source-reported HPOA annotations. Mechanistic equivalence and asset transfer are not inferred.','synthetic':False,'created_at':retrieved_at},'nodes':[],'sources':[{'id':source_id,'title':'HPOA '+source_version,'url':source_url,'published_at':None,'retrieved_at':retrieved_at,'kind':'database','synthetic':False,'license':license}],'claims':[],'evidence':[],'coverage':[]}
+    bundle={'schema_version':'1.0','dataset':{'id':'dataset:hpoa:'+source_version,'title':'HPO disease–phenotype annotations','description':'Source-reported HPOA annotations. Mechanistic equivalence and asset transfer are not inferred.','synthetic':False,'created_at':retrieved_at},'nodes':[],'sources':[{'id':source_id,'title':'HPOA '+source_version,'url':source_url,'published_at':None,'retrieved_at':retrieved_at,'kind':'database','synthetic':False,'license':license,'version':source_version}],'claims':[],'evidence':[],'coverage':[]}
     nodes={}
     seen=set()
-    for (line_number, _), raw in zip(records, reader):
+    for index, ((line_number, original_record), raw) in enumerate(zip(records, reader)):
+        if reader.line_num != index + 2:
+            raise ValueError(f'HPOA annotations must occupy one physical line; multiline row near line {line_number}.')
         if None in raw or any(v is None for v in raw.values()):
             raise ValueError(f'Malformed HPOA row near line {line_number}.')
         row={normalize(k):v.strip() for k,v in raw.items()}
@@ -43,13 +48,13 @@ def hpoa_to_bundle(text, *, source_url, retrieved_at, source_version, license):
             if row.get(k): context[k]=row[k]
         if row['evidence']: context['evidence_code']=row['evidence']
         # The raw record is an annotation, not a quotation from the referenced paper.
-        record='\t'.join(raw[k] for k in reader.fieldnames)
+        record=original_record
         digest=sha256((source_id+'\n'+record).encode()).hexdigest()[:24]
         if digest in seen: continue
         seen.add(digest)
         claim_id='claim:hpoa:'+digest
         bundle['claims'].append(dict(id=claim_id,subject=disease,predicate='HAS_PHENOTYPE',object=hpo,assertion_type='reported',context=context,extraction_confidence=None))
-        bundle['evidence'].append(dict(id='evidence:hpoa:'+digest,claim_id=claim_id,source_id=source_id,locator=f'HPOA row {line_number}; upstream reference: {row["reference"] or "not supplied"}',excerpt=record,stance='supports',review_status='unreviewed'))
+        bundle['evidence'].append(dict(id='evidence:hpoa:'+digest,claim_id=claim_id,source_id=source_id,locator=f'HPOA row {line_number}; upstream reference: {row["reference"] or "not supplied"}',excerpt=record,stance='supports',review_status='unreviewed',source_version=source_version))
     if not nodes: raise ValueError('HPOA input contains no annotation records.')
     bundle['nodes']=list(nodes.values())
     for node in bundle['nodes']:

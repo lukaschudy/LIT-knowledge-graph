@@ -7,6 +7,9 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 import json
+from functools import lru_cache
+from hashlib import sha256
+import os
 from pathlib import Path
 import sqlite3
 import struct
@@ -53,6 +56,28 @@ CREATE TABLE IF NOT EXISTS metadata (
 """
 
 
+def _offset_stamp(stat):
+    return stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns, stat.st_ino, stat.st_dev
+
+
+@lru_cache(maxsize=128)
+def _file_digest(path, stamp):
+    """Hash source/sidecar bytes once per filesystem version, not once per row."""
+    digest = sha256()
+    with open(path, 'rb') as handle:
+        if _offset_stamp(os.fstat(handle.fileno())) != stamp:
+            raise ValueError('Source file or index changed while checking its receipt.')
+        for chunk in iter(lambda: handle.read(1024 * 1024), b''):
+            digest.update(chunk)
+        if _offset_stamp(os.fstat(handle.fileno())) != stamp:
+            raise ValueError('Source file or index changed while checking its receipt.')
+    return digest.hexdigest()
+
+
+# Preserve the existing helper name for callers inspecting offset-cache stats.
+_offset_digest = _file_digest
+
+
 @contextmanager
 def _connection(path: Path, *, readonly: bool = False) -> Iterator[sqlite3.Connection]:
     if readonly:
@@ -73,6 +98,45 @@ def initialize(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA)
 
 
+_TABLES = ('datasets', 'nodes', 'predicates', 'edges', 'metadata')
+
+
+def _schema_contract(conn):
+    """Columns and uniqueness are both required for resumable INSERT OR IGNORE."""
+    contract = {}
+    for table in _TABLES:
+        columns = tuple(tuple(row)[1:] for row in conn.execute(f'PRAGMA table_info({table})'))
+        unique = set()
+        for index in conn.execute(f'PRAGMA index_list({table})'):
+            if index[2]:
+                name = index[1].replace('"', '""')
+                unique.add((tuple(row[2] for row in conn.execute(f'PRAGMA index_info("{name}")')), index[4]))
+        contract[table] = (columns, frozenset(unique))
+    return contract
+
+
+@lru_cache(maxsize=1)
+def _expected_schema_contract():
+    conn = sqlite3.connect(':memory:')
+    try:
+        initialize(conn)
+        return _schema_contract(conn)
+    finally:
+        conn.close()
+
+
+def validate_schema(conn: sqlite3.Connection, *, allow_empty=False) -> bool:
+    """Check compatibility before any journal-mode, schema, or content write."""
+    tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    if not tables and allow_empty:
+        # A views-only database is not an unused output database either.
+        if not conn.execute("SELECT 1 FROM sqlite_master LIMIT 1").fetchone():
+            return False
+    if not set(_TABLES) <= tables or _schema_contract(conn) != _expected_schema_contract():
+        raise ValueError('Output database is not a harvest index with the required schema; choose a new output database.')
+    return True
+
+
 class HarvestGraph:
     """Thread-safe read API for a potentially multi-million-edge local index.
 
@@ -89,10 +153,7 @@ class HarvestGraph:
         # Fail early on an unrelated or incomplete SQLite file without keeping a
         # connection alive across request threads.
         with _connection(self.path, readonly=True) as conn:
-            tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-            required = {"datasets", "nodes", "predicates", "edges", "metadata"}
-            if not required <= tables:
-                raise ValueError("Harvest graph database is missing required tables.")
+            validate_schema(conn)
 
     @staticmethod
     def _decode(value: Any, fallback=None):
@@ -142,7 +203,12 @@ class HarvestGraph:
     @staticmethod
     def _dataset_row(conn: sqlite3.Connection, dataset: str | int) -> sqlite3.Row | None:
         if isinstance(dataset, int) or (isinstance(dataset, str) and dataset.startswith("dataset:") and dataset[8:].isdigit()):
-            ident = int(dataset if isinstance(dataset, int) else dataset[8:])
+            raw = dataset if isinstance(dataset, int) else dataset[8:]
+            if isinstance(raw, str) and (not raw.isascii() or len(raw) > 19):
+                return None
+            ident = int(raw)
+            if not 0 < ident <= 2**63 - 1:
+                return None
             return conn.execute("SELECT * FROM datasets WHERE id=?", (ident,)).fetchone()
         return conn.execute("SELECT * FROM datasets WHERE key=?", (str(dataset),)).fetchone()
 
@@ -179,13 +245,28 @@ class HarvestGraph:
         if offset is None:
             offsets_path = Path(str(self.path) + ".sources") / f"{dataset_id}.offsets"
             try:
+                receipt = ds_data['metadata'].get('offsets_sha256')
+                if receipt is not None:
+                    stamp = _offset_stamp(offsets_path.stat())
+                    if _offset_digest(str(offsets_path), stamp) != receipt:
+                        raise ValueError('Source offset index checksum differs from its ingestion receipt.')
                 with offsets_path.open("rb") as handle:
-                    handle.seek((row_number - 1) * 8)
-                    raw = handle.read(8)
-                if len(raw) == 8:
-                    offset = struct.unpack("<Q", raw)[0]
-            except OSError:
-                pass
+                    if receipt is not None and _offset_stamp(os.fstat(handle.fileno())) != stamp:
+                        raise ValueError('Source offset index changed after checking its receipt.')
+                    preceding = int(row_number > 1)
+                    following = int(row_number < ds_data["processed_rows"])
+                    count = preceding + 1 + following
+                    handle.seek((row_number - 1 - preceding) * 8)
+                    raw = handle.read(count * 8)
+                if len(raw) != count * 8:
+                    raise ValueError("The committed source offset index is truncated; rebuild it before reading records.")
+                nearby = struct.unpack('<' + 'Q' * count, raw)
+                offset = nearby[preceding]
+                if (row_number == 1 and offset != 0) or any(a >= b for a, b in zip(nearby, nearby[1:])):
+                    raise ValueError("The source offset index is inconsistent; rebuild it before reading records.")
+            except FileNotFoundError:
+                if receipt is not None:
+                    raise ValueError('The receipted source offset index is missing; rebuild it before reading records.') from None
         # Older tiny indexes may not have a row-offset sidecar yet. Keep a
         # compatibility fallback, but never scan millions of mapped rows when
         # the canonical sidecar is present.
@@ -274,7 +355,9 @@ class HarvestGraph:
 
     def graph(self, limit: int = 3000, offset: int = 0, focus: str | None = None) -> dict[str, Any]:
         limit = self._limit(limit, default=3000, maximum=10000)
-        offset = max(0, offset) if type(offset) is int else 0
+        offset = min(2**63 - 1, max(0, offset)) if type(offset) is int else 0
+        if focus and limit < 2:
+            raise ValueError('A focused graph page needs room for the selected node and a neighbor (limit at least 2).')
         with _connection(self.path, readonly=True) as conn:
             stats = self._stats(conn)
             selected: list[sqlite3.Row]
@@ -340,18 +423,25 @@ class HarvestGraph:
             raise ValueError("Search query must contain 1–500 characters.")
         limit = self._limit(limit, default=40, maximum=200)
         query = q.strip()
+        try:
+            query.encode('utf-8')
+        except UnicodeEncodeError:
+            raise ValueError('Search query must contain valid Unicode text.') from None
         with _connection(self.path, readonly=True) as conn:
             exact = conn.execute("SELECT * FROM nodes WHERE id=? LIMIT ?", (query, limit)).fetchall()
             remaining = limit - len(exact)
             prefix_rows = []
             if remaining:
-                last = ord(query[-1])
-                if last < 0x10FFFF:
-                    upper = query[:-1] + chr(last + 1)
-                    prefix_rows = conn.execute(
-                        "SELECT * FROM nodes WHERE label>=? COLLATE NOCASE AND label<? COLLATE NOCASE "
-                        "AND id<>? ORDER BY label COLLATE NOCASE,nid LIMIT ?",
-                        (query, upper, query, remaining)).fetchall()
+                # Match SQLite NOCASE's ASCII fold before computing the upper
+                # bound: uppercase Z + 1 is '[', which sorts *before* folded z.
+                folded = query.translate(str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))
+                prefix = folded.rstrip(chr(0x10FFFF))
+                upper = prefix[:-1] + chr(ord(prefix[-1]) + 1) if prefix else None
+                upper_clause = "AND label<? COLLATE NOCASE " if upper is not None else ""
+                parameters = (folded, upper, query, remaining) if upper is not None else (folded, query, remaining)
+                prefix_rows = conn.execute(
+                    "SELECT * FROM nodes WHERE label>=? COLLATE NOCASE " + upper_clause +
+                    "AND id<>? ORDER BY label COLLATE NOCASE,nid LIMIT ?", parameters).fetchall()
             rows = exact + prefix_rows
             return {"query": query, "total": len(rows), "results": [self._node(conn, row) for row in rows]}
 
@@ -402,7 +492,12 @@ class HarvestGraph:
         prefix = "harvest:edge:"
         if not isinstance(claim_id, str) or not claim_id.startswith(prefix) or not claim_id[len(prefix):].isdigit():
             return None
-        eid = int(claim_id[len(prefix):])
+        token = claim_id[len(prefix):]
+        if not token.isascii() or len(token) > 19:
+            return None
+        eid = int(token)
+        if not 0 < eid <= 2**63 - 1:
+            return None
         with _connection(self.path, readonly=True) as conn:
             row = conn.execute(
                 "SELECT e.*,s.id AS subject_id,o.id AS object_id FROM edges e "

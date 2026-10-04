@@ -1,7 +1,10 @@
 import copy
+from contextlib import closing
 import json
 from pathlib import Path
 import unittest
+import sqlite3
+import tempfile
 
 from atlas.export import to_cytoscape, to_jsonld
 from atlas.model import ValidationError, validate_bundle
@@ -28,6 +31,40 @@ class GraphStoreTests(unittest.TestCase):
         stats = self.store.load_bundle(bundle)
         self.assertEqual(stats, {"nodes": 23, "sources": 4, "claims": 30, "evidence": 30, "coverage": 7})
         self.assertEqual(self.store.bundle(), bundle)
+
+    def test_opening_unrelated_sqlite_does_not_add_tables_or_change_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'existing.sqlite'
+            with closing(sqlite3.connect(path)) as connection, connection:
+                connection.execute('CREATE TABLE nodes (nid INTEGER PRIMARY KEY, id TEXT, label TEXT)')
+                connection.execute("INSERT INTO nodes VALUES (1, 'original', 'Keep this record')")
+            original=path.read_bytes()
+            with self.assertRaisesRegex(ValueError,'not a curated Atlas database'):
+                GraphStore(str(path))
+            self.assertEqual(path.read_bytes(),original)
+            with closing(sqlite3.connect(path)) as connection:
+                self.assertEqual(connection.execute('SELECT label FROM nodes').fetchone()[0],'Keep this record')
+                self.assertEqual(connection.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table'").fetchone()[0],1)
+
+    def test_matching_column_names_without_identity_keys_are_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'lookalike.sqlite'
+            with closing(sqlite3.connect(path)) as connection, connection:
+                for name in ('metadata', 'nodes', 'sources', 'claims', 'evidence', 'coverage'):
+                    columns = [row[1] for row in self.store._conn.execute(f'PRAGMA table_info({name})')]
+                    connection.execute(f"CREATE TABLE {name} ({', '.join(column + ' TEXT' for column in columns)})")
+                connection.execute("INSERT INTO nodes(id,label) VALUES ('private-record','Keep this data')")
+            original = path.read_bytes()
+            with self.assertRaisesRegex(ValueError, 'not a curated Atlas database'):
+                GraphStore(str(path))
+            self.assertEqual(path.read_bytes(), original)
+
+    def test_existing_curated_database_reopens_without_losing_bundle(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'atlas.sqlite'
+            bundle=fixture_bundle()
+            with GraphStore(str(path)) as store:store.load_bundle(bundle)
+            with GraphStore(str(path)) as store:self.assertEqual(store.bundle(),bundle)
 
     def test_rejects_missing_references_and_bad_endpoint_types(self):
         missing = fixture_bundle()

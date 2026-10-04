@@ -15,10 +15,30 @@ from urllib.parse import urlsplit
 
 from .model import require_valid_bundle
 
-POLICY_VERSION = "assay-reuse-v2"
+POLICY_VERSION = "assay-reuse-v3"
 COLLECTIONS = ("nodes", "sources", "claims", "evidence", "coverage")
 QUALIFIERS = ("mechanism_step", "readout", "species", "tissue")
 STATUS_ORDER = {"ready_for_discussion": 0, "needs_clarification": 1, "not_supported": 2}
+
+
+def _unknown_scope(value: Any) -> bool:
+    return (not isinstance(value, str) or value.strip().casefold() in {
+        "", "unknown", "unspecified", "not reported", "not_reported", "not available", "n/a", "na", "null", "none"})
+
+
+def _scope(context: dict, request: ResearchRequest) -> str:
+    """Absent optional scope is broad; explicitly unknown scope is unresolved."""
+    unresolved = "variant_id" in context  # The request has no variant selector.
+    for key in (*QUALIFIERS, "stage", "action_type"):
+        if key not in context:
+            continue
+        actual = context[key]
+        wanted = "assay_reuse" if key == "action_type" else getattr(request, key)
+        if _unknown_scope(actual) or _unknown_scope(wanted):
+            unresolved = True
+        elif actual != wanted:
+            return "different"
+    return "unknown" if unresolved else "applicable"
 
 
 def digest(value: Any) -> str:
@@ -116,7 +136,10 @@ def _url(value: Any) -> bool:
         return False
     try:
         parsed = urlsplit(value)
-        return parsed.scheme in ("https", "http") and bool(parsed.hostname) and not parsed.username
+        parsed.port  # A malformed port is not a usable professional contact route.
+        return (parsed.scheme in ("https", "http") and bool(parsed.hostname)
+                and parsed.username is None and parsed.password is None
+                and not any(char.isspace() for char in value))
     except ValueError:
         return False
 
@@ -165,7 +188,9 @@ class RecommendationEngine:
             if related["object"] != claim["object"] or self._proposition(related) == key:
                 continue
             other = {k: v for k, v in related["context"].items() if k != "negated"}
-            if all(context[k] == other[k] for k in context.keys() & other.keys()):
+            if all(context[k] == other[k] or (k in (*QUALIFIERS, "stage", "variant_id", "action_type")
+                   and (_unknown_scope(context[k]) or _unknown_scope(other[k])))
+                   for k in context.keys() & other.keys()):
                 if any((e["stance"] == "contradicts") != bool(related["context"].get("negated"))
                        for e in self.evidence[related["id"]]):
                     aliases.append(related)
@@ -216,10 +241,8 @@ class RecommendationEngine:
         for claim in claims:
             check = self._evidence_gate(claim, "anchor")
             context = claim["context"]
-            if check["state"] == "pass" and (
-                any(context.get(key) and context[key] != getattr(request, key) for key in ("species", "tissue", "stage"))
-                or context.get("variant_id")
-            ):
+            if check["state"] == "pass" and (_scope(context, request) != "applicable"
+                                              or _unknown_scope(request.mechanism_step)):
                 check = gate("anchor", "unknown", "Disease mechanism evidence is scoped to a different or unspecified model, stage or variant; resolve that scope first.", check["claim_ids"])
             checks.append(check)
         return min(checks, key=lambda g: _route_key([g]))
@@ -231,38 +254,46 @@ class RecommendationEngine:
                 continue
             proof = self._evidence_gate(claim, "capability_evidence")
             checks = [proof]
-            qualifiers = (*QUALIFIERS, "stage") if request.stage or claim["context"].get("stage") else QUALIFIERS
+            qualifiers = (*QUALIFIERS, "stage") if request.stage or "stage" in claim["context"] else QUALIFIERS
             for qualifier in qualifiers:
                 actual = claim["context"].get(qualifier)
                 wanted = getattr(request, qualifier)
                 if proof["state"] != "pass":
                     checks.append(gate(qualifier, "unknown", "Capability evidence needs resolution before comparing context.", proof["claim_ids"],
                                        researchable=proof.get("researchable", True)))
-                elif not wanted or not isinstance(actual, str) or not actual.strip():
+                elif _unknown_scope(wanted) or _unknown_scope(actual):
                     checks.append(gate(qualifier, "unknown", f"The assay's {qualifier} is undocumented.", proof["claim_ids"]))
                 else:
                     matches = actual == wanted
                     checks.append(gate(qualifier, "pass" if matches else "block",
                                        f"Requested {wanted}; documented {actual}.", proof["claim_ids"]))
+            if ("variant_id" in claim["context"] or ("action_type" in claim["context"]
+                    and claim["context"]["action_type"] != "assay_reuse")):
+                checks.append(gate("capability_scope", "unknown", "Resolve the capability's variant or action scope before applying it to this request.", proof["claim_ids"]))
             routes.append({"claim_id": claim["id"], "gates": checks})
         if not routes:
             return [gate("capability_evidence", "unknown", "No documented measurement capability for this mechanism.")], []
         best = min(routes, key=lambda route: _route_key(route["gates"]))
         return best["gates"], routes
 
-    def _access(self, asset_id: str) -> tuple[list[dict], dict | None, list[dict]]:
+    def _access(self, asset_id: str, request: ResearchRequest) -> tuple[list[dict], dict | None, list[dict]]:
         routes = []
         for claim in self.incoming[asset_id, "MAINTAINS"]:
             proof = self._evidence_gate(claim, "maintainer_evidence")
             context = claim["context"]
             access = context.get("access_status")
             contact = context.get("contact_url")
-            reviewed = proof["state"] == "pass"
+            applicable = _scope(context, request) == "applicable"
+            reviewed = proof["state"] == "pass" and applicable
             state = ("pass" if access in ("open", "on_request") else
                      "block" if access == "unavailable" else "unknown") if reviewed else "unknown"
             conflicting_access = any(
                 other["subject"] == claim["subject"]
-                and self._claim_state(other)["state"] == "supported"
+                and _scope(other["context"], request) != "different"
+                and self._claim_state(other)["state"] != "refuted"
+                and any(self.sources[e["source_id"]].get("status", "active") == "active"
+                        and (e["stance"] == "supports") != bool(other["context"].get("negated"))
+                        for e in self.evidence[other["id"]])
                 and ((other["context"].get("access_status") == "unavailable") != (access == "unavailable"))
                 and other["context"].get("access_status") in ("open", "on_request", "unavailable")
                 for other in self.incoming[asset_id, "MAINTAINS"]
@@ -276,6 +307,8 @@ class RecommendationEngine:
                       gate("contact", "pass" if reviewed and _url(contact) else "unknown",
                            "A source-backed professional contact route is required.", proof["claim_ids"],
                            researchable=proof.get("researchable", True))]
+            if not applicable:
+                checks.append(gate("access_scope", "unknown", "The documented access route does not establish access for this request's context.", proof["claim_ids"]))
             routes.append({"organization_id": claim["subject"], "contact_url": contact if reviewed and _url(contact) else None,
                            "access_status": access if reviewed else "unknown", "gates": checks})
         if not routes:
@@ -289,19 +322,13 @@ class RecommendationEngine:
             if claim["object"] != request.disease_id:
                 continue
             action = claim["context"].get("action_type")
-            if action is not None and action != "assay_reuse":
-                continue
-            if any(key in claim["context"] and claim["context"][key] != getattr(request, key)
-                   for key in QUALIFIERS):
-                continue
-            if request.stage and claim["context"].get("stage") and claim["context"]["stage"] != request.stage:
+            scope = _scope(claim["context"], request)
+            if scope == "different":
                 continue
             proof = self._claim_state(claim)
             if proof["state"] == "refuted":
                 continue
-            state = "block" if proof["state"] == "supported" and action == "assay_reuse" else "unknown"
-            if claim["context"].get("stage") and not request.stage:
-                state = "unknown"
+            state = "block" if proof["state"] == "supported" and action == "assay_reuse" and scope == "applicable" else "unknown"
             checks.append(gate("exclusion", state,
                                "Documented assay-reuse exclusion." if state == "block" else
                                "Potential exclusion needs review of its evidence or action scope.", proof["claim_ids"]))
@@ -323,7 +350,7 @@ class RecommendationEngine:
 
     def _record(self, asset_id: str, request: ResearchRequest, anchor: dict) -> dict:
         capability, capability_routes = self._capabilities(asset_id, request)
-        access, partner, access_routes = self._access(asset_id)
+        access, partner, access_routes = self._access(asset_id, request)
         gates = [anchor, *capability, *access, *self._exclusions(asset_id, request)]
         status = ("not_supported" if any(g["state"] == "block" for g in gates) else
                   "needs_clarification" if any(g["state"] == "unknown" for g in gates) else "ready_for_discussion")

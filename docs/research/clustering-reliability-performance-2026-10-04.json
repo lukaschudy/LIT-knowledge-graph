@@ -1,0 +1,17 @@
+{
+  "fixture": "synthetic, 500 diseases with identical mechanism/step, all active human-reviewed evidence",
+  "scope": "single local Python3 run; complete-link clustering limit, not full corpus",
+  "measurements": {
+    "before": {
+      "seconds": 22.3081,
+      "groups": 1,
+      "links": 124750
+    },
+    "after": {
+      "seconds": 1.5666,
+      "groups": 1,
+      "links": 124750
+    }
+  },
+  "exact_output_equal": true
+}

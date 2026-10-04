@@ -154,6 +154,67 @@ class EntityExtractionTests(unittest.TestCase):
         with self.assertRaises(ModelError):
             extract_entities_and_relationships(doc(text), [], FakeClient(raw))
 
+    def test_assertion_type_is_part_of_claim_identity(self):
+        raw = proposal()
+        reported = extract_entities_and_relationships(doc(), [], FakeClient(raw))
+        raw['relations'][0]['assertion_type'] = 'inferred'
+        inferred = extract_entities_and_relationships(doc(), [], FakeClient(raw))
+        self.assertNotEqual(reported['claims'][0]['id'], inferred['claims'][0]['id'])
+
+    def test_malformed_model_enum_values_raise_model_errors(self):
+        for collection, field in [('entities', 'type'), ('entities', 'existing_id'),
+                                  ('relations', 'predicate'), ('relations', 'assertion_type')]:
+            for value in [[], {}, ['Gene']]:
+                raw = proposal()
+                raw[collection][0][field] = value
+                with self.subTest(collection=collection, field=field, value=value), self.assertRaises(ModelError):
+                    extract_entities_and_relationships(doc(), [], FakeClient(raw))
+        for value in [10**1000, float('nan'), float('inf'), True]:
+            raw = proposal(); raw['entities'][0]['confidence'] = value
+            with self.subTest(value=str(value)[:30]), self.assertRaises(ModelError):
+                extract_entities_and_relationships(doc(), [], FakeClient(raw))
+
+    def test_relationship_cannot_borrow_unrelated_authentic_quote(self):
+        text = 'EPG5 appears in this source. BPAN is also mentioned. Other experiments failed.'
+        raw = proposal()
+        raw['entities'][0]['excerpt'] = 'EPG5 appears in this source.'
+        raw['entities'][1]['excerpt'] = 'BPAN is also mentioned.'
+        raw['relations'][0]['excerpt'] = 'Other experiments failed.'
+        with self.assertRaisesRegex(ModelError, 'both selected entity mentions'):
+            extract_entities_and_relationships(doc(text), [], FakeClient(raw))
+
+    def test_relationship_quote_must_cover_selected_occurrences(self):
+        text = 'EPG5 was sequenced. EPG5 is associated with BPAN.'
+        raw = proposal()
+        raw['entities'][0]['excerpt'] = 'EPG5 was sequenced.'
+        raw['entities'][1]['excerpt'] = 'EPG5 is associated with BPAN.'
+        raw['relations'][0]['excerpt'] = 'EPG5 is associated with BPAN.'
+        with self.assertRaisesRegex(ModelError, 'both selected entity mentions'):
+            extract_entities_and_relationships(doc(text), [], FakeClient(raw))
+
+    def test_invalid_inputs_fail_before_requesting_model_output(self):
+        for changes in [{'kind': []}, {'kind': 'invented'}, {'url': 'https://user:secret@example.org'},
+                        {'url': 'https://example.org/a\nb'}, {'version': 0}, {'text': 'Bad\ud800text'}]:
+            client = FakeClient(proposal())
+            with self.subTest(changes=repr(changes)), self.assertRaises(ValueError):
+                extract_entities_and_relationships({**doc(), **changes}, [], client)
+            self.assertIsNone(client.prompt)
+        for node in [{'id': 'gene:x', 'type': []}, {'id': 'gene:x', 'type': 'Gene'},
+                     {'id': 'gene:x', 'type': 'Gene', 'label': 'X', 'aliases': [123]}]:
+            client = FakeClient(proposal())
+            with self.assertRaises(ValueError):
+                extract_entities_and_relationships(doc(), [node], client)
+            self.assertIsNone(client.prompt)
+
+    def test_invalid_metadata_and_unicode_context_reject_whole_result(self):
+        client = FakeClient(proposal())
+        client.generate_json = lambda *args: {'data': proposal(), 'metadata': ['not an object']}
+        with self.assertRaises(ModelError):
+            extract_entities_and_relationships(doc(), [], client)
+        raw = proposal(); raw['relations'][0]['context'] = 'bad\ud800context'
+        with self.assertRaises(ModelError):
+            extract_entities_and_relationships(doc(), [], FakeClient(raw))
+
 
 if __name__ == "__main__":
     unittest.main()

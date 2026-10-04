@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "dataset": "hgnc/hgnc_complete_set",
+  "row": 100,
+  "schema_valid": true,
+  "source_sha_verified": true,
+  "record_repeat_equal": true,
+  "cold_read_seconds": 0.0676,
+  "warm_read_seconds": 0.0418,
+  "scope": "read-only real harvest schema and HGNC source record; no corpus or workspace writes"
+}

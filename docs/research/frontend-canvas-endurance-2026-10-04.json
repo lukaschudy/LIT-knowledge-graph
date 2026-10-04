@@ -1,0 +1,168 @@
+{
+  "seconds": 1200,
+  "iterations": 1920,
+  "nodes": 10000,
+  "claims": 5346,
+  "fixture": "data/curated/hgnc_dense_snapshot.json.gz",
+  "renderer": "canvas",
+  "lifecycleSuspendResume": true,
+  "extendedInteractions": true,
+  "pinchCycles": 48,
+  "chatCycles": 192,
+  "filterCycles": 64,
+  "viewportPhases": [
+    {
+      "width": 1200,
+      "height": 800
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "samples": [
+    {
+      "seconds": 1,
+      "iterations": 1,
+      "heapBytes": 11125416,
+      "targets": 32
+    },
+    {
+      "seconds": 61,
+      "iterations": 96,
+      "heapBytes": 11578668,
+      "targets": 32
+    },
+    {
+      "seconds": 121,
+      "iterations": 192,
+      "heapBytes": 11649484,
+      "targets": 32
+    },
+    {
+      "seconds": 180,
+      "iterations": 288,
+      "heapBytes": 11733504,
+      "targets": 32
+    },
+    {
+      "seconds": 241,
+      "iterations": 384,
+      "heapBytes": 11705040,
+      "targets": 32
+    },
+    {
+      "seconds": 300,
+      "iterations": 480,
+      "heapBytes": 11758336,
+      "targets": 32
+    },
+    {
+      "seconds": 360,
+      "iterations": 577,
+      "heapBytes": 11795888,
+      "targets": 32
+    },
+    {
+      "seconds": 420,
+      "iterations": 673,
+      "heapBytes": 11806172,
+      "targets": 32
+    },
+    {
+      "seconds": 481,
+      "iterations": 770,
+      "heapBytes": 11792992,
+      "targets": 32
+    },
+    {
+      "seconds": 540,
+      "iterations": 866,
+      "heapBytes": 11804836,
+      "targets": 32
+    },
+    {
+      "seconds": 600,
+      "iterations": 962,
+      "heapBytes": 11797120,
+      "targets": 32
+    },
+    {
+      "seconds": 660,
+      "iterations": 1059,
+      "heapBytes": 11792016,
+      "targets": 32
+    },
+    {
+      "seconds": 721,
+      "iterations": 1155,
+      "heapBytes": 11802128,
+      "targets": 32
+    },
+    {
+      "seconds": 780,
+      "iterations": 1250,
+      "heapBytes": 11807984,
+      "targets": 32
+    },
+    {
+      "seconds": 841,
+      "iterations": 1347,
+      "heapBytes": 11808780,
+      "targets": 32
+    },
+    {
+      "seconds": 901,
+      "iterations": 1443,
+      "heapBytes": 11803000,
+      "targets": 32
+    },
+    {
+      "seconds": 960,
+      "iterations": 1538,
+      "heapBytes": 11814676,
+      "targets": 32
+    },
+    {
+      "seconds": 1020,
+      "iterations": 1634,
+      "heapBytes": 11821392,
+      "targets": 32
+    },
+    {
+      "seconds": 1081,
+      "iterations": 1731,
+      "heapBytes": 11559612,
+      "targets": 32
+    },
+    {
+      "seconds": 1141,
+      "iterations": 1826,
+      "heapBytes": 11751236,
+      "targets": 32
+    }
+  ],
+  "finalHeapBytes": 11776236,
+  "heapGrowthBytes": 197568,
+  "passed": true,
+  "pageErrors": 0,
+  "method": {
+    "date": "2026-10-04",
+    "browser": "Headless Chromium via Playwright with --disable-webgl",
+    "checkout": "LIT-atlas-production; identical report retained in the local feature checkout for reference",
+    "application_version_note": "This continuous tab loaded before the later startup timeout/readiness fixes. Those initialization changes were verified separately in 27-case production/local suites and three focused Canvas regressions. Rendering/interaction code was not changed in the running tab.",
+    "motion": "prefers-reduced-motion: reduce",
+    "api_requests": "All /api requests intercepted in a local test tab; no live API or model calls and no proposal writes",
+    "graph_fixture": "Checked-in real HGNC snapshot, 10000 nodes and 5346 relationships",
+    "interactions": "Pointer orbit, wheel zoom, node search/select/clear, periodic recomposition, desktop/mobile viewport changes, CDP touch pinch, chat open/draft/close, dataset filtering, one CDP frozen/active lifecycle cycle",
+    "invariants": "Exact equality of every node world coordinate, 10000 nodes and all 5346 relationships retained, at most 40 mounted node targets, zero pageerror exceptions",
+    "heap": "Chrome DevTools Protocol HeapProfiler.collectGarbage before Performance JSHeapUsedSize sampling; growth baseline is the second sample near one minute",
+    "limitations": [
+      "Chromium only",
+      "Mocked API responses",
+      "No physical phone, microphone, or production infrastructure exercised",
+      "The running tab predates later startup-only fixes; those have separate passing regressions"
+    ],
+    "command": "NODE_PATH=<playwright node_modules> ATLAS_DISABLE_WEBGL=1 ATLAS_ENDURANCE_ONLY=1 ATLAS_ENDURANCE_EXTENDED=1 ATLAS_ENDURANCE_SECONDS=1200 ATLAS_ENDURANCE_REPORT=/tmp/atlas-frontend-canvas-endurance.json node scripts/check_frontend_reliability.cjs"
+  }
+}

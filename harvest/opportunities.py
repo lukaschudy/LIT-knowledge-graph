@@ -26,7 +26,7 @@ def harvest_grants_gov(page_size=100):
     """Page every current forecasted/posted Grants.gov result for each rare/orphan phrase."""
     source='grants_gov'; unique={}; searches=[]; detail_probe=None
     for term in TERMS:
-        offset=0; expected=None; pages=0; returned=0
+        offset=0; expected=None; pages=0; returned=0; identifiers=set(); reported_counts=set()
         while expected is None or offset < expected:
             gene_query=term in ('GRIN2A','GRIN2B')
             statuses='forecasted|posted|closed|archived' if gene_query else 'forecasted|posted'
@@ -36,19 +36,26 @@ def harvest_grants_gov(page_size=100):
             obj=_json(p)
             if obj.get('errorcode') not in (None,0): raise RuntimeError(f"Grants.gov search error for {term}: {obj.get('msg')}")
             data=obj.get('data') or {}; hits=data.get('oppHits') or []
+            reported_counts.add(int(data.get('hitCount') or 0))
             if expected is None: expected=int(data.get('hitCount') or 0)
             for hit in hits:
                 ident=_id_number(hit)
                 if not ident: continue
+                identifiers.add(ident)
                 if ident not in unique: unique[ident]=dict(hit,query_membership=[])
                 entry={'term':term,'status_filter':statuses}
                 if entry not in unique[ident]['query_membership']: unique[ident]['query_membership'].append(entry)
             pages+=1; returned+=len(hits)
             if not hits: break
-            offset=int(data.get('startRecord',offset))+len(hits)
+            next_offset=int(data.get('startRecord',offset))+len(hits)
+            if next_offset<=offset:raise RuntimeError('Grants.gov pagination did not advance; acquisition is incomplete')
+            offset=next_offset
             if offset>=expected: break
             time.sleep(.1)
-        searches.append({'term':term,'status_filter':statuses,'hit_count_reported':expected,'records_received':returned,'pages':pages,'complete':returned==expected})
+        searches.append({'term':term,'status_filter':statuses,'hit_count_reported':expected,
+                         'reported_counts':sorted(reported_counts),'records_received':returned,
+                         'unique_records_received':len(identifiers),'pages':pages,
+                         'complete':returned==expected and len(identifiers)==expected and len(reported_counts)==1})
     if not unique: raise RuntimeError('Grants.gov returned no opportunities for rare/orphan search terms')
     # The detailed endpoint is documented and public. Probe it once because its
     # backend can be unavailable independently from the working search service.
@@ -64,7 +71,7 @@ def harvest_grants_gov(page_size=100):
                 details.append({'opp_id':ident,'response':response,'detail_available':False})
             else:
                 details.append({'opp_id':ident,'response':response,'detail_available':True})
-    out=core.emit_records(source,'opportunities',unique.values(),input_paths=[core.RAW/source],description='Complete union of all paged Grants.gov search2 results for rare/orphan disease, orphan product and rare disorder terms, restricted to current forecasted/posted opportunities. Native search result fields and every matching query are retained.')
+    out=core.emit_records(source,'opportunities',unique.values(),input_paths=[core.RAW/source],description='Acquired union of paged Grants.gov search2 results for rare/orphan disease, orphan product and rare disorder terms, restricted to current forecasted/posted opportunities. Native search result fields and every matching query are retained; manifest coverage records count and uniqueness gaps.')
     if details:
         core.emit_records(source,'opportunity_details',details,input_paths=[core.RAW/source],description='fetchOpportunity endpoint responses for each matching opportunity ID; full provider envelopes retained.')
     detail_record={'opp_id':_id_number(first),'detail_available':detail_available,'response':detail_probe}
@@ -185,7 +192,7 @@ def harvest_grin_evidence(page_size=100):
     query=f'''query geneEvidence($id:String!,$diseases:[String!]!,$size:Int!,$cursor:String) {{ target(ensemblId:$id) {{ id approvedSymbol evidences(efoIds:$diseases,size:$size,cursor:$cursor) {{ count cursor rows {{ {selection} }} }} }} }}'''
     for ensembl,symbol,hgnc_id in genes:
         mondo_ids=sorted(mid for mid,items in evidence_ids.items() if any(x['gene']==symbol for x in items))
-        cursor=None; page=0; total=None; count=0
+        cursor=None; page=0; total=None; count=0; visited_cursors={None}; evidence_keys=set(); reported_counts=set()
         while True:
             body={'query':query,'variables':{'id':ensembl,'diseases':mondo_ids,'size':page_size,'cursor':cursor}}
             filename=f'grin-evidence-{symbol}-page-{page:05d}.json'
@@ -193,19 +200,27 @@ def harvest_grin_evidence(page_size=100):
             payload=_json(p)
             if payload.get('errors'): raise RuntimeError(f'Open Targets evidence query failed for {symbol} page {page}: {payload["errors"][:1]}')
             response=(payload.get('data') or {}).get('target') or {}; page_data=response.get('evidences') or {}
+            reported_counts.add(int(page_data.get('count') or 0))
             if total is None: total=int(page_data.get('count') or 0)
             rows=page_data.get('rows') or []
             for row in rows:
+                evidence_keys.add(row.get('id') or hashlib.sha256(json.dumps(row,sort_keys=True).encode()).hexdigest())
                 row['_focus']={'hgnc_id':hgnc_id,'approved_symbol':symbol,'ensembl_id':ensembl,'disease_identifiers':evidence_ids.get(row.get('disease',{}).get('id'),[])}
                 all_rows.append(row)
             count+=len(rows); page+=1; artifacts.append(str(p.relative_to(core.ROOT)))
             cursor=page_data.get('cursor')
             if not cursor or not rows: break
-        coverage[symbol]={'hgnc_id':hgnc_id,'ensembl_id':ensembl,'linked_disease_ids':mondo_ids,'reported_evidence_count':total,'records_acquired':count,'pages':page,'complete':count==total}
+            if not isinstance(cursor,str) or cursor in visited_cursors:
+                raise RuntimeError('Open Targets evidence cursor repeated or is invalid; acquisition is incomplete')
+            visited_cursors.add(cursor)
+        coverage[symbol]={'hgnc_id':hgnc_id,'ensembl_id':ensembl,'linked_disease_ids':mondo_ids,
+                          'reported_evidence_count':total,'reported_counts':sorted(reported_counts),
+                          'records_acquired':count,'unique_records_acquired':len(evidence_keys),'pages':page,
+                          'complete':count==total and len(evidence_keys)==total and len(reported_counts)==1}
     input_paths=[core.PROCESSED/'hgnc/hgnc_complete_set.jsonl.gz',core.PROCESSED/'clingen/gene_disease_validity.jsonl.gz',core.PROCESSED/'clingen/gene_disease_validity_lumping_splitting.jsonl.gz',core.PROCESSED/'gencc/assertions.jsonl.gz',core.PROCESSED/'hpo/genes_to_disease.jsonl.gz',core.PROCESSED/'orphadata/genes.jsonl.gz',core.PROCESSED/'mondo/obo_stanzas.jsonl.gz']
     if all_rows:
-        core.emit_records(source,'grin_gene_disease_evidence',all_rows,input_paths=input_paths,description='All cursor-paginated Open Targets source-native evidence records for MONDO diseases asserted/linked to GRIN2A or GRIN2B by ClinGen, GenCC, HPO or Orphadata. Evidence model scalar fields and nested first-level scalar fields were selected from the current GraphQL schema.')
-    core.update_manifest(source,status='partial',focused_grin_evidence=coverage,focused_disease_identifiers=evidence_ids,provider_release='Current GraphQL API; release ID not exposed in response (captured 2026-10-03)',evidence_dataset={'records':len(all_rows),'pages':artifacts,'selection':'All Evidence scalar fields plus nested objects\' direct scalar fields; paged until provider cursor exhausted. This focused dataset is complete for the 13 disease IDs linked to GRIN2A/GRIN2B by listed curated sources.'},rights='Open Targets Platform data; provider documentation describes CC BY 4.0; review current release terms')
+        core.emit_records(source,'grin_gene_disease_evidence',all_rows,input_paths=input_paths,description='Acquired cursor-paginated Open Targets source-native evidence records for MONDO diseases asserted/linked to GRIN2A or GRIN2B by ClinGen, GenCC, HPO or Orphadata. Evidence model scalar fields and nested first-level scalar fields were selected from the current GraphQL schema; manifest coverage records count and uniqueness gaps.')
+    core.update_manifest(source,status='partial',focused_grin_evidence=coverage,focused_disease_identifiers=evidence_ids,provider_release='Current GraphQL API; release ID not exposed in response (captured 2026-10-03)',evidence_dataset={'records':len(all_rows),'pages':artifacts,'complete_for_selected_diseases':all(item['complete'] for item in coverage.values()),'selection':'All Evidence scalar fields plus nested objects\' direct scalar fields; paged until provider cursor exhausted. Per-gene coverage verifies stable provider counts and unique evidence records for the selected disease IDs.'},rights='Open Targets Platform data; provider documentation describes CC BY 4.0; review current release terms')
     return coverage
 
 def _ot_query_batch(ids):

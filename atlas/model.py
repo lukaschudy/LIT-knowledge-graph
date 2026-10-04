@@ -97,6 +97,10 @@ def _validate_bundle(bundle: Any) -> list[str]:
 
     if not obj(bundle, "bundle"):
         return errors
+    # Optional/extension metadata is serialized alongside the known fields.
+    # Validate the complete payload so a "valid" bundle cannot later fail JSON
+    # persistence or emit NaN merely because the value lived outside context.
+    _check_json_value(bundle, "bundle", err)
     required_fields(bundle, {"schema_version", "dataset", "nodes", "sources", "claims", "evidence", "coverage"}, "bundle")
     if bundle.get("schema_version") != "1.0":
         err("schema_version", "must equal '1.0'")
@@ -148,8 +152,6 @@ def _validate_bundle(bundle: Any) -> list[str]:
             err(path + ".aliases", "must be an array of nonempty strings")
         if not isinstance(node.get("properties"), dict):
             err(path + ".properties", "must be an object")
-        else:
-            _check_json_value(node["properties"], path + ".properties", err)
 
     source_rows = rows_by_name["sources"]
     for index, source in enumerate(buckets["sources"]):
@@ -223,7 +225,6 @@ def _validate_bundle(bundle: Any) -> list[str]:
         if not isinstance(context, dict):
             err(path + ".context", "must be an object")
         else:
-            _check_json_value(context, path + ".context", err)
             if "effect" in context and (not isinstance(context["effect"], str) or context["effect"] not in CONTEXT_EFFECTS):
                 err(path + ".context.effect", f"unknown effect {context['effect']!r}")
             if "negated" in context and not isinstance(context["negated"], bool):

@@ -156,10 +156,13 @@ def resolve_entities(nodes: list[dict[str, Any]], links: list[dict[str, Any]]) -
     accepted_links: list[dict[str, Any]] = []
     for link in ordered_links:
         subject, object_id, rule = link.get("subject"), link.get("object"), link.get("rule")
+        provenance = link.get('provenance')
+        has_provenance = ((isinstance(provenance, str) and bool(provenance.strip()))
+                          or (isinstance(provenance, (dict, list)) and bool(provenance)))
         decision = {"link": link, "status": None}
-        if rule not in TRUSTED_RULES:
+        if not isinstance(rule, str) or rule not in TRUSTED_RULES:
             decision["status"] = "rejected_untrusted_rule"
-        elif link.get("provenance") is None or link.get("provenance") == {} or link.get("provenance") == [] or link.get("provenance") == "":
+        elif not has_provenance:
             decision["status"] = "rejected_missing_provenance"
         elif not isinstance(subject, str) or not isinstance(object_id, str) or subject not in by_id or object_id not in by_id:
             decision["status"] = "rejected_missing_node"

@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import threading
 import unittest
+from unittest.mock import Mock
 from urllib.error import HTTPError
 from urllib.request import urlopen
 
@@ -97,6 +98,27 @@ class AtlasServerTests(unittest.TestCase):
             payload = json.loads(response.read().decode("utf-8"))
         self.assertEqual(payload["error"]["code"], "disease_not_found")
         self.assertNotIn("traceback", json.dumps(payload).lower())
+
+    def test_harvest_rejects_ambiguous_pagination_and_missing_datasets(self):
+        harvest = Mock()
+        harvest.records.return_value = None
+        server = create_server(self.store, port=0, harvest=harvest)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        base = f'http://127.0.0.1:{server.server_address[1]}'
+        try:
+            for route, expected in (('/api/harvest/graph?limit=100&limit=200', 400),
+                                    ('/api/harvest/records?dataset=999', 404)):
+                with self.subTest(route=route), self.assertRaises(HTTPError) as caught:
+                    urlopen(base + route, timeout=2)
+                self.assertEqual(caught.exception.code, expected)
+                caught.exception.close()
+            harvest.graph.assert_not_called()
+            harvest.records.assert_called_once_with(999, page=0, limit=50)
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=2)
 
 
 if __name__ == "__main__":

@@ -96,7 +96,7 @@
     if(phase==='recording')stop();
   }
   document.addEventListener('submit',e=>{if(e.target===$('chat-form'))guard(e);},true);
-  document.addEventListener('keydown',e=>{if(e.target===input&&e.key==='Enter'&&!e.shiftKey)guard(e);},true);
+  document.addEventListener('keydown',e=>{if(e.target===input&&e.key==='Enter'&&!e.shiftKey&&!e.isComposing)guard(e);},true);
   state('idle','Checking microphone support…');
   (async()=>{
     if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){state('idle','Voice needs a browser with microphone recording support.');return;}

@@ -1,4 +1,7 @@
 import gzip
+from copy import deepcopy
+from concurrent.futures import ThreadPoolExecutor
+import threading
 from hashlib import sha256
 import json
 from contextlib import closing
@@ -181,6 +184,7 @@ class NeuroIngestionTests(unittest.TestCase):
             conn.execute('CREATE TABLE metadata(key TEXT PRIMARY KEY,value TEXT NOT NULL)')
             conn.execute("INSERT INTO metadata(key,value) VALUES('source_root',?)", (str(self.root),))
             conn.execute("INSERT INTO metadata(key,value) VALUES('build_id','fixture-build')")
+            conn.execute("INSERT INTO metadata(key,value) VALUES('stats',?)", (json.dumps({'status':'complete'}),))
             conn.commit()
         output_path = self.output / 'resolved.json'
         with patch('atlas.neuro_ingestion.HarvestGraph', return_value=self.harvest), \
@@ -216,6 +220,94 @@ class NeuroIngestionTests(unittest.TestCase):
                 neuro_ingestion.build_neuro(ROOT,db,output_path,client=object(),extract=True)
             extractor.assert_not_called()
         self.assertEqual(output_path.read_bytes(),before)
+
+        cache.write_text(json.dumps(extracted))
+        def changed_snapshot(*args):
+            with closing(sqlite3.connect(db)) as connection:
+                connection.execute("UPDATE metadata SET value='changed' WHERE key='build_id'")
+                connection.commit()
+            return prepared
+        with patch('atlas.neuro_ingestion.HarvestGraph', return_value=self.harvest), \
+             patch('atlas.neuro_ingestion.prepare_neuro', side_effect=changed_snapshot):
+            with self.assertRaisesRegex(ValueError, 'changed during'):
+                neuro_ingestion.build_neuro(ROOT, db, output_path, client=object(), extract=True)
+        self.assertEqual(output_path.read_bytes(), before)
+
+    def test_atomic_json_writers_never_share_a_temporary_file(self):
+        destination = self.output / 'atomic.json'
+        neuro_ingestion.save_json(destination, {'original': True})
+        barrier = threading.Barrier(2)
+        replace = Path.replace
+        temporary_paths = []
+        def synchronized_replace(path, target):
+            temporary_paths.append(path)
+            barrier.wait(timeout=5)
+            return replace(path, target)
+        values = [{'writer': 1, 'payload': 'a' * 20000}, {'writer': 2, 'payload': 'b' * 20000}]
+        with patch.object(Path, 'replace', synchronized_replace):
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                list(pool.map(lambda value: neuro_ingestion.save_json(destination, value), values))
+        self.assertEqual(len(set(temporary_paths)), 2)
+        self.assertIn(json.loads(destination.read_text()), values)
+        self.assertEqual(list(self.output.glob('*.tmp')), [])
+        before = destination.read_bytes()
+        with patch.object(Path, 'replace', side_effect=OSError('publication failed')):
+            with self.assertRaises(OSError):
+                neuro_ingestion.save_json(destination, {'new': True})
+        self.assertEqual(destination.read_bytes(), before)
+        self.assertFalse(any(path.name.endswith('.tmp') for path in self.output.iterdir()))
+
+    def test_missing_or_paused_harvest_never_creates_database_or_output(self):
+        missing = self.root / 'missing.sqlite'
+        output = self.output / 'resolved.json'
+        with self.assertRaises(sqlite3.OperationalError):
+            neuro_ingestion.build_neuro(ROOT, missing, output, extract=False)
+        self.assertFalse(missing.exists())
+        self.assertFalse(output.exists())
+        with closing(sqlite3.connect(missing)) as connection:
+            connection.execute('CREATE TABLE metadata(key TEXT PRIMARY KEY,value TEXT)')
+            connection.executemany('INSERT INTO metadata VALUES (?,?)', [
+                ('source_root', str(self.root)), ('build_id', 'fixture'), ('stats', json.dumps({'status': 'paused'}))])
+            connection.commit()
+        with self.assertRaisesRegex(ValueError, 'complete harvest'):
+            neuro_ingestion.build_neuro(ROOT, missing, output, extract=False)
+        self.assertFalse(output.exists())
+
+    def test_cached_metadata_cannot_change_an_indexed_author_or_title(self):
+        original = {'pmcid': 'PMC123', 'title': 'Original title'}
+        with gzip.open(self.root / 'articles.jsonl.gz', 'wt', encoding='utf-8') as stream:
+            stream.write(json.dumps(original) + '\n')
+        documents = [{'url': 'https://pmc.ncbi.nlm.nih.gov/articles/PMC123/'}]
+        cache = self.output / 'paper-cache.json'
+        neuro_ingestion.paper_records(self.harvest, documents, cache)
+        with patch('atlas.neuro_ingestion.read_record', return_value={'data': original}) as reader:
+            self.assertEqual(neuro_ingestion.paper_records(self.harvest, documents, cache)[0]['data'], original)
+            reader.assert_called_once()
+        cached = json.loads(cache.read_text())
+        cached['records'][0]['data']['title'] = 'Invented author attribution'
+        cache.write_text(json.dumps(cached))
+        with patch('atlas.neuro_ingestion.read_record', return_value={'data': original}):
+            with self.assertRaisesRegex(ValueError, 'differs from its indexed source row'):
+                neuro_ingestion.paper_records(self.harvest, documents, cache)
+
+    def test_pmcid_prefixes_bind_to_the_exact_documents(self):
+        curated_dir = self.root / 'data/curated'; curated_dir.mkdir(parents=True)
+        documents = [{'source_id': 'paper:' + pmcid, 'title': pmcid,
+                      'url': 'https://pmc.ncbi.nlm.nih.gov/articles/' + pmcid + '/',
+                      'text': 'Fixture source', 'version': sha256(b'Fixture source').hexdigest(), 'license': 'fixture'}
+                     for pmcid in ['PMC1234', 'PMC123']]
+        (curated_dir / 'neuro_documents.json').write_text(json.dumps(documents))
+        (curated_dir / 'neuro-identities.json').write_text(json.dumps({'anchors': [], 'scope': 'test'}))
+        (curated_dir / 'neuro_bundle.json').write_text(json.dumps({'nodes': [], 'claims': [], 'sources': [], 'evidence': []}))
+        rows = [{'pmcid': 'PMC123', 'pmid': '111', 'title': None, 'authorList': None},
+                {'pmcid': 'PMC1234', 'pmid': '222', 'title': 'Second paper'}]
+        harvest = FakeHarvest(self.root, [])
+        records = [{'data': row, 'pointer': {'sha256': 'fixture', 'row': index + 1}} for index, row in enumerate(rows)]
+        with patch('atlas.neuro_ingestion.paper_records', return_value=records):
+            prepared = neuro_ingestion.prepare_neuro(self.root, harvest, self.output)
+        mapping = {doc['source_id']: doc['publication_id'] for doc in prepared['documents']}
+        self.assertEqual(mapping, {'paper:PMC123': 'PMID:111', 'paper:PMC1234': 'PMID:222'})
+        self.assertEqual(prepared['sources'][0]['title'], 'PMID:111 — publication metadata')
 
 
 if __name__ == '__main__':

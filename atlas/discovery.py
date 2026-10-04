@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from itertools import combinations
+import heapq
 from .recommendations import RecommendationEngine
 
 
@@ -13,7 +14,7 @@ def discover(bundle: dict, *, threshold: float = 0.3) -> dict:
     are explicit design choices, not learned probabilities. Unreviewed reported
     features can generate a candidate neighborhood but are visibly provisional.
     """
-    if not 0 < threshold <= 1:
+    if type(threshold) not in (int, float) or not 0 < threshold <= 1:
         raise ValueError('Discovery threshold must be in (0, 1]')
     engine = RecommendationEngine(bundle)
     disease_ids = sorted(n['id'] for n in bundle['nodes'] if n['type'] == 'Disease')
@@ -25,7 +26,10 @@ def discover(bundle: dict, *, threshold: float = 0.3) -> dict:
         disease = claim['subject']
         if disease not in features or claim['assertion_type'] != 'reported' or claim['context'].get('negated'):
             continue
-        if engine._claim_state(claim)['state'] == 'refuted':
+        active_evidence = [e for e in engine.evidence[claim['id']]
+                           if e['stance'] == 'supports'
+                           and engine.sources[e['source_id']].get('status', 'active') == 'active']
+        if not active_evidence or engine._claim_state(claim)['state'] == 'refuted':
             continue
         additions = []
         if claim['predicate'] == 'INVOLVES':
@@ -54,20 +58,51 @@ def discover(bundle: dict, *, threshold: float = 0.3) -> dict:
             links.append({'source': left, 'target': right, 'similarity': round(score, 4),
                           'reasons': reasons, 'claim_ids': sorted(claim_ids),
                           'reviewed': all(engine._claim_state(engine.claims[cid])['state'] == 'supported' for cid in claim_ids)})
-    groups = [(did,) for did in disease_ids]
-    while True:
-        choices = []
-        for i, j in combinations(range(len(groups)), 2):
-            minimum = min(scores[tuple(sorted((a, b)))] for a in groups[i] for b in groups[j])
-            if minimum >= threshold:
-                choices.append((-minimum, tuple(sorted(groups[i] + groups[j])), i, j))
-        if not choices:
-            break
-        _, combined, i, j = min(choices)
-        groups = [group for k, group in enumerate(groups) if k not in (i, j)] + [combined]
-        groups.sort()
+    groups = _complete_link_groups(disease_ids, scores, threshold)
     return {'method': 'Complete-link clustering of typed graph features using weighted Jaccard overlap',
             'threshold': threshold, 'weights': weights,
             'groups': [{'id': 'cluster:' + str(i + 1), 'disease_ids': list(group),
                         'label': ' · '.join(engine.nodes[did]['label'] for did in group)} for i, group in enumerate(groups)],
             'links': links, 'note': 'Exploratory research neighborhoods, not shared treatments or assay compatibility. Unreviewed features remain provisional; absent features are unknown. Weights and threshold are uncalibrated design choices.'}
+
+
+def _complete_link_groups(identifiers, scores, threshold):
+    """Cache linkage distances; merging A/B uses min(distance(A,C),distance(B,C)).
+
+    Only above-threshold pairs can ever merge. Heap entries retain compact
+    minimum-member tie keys: for disjoint clusters, these order candidate unions
+    exactly like comparing every sorted member. Stale entries are skipped.
+    """
+    groups = {i: (identifier,) for i, identifier in enumerate(identifiers)}
+    neighbors = {i: {} for i in groups}
+    queue = []
+
+    def connect(left, right, score):
+        neighbors[left][right] = score
+        neighbors[right][left] = score
+        first, second = sorted((groups[left][0], groups[right][0]))
+        heapq.heappush(queue, (-score, first, second, left, right))
+
+    for left, right in combinations(groups, 2):
+        score = scores[tuple(sorted((groups[left][0], groups[right][0])))]
+        if score >= threshold:
+            connect(left, right, score)
+    next_id = len(groups)
+    while queue:
+        _, _, _, left, right = heapq.heappop(queue)
+        if left not in groups or right not in groups:
+            continue
+        # A complete-link pair must meet the threshold to both merged clusters.
+        common = neighbors[left].keys() & neighbors[right].keys()
+        linked = {other: min(neighbors[left][other], neighbors[right][other]) for other in common}
+        combined = tuple(sorted(groups.pop(left) + groups.pop(right)))
+        for old in (left, right):
+            for other in neighbors.pop(old):
+                if other in neighbors:
+                    neighbors[other].pop(old, None)
+        groups[next_id] = combined
+        neighbors[next_id] = {}
+        for other, score in linked.items():
+            connect(next_id, other, score)
+        next_id += 1
+    return sorted(groups.values())
