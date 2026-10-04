@@ -27,3 +27,24 @@ class HPOAAdapterTests(unittest.TestCase):
         row='OMIM:1\tTest\t\tHP:0000001\tPMID:1\tTAS\t\t\t\n'
         b=self.convert('#version: test\n'+HEADER+'#comment\n'+row)
         self.assertIn('HPOA row 4;',b['evidence'][0]['locator'])
+
+    def test_duplicate_columns_cannot_silently_change_negative_annotation(self):
+        for duplicate in ('qualifier', 'Qualifier', 'qual_ifier', 'qual-ifier'):
+            with self.subTest(duplicate=duplicate):
+                header = HEADER.rstrip('\n') + '\t' + duplicate + '\n'
+                row = 'OMIM:1\tTest\tNOT\tHP:0000001\tPMID:1\tTAS\t\t\t\t\n'
+                with self.assertRaisesRegex(ValueError, 'unique after normalization'):
+                    self.convert(header + row)
+
+    def test_quote_decoding_does_not_rewrite_source_evidence(self):
+        row = 'OMIM:1\t"Quoted disease"\tNOT\tHP:0000001\tPMID:1\tTAS\t\t\t'
+        bundle = self.convert(HEADER + row + '\n')
+        self.assertEqual(bundle['nodes'][0]['label'], 'Quoted disease')
+        self.assertEqual(bundle['evidence'][0]['excerpt'], row)
+        self.assertEqual(bundle['sources'][0]['version'], 'test-fixture')
+        self.assertEqual(bundle['evidence'][0]['source_version'], 'test-fixture')
+
+    def test_multiline_annotation_cannot_misnumber_following_evidence(self):
+        row = 'OMIM:1\t"Quoted\ndisease"\tNOT\tHP:0000001\tPMID:1\tTAS\t\t\t\n'
+        with self.assertRaisesRegex(ValueError, 'one physical line'):
+            self.convert(HEADER + row)

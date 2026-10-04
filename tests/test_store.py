@@ -1,4 +1,5 @@
 import copy
+from contextlib import closing
 import json
 from pathlib import Path
 import unittest
@@ -34,16 +35,29 @@ class GraphStoreTests(unittest.TestCase):
     def test_opening_unrelated_sqlite_does_not_add_tables_or_change_bytes(self):
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'existing.sqlite'
-            with sqlite3.connect(path) as connection:
+            with closing(sqlite3.connect(path)) as connection, connection:
                 connection.execute('CREATE TABLE nodes (nid INTEGER PRIMARY KEY, id TEXT, label TEXT)')
                 connection.execute("INSERT INTO nodes VALUES (1, 'original', 'Keep this record')")
             original=path.read_bytes()
             with self.assertRaisesRegex(ValueError,'not a curated Atlas database'):
                 GraphStore(str(path))
             self.assertEqual(path.read_bytes(),original)
-            with sqlite3.connect(path) as connection:
+            with closing(sqlite3.connect(path)) as connection, connection:
                 self.assertEqual(connection.execute('SELECT label FROM nodes').fetchone()[0],'Keep this record')
                 self.assertEqual(connection.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table'").fetchone()[0],1)
+
+    def test_matching_column_names_without_identity_keys_are_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'lookalike.sqlite'
+            with closing(sqlite3.connect(path)) as connection, connection:
+                for name in ('metadata', 'nodes', 'sources', 'claims', 'evidence', 'coverage'):
+                    columns = [row[1] for row in self.store._conn.execute(f'PRAGMA table_info({name})')]
+                    connection.execute(f"CREATE TABLE {name} ({', '.join(column + ' TEXT' for column in columns)})")
+                connection.execute("INSERT INTO nodes(id,label) VALUES ('private-record','Keep this data')")
+            original = path.read_bytes()
+            with self.assertRaisesRegex(ValueError, 'not a curated Atlas database'):
+                GraphStore(str(path))
+            self.assertEqual(path.read_bytes(), original)
 
     def test_existing_curated_database_reopens_without_losing_bundle(self):
         with tempfile.TemporaryDirectory() as directory:

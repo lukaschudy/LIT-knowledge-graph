@@ -1,12 +1,12 @@
 {
   "schema_version": "atlas-dense-production-release-v1",
-  "deployed_at": "2026-10-04T03:09:41.029832+00:00",
+  "deployed_at": "2026-10-04T03:56:26.759951+00:00",
   "worker": "varentik-atlas",
-  "version": "f5d059b4-8b9a-4748-bffa-8d720294e332",
+  "version": "ab5a8ebd-8a82-48d4-ad4c-36f767beb089",
   "traffic_percent": 100,
   "url": "https://atlas.varentik.com/explore",
-  "previous_version": "0f478062-2884-4b2c-8f8f-2a8a35ffecbd",
-  "frontend_source_commit": "b2980cf",
+  "previous_version": "f5d059b4-8b9a-4748-bffa-8d720294e332",
+  "frontend_source_commit": "0228845",
   "production_nodes": 10035,
   "public_hgnc_nodes": 10000,
   "reviewed_grin_nodes": 35,
@@ -23,21 +23,28 @@
     "white_background": true,
     "dark_green_brand": true,
     "proposal_entry_preserved": true,
-    "backend_tests": 12
+    "backend_tests": 12,
+    "application_tests": 141,
+    "build_and_vendor_tests": 29,
+    "production_scope_coverage_gap": true,
+    "production_proposal_form_preserved": true,
+    "vendor_files_verified": 29,
+    "sealed_generated_files": 36,
+    "sealed_build_inputs": 70
   },
   "limitations": [
     "Production uses a fixed public HGNC projection, not the full local harvest store.",
     "Ask Atlas retains the reviewed GRIN annotation lookup; local Codex/TopK and Whisper services are not deployed."
   ],
   "sha256": {
-    "atlas/web/graph.js": "48cd2cbcac14702ad2380a3cfe77d8407649da2487a272ac273112e1071b53d1",
+    "atlas/web/graph.js": "b0e7238ff92aa34f515eea6da5d3cff6b5fa5fae77e832d0267b9e6ae126ff81",
     "atlas/web/graph-renderer.js": "2e2a7ad40836d79bbf49dfbbe472cc3dbdbb1b95a082f1b193fb34211a1a102a",
-    "atlas/web/graph.css": "ae108b6c2c1f96501c2795b9f9f6ba8877d19cd661f5c10f88161ef90d14a766",
+    "atlas/web/graph.css": "5aec1b52cff9b043c50c059f1a2d5515fa26fd76f930d8c44dfeb9f6560a78b9",
     "atlas/web/explore.html": "ee9b33f7b1cdb94dff497e85b47b9c3042d35f92c74d5879a267777defd0671a",
-    "atlas/public_graph.py": "4e79b9c4a0ea1695001435c53dc7c5804d5701bbf8cdab835504faf381590663",
-    "deploy/cloudflare/worker.py": "9906475221a579c3713feae373c6a44a0b24bb487dc73c9803bf705cd1b32dc8",
+    "atlas/public_graph.py": "9c442501175d1148d4d1442f1228db7664685e5c5ee173c359387fe5a8c05346",
+    "deploy/cloudflare/worker.py": "aecfd2e25f57481242c8e8d2bfb5488c4e781e9fe3992c8b616c33c412ae0c76",
     "data/curated/hgnc_dense_snapshot.json.gz": "8673edbc095100db4639a7e5de13831c245f072909ae3abff219498e7d2853c9",
     "deploy/cloudflare/wrangler.jsonc": "5e8bff3396e73538e545e63878d16e5393fbf9479e65ee8f8264eb17a080ab0e",
-    "atlas/proposals.py": "eaf81fa28e04fdf841f59549dd84cef4a46674166a79d5ac09aa35a1a0c70e94"
+    "atlas/proposals.py": "4e5f51ea6444ded88869ab31a877abf64d452b09383ed99a8dfb6db075568534"
   }
 }

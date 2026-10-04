@@ -1,0 +1,42 @@
+{
+  "schema_version": "atlas-reliability-release-v1",
+  "worker": "varentik-atlas",
+  "version": "ab5a8ebd-8a82-48d4-ad4c-36f767beb089",
+  "traffic_percent": 100,
+  "deployed_at": "2026-10-04T03:56:26.759951+00:00",
+  "source_commit": "0228845",
+  "rollback_version": "f5d059b4-8b9a-4748-bffa-8d720294e332",
+  "manifest_sha256": "78c27827ab1554153690ffddd50462a1d157599d969ce5b1390aa6944872b54a",
+  "vendor_sha256": "d52ce509a674e32fa9c31f6d09e2fee85f699957ec6d156294c42b5ae1f475c2",
+  "preserved_bindings": [
+    "PROPOSAL_INBOX",
+    "ASSETS"
+  ],
+  "verification": {
+    "public_graph_tests": 4,
+    "webgl_and_canvas_interaction_checks": true,
+    "production_dom_count": 10035,
+    "production_webgl": true,
+    "production_canvas_width": 1280,
+    "production_viewport_width": 1280,
+    "production_device_pixel_ratio": 2,
+    "production_reviewed_chat_and_five_citation_links": true,
+    "node_drag_keeps_world_positions_fixed": true,
+    "white_background": true,
+    "dark_green_brand": true,
+    "proposal_entry_preserved": true,
+    "backend_tests": 12,
+    "application_tests": 141,
+    "build_and_vendor_tests": 29,
+    "production_scope_coverage_gap": true,
+    "production_proposal_form_preserved": true,
+    "vendor_files_verified": 29,
+    "sealed_generated_files": 36,
+    "sealed_build_inputs": 70
+  },
+  "limitations": [
+    "Production uses a fixed public HGNC projection, not the full local harvest store.",
+    "Ask Atlas retains the reviewed GRIN annotation lookup; local Codex/TopK and Whisper services are not deployed."
+  ],
+  "manifest_path": "deploy/cloudflare/reliability-build-manifest.json"
+}

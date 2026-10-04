@@ -64,7 +64,7 @@ def run(workers=4, wait_for_rechecks=False):
         qid=hashlib.sha256(query.encode()).hexdigest()[:20]
         if qid in progress['completed']:
             connection.close();return
-        cursor='*';page=0;seen=set();expected=None;paths=[]
+        cursor='*';page=0;seen=set();expected=None;paths=[];visited_cursors={cursor};reported_counts=set()
         while True:
             params={'query':query,'format':'json','resultType':'core','pageSize':1000,'cursorMark':cursor}
             url=ENDPOINT+'?'+urlencode(params)
@@ -78,6 +78,7 @@ def run(workers=4, wait_for_rechecks=False):
             obj=json.loads(p.read_text());paths.append(str(p.relative_to(ROOT)))
             if 'hitCount' not in obj:raise ValueError('Europe PMC returned no hitCount')
             if expected is None:expected=int(obj['hitCount'])
+            reported_counts.add(int(obj['hitCount']))
             rows=obj.get('resultList',{}).get('result',[])
             for row in rows:
                 key=str(row['source'])+':'+str(row['id']);seen.add(key)
@@ -87,10 +88,16 @@ def run(workers=4, wait_for_rechecks=False):
             nxt=obj.get('nextCursorMark')
             if not rows or not nxt or nxt==cursor:break
             if len(seen)>=expected:break
+            if not isinstance(nxt,str) or nxt in visited_cursors:
+                connection.close()
+                raise ValueError('Europe PMC cursor cycle or invalid cursor; acquisition is incomplete')
+            visited_cursors.add(nxt)
             cursor=nxt;time.sleep(.15)
         with progress_lock:
-            status='count_verified' if len(seen)==expected else 'count_discrepancy'
-            progress['completed'][qid]={'reported_hits':expected,'last_reported_hits':int(obj['hitCount']),'unique_retrieved':len(seen),'pages':page,'input_paths':paths,'completed_at':now(),'status':status}
+            status='count_verified' if len(seen)==expected and len(reported_counts)==1 else 'count_discrepancy'
+            progress['completed'][qid]={'reported_hits':expected,'last_reported_hits':int(obj['hitCount']),
+                                        'reported_counts':sorted(reported_counts),'unique_retrieved':len(seen),
+                                        'pages':page,'input_paths':paths,'completed_at':now(),'status':status}
             atomic_json(progress_path,progress)
             update_manifest(SOURCE,status='in_progress',coverage={'vocabulary_terms':len(terms),'eligible_search_terms':sum(t['term'] not in EXCLUDED_ALIASES for t in terms),'excluded_aliases':EXCLUDED_ALIASES,'total_queries':len(groups),'completed_queries':len(progress['completed']),'unique_articles':connection.execute('SELECT COUNT(*) FROM records').fetchone()[0]},scope='Exhaustive cursor results for recorded rare-disease name phrases in titles/abstracts; retrieval candidates, not biological evidence.')
             print(json.dumps({'event':'query_complete','query_index':index+1,'queries':len(groups),'hits':len(seen)}),flush=True)
@@ -121,7 +128,7 @@ def run(workers=4, wait_for_rechecks=False):
     emit_records(SOURCE,'queries',queries,input_paths=[source_path],description='Exact query definitions linking vocabulary batches to retrieval membership.')
     emit_records(SOURCE,'articles',(json.loads(r[0]) for r in connection.execute('SELECT data FROM records ORDER BY key')),description='Deduplicated complete Europe PMC core metadata per source:id; abstracts, authors, affiliations, grants, identifiers and available rights retained. Raw input artifacts and per-query progress establish provenance.')
     emit_records(SOURCE,'query_membership',({'query_id':q,'article_id':k} for q,k in connection.execute('SELECT query_id,key FROM matches ORDER BY query_id,key')),description='Search batch membership only; an article need not match every term in a batch.')
-    discrepancies={k:v for k,v in progress['completed'].items() if v['reported_hits']!=v['unique_retrieved']}
+    discrepancies={k:v for k,v in progress['completed'].items() if v['reported_hits']!=v['unique_retrieved'] or v.get('status')=='count_discrepancy'}
     coverage=dict(manifest(SOURCE).get('coverage',{}))
     coverage.update(unique_articles=connection.execute('SELECT COUNT(*) FROM records').fetchone()[0],query_memberships=connection.execute('SELECT COUNT(*) FROM matches').fetchone()[0])
     update_manifest(SOURCE,coverage=coverage,status='complete_with_query_gaps' if errors or discrepancies else 'complete_for_scope',queries=progress['completed'],query_errors=errors,count_discrepancies=discrepancies,limitations=['Preferred name and multiword alias matches are discovery candidates, not proven disease associations.','Short or single-word aliases and the non-discriminating alias the syndrome are excluded to reduce ambiguity; preferred names all included.','No source search guarantees complete recall; title/abstract search misses full-text-only mentions.','Europe PMC updates during traversal may change counts; acquired pages remain reproducible snapshots.'])

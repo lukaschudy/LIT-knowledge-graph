@@ -31,8 +31,10 @@ class GraphStore:
         try:
             tables = {row[0] for row in self._conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
             if tables:
+                schemas = {name: list(self._conn.execute(f'PRAGMA table_info({name})')) for name in expected}
                 if not expected.keys() <= tables or any(
-                    not columns <= {row[1] for row in self._conn.execute(f'PRAGMA table_info({name})')}
+                    not columns <= {row[1] for row in schemas[name]}
+                    or [row[1] for row in schemas[name] if row[5]] != ['key' if name == 'metadata' else 'id']
                     for name, columns in expected.items()
                 ):
                     raise ValueError('This file is not a curated Atlas database. Choose a separate output path.')
