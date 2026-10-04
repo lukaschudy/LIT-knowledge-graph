@@ -1,6 +1,6 @@
 # Atlas reliability review — 4 October 2026
 
-Status: integration and release verification in progress. Review started at 03:24 UTC; this report is updated as checks finish.
+Status: fixes, integration, deployment verification and runtime checks complete. Review started at 03:24 UTC. The findings below distinguish tested behavior from remaining limits.
 
 ## Scope and release boundaries
 
@@ -61,6 +61,6 @@ Production version `ab5a8ebd-8a82-48d4-ad4c-36f767beb089` is deployed at 100% tr
 
 After the final extraction/model/store changes, a fresh build produced the same 36 generated file hashes as the deployed release. Vendor verification again authenticated all 29 installed files against the pinned wheel. The preserved release manifest records the exact deployed input state; build-time-only follow-up fixes therefore require no second deployment.
 
-All application fixes are committed and pushed: production `2968748` (following deployed runtime fixes in `ad23ebc`/`0228845`), local research `bf9d4a5`. Hosted GitHub Actions passed all three jobs on both exact commits: [production run](https://github.com/lukaschudy/LIT-knowledge-graph/actions/runs/37176289095), [research run](https://github.com/lukaschudy/LIT-knowledge-graph/actions/runs/37176399846). The research run was explicitly dispatched after its push did not create an Actions run. The validation JSON includes commit IDs, suite totals and log hashes.
+All application fixes are committed and pushed: production `2968748` (following deployed runtime fixes in `ad23ebc`/`0228845`), local research `bf9d4a5`. Hosted GitHub Actions passed all three jobs on both exact commits: [production run](https://github.com/lukaschudy/LIT-knowledge-graph/actions/runs/37176289095), [research run](https://github.com/lukaschudy/LIT-knowledge-graph/actions/runs/37176399846). The first research run was explicitly dispatched after its push did not create an Actions run; subsequent pushes automatically started CI on both branches. The validation JSON includes commit IDs, suite totals and log hashes.
 
-Runtime endurance and final integration are complete. The audit-only Cloudflare preview was stopped; the live site and local research server remain running. Final review-window completion is recorded below.
+Runtime endurance and final integration are complete. The audit-only Cloudflare preview was stopped; the live site and local research server remain running. Both working trees contain the committed review results; the unrelated main checkout was left untouched.
