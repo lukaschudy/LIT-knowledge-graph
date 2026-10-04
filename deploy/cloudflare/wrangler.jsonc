@@ -19,5 +19,21 @@
       "pattern": "atlas.varentik.com",
       "custom_domain": true
     }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "PROPOSAL_INBOX",
+        "class_name": "ProposalInbox"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1-proposal-inbox",
+      "new_sqlite_classes": [
+        "ProposalInbox"
+      ]
+    }
   ]
 }

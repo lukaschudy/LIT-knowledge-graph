@@ -35,9 +35,9 @@ def answer_question(bundle: dict[str, Any], reasoner: Any, question: str, contex
     if context in nodes and nodes[context]['type'] == 'Disease' and context not in [n['id'] for n in disease_nodes]:
         disease_nodes.append(nodes[context])
 
-    def result(answer: str, ids=(), node_ids=(), suggestions=()):
+    def result(answer: str, ids=(), node_ids=(), suggestions=(), missing=False):
         valid = list(dict.fromkeys(c for c in ids if c in claims))
-        return {'answer': answer, 'claim_ids': valid, 'node_ids': list(dict.fromkeys(node_ids)),
+        return {**({'proposal': {'query': question, 'entry': 'chat'}} if missing else {}), 'answer': answer, 'claim_ids': valid, 'node_ids': list(dict.fromkeys(node_ids)),
                 'suggestions': list(suggestions), 'mode': 'graph_lookup', 'synthetic': bool(bundle['dataset']['synthetic'])}
 
     if re.search(r'\b(treat|treatment|cure|dose|dosage|medication|diagnose|diagnosis|take a drug)\b', q):
@@ -58,7 +58,7 @@ def answer_question(bundle: dict[str, Any], reasoner: Any, question: str, contex
         route = reasoner.explore(first['id'])
         candidate = next((c for c in route.get('candidates', []) if c['disease']['id'] == second['id']), None)
         if not candidate:
-            return result(f"No candidate route between {first['label']} and {second['label']} is recorded in this dataset. This is a coverage gap, not proof that no connection exists.", node_ids=[first['id'], second['id']])
+            return result(f"No candidate route between {first['label']} and {second['label']} is recorded in this dataset. This is a coverage gap, not proof that no connection exists.", node_ids=[first['id'], second['id']], missing=True)
         status = {'supported_lead': 'a supported research lead', 'needs_review': 'a connection requiring review', 'rejected': 'an unsupported route'}.get(candidate['status'], 'an unsupported route')
         reasons = [REASONS[r] for r in candidate.get('reasons', []) if r in REASONS]
         return result(f"{first['label']} and {second['label']}: {status}. " + ' '.join(reasons) + ' This is a research assessment, not clinical compatibility.', candidate.get('path_claim_ids', []), [first['id'], second['id']], ['What evidence supports this?'])
@@ -78,7 +78,7 @@ def answer_question(bundle: dict[str, Any], reasoner: Any, question: str, contex
             if leads:
                 names = '; '.join(dict.fromkeys(o['asset']['label'] for o in leads))
                 return result(f"Research asset to investigate: {names}. Access and suitability still need review; shared biology does not establish transferability.", [cid for o in leads for cid in o.get('path_claim_ids', [])], [o['asset']['id'] for o in leads])
-            return result(f"No fully evidenced asset-and-maintainer route is recorded for {selected['label']}. More evidence or ownership information is needed.", node_ids=[selected['id']])
+            return result(f"No fully evidenced asset-and-maintainer route is recorded for {selected['label']}. More evidence or ownership information is needed.", node_ids=[selected['id']], missing=True)
         assets = [n for n in nodes.values() if n['type'] == 'Asset']
         return result('Recorded research assets: ' + '; '.join(n['label'] for n in assets) + '. Select one to inspect its recorded relationships.' if assets else 'No research assets are recorded in this dataset.', [c['id'] for c in claims.values() if any(n['id'] in (c['subject'], c['object']) for n in assets)], [n['id'] for n in assets])
 
@@ -92,7 +92,7 @@ def answer_question(bundle: dict[str, Any], reasoner: Any, question: str, contex
             sources = {e['source_id'] for e in rows}
             counter = sum(e['stance'] == 'contradicts' for e in rows)
             counter_label = "record" if counter == 1 else "records"
-            return result(f"{selected['label']}: {len(rows)} evidence records across {len(sources)} sources; {counter} counter-evidence {counter_label}. Each linked claim below opens the original excerpt, context and review status.", [c['id'] for c in related], [selected['id']])
+            return result(f"{selected['label']}: {len(rows)} evidence records across {len(sources)} sources; {counter} counter-evidence {counter_label}. Each linked claim below opens the original excerpt, context and review status.", [c['id'] for c in related], [selected['id']], missing=not rows)
         if selected['type'] == 'Disease' and re.search(r'\b(connect|connected|connection|connections|related|why|similar)\b', q):
             route = reasoner.explore(selected['id'])
             leads = [c for c in route.get('candidates', []) if c['status'] == 'supported_lead']
@@ -107,11 +107,11 @@ def answer_question(bundle: dict[str, Any], reasoner: Any, question: str, contex
             adjacent = list(dict.fromkeys(c['object'] if c['subject'] == selected['id'] else c['subject'] for c in connected))
             names = '; '.join(nodes[n]['label'] for n in adjacent[:8])
             answer = f"Recorded neighbors of {selected['label']}: {names}." if adjacent else f"No linked assertions are recorded for {selected['label']}."
-            return result(answer + ' Inspect the claims for direction, context and uncertainty.', [c['id'] for c in connected], [selected['id'], *adjacent])
+            return result(answer + ' Inspect the claims for direction, context and uncertainty.', [c['id'] for c in connected], [selected['id'], *adjacent], missing=not adjacent)
         if re.search(r'\b(what|tell|describe|about|show|who)\b', q) or q in [t.casefold() for t in [selected['label'], *selected.get('aliases', [])]]:
             description = selected.get('properties', {}).get('description', '')
             return result(f"{selected['label']} is recorded as {selected['type'].lower()}. {description} {len(connected)} linked assertions are available for inspection.", [c['id'] for c in connected], [selected['id']], ['What is connected?', 'What evidence is recorded?', 'Any conflicting evidence?'])
 
     if re.search(r'\b(overview|graph|atlas|start|here|explore)\b', q) and not selected:
         return result(f"This graph contains {len(nodes)} entities and {len(claims)} recorded assertions. Select a node, then ask about its connections, evidence, or research assets. Proximity is only a layout choice, not a measure of scientific similarity.", suggestions=['What research assets are recorded?', 'Any conflicting evidence?'])
-    return result('I can look up connections, evidence and research assets in this graph. Select a node or name an entity, then ask about one of those. This is a graph lookup, not a general-purpose AI answer.', suggestions=['What is in this graph?', 'What research assets are recorded?'])
+    return result('I can look up connections, evidence and research assets in this graph. Select a node or name an entity, then ask about one of those. This is a graph lookup, not a general-purpose AI answer.', suggestions=['What is in this graph?', 'What research assets are recorded?'], missing=True)

@@ -888,16 +888,16 @@
         });
         results.append(button);
       });
-      if(!matches.length&&!results.querySelector('button'))results.replaceChildren(make('p','','No match in the loaded graph or harvest index.'));
+      if(!matches.length&&!results.querySelector('button')){results.replaceChildren(make('p','','No match in the loaded graph or harvest index.'));const add=make('a','proposal-link','Propose an addition →');add.href='/propose?'+new URLSearchParams({q:query,entry:'search'});results.append(add);}
     }catch(_){if(requestId===searchRequest&&!resultsElement.querySelector('button'))resultsElement.replaceChildren(make('p','','The harvest search index is unavailable; try a broader loaded-graph search.'));}
   }
   $('node-search').addEventListener('input',searchNodes);
   $('node-search').addEventListener('keydown',e=>{
     if(e.key==='Escape'){$('node-search').value='';searchNodes();}
-    if(e.key==='ArrowDown'){e.preventDefault();$('node-results').querySelector('button')?.focus();}
+    if(e.key==='ArrowDown'){e.preventDefault();$('node-results').querySelector('button,a')?.focus();}
     if(e.key==='Enter'&&searchLead){e.preventDefault();const id=searchLead;if(byId.has(id)){select(id,true);byId.get(id)?.el.focus();}else $('node-results').querySelector(`[data-node-id="${CSS.escape(id)}"]`)?.click();}
   });
-  $('node-results').addEventListener('keydown',e=>{const items=[...$('node-results').querySelectorAll('button')],i=items.indexOf(document.activeElement);if(e.key==='ArrowDown'){e.preventDefault();items[(i+1)%items.length]?.focus();}if(e.key==='ArrowUp'){e.preventDefault();items[(i-1+items.length)%items.length]?.focus();}if(e.key==='Escape'){$('node-search').focus();hideResults();}});
+  $('node-results').addEventListener('keydown',e=>{const items=[...$('node-results').querySelectorAll('button,a')],i=items.indexOf(document.activeElement);if(e.key==='ArrowDown'){e.preventDefault();items[(i+1)%items.length]?.focus();}if(e.key==='ArrowUp'){e.preventDefault();items[(i-1+items.length)%items.length]?.focus();}if(e.key==='Escape'){$('node-search').focus();hideResults();}});
 
   svg.addEventListener('pointerdown',e=>{
     if(e.button!==0)return;
@@ -1058,6 +1058,7 @@
       const response=await fetch(`/api/ask?${params}`),data=await response.json();if(!response.ok)throw new Error(data.error?.message||'The graph could not answer just now.');
       lastAnswer=data;
       reply.replaceChildren(make('div','answer-label',data.synthetic?'Atlas · fictional demo records':'Atlas · graph records'),make('p','',data.answer));
+      if(data.proposal){const add=make('a','proposal-link','Propose an addition →');add.href='/propose?'+new URLSearchParams({q:question,entry:'chat'});reply.append(add);}
       if(data.citations?.length||data.evidence_links?.length){const refs=make('div','chat-citations');for(const source of [...(data.citations||[]).map(s=>({label:s.document_id,url:s.url,title:s.title})),...(data.evidence_links||[])]){try{const url=new URL(source.url,location.origin);if(!['http:','https:'].includes(url.protocol))continue;const a=make('a','',source.label);a.href=url.href;a.title=source.title||source.label;a.target='_blank';a.rel='noopener noreferrer';refs.append(a);}catch(_){}}reply.append(refs);}
       if(data.claim_ids?.length){const refs=make('div','chat-citations');data.claim_ids.forEach((id,i)=>{const claim=bundle.claims.find(c=>c.id===id);if(!claim)return;const b=make('button','',`[${i+1}] ${claim.predicate.replaceAll('_',' ').toLowerCase()}`);b.type='button';b.title=`${byId.get(claim.subject)?.label} → ${byId.get(claim.object)?.label}`;b.onclick=()=>openClaim(id);refs.append(b);});reply.append(refs);}
     }catch(error){reply.replaceChildren(make('p','',error.message||'The answer could not be loaded. Try again.'));}

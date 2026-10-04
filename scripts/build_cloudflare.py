@@ -5,6 +5,7 @@ from pathlib import Path
 import shutil
 import sys
 import re
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -24,7 +25,10 @@ def build():
         source = ROOT / 'atlas/web' / filename
         destination = public / filename
         destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, destination)
+        if '--committed-assets' in sys.argv:
+            destination.write_bytes(subprocess.check_output(['git', 'show', 'HEAD:atlas/web/' + filename], cwd=ROOT))
+        else:
+            shutil.copy2(source, destination)
     (public / '_headers').write_text("""/*
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
@@ -32,7 +36,7 @@ def build():
 """)
     package = target / 'atlas'
     package.mkdir(exist_ok=True)
-    for name in ['__init__.py', 'http_api.py', 'reasoning.py', 'questions.py', 'cluster_questions.py', 'public_graph.py']:
+    for name in ['__init__.py', 'http_api.py', 'reasoning.py', 'questions.py', 'cluster_questions.py', 'public_graph.py', 'proposals.py']:
         shutil.copy2(ROOT / 'atlas' / name, package / name)
     shutil.copy2(ROOT / 'deploy/cloudflare/worker.py', target / 'worker.py')
     cluster = json.loads((ROOT / 'data/curated/grin_cluster_demo_v2.json').read_text())

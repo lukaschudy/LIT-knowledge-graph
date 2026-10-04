@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Propose an addition · Atlas</title>
+  <link rel="stylesheet" href="/proposal.css"><script src="/proposal.js" defer></script>
+</head>
+<body class="proposal-page">
+  <main>
+    <a class="back" href="/explore">← Back to Atlas</a>
+    <p class="eyebrow">HELP FILL A KNOWLEDGE GAP</p>
+    <h1>What are we missing?</h1>
+    <p class="intro">Suggest an entity, paper, or relationship for the database. We’ll save it for review before it becomes part of the graph.</p>
+    <form id="proposal-form">
+      <label for="query">Your original search or question</label>
+      <textarea id="query" name="query" maxlength="1000" rows="2"></textarea>
+      <div class="form-grid">
+        <div><label for="name">Item name</label><input id="name" name="name" required minlength="2" maxlength="160" placeholder="e.g. gene, variant, or paper title"></div>
+        <div><label for="kind">Item type</label><select id="kind" name="kind" required><option value="">Choose a type</option value="gene">Gene</option><option value="variant">Variant</option><option value="disease">Disease</option><option value="paper">Paper</option><option value="relationship">Relationship</option><option value="other">Other</option></select></div>
+      </div>
+      <label for="description">What should we add, and why?</label>
+      <textarea id="description" name="description" required minlength="10" maxlength="4000" rows="4" placeholder="Describe the missing information and any evidence supporting it."></textarea>
+      <label for="source_url">Published source URL <span>(optional)</span></label>
+      <input id="source_url" name="source_url" type="url" maxlength="1500" placeholder="https://doi.org/…">
+      <p class="hint">A paper or database link helps us check the evidence. Please omit personal medical information. Suggestions are stored privately for review.</p>
+      <button id="submit-proposal" type="submit">Submit for review →</button>
+      <p id="form-status" role="status" aria-live="polite"></p>
+    </form>
+    <section id="receipt" hidden tabindex="-1" aria-labelledby="receipt-heading">
+      <p class="eyebrow">PENDING REVIEW</p><h2 id="receipt-heading">Your suggestion is saved.</h2>
+      <p>It is in the review inbox. It has not been added to the evidence graph.</p>
+      <p id="receipt-id"></p><a id="receipt-link">Check submission status</a>
+      <p><a class="proposal-link" href="/explore">Return to the graph →</a></p>
+    </section>
+    <noscript>This form needs JavaScript to submit a suggestion.</noscript>
+  </main>
+</body>
+</html>
