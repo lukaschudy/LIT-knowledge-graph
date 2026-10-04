@@ -1,6 +1,6 @@
 # Neuro entity ingestion and resolution
 
-The default `/explore` view opens a bounded neuro neighborhood around EPG5/Vici, WDR45/BPAN and AP4B1/SPG47. It combines registry entities, source-scoped researchers and assets, publication metadata, and exact-quote model extractions. Expand a node or search by identifier, alias or label to navigate the larger resolved layer. Switch to **All harvested data** to browse the complete 105-dataset source graph.
+The optional **Resolved neuro overview** in `/explore` opens a bounded neuro neighborhood around EPG5/Vici, WDR45/BPAN and AP4B1/SPG47. It combines registry entities, source-scoped researchers and assets, publication metadata, and exact-quote model extractions. Expand a node or search by identifier, alias or label to navigate the larger resolved layer. The default **All harvested data** view opens the dense 10,000-node projection of the complete 105-dataset source graph.
 
 ## Run it
 

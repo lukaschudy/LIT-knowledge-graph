@@ -23,7 +23,7 @@ const { chromium } = require('playwright');
     assert.ok((await page.locator('#harvest-status').innerText()).length > 0, 'harvest coverage state should be explained');
     assert.equal(await page.locator('#graph-scope option').count(), 2, 'resolved and full-harvest scopes should both be available');
     const resolvedAvailable = await page.evaluate(async () => { const r = await fetch('/api/resolved/status'); return r.ok; });
-    assert.equal(await page.locator('#graph-scope').inputValue(), resolvedAvailable ? 'resolved' : 'harvest', 'use resolved neuro by default when the route is available');
+    assert.equal(await page.locator('#graph-scope').inputValue(), 'harvest', 'keep the dense full-harvest graph as the default');
     await page.locator('#graph-scope').selectOption('harvest');
     await page.locator('#harvest-status').waitFor({state:'visible'});
     assert.equal(await page.locator('#harvest-limit option').count(), 3, 'full-harvest page budgets should be available');

@@ -25,7 +25,7 @@
   const family = n => families[n.type] || 'research';
   let bundle, nodes = [], edges = [], byId = new Map(), selected = null, hovered = null;
   let workspaceState = null, pendingWorkspaceState = null, animationLoopStarted = false, workspaceGraphSignature = '';
-  let harvestBase = null, resolvedBase = null, dataMode = 'resolved', harvestCoverage = null, harvestRequest = 0, searchRequest = 0, searchTimer = 0;
+  let harvestBase = null, resolvedBase = null, dataMode = 'harvest', harvestCoverage = null, harvestRequest = 0, searchRequest = 0, searchTimer = 0;
   let harvestLimit = 10000, resolvedLimit = 120, harvestOffset = 0, harvestLoading = false, harvestError = '', resolvedError = '', nextHarvestOffset = null, resolvedNextOffset = null, scopeGeneration=0;
   let expandedFocusId = null, expandedFocusNextOffset = 0, expandedFocusDone = false;
   let harvestDatasets = [], selectedDatasetId = '', recordPage = 0, recordRequest = 0;
@@ -330,14 +330,14 @@
     const minX=Math.min(...nodes.map(n=>n.x)),maxX=Math.max(...nodes.map(n=>n.x));
     const minY=Math.min(...nodes.map(n=>n.y)),maxY=Math.max(...nodes.map(n=>n.y));
     const padX=width<650?24:48, top=90, bottom=75;
-    view.k=Math.max(.04,Math.min(3,(width-padX*2)/Math.max(100,maxX-minX),(height-top-bottom)/Math.max(100,maxY-minY)));
+    view.k=Math.max(dataMode==='harvest'?.15:.04,Math.min(3,(width-padX*2)/Math.max(100,maxX-minX),(height-top-bottom)/Math.max(100,maxY-minY)));
     view.x=width/2-(minX+maxX)/2*view.k;
     view.y=top+(height-top-bottom)/2-(minY+maxY)/2*view.k;
     applyCamera();
   }
   function zoom(factor,x=width/2,y=height/2) {
     cameraTransition=null;
-    const next=Math.max(.04,Math.min(4,view.k*factor)), ratio=next/view.k;
+    const next=Math.max(dataMode==='harvest'?.12:.04,Math.min(4,view.k*factor)), ratio=next/view.k;
     view.x=x-(x-view.x)*ratio; view.y=y-(y-view.y)*ratio; view.k=next; applyCamera();
   }
   function highlight() {
@@ -1002,15 +1002,15 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('graph-options').hidden=true;$('options-toggle').setAttribute('aria-expanded','false');hideResults();}});
 
   async function init() {
+    const initialScopeGeneration=scopeGeneration;
     try{
       const statusRequest=Promise.all([loadHarvestStatus(),loadResolvedStatus()]);
-      const loaded=await loadResolvedGraph({limit:resolvedLimit,offset:0});
-      if(!loaded){
-        dataMode='harvest';$('graph-scope').value='harvest';
-        const fallback=await loadHarvestGraph({limit:harvestLimit,offset:0});
-        if(!fallback){
+      const loaded=await loadHarvestGraph({limit:harvestLimit,offset:0});
+      if(!loaded&&scopeGeneration===initialScopeGeneration){
+        const fallback=await loadResolvedGraph({limit:resolvedLimit,offset:0});
+        if(!fallback&&scopeGeneration===initialScopeGeneration){
           const response=await fetch('/api/graph');if(!response.ok)throw new Error('The graph could not be loaded. Refresh to try again.');
-          harvestBase=null;harvestError='The harvest projection is unavailable. Showing the smaller curated graph view.';
+          dataMode='harvest';$('graph-scope').value='harvest';harvestBase=null;harvestError='The harvest projection is unavailable. Showing the smaller curated graph view.';
           bundle=await response.json();nodes=bundle.nodes.map(node=>({...node}));byId=new Map(nodes.map(node=>[node.id,node]));render();updateHarvestControls();
         }
       }
