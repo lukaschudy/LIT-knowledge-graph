@@ -1,0 +1,275 @@
+{
+  "schema_version": "grin-benchmark-report-v1",
+  "run_id": "synthetic-perfect",
+  "mode": "extraction",
+  "split": "development",
+  "synthetic": true,
+  "input_hashes": {
+    "manifest": "4de21c95d4919c331919a51d4c0eee71fdf42a81d9f6bbe3dc6b865817e101f0",
+    "sources": "f76e84dde4c7e7bc412be0e56143fbd5e9dc708fb71ddf2cb626caf41933832e",
+    "reference": "f0b607020b450bab6700c7238dd480c1ac4bcefe2e6bd52a0544a82b920a148d",
+    "predictions": "15feef6eb715b36c2a36cebc8b40bd89f3a33484edfa282b669ab21596223a65"
+  },
+  "observations": {
+    "tp": 2,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "macro_by_document": {
+    "precision": {
+      "mean": 1.0,
+      "defined_documents": 2,
+      "total_documents": 2
+    },
+    "recall": {
+      "mean": 1.0,
+      "defined_documents": 2,
+      "total_documents": 2
+    },
+    "f1": {
+      "mean": 1.0,
+      "defined_documents": 2,
+      "total_documents": 2
+    }
+  },
+  "uncertainty": {
+    "method": "study-cluster percentile bootstrap",
+    "study_count": 2,
+    "iterations": 2000,
+    "seed": 20261004,
+    "intervals": {
+      "precision": {
+        "lower": 1.0,
+        "upper": 1.0,
+        "valid_draws": 2000,
+        "undefined_draws": 0
+      },
+      "recall": {
+        "lower": 1.0,
+        "upper": 1.0,
+        "valid_draws": 2000,
+        "undefined_draws": 0
+      },
+      "f1": {
+        "lower": 1.0,
+        "upper": 1.0,
+        "valid_draws": 2000,
+        "undefined_draws": 0
+      }
+    },
+    "limitation": "Descriptive uncertainty; perfect small samples do not rule out rare errors."
+  },
+  "documents": [
+    {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "document_id": "SYNTHETIC-DOC-1",
+      "study_id": "synthetic-study-1",
+      "execution_status": "complete",
+      "matches": [
+        {
+          "prediction_id": "prediction-1",
+          "reference_id": "reference-1"
+        }
+      ],
+      "unmatched_predictions": [],
+      "missed_references": [],
+      "content_only_tp": 1
+    },
+    {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "document_id": "SYNTHETIC-DOC-2",
+      "study_id": "synthetic-study-2",
+      "execution_status": "complete",
+      "matches": [
+        {
+          "prediction_id": "prediction-1",
+          "reference_id": "reference-1"
+        }
+      ],
+      "unmatched_predictions": [],
+      "missed_references": [],
+      "content_only_tp": 1
+    }
+  ],
+  "field_diagnostics": {
+    "gene": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "variant": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "sequence_context": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "assay": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "property": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "measurement_type": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "value": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "unit": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "comparator": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "conditions": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "uncertainty": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    },
+    "sample_size": {
+      "correct": 2,
+      "total": 2,
+      "accuracy": 1.0
+    }
+  },
+  "numeric_diagnostics": {
+    "correct": 6,
+    "total": 6,
+    "accuracy": 1.0,
+    "scope": "Non-null reference numbers on uniquely anchored pairs only; not end-to-end accuracy"
+  },
+  "source_spans": {
+    "valid": 2,
+    "total": 2,
+    "note": "Exact source text verification is not independent semantic entailment review"
+  },
+  "decisions": {
+    "cases": 2,
+    "confusion": {
+      "contradicts": {
+        "abstain": 0,
+        "contradicts": 0,
+        "supports": 0,
+        "unresolved": 0
+      },
+      "supports": {
+        "abstain": 0,
+        "contradicts": 0,
+        "supports": 2,
+        "unresolved": 0
+      },
+      "unresolved": {
+        "abstain": 0,
+        "contradicts": 0,
+        "supports": 0,
+        "unresolved": 0
+      }
+    },
+    "per_label": {
+      "contradicts": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "f1": null
+      },
+      "supports": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "unresolved": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null,
+        "f1": null
+      }
+    },
+    "coverage": 1.0,
+    "label_accuracy": 1.0,
+    "grounded_accuracy": 1.0,
+    "cases_detail": [
+      {
+        "document_id": "SYNTHETIC-DOC-1",
+        "case_id": "synthetic-question-1",
+        "expected": "supports",
+        "predicted": "supports",
+        "label_correct": true,
+        "grounded_correct": true
+      },
+      {
+        "document_id": "SYNTHETIC-DOC-2",
+        "case_id": "synthetic-question-1",
+        "expected": "supports",
+        "predicted": "supports",
+        "label_correct": true,
+        "grounded_correct": true
+      }
+    ]
+  },
+  "operations": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": "0",
+    "elapsed_seconds": null,
+    "cost_per_correct_observation_usd": "0"
+  },
+  "assessment": {
+    "status": "inconclusive",
+    "reasons": [
+      "Synthetic fixtures test machinery, not extraction quality",
+      "Development data are not an independent test",
+      "Independent annotation, adjudication and expert review are not recorded for every document",
+      "Fewer than the proposed minimum of 20 independent study families"
+    ],
+    "scientifically_validated": false,
+    "note": "No automatic scientific release. Freeze acceptance policy and document test exposure externally."
+  },
+  "limitations": [
+    "Metrics apply to this reference scope, not the entire harvested corpus.",
+    "Study grouping, exposure history and reviewer independence require human verification.",
+    "Unknown sequence context does not resolve an allele identity.",
+    "Field diagnostics exclude ambiguous anchors; consult end-to-end recall.",
+    "Retrieval recall, entity mention recall, clustering and human correction time are not scored in v1."
+  ]
+}

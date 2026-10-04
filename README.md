@@ -112,6 +112,7 @@ Download the interactive files and open them in a browser; GitHub displays their
 - [Additional sources and ingestion priorities](docs/additional-sources.md)
 - [Graph design and implementation sequence](docs/ingestion-plan.md)
 - [GRIN cluster, demo and evaluation plan](docs/grin-cluster-plan.md)
+- [GRIN extraction benchmark protocol and offline scorer](docs/grin-benchmark.md)
 - [Frontend strategy](docs/frontend-strategy.md)
 - [Proposed recommendation loops and model architecture](docs/architecture/recommendation-loops.md)
 

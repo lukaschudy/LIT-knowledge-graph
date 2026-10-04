@@ -1,0 +1,131 @@
+{
+  "schema_version": "grin-benchmark-v1",
+  "manifest_sha256": "4de21c95d4919c331919a51d4c0eee71fdf42a81d9f6bbe3dc6b865817e101f0",
+  "split": "development",
+  "run": {
+    "id": "synthetic-perfect",
+    "mode": "extraction",
+    "code_commit": "0000000000000000000000000000000000000000",
+    "prompt_sha256": "7863685d2ae9ae3c121084db227f42e414d5a5fb6af85c34c460ad77d9e6b529",
+    "configuration": {
+      "models": [],
+      "generator": "tests_benchmark.fixtures.example",
+      "model_calls": 0,
+      "retrieval": {
+        "enabled": false,
+        "max_rounds": 0
+      }
+    },
+    "configuration_sha256": "21c30b21cded9459750b542bc539b429792ecab8070c195f270883737504115a",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": "0",
+    "elapsed_seconds": null
+  },
+  "documents": [
+    {
+      "document_id": "SYNTHETIC-DOC-1",
+      "status": "complete",
+      "observations": [
+        {
+          "id": "prediction-1",
+          "gene": "SYNTHETIC_GENE",
+          "variant": "p.Ala1Val",
+          "sequence_context": null,
+          "assay": "synthetic current assay",
+          "property": "current",
+          "measurement_type": "measured",
+          "value": "30",
+          "unit": "pA",
+          "comparator": {
+            "label": "WT",
+            "value": "100",
+            "unit": "pA"
+          },
+          "conditions": {
+            "receptor": null,
+            "system": "synthetic cells",
+            "protocol": null
+          },
+          "uncertainty": {
+            "type": "SEM",
+            "value": "2"
+          },
+          "sample_size": {
+            "value": 5,
+            "unit": "cells"
+          },
+          "evidence": [
+            {
+              "unit_id": "synthetic-unit-1",
+              "start": 0,
+              "end": 80,
+              "quote": "SYNTHETIC ONLY. Variant p.Ala1Val current 30 pA; WT 100 pA; SEM 2 pA; n=5 cells."
+            }
+          ]
+        }
+      ],
+      "decisions": [
+        {
+          "case_id": "synthetic-question-1",
+          "label": "supports",
+          "observation_ids": [
+            "prediction-1"
+          ]
+        }
+      ]
+    },
+    {
+      "document_id": "SYNTHETIC-DOC-2",
+      "status": "complete",
+      "observations": [
+        {
+          "id": "prediction-1",
+          "gene": "SYNTHETIC_GENE",
+          "variant": "p.Ala1Val",
+          "sequence_context": null,
+          "assay": "synthetic current assay",
+          "property": "current",
+          "measurement_type": "measured",
+          "value": "30",
+          "unit": "pA",
+          "comparator": {
+            "label": "WT",
+            "value": "100",
+            "unit": "pA"
+          },
+          "conditions": {
+            "receptor": null,
+            "system": "synthetic cells",
+            "protocol": null
+          },
+          "uncertainty": {
+            "type": "SEM",
+            "value": "2"
+          },
+          "sample_size": {
+            "value": 5,
+            "unit": "cells"
+          },
+          "evidence": [
+            {
+              "unit_id": "synthetic-unit-2",
+              "start": 0,
+              "end": 80,
+              "quote": "SYNTHETIC ONLY. Variant p.Ala1Val current 30 pA; WT 100 pA; SEM 2 pA; n=5 cells."
+            }
+          ]
+        }
+      ],
+      "decisions": [
+        {
+          "case_id": "synthetic-question-1",
+          "label": "supports",
+          "observation_ids": [
+            "prediction-1"
+          ]
+        }
+      ]
+    }
+  ]
+}

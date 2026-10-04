@@ -1,0 +1,129 @@
+{
+  "schema_version": "grin-benchmark-v1",
+  "manifest_sha256": "4de21c95d4919c331919a51d4c0eee71fdf42a81d9f6bbe3dc6b865817e101f0",
+  "split": "development",
+  "documents": [
+    {
+      "document_id": "SYNTHETIC-DOC-1",
+      "coverage": "complete",
+      "review": {
+        "annotators": [],
+        "adjudicator": null,
+        "expert_reviewed": false
+      },
+      "observations": [
+        {
+          "id": "reference-1",
+          "gene": "SYNTHETIC_GENE",
+          "variant": "p.Ala1Val",
+          "sequence_context": null,
+          "assay": "synthetic current assay",
+          "property": "current",
+          "measurement_type": "measured",
+          "value": "30",
+          "unit": "pA",
+          "comparator": {
+            "label": "WT",
+            "value": "100",
+            "unit": "pA"
+          },
+          "conditions": {
+            "receptor": null,
+            "system": "synthetic cells",
+            "protocol": null
+          },
+          "uncertainty": {
+            "type": "SEM",
+            "value": "2"
+          },
+          "sample_size": {
+            "value": 5,
+            "unit": "cells"
+          },
+          "evidence_sets": [
+            [
+              {
+                "unit_id": "synthetic-unit-1",
+                "start": 0,
+                "end": 80,
+                "quote": "SYNTHETIC ONLY. Variant p.Ala1Val current 30 pA; WT 100 pA; SEM 2 pA; n=5 cells."
+              }
+            ]
+          ]
+        }
+      ],
+      "decisions": [
+        {
+          "case_id": "synthetic-question-1",
+          "question": "Does the synthetic assay support lower current than WT?",
+          "label": "supports",
+          "observation_ids": [
+            "reference-1"
+          ],
+          "author_interpretation": null
+        }
+      ]
+    },
+    {
+      "document_id": "SYNTHETIC-DOC-2",
+      "coverage": "complete",
+      "review": {
+        "annotators": [],
+        "adjudicator": null,
+        "expert_reviewed": false
+      },
+      "observations": [
+        {
+          "id": "reference-1",
+          "gene": "SYNTHETIC_GENE",
+          "variant": "p.Ala1Val",
+          "sequence_context": null,
+          "assay": "synthetic current assay",
+          "property": "current",
+          "measurement_type": "measured",
+          "value": "30",
+          "unit": "pA",
+          "comparator": {
+            "label": "WT",
+            "value": "100",
+            "unit": "pA"
+          },
+          "conditions": {
+            "receptor": null,
+            "system": "synthetic cells",
+            "protocol": null
+          },
+          "uncertainty": {
+            "type": "SEM",
+            "value": "2"
+          },
+          "sample_size": {
+            "value": 5,
+            "unit": "cells"
+          },
+          "evidence_sets": [
+            [
+              {
+                "unit_id": "synthetic-unit-2",
+                "start": 0,
+                "end": 80,
+                "quote": "SYNTHETIC ONLY. Variant p.Ala1Val current 30 pA; WT 100 pA; SEM 2 pA; n=5 cells."
+              }
+            ]
+          ]
+        }
+      ],
+      "decisions": [
+        {
+          "case_id": "synthetic-question-1",
+          "question": "Does the synthetic assay support lower current than WT?",
+          "label": "supports",
+          "observation_ids": [
+            "reference-1"
+          ],
+          "author_interpretation": null
+        }
+      ]
+    }
+  ]
+}

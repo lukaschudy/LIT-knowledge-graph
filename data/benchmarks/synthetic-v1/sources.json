@@ -1,0 +1,19 @@
+{
+  "schema_version": "grin-benchmark-v1",
+  "units": [
+    {
+      "unit_id": "synthetic-unit-1",
+      "document_id": "SYNTHETIC-DOC-1",
+      "kind": "paragraph",
+      "locator": "synthetic paragraph 1",
+      "text": "SYNTHETIC ONLY. Variant p.Ala1Val current 30 pA; WT 100 pA; SEM 2 pA; n=5 cells."
+    },
+    {
+      "unit_id": "synthetic-unit-2",
+      "document_id": "SYNTHETIC-DOC-2",
+      "kind": "paragraph",
+      "locator": "synthetic paragraph 1",
+      "text": "SYNTHETIC ONLY. Variant p.Ala1Val current 30 pA; WT 100 pA; SEM 2 pA; n=5 cells."
+    }
+  ]
+}

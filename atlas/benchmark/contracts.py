@@ -182,8 +182,12 @@ def validate_reference(manifest, sources, reference):
         string(doc["review"]["adjudicator"], "adjudicator", nullable=True)
         require(type(doc["review"]["expert_reviewed"]) is bool, "Expert review must be boolean")
         obs = unique(doc["observations"], "id", "reference observations")
+        fingerprints = set()
         for row in obs.values():
             observation(row, reference=True)
+            fingerprint = digest({k: v for k, v in row.items() if k != "id"})
+            require(fingerprint not in fingerprints, "Duplicate reference observation with different ID")
+            fingerprints.add(fingerprint)
             for bundle in row["evidence_sets"]:
                 require(all(valid_span(s, doc_id, units) for s in bundle), "Ungrounded reference span")
         decisions = unique(doc["decisions"], "case_id", "reference decisions")

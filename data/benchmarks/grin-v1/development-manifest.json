@@ -1,0 +1,93 @@
+{
+  "schema_version": "grin-benchmark-v1",
+  "benchmark_id": "grin-development-seed-v1",
+  "state": "draft",
+  "synthetic": false,
+  "scope": "Seven previously curated papers. Development only; study grouping, source units and independent annotations pending.",
+  "documents": [
+    {
+      "document_id": "PMC10508039",
+      "study_id": "UNREVIEWED-PMC10508039",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": null,
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC10641759",
+      "study_id": "UNREVIEWED-PMC10641759",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": null,
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC10973091",
+      "study_id": "UNREVIEWED-PMC10973091",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": null,
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC11046977",
+      "study_id": "UNREVIEWED-PMC11046977",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": null,
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC5142120",
+      "study_id": "UNREVIEWED-PMC5142120",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": null,
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC5656050",
+      "study_id": "UNREVIEWED-PMC5656050",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": null,
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    },
+    {
+      "document_id": "PMC7554152",
+      "study_id": "UNREVIEWED-PMC7554152",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": false,
+      "source_sha256": null,
+      "strata": [
+        "previously_curated",
+        "screening_pending"
+      ]
+    }
+  ]
+}

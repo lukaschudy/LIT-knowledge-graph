@@ -1,0 +1,33 @@
+{
+  "schema_version": "grin-benchmark-v1",
+  "benchmark_id": "SYNTHETIC-MACHINERY-ONLY",
+  "state": "frozen",
+  "synthetic": true,
+  "scope": "Invented records for software tests; not a scientific benchmark.",
+  "documents": [
+    {
+      "document_id": "SYNTHETIC-DOC-1",
+      "study_id": "synthetic-study-1",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": true,
+      "source_sha256": "38e931c2760f18182629452a179f792bd72c338aac25e13c4d2646f8e5718c36",
+      "strata": [
+        "synthetic",
+        "paragraph"
+      ]
+    },
+    {
+      "document_id": "SYNTHETIC-DOC-2",
+      "study_id": "synthetic-study-2",
+      "split": "development",
+      "known_development": true,
+      "grouping_reviewed": true,
+      "source_sha256": "2059ceb5d1589984c861ea2234fc782016453a9084822e56fb0ba20c7de0dd3b",
+      "strata": [
+        "synthetic",
+        "paragraph"
+      ]
+    }
+  ]
+}
