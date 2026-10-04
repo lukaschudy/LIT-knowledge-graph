@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from atlas.search.passages import article_documents, bundle_documents, chunks, export, protein_mentions, read_rows, xml_units
+from atlas.search.passages import article_documents, bundle_documents, chunks, export, file_sha, protein_mentions, read_rows, xml_units
 from atlas.search.topk import batches, checked_bundle, fuse, graph_connections, ingest, request, resolve_filters, settings
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -71,6 +71,40 @@ class PassageTests(unittest.TestCase):
 
 
 class TransportTests(unittest.TestCase):
+    def test_interrupted_verification_resumes_completed_batches(self):
+        class Remote:
+            def __init__(self): self.docs, self.get_calls = {}, 0
+            def upsert(self, rows):
+                self.docs.update({r["_id"]: r for r in rows})
+                return "barrier"
+            def get(self, ids, **kwargs):
+                self.get_calls += 1
+                if self.get_calls == 2:
+                    raise ConnectionError("temporary read interruption")
+                return {k: self.docs[k] for k in ids}
+        class Client:
+            def __init__(self): self.remote = Remote()
+            def collection(self, name): return self.remote
+        with tempfile.TemporaryDirectory() as td:
+            p, checkpoint = Path(td) / "export.gz", Path(td) / "state.json"
+            manifest = export(ROOT, p, fulltext=False)
+            original = list(read_rows(p))
+            rows = [{**row, "_id": f'{i}:{row["_id"]}'} for i in range(4) for row in original]
+            with gzip.open(p, "wt") as f:
+                for row in rows: f.write(json.dumps(row) + "\n")
+            manifest.update(export_sha256=file_sha(p), documents=len(rows))
+            p.with_suffix(p.suffix + ".manifest.json").write_text(json.dumps(manifest))
+            client = Client()
+            with patch("atlas.search.topk.wire_documents", side_effect=lambda rows: rows), patch("atlas.search.topk.time.sleep"):
+                with self.assertRaises(ConnectionError):
+                    ingest(client, "pilot", p, checkpoint, "region")
+                state = json.loads(checkpoint.read_text())
+                self.assertEqual(state["verified_documents"], 100)
+                state = ingest(client, "pilot", p, checkpoint, "region")
+                self.assertEqual(state["verified_documents"], 224)
+                self.assertEqual(state["status"], "verified")
+                self.assertEqual(client.remote.get_calls, 4)
+
     def test_only_transient_quota_errors_are_retried(self):
         QuotaExceededError = type("QuotaExceededError", (Exception,), {})
         calls = []

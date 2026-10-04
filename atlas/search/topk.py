@@ -20,13 +20,13 @@ _NEXT_REQUEST = 0.0
 
 
 def request(call, *args, **kwargs):
-    """Pace this process to two API requests/second; retry transient limits only."""
+    """Pace this process to one API request/second; retry transient limits only."""
     global _NEXT_REQUEST
-    for attempt in range(6):
+    for attempt in range(7):
         with _REQUEST_LOCK:
             now = time.monotonic()
             slot = max(now, _NEXT_REQUEST)
-            _NEXT_REQUEST = slot + .5
+            _NEXT_REQUEST = slot + 1.0
         time.sleep(max(0, slot - now))
         try:
             return call(*args, **kwargs)
@@ -34,7 +34,7 @@ def request(call, *args, **kwargs):
             name = type(exc).__name__
             transient = name in {"SlowDownError", "QueryLsnTimeoutError"} or (
                 name == "QuotaExceededError" and "too many requests" in str(exc).lower())
-            if not transient or attempt == 5:
+            if not transient or attempt == 6:
                 raise
             time.sleep(2 ** attempt)
 
@@ -114,6 +114,11 @@ def ingest(client, collection, export_path, state_path, region, *, create=False,
         state = json.loads(state_path.read_text())
         if any(state.get(k) != v for k, v in target.items()):
             raise ValueError("Checkpoint belongs to a different export or target; use a new checkpoint")
+        if state.get("status") == "verified":
+            # An explicit rerun rechecks a previously completed index. Only an
+            # interrupted verification resumes its already checked prefix.
+            state["verified_batches"] = 0
+            state["verified_documents"] = 0
     state["bundle_sha256"] = manifest["input_sha256"]["data/curated/grin_atlas_bundle.json"]
     if create:
         # Never mask a permission/schema error as 'already exists'.
@@ -158,14 +163,22 @@ def ingest(client, collection, export_path, state_path, region, *, create=False,
         state["last_lsn"] = state["final_barrier_lsn"]
         save_json(state_path, state)
     # Verify every identifier and its content, not just the global collection count.
-    verified = 0
-    for batch in batches(read_rows(export_path)):
+    verified = state.get("verified_documents", 0)
+    for index, batch in enumerate(batches(read_rows(export_path))):
+        if index < state.get("verified_batches", 0):
+            continue
         found = request(remote.get, [r["_id"] for r in batch], lsn=state.get("last_lsn"))
         for expected in batch:
             actual = found.get(expected["_id"])
             if actual is None or any(actual.get(k) != v for k, v in expected.items() if k != "_id"):
                 raise ValueError("TopK read-back differs from local export")
             verified += 1
+        state.update(verified_batches=index + 1, verified_documents=verified)
+        save_json(state_path, state)
+        if progress and ((index + 1) % 10 == 0 or verified == manifest["documents"]):
+            progress({"verified": verified, "total": manifest["documents"]})
+    if verified != manifest["documents"]:
+        raise ValueError("Verified count does not match export")
     state.update(status="verified", verified_documents=verified)
     save_json(state_path, state)
     return state
