@@ -4,6 +4,7 @@ from typing import Any
 from .reasoning import AtlasReasoner
 from .questions import answer_question
 from .cluster_questions import answer_cluster_question
+from .demo_scope import SCOPE, question_in_scope, scope_boundary, scoped_answer
 
 
 def response(status: int, payload: dict[str, Any]) -> tuple[int, dict[str, Any]]:
@@ -97,14 +98,17 @@ class AtlasAPI:
             # A linked-claim follow-up must retain its evidence scope instead
             # of being replaced by a selected variant's annotation overview.
             if self.cluster:
+                if not question_in_scope(question, nodes.values()):
+                    return response(200, scope_boundary(question))
                 answer = answer_cluster_question(self.cluster, question, None if claim_context else context)
                 if answer is not None:
-                    return response(200, answer)
+                    return response(200, scoped_answer(answer))
+                return response(200, scoped_answer(answer_question(bundle, reasoner, question, context, claim_context)))
             return response(200, answer_question(bundle, reasoner, question, context, claim_context))
         if path == "/api/cluster" and self.cluster:
             return response(200, self.cluster)
         if path == "/api/health":
-            return response(200, {"status": "ok", "synthetic": bool(bundle["dataset"]["synthetic"]), "dataset": bundle["dataset"]})
+            return response(200, {"status": "ok", "synthetic": bool(bundle["dataset"]["synthetic"]), "dataset": bundle["dataset"], **({"answer_scope": dict(SCOPE)} if self.cluster else {})})
         if path == "/api/stats":
             return response(200, {"dataset": bundle["dataset"], "stats": stats})
         if path == "/api/graph":

@@ -272,8 +272,32 @@ class WorkerTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status, 200)
         self.assertIn('outside the reviewed GRIN', response.json()['answer'])
         self.assertEqual(response.json()['claim_ids'], [])
-        self.assertEqual(response.json()['node_ids'], [node['id']])
+        self.assertEqual(response.json()['node_ids'], [])
+        self.assertEqual(response.json()['answer_scope']['id'], 'grin-reduced-function-v1')
         self.assertNotIn('observation_ids', response.json())
+
+    async def test_global_search_does_not_change_the_demo_answer_scope(self):
+        search = await self.app.fetch(request('/api/harvest/search?q=ARX'))
+        self.assertEqual(search.status, 200)
+        outside = next(n for n in search.json()['results'] if n['label'] == 'ARX')
+        answer = await self.app.fetch(request('/api/ask?q=Explain+GRIN2B+S541R&node=' + outside['id']))
+        self.assertEqual(answer.status, 200)
+        self.assertEqual(answer.json()['mode'], 'source_annotation_lookup')
+        self.assertNotIn(outside['id'], answer.json()['node_ids'])
+        self.assertIn('9.1 (7.2, 11)', answer.json()['answer'])
+        self.assertEqual(answer.json()['answer_scope']['id'], 'grin-reduced-function-v1')
+
+    async def test_public_gene_identity_maps_to_its_demo_gene(self):
+        public = next(n for n in self.worker.PUBLIC.nodes.values() if n['id'].startswith('HGNC:') and n['label'] == 'GRIN2B')
+        response = await self.app.fetch(request('/api/ask?q=What+evidence+is+available&node=' + public['id']))
+        self.assertEqual(response.status, 200)
+        self.assertNotEqual(response.json()['mode'], 'demo_scope_boundary')
+        self.assertEqual(response.json()['answer_scope']['id'], 'grin-reduced-function-v1')
+
+    async def test_mentioning_demo_gene_cannot_import_an_outside_gene(self):
+        response = await self.app.fetch(request('/api/ask?q=Compare+ARX+and+GRIN2B+variants'))
+        self.assertEqual(response.json()['mode'], 'demo_scope_boundary')
+        self.assertEqual(response.json()['claim_ids'], [])
 
     async def test_unknown_and_ambiguous_contexts_do_not_get_hgnc_fallback(self):
         node = next(iter(self.worker.API.nodes))

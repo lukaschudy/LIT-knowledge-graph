@@ -7,6 +7,7 @@ from atlas.proposals import SCHEMA, INDEX, MAX_BYTES, ProposalError, parse_propo
 from snapshot import BUNDLE, STATS
 from dense_snapshot import BUNDLE as DENSE
 from atlas.public_graph import PublicGraphAPI
+from atlas.demo_scope import question_in_scope, mentions_scope, scope_boundary, mentioned_external_genes
 from cluster_snapshot import CLUSTER, EXCERPTS
 
 PUBLIC = PublicGraphAPI(DENSE, BUNDLE)
@@ -105,6 +106,10 @@ def evidence_response(query):
 
 def atlas_response(path, query):
     status, payload = API.request(path, query)
+    if path == '/api/ask' and status == 200:
+        outside = mentioned_external_genes(API._one(query, 'q'), PUBLIC.nodes.values(), API.nodes)
+        if outside:
+            return 200, scope_boundary(API._one(query, 'q'), selected_label=outside[0]['label'])
     # Only a known public entity can receive the HGNC scope response. Validate
     # the complete request first so malformed IDs/claims cannot be discarded.
     context = API._one(query, 'node') if path == '/api/ask' else None
@@ -112,14 +117,18 @@ def atlas_response(path, query):
             and context in PUBLIC.nodes):
         node = PUBLIC.nodes[context]
         question = API._one(query, 'q')
-        return 200, {
-            'answer': f"{node['label']} is in the public HGNC snapshot, outside the reviewed GRIN evidence cluster. "
-                      'The snapshot provides discovery relationships and source provenance for this entity. '
-                      'No reviewed evidence answer is available for this selection; this is a coverage gap, '
-                      'not evidence that the entity has no effect.',
-            'mode': 'graph_lookup', 'synthetic': False, 'claim_ids': [], 'node_ids': [context],
-            'suggestions': [], 'proposal': {'query': question, 'entry': 'chat'},
-        }
+        canonical = next((n['id'] for n in API.nodes.values() if n['type'] == 'Gene' and node['type'] == 'Gene' and n['label'].casefold() == node['label'].casefold()), None)
+        if canonical:
+            return API.request(path, {**query, 'node': [canonical]})
+        outside = mentioned_external_genes(question, PUBLIC.nodes.values(), API.nodes)
+        if outside:
+            return 200, scope_boundary(question, selected_label=outside[0]['label'])
+        # Search selection never changes the fixed answer scope. Explicit
+        # cluster questions still work after browsing an unrelated public node.
+        if (mentions_scope(question, API.nodes.values())
+                or 'cluster' in question.casefold() and question_in_scope(question)):
+            return API.request(path, {key: value for key, value in query.items() if key != 'node'})
+        return 200, scope_boundary(question, selected_label=node['label'])
     return status, payload
 
 
