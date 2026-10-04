@@ -34,6 +34,8 @@
   let lastAnswer = null, searchTerm = '', searchMatches = new Set(), searchLead = null;
   let needsProjection = true, needsPaint = true, overlayDirty = true, labelScale = 0;
   let depthOrder = [], edgeBatches = [], pixelRatio = 1, lastOverlay = 0;
+  const DENSE_GRAPH_THRESHOLD=1200, HIT_CELL=32;
+  let overlayNodes=[],overlayEdges=[],overlayAnchors=[],hitGrid=new Map();
   let hoverTimer = 0, hoverCandidate = null, sceneTransition = null, cameraTransition = null;
   function setHover(id) {
     clearTimeout(hoverTimer);hoverCandidate=id;
@@ -52,10 +54,13 @@
     // The same point stays under hover and click, even where SVG hit circles overlap.
     if(current&&!current.hidden&&Math.hypot(x-current.screenX,y-current.screenY)<Math.max(12,current.screenR+7))return current.id;
     let nearest=null,distance=e.pointerType==='touch'?20:10;
-    for(const n of nodes){
-      if(n.hidden)continue;
-      const d=Math.hypot(x-n.screenX,y-n.screenY);
-      if(d<distance){nearest=n.id;distance=d;}
+    const col=Math.floor(x/HIT_CELL),row=Math.floor(y/HIT_CELL);
+    for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){
+      for(const n of hitGrid.get(`${col+dx}:${row+dy}`)||[]){
+        if(n.hidden)continue;
+        const d=Math.hypot(x-n.screenX,y-n.screenY);
+        if(d<distance){nearest=n.id;distance=d;}
+      }
     }
     return nearest;
   }
@@ -64,14 +69,14 @@
     queueHover(nodeAt(e));
   }
   function transitionScene() {
-    const focused=!!(selected||searchTerm);
+    const focused=!!(selected||searchTerm),showConnections=$('show-connections').checked;
     for(const n of nodes){
       const active=(n.id===selected||n.id===hovered)&&!n.dimmed,matched=searchMatches.has(n.id);
       n.fromWeight=n.weight??1;n.toWeight=n.hidden?0:n.dimmed?.16:1;
       n.fromRing=n.ring??0;n.toRing=!n.hidden&&(active||matched)?1:0;
     }
     for(const e of edges){
-      e.fromWeight=e.weight??1;e.toWeight=e.hidden||focused&&!e.linked||!$('show-connections').checked&&!e.linked?0:1;
+      e.fromWeight=e.weight??1;e.toWeight=e.hidden||focused&&!e.linked||!showConnections&&!e.linked?0:1;
       e.fromEmphasis=e.emphasis??0;e.toEmphasis=focused&&e.linked?1:0;
     }
     sceneTransition={start:performance.now()};
@@ -121,7 +126,7 @@
     const elapsed=Math.min(50,time-(previousFrame||time));previousFrame=time;
     advanceTransitions(time);
     const editing=['INPUT','TEXTAREA'].includes(document.activeElement?.tagName);
-    const idle=!document.hidden&&time>idleAfter&&$('ambient-motion').checked&&!gesture&&!cameraTransition&&!sceneTransition&&!selected&&!hovered&&!searchTerm&&!editing&&$('chat-panel').hidden&&$('graph-options').hidden&&!document.querySelector('dialog[open]');
+    const idle=!document.hidden&&time>idleAfter&&$('ambient-motion').checked&&!gesture&&!cameraTransition&&!sceneTransition&&!selected&&!hovered&&!searchTerm&&!editing&&$('chat-panel').hidden&&$('workspace-panel').hidden&&$('graph-options').hidden&&!document.querySelector('dialog[open]');
     if(idle){yaw+=elapsed*.000023;needsProjection=true;}
     if(!document.hidden&&(needsPaint||needsProjection)&&(!idle||time-lastPaint>32)){
       if(needsProjection){
@@ -144,11 +149,17 @@
   function drawGraph() {
     ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);ctx.clearRect(0,0,width,height);
     const sqrtZoom=Math.sqrt(view.k);
-    nodes.forEach(n=>{n.screenX=view.x+n.x*view.k;n.screenY=view.y+n.y*view.k;n.screenR=Math.max(1.5,n.radius*n.perspective*sqrtZoom);});
+    hitGrid.clear();
+    nodes.forEach(n=>{
+      n.screenX=view.x+n.x*view.k;n.screenY=view.y+n.y*view.k;n.screenR=Math.max(1.5,n.radius*n.perspective*sqrtZoom);
+      n.inViewport=n.screenX>-32&&n.screenX<width+32&&n.screenY>-32&&n.screenY<height+32;
+      if(n.inViewport&&!n.hidden){const key=`${Math.floor(n.screenX/HIT_CELL)}:${Math.floor(n.screenY/HIT_CELL)}`;if(!hitGrid.has(key))hitGrid.set(key,[]);hitGrid.get(key).push(n);}
+    });
     // Quantized opacity keeps fading edges batched instead of stroking each one.
     for(const batch of edgeBatches){
       const buckets=new Map();
       for(const e of batch.edges){
+        if((e.a.screenX<0&&e.b.screenX<0)||(e.a.screenX>width&&e.b.screenX>width)||(e.a.screenY<0&&e.b.screenY<0)||(e.a.screenY>height&&e.b.screenY>height))continue;
         const front=e.a.depth+e.b.depth<0,base=front?.23:.115;
         const alpha=Math.round((e.weight??1)*(base+(.68-base)*(e.emphasis??0))*48)/48;
         if(alpha<=0)continue;
@@ -168,13 +179,13 @@
     ctx.setLineDash([]);
     // Cached colour sprites keep the soft halos cheap while rotating or dragging.
     for(const n of depthOrder){
-      if(n.weight<.01||(!n.ring&&n.degree<6))continue;
+      if(!n.inViewport||n.weight<.01||(!n.ring&&n.degree<6))continue;
       const r=n.screenR,extent=r*(2.8+n.ring);
       ctx.globalAlpha=(.3+n.ring*.35)*n.weight;
       ctx.drawImage(glows[family(n)],n.screenX-extent,n.screenY-extent,extent*2,extent*2);
     }
     for(const n of depthOrder){
-      if(n.weight<.01)continue;
+      if(!n.inViewport||n.weight<.01)continue;
       const r=n.screenR,x=n.screenX,y=n.screenY;
       const color=colors[family(n)],depthAlpha=Math.max(.66,Math.min(1,.9-n.depth/1000));
       if(n.ring>.01){
@@ -193,13 +204,13 @@
   function syncOverlay() {
     camera.setAttribute('transform',`translate(${view.x} ${view.y}) scale(${view.k})`);
     const scaled=labelScale!==view.k;labelScale=view.k;
-    nodes.forEach(n=>{
+    overlayNodes.forEach(n=>{
       n.el.setAttribute('transform',`translate(${n.x.toFixed(2)} ${n.y.toFixed(2)})`);
       n.drawnRadius=n.screenR/view.k;
       if(scaled){n.hit.setAttribute('r',9/view.k);n.text.setAttribute('font-size',12/view.k);}
     });
     // Only highlighted edges need a pointer target. The faint overview lives on canvas.
-    edges.forEach(e=>{if(e.linked&&!e.hidden)e.hit.setAttribute('d',`M${e.a.x} ${e.a.y}L${e.b.x} ${e.b.y}`);});
+    overlayEdges.forEach(e=>{if(e.linked&&!e.hidden)e.hit.setAttribute('d',`M${e.a.x} ${e.a.y}L${e.b.x} ${e.b.y}`);});
     placeLabels();overlayDirty=false;
   }
 
@@ -309,7 +320,7 @@
   function placeLabels() {
     const occupied=[];
     const priority=n=>n.id===selected?0:n.type==='Disease'?1:n.type==='Mechanism'?2:3;
-    nodes.filter(n=>svg.classList.contains('all-labels')||n.id===selected||n.id===hovered||n.id===searchLead).sort((a,b)=>priority(a)-priority(b)).forEach(n=>{
+    overlayNodes.filter(n=>svg.classList.contains('all-labels')||n.id===selected||n.id===hovered||n.id===searchLead).sort((a,b)=>priority(a)-priority(b)).forEach(n=>{
       if(!n.text||n.el.getAttribute('display')==='none')return;
       const visible=svg.classList.contains('all-labels')||n.id===selected||n.id===hovered||n.id===searchLead;
       if(!visible)return;
@@ -341,29 +352,20 @@
     view.x=x-(x-view.x)*ratio; view.y=y-(y-view.y)*ratio; view.k=next; applyCamera();
   }
   function highlight() {
-    const searching=!!searchTerm;
+    const searching=!!searchTerm,localView=$('local-view').checked;
     // Hover reveals a label and ring; only selection/search changes the whole scene.
     const id=selected, neighbors=new Set(id?[id]:[]);
     edges.forEach(e=>{if(e.a.id===id)neighbors.add(e.b.id);if(e.b.id===id)neighbors.add(e.a.id);});
     svg.classList.toggle('has-focus',!!id);svg.classList.toggle('is-searching',searching);
     nodes.forEach(n=>{
       n.dimmed=searching?!searchMatches.has(n.id):!!id&&!neighbors.has(n.id);
-      n.hidden=!searching&&$('local-view').checked&&selected&&!neighbors.has(n.id);
-      n.el.classList.toggle('selected',n.id===selected);
-      n.el.classList.toggle('hovered',n.id===hovered);
-      n.el.classList.toggle('neighbor',neighbors.has(n.id));
-      n.el.classList.toggle('dimmed',n.dimmed);
-      n.el.classList.toggle('search-match',searchMatches.has(n.id));
-      n.el.classList.toggle('search-lead',n.id===searchLead);
-      n.el.setAttribute('aria-pressed',String(n.id===selected));
-      n.el.setAttribute('display',n.hidden?'none':'');
+      n.hidden=!searching&&localView&&selected&&!neighbors.has(n.id);
     });
     edges.forEach(e=>{
       e.linked=searching?searchMatches.has(e.a.id)&&searchMatches.has(e.b.id):e.a.id===id||e.b.id===id;
-      e.hidden=!searching&&$('local-view').checked&&selected&&!e.linked;
-      e.el.classList.toggle('highlight',e.linked);e.el.classList.toggle('dimmed',!!id&&!e.linked);
-      e.el.setAttribute('tabindex',e.linked?'0':'-1');e.el.setAttribute('display',e.hidden?'none':'');
+      e.hidden=!searching&&localView&&selected&&!e.linked;
     });
+    updateOverlayTargets(neighbors);
     transitionScene();overlayDirty=true;needsPaint=true;
   }
   function select(id,center=false) {
@@ -383,30 +385,53 @@
     const workspaceId=workspaceNodeId(id);
     window.dispatchEvent(new CustomEvent('atlas:node-select',{detail:{node_id:workspaceId,graph_node_id:id,node:node?{id:workspaceId,graph_id:id,label:label(node),type:node.type}:null}}));
   }
+  function createNodeTarget(n) {
+    n.el=shape('g',{class:'net-node',role:'button',tabindex:0,'data-node':n.id,'data-kind':n.type,'data-family':family(n),'aria-label':`${n.label}, ${n.type}`,'aria-pressed':'false'});
+    n.hit=shape('circle',{r:9/view.k,fill:'transparent'});
+    n.text=shape('text',{class:'node-label','text-anchor':'middle','font-size':12/view.k});n.text.textContent=short(label(n));
+    const title=shape('title');title.textContent=`${n.label} · ${n.type}`;
+    n.el.append(title,n.hit,n.text);nodeLayer.append(n.el);
+    n.el.addEventListener('focus',()=>setHover(n.id));
+    n.el.addEventListener('blur',()=>setHover(null));
+  }
+  function updateOverlayTargets(neighbors) {
+    // Dense graphs keep every point on canvas. Search, pointer picking and
+    // selection expose the corresponding accessible controls on demand.
+    const wanted=nodes.length>DENSE_GRAPH_THRESHOLD?new Set(overlayAnchors):new Set(nodes);
+    for(const id of [selected,hovered,searchLead,document.activeElement?.closest('[data-node]')?.dataset.node,...[...searchMatches].slice(0,12),...[...neighbors].slice(0,64)]){
+      const n=byId.get(id);if(n)wanted.add(n);
+    }
+    for(const n of overlayNodes)if(!wanted.has(n)){n.el.remove();n.el=n.hit=n.text=null;}
+    overlayNodes=[...wanted];
+    for(const n of overlayNodes){
+      if(!n.el)createNodeTarget(n);
+      n.el.classList.toggle('selected',n.id===selected);n.el.classList.toggle('hovered',n.id===hovered);
+      n.el.classList.toggle('neighbor',neighbors.has(n.id));n.el.classList.toggle('dimmed',n.dimmed);
+      n.el.classList.toggle('search-match',searchMatches.has(n.id));n.el.classList.toggle('search-lead',n.id===searchLead);
+      n.el.setAttribute('aria-pressed',String(n.id===selected));n.el.setAttribute('display',n.hidden?'none':'');
+    }
+    const wantedEdges=new Set(edges.filter(e=>e.linked&&!e.hidden&&(selected||searchMatches.size<=12)));
+    for(const e of overlayEdges)if(!wantedEdges.has(e)){e.el.remove();e.el=e.hit=null;}
+    overlayEdges=[...wantedEdges];
+    for(const e of overlayEdges){
+      if(!e.el){
+        e.el=shape('g',{class:'edge-group highlight',role:'button','aria-label':`${label(e.a)} ${e.claim.predicate.toLowerCase().replaceAll('_',' ')} ${label(e.b)}. Inspect evidence.`,tabindex:0,'data-claim':e.claim.id});
+        e.hit=shape('path',{class:'edge-target'});const title=shape('title');title.textContent=`${label(e.a)} → ${label(e.b)} · ${e.claim.predicate.replaceAll('_',' ').toLowerCase()}`;
+        e.el.append(title,e.hit);$('links').append(e.el);
+      }
+    }
+  }
   function render() {
     $('links').replaceChildren();nodeLayer.replaceChildren();
     const contestedClaims=new Set(bundle.evidence.filter(r=>r.stance==='contradicts').map(r=>r.claim_id));
     edges=bundle.claims.filter(c=>byId.has(c.subject)&&byId.has(c.object)).map(c=>({claim:c,a:byId.get(c.subject),b:byId.get(c.object)}));
     layout();
-    edges.forEach(e=>{
-      const contested=e.claim.context?.negated===true||contestedClaims.has(e.claim.id);
-      e.kind=contested?'contested':e.claim.assertion_type==='inferred'?'inferred':'normal';
-      e.el=shape('g',{class:'edge-group',role:'button','aria-label':`${label(e.a)} ${e.claim.predicate.toLowerCase().replaceAll('_',' ')} ${label(e.b)}. Inspect evidence.`,tabindex:-1,'data-claim':e.claim.id});
-      e.hit=shape('path',{class:'edge-target'});
-      const title=shape('title');title.textContent=`${label(e.a)} → ${label(e.b)} · ${e.claim.predicate.replaceAll('_',' ').toLowerCase()}`;
-      e.el.append(title,e.hit);$('links').append(e.el);
-    });
-    nodes.forEach(n=>{
-      n.radius=2+Math.min(3.3,Math.sqrt(n.degree)*.66);
-      n.el=shape('g',{class:'net-node',role:'button',tabindex:0,'data-node':n.id,'data-kind':n.type,'data-family':family(n),'aria-label':`${n.label}, ${n.type}`,'aria-pressed':'false'});
-      const hit=shape('circle',{r:Math.max(18,n.radius+6),fill:'transparent'});
-      n.hit=hit;
-      n.text=shape('text',{class:'node-label','text-anchor':'middle'});n.text.textContent=short(label(n));
-      const title=shape('title');title.textContent=`${n.label} · ${n.type}`;
-      n.el.append(title,hit,n.text);nodeLayer.append(n.el);
-      n.el.addEventListener('focus',()=>setHover(n.id));
-      n.el.addEventListener('blur',()=>setHover(null));
-    });
+    overlayNodes=[];overlayEdges=[];hitGrid.clear();
+    edges.forEach(e=>{const contested=e.claim.context?.negated===true||contestedClaims.has(e.claim.id);e.kind=contested?'contested':e.claim.assertion_type==='inferred'?'inferred':'normal';});
+    nodes.forEach(n=>{n.radius=2+Math.min(3.3,Math.sqrt(n.degree)*.66);n.el=n.hit=n.text=null;});
+    overlayAnchors=[...nodes].sort((a,b)=>b.degree-a.degree||a.id.localeCompare(b.id)).slice(0,32);
+    svg.dataset.nodeCount=String(nodes.length);svg.dataset.claimCount=String(edges.length);
+    svg.setAttribute('aria-label',`Atlas knowledge graph: ${nodes.length.toLocaleString()} nodes. Drag to rotate; scroll to zoom. Shift-drag to pan. Search to select any entity and inspect its connections.`);
     const batches=new Map();
     edges.forEach(e=>{
       const key=`${e.kind}:${family(e.a)}`;

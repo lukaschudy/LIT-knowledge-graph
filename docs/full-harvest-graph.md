@@ -28,6 +28,14 @@ The app defaults to **All harvested data** and its dense 10,000-node view. The [
 
 The graph distinguishes entity counts, relationship counts, original record counts and the current view. Duplicate source assertions can remain separate edges because each has its own provenance; graph edge counts are not counts of independent scientific findings.
 
+## Dense rendering performance
+
+Every loaded node and relationship remains on canvas. For views above 1,200 nodes, SVG controls are created only for keyboard entry points, hovered/selected entities, search results and nearby entities; selected relationships retain evidence controls. A screen-space index finds mouse/touch targets without scanning all nodes, and offscreen drawing is skipped. Search still reaches every loaded entity and the full source index.
+
+A local Chromium comparison with **10,045 nodes and 5,399 relationships** reduced total DOM elements from **57,825 to 1,576**. The 95th-percentile animation-frame interval during ambient rotation fell from **83.4 ms to 16.8 ms**; the longest interval in the scripted drag/zoom sequence fell from **299.9 ms to 33.4 ms**. These are local diagnostic measurements, not a cross-device FPS guarantee. [Measurement receipt](research/dense-rendering-performance-2026-10-04.json).
+
+With Playwright and Chromium installed, run `node scripts/check_dense_graph_browser.cjs` to check the dense DOM budget, search, direct canvas selection, spatial picking against exhaustive picking, and keyboard evidence inspection. Run `node scripts/profile_graph_browser.cjs` for timings. Both accept `ATLAS_URL`; the profiler also accepts `GRAPH_SCRIPT` to compare an earlier renderer and `OUTPUT` to save JSON. Test instrumentation is injected into the test tab only.
+
 ## Why this representation
 
 Loading millions of objects into a browser would make interaction impractical. SQLite holds the complete entity/relationship index while the browser renders bounded, dense projections. Binary row offsets and gzip seek indexes retrieve original records without duplicating their large payloads. Stable source identifiers connect registries, papers, genes, diseases, variants, pathways, proteins, trials and organizations. Names alone do not merge researchers.
