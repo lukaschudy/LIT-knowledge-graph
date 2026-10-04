@@ -91,6 +91,19 @@ def wire_documents(rows):
     return [{k: string_list(v) if isinstance(v, list) else v for k, v in row.items()} for row in rows]
 
 
+def make_read_query(rows):
+    from topk_sdk.query import select, field
+    return (select(*sorted({k for row in rows for k in row}))
+            .filter(field("_id").in_([row["_id"] for row in rows])).limit(len(rows)))
+
+
+def read_batch(remote, rows, lsn):
+    # In this account, get(20..100 IDs) was throttled while a single filtered
+    # query returned all 100 correctly. Use one query for the whole batch.
+    found = request(remote.query, make_read_query(rows), lsn=lsn)
+    return {row["_id"]: row for row in found}
+
+
 def save_json(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -167,7 +180,7 @@ def ingest(client, collection, export_path, state_path, region, *, create=False,
     for index, batch in enumerate(batches(read_rows(export_path))):
         if index < state.get("verified_batches", 0):
             continue
-        found = request(remote.get, [r["_id"] for r in batch], lsn=state.get("last_lsn"))
+        found = read_batch(remote, batch, state.get("last_lsn"))
         for expected in batch:
             actual = found.get(expected["_id"])
             if actual is None or any(actual.get(k) != v for k, v in expected.items() if k != "_id"):

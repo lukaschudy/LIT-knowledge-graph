@@ -95,7 +95,7 @@ class TransportTests(unittest.TestCase):
             manifest.update(export_sha256=file_sha(p), documents=len(rows))
             p.with_suffix(p.suffix + ".manifest.json").write_text(json.dumps(manifest))
             client = Client()
-            with patch("atlas.search.topk.wire_documents", side_effect=lambda rows: rows), patch("atlas.search.topk.time.sleep"):
+            with patch("atlas.search.topk.wire_documents", side_effect=lambda rows: rows), patch("atlas.search.topk.time.sleep"), patch("atlas.search.topk.read_batch", side_effect=lambda remote, rows, lsn: remote.get([r["_id"] for r in rows], lsn=lsn)):
                 with self.assertRaises(ConnectionError):
                     ingest(client, "pilot", p, checkpoint, "region")
                 state = json.loads(checkpoint.read_text())
@@ -162,7 +162,7 @@ class TransportTests(unittest.TestCase):
             p, state = Path(td) / "rows.gz", Path(td) / "state.json"
             export(ROOT, p, fulltext=False)
             client = Client()
-            with patch("atlas.search.topk.wire_documents", side_effect=lambda rows: rows), patch("atlas.search.topk.time.sleep"):
+            with patch("atlas.search.topk.wire_documents", side_effect=lambda rows: rows), patch("atlas.search.topk.time.sleep"), patch("atlas.search.topk.read_batch", side_effect=lambda remote, rows, lsn: remote.get([r["_id"] for r in rows], lsn=lsn)):
                 with self.assertRaises(ConnectionError):
                     ingest(client, "pilot", p, state, "region")
                 self.assertFalse(state.exists())
