@@ -1,0 +1,31 @@
+{
+  "schema_version": "atlas-hosted-voice-release-v1",
+  "deployed_at": "2026-10-04T12:34:20.662422+00:00",
+  "worker": "varentik-atlas",
+  "version": "d1c8d500-40cf-49c6-985a-c26ee10d4106",
+  "traffic_percent": 100,
+  "source_commit": "0714348",
+  "url": "https://atlas.varentik.com/explore",
+  "rollback_version": "ea3f905c-36cb-45c9-adb9-8af3505fbbd3",
+  "model": "@cf/openai/whisper-large-v3-turbo",
+  "validation": {
+    "application_tests": 176,
+    "voice_browser_scenarios": 9,
+    "graph_chat_browser_scenarios": 29,
+    "sealed_generated_files": 38,
+    "sealed_build_inputs": 72,
+    "vendor_files_verified": 29,
+    "live_voice_status_available": true,
+    "live_microphone_control_enabled": true,
+    "live_synthetic_wav_transcription": "What evidence do we have for neurodevelopmental disease?",
+    "live_browser_webm_transcription": "what evidence do we have for neurodevelopmental disease what evidence do we have for neurodevelopment",
+    "webm_note": "Synthetic fake-microphone fixture loops; live response retained as observed.",
+    "physical_microphone_used": false
+  },
+  "limits": [
+    "Browser recording cap is 60 seconds; backend enforces 4 MiB, not decoded audio duration.",
+    "Anonymous rate limiting is per IP per Cloudflare location, not a global spend cap.",
+    "Audio is processed by Cloudflare; Atlas does not persist recordings.",
+    "Hosted answers remain deterministic GRIN lookup."
+  ]
+}

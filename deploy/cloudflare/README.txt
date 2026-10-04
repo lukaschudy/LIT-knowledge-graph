@@ -104,9 +104,9 @@ remain available, and the chat retains its paper and evidence links.
 Dense rendering uses a 1x pixel budget, GPU buffer reuse and lazy pointer indexing;
 SVG labels and controls remain at native display resolution.
 
-Active dense-graph version: ea3f905c-36cb-45c9-adb9-8af3505fbbd3 (100% traffic).
+Active dense-graph version: d1c8d500-40cf-49c6-985a-c26ee10d4106 (100% traffic).
 Verified release: deploy/cloudflare/dense-release.json
-Rollback: uv run pywrangler versions deploy 0b393da6-08c4-4983-ba6b-f23110a3db9c@100% --yes
+Rollback: uv run pywrangler versions deploy ea3f905c-36cb-45c9-adb9-8af3505fbbd3@100% --yes
 
 Nodes keep fixed world positions during pointer gestures; dragging orbits the camera.
 The current theme uses a white background, dark lotus-green branding and the original
@@ -134,3 +134,8 @@ exact deployed manifest: grin2b-help-build-manifest.json.
 The public view resolves two HGNC/curated gene duplicates into 10,033 unique
 nodes. GRIN2B now has eight incident source and variant claims on one node.
 Release: gene-identity-release.json; manifest: gene-identity-build-manifest.json.
+
+Hosted dictation is now enabled through the AI and VOICE_LIMITER bindings.
+The frontend no longer depends on the local research state/token for public
+recordings. Cloudflare-hosted Whisper transcribes into the editable draft.
+See docs/hosted-dictation.md and deploy/cloudflare/voice-release.json.

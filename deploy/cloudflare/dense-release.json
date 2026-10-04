@@ -1,27 +1,33 @@
 {
   "schema_version": "atlas-dense-production-release-v1",
-  "deployed_at": "2026-10-04T11:24:32.213733+00:00",
+  "deployed_at": "2026-10-04T12:34:20.662422+00:00",
   "worker": "varentik-atlas",
-  "version": "ea3f905c-36cb-45c9-adb9-8af3505fbbd3",
+  "version": "d1c8d500-40cf-49c6-985a-c26ee10d4106",
   "traffic_percent": 100,
   "url": "https://atlas.varentik.com/explore",
-  "previous_version": "0b393da6-08c4-4983-ba6b-f23110a3db9c",
-  "frontend_source_commit": "25158ce",
+  "previous_version": "ea3f905c-36cb-45c9-adb9-8af3505fbbd3",
+  "frontend_source_commit": "0714348",
   "production_nodes": 10033,
   "public_hgnc_nodes": 10000,
   "reviewed_grin_nodes": 35,
   "validation": {
-    "application_tests": 168,
-    "live_unique_grin2b_and_eight_connections_verified": true,
-    "live_hgnc_search_and_curated_answer_verified": true,
-    "production_dom_count": 10033,
+    "application_tests": 176,
+    "voice_browser_scenarios": 9,
+    "graph_chat_browser_scenarios": 29,
+    "sealed_generated_files": 38,
+    "sealed_build_inputs": 72,
     "vendor_files_verified": 29,
-    "sealed_generated_files": 37,
-    "sealed_build_inputs": 71
+    "live_voice_status_available": true,
+    "live_microphone_control_enabled": true,
+    "live_synthetic_wav_transcription": "What evidence do we have for neurodevelopmental disease?",
+    "live_browser_webm_transcription": "what evidence do we have for neurodevelopmental disease what evidence do we have for neurodevelopment",
+    "webm_note": "Synthetic fake-microphone fixture loops; live response retained as observed.",
+    "physical_microphone_used": false
   },
   "limitations": [
     "Production uses a fixed public HGNC projection, not the full local harvest store.",
-    "Ask Atlas retains the reviewed GRIN annotation lookup; local Codex/TopK and Whisper services are not deployed."
+    "Ask Atlas retains reviewed GRIN annotation lookup; local Codex/TopK are not deployed.",
+    "Hosted dictation uses Cloudflare Workers AI Whisper; local faster-whisper is a separate backend."
   ],
   "sha256": {
     "atlas/web/graph.js": "c4216c06cbace3b395473e9d81437797036f7c98182b5bab0888d62d3757b5fa",
@@ -29,14 +35,16 @@
     "atlas/web/graph.css": "f179ad39abcb58bbd7d0e8f6ca50f3495b9716d44318a8b110f5caa2017fb6b0",
     "atlas/web/explore.html": "7653e460f387ffa148a930a5c3972bebfd8646e746c9d6c07b8439ff461662b5",
     "atlas/public_graph.py": "9f207986f965da5082381312bce6d2cf00630e8154c3ab27500fb21081ee3414",
-    "deploy/cloudflare/worker.py": "a5e424f1f73b6ddb1a61562c4e9f98b825a5a33ed0a9b4e14516cac17fa36029",
+    "deploy/cloudflare/worker.py": "be79a8831471d9063f0d445bcc2315a8c5c7bd72d400144df74a5e44291f502e",
     "data/curated/hgnc_dense_snapshot.json.gz": "8673edbc095100db4639a7e5de13831c245f072909ae3abff219498e7d2853c9",
-    "deploy/cloudflare/wrangler.jsonc": "5e8bff3396e73538e545e63878d16e5393fbf9479e65ee8f8264eb17a080ab0e",
+    "deploy/cloudflare/wrangler.jsonc": "954d049f65c2150eeae534c50357c776ca46173410989e536b4ceaa8c8be22f3",
     "atlas/proposals.py": "4e5f51ea6444ded88869ab31a877abf64d452b09383ed99a8dfb6db075568534",
     "atlas/demo_scope.py": "2e92bb50b850313d4c31d4c5f0640930f1d1bcccc4f20602c543f8ec49f4249e",
-    "atlas/cluster_questions.py": "b00aaf4b1b8b080e93017f4f0c84f3e98e9769985c61e17414bb1cf7c87b3c81"
+    "atlas/cluster_questions.py": "b00aaf4b1b8b080e93017f4f0c84f3e98e9769985c61e17414bb1cf7c87b3c81",
+    "atlas/cloud_voice.py": "5640cd9567b040ea339d2015c5cdf33347b5e85833b0446f8eb543cd79ae039b",
+    "atlas/web/voice.js": "b049f4a3dc37148fd43a13751e4984894783c80b3b7db466943c135a7b85ed1b"
   },
-  "release_receipt": "deploy/cloudflare/gene-identity-release.json",
-  "rollback_version": "0b393da6-08c4-4983-ba6b-f23110a3db9c",
+  "release_receipt": "deploy/cloudflare/voice-release.json",
+  "rollback_version": "ea3f905c-36cb-45c9-adb9-8af3505fbbd3",
   "resolved_duplicate_pairs": 2
 }

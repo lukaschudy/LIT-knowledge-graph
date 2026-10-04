@@ -10,7 +10,7 @@ const html=`<!doctype html><form id="chat-form"><section id="chat-panel"><textar
 (async()=>{
  const server=http.createServer((req,res)=>{res.setHeader('Content-Type',req.url==='/voice.js'?'text/javascript':'text/html');res.end(req.url==='/voice.js'?fs.readFileSync(path.join(root,'atlas/web/voice.js')):html);});
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
- const browser=await chromium.launch({headless:true,args:['--use-fake-ui-for-media-stream','--use-fake-device-for-media-stream']});
+ const browser=await chromium.launch({headless:true,args:['--use-fake-ui-for-media-stream','--use-fake-device-for-media-stream',...(process.env.ATLAS_TEST_AUDIO?[`--use-file-for-fake-audio-capture=${process.env.ATLAS_TEST_AUDIO}`]:[])]});
  const results=[];
  try{
   const context=await browser.newContext({permissions:['microphone']});
@@ -24,7 +24,7 @@ const html=`<!doctype html><form id="chat-form"><section id="chat-panel"><textar
   await page.route('**/api/voice/status',route=>route.fulfill({json:{available:true,requires_token:false,provider:'cloudflare_workers_ai',message:'Dictation via Cloudflare'}}));
   await page.route('**/api/research/state',route=>{localState++;return route.fulfill({status:404,json:{}});});
   await page.route('**/api/voice/transcribe',async route=>{
-   uploads++;assert.ok(route.request().postDataBuffer().length>0);assert.match(route.request().headers()['content-type'],/^audio\//);assert.equal(route.request().headers()['x-atlas-token'],undefined);
+   uploads++;if(uploads===1&&process.env.ATLAS_CAPTURE_OUTPUT)fs.writeFileSync(process.env.ATLAS_CAPTURE_OUTPUT,route.request().postDataBuffer());assert.ok(route.request().postDataBuffer().length>0);assert.match(route.request().headers()['content-type'],/^audio\//);assert.equal(route.request().headers()['x-atlas-token'],undefined);
    if(mode==='late'){pending();await new Promise(resolve=>release=resolve);}
    await route.fulfill(mode==='failure'?{status:503,json:{error:{message:'Service unavailable. Try again.'}}}:{json:{text:mode==='silence'?'':'What is known about GRIN2B?'}}).catch(()=>{});
   });
@@ -34,7 +34,7 @@ const html=`<!doctype html><form id="chat-form"><section id="chat-panel"><textar
   const stop=async()=>{await page.locator('#voice-button').click();await state('idle');};
   const released=async()=>assert.ok(await page.evaluate(()=>window.tracks.every(t=>t.readyState==='ended')));
   await page.waitForFunction(()=>!document.querySelector('#voice-button').disabled);
-  await start();await page.locator('#question').press('Enter');await state('idle');
+  await start();if(process.env.ATLAS_TEST_AUDIO)await page.waitForTimeout(5000);await page.locator('#question').press('Enter');await state('idle');
   assert.equal(await page.locator('#question').inputValue(),'What is known about GRIN2B?');
   assert.equal(await page.evaluate(()=>window.submitted||0),0);assert.equal(localState,0);await released();results.push('hosted capture replaces untouched prefill; Enter stops without submitting');
   await page.locator('#question').fill('My own draft.');await start();await stop();assert.equal(await page.locator('#question').inputValue(),'My own draft. What is known about GRIN2B?');results.push('user draft preserved');
