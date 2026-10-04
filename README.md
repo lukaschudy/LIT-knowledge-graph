@@ -1,5 +1,11 @@
 # Atlas — evidence for rare-disease research
 
+**The idea · 1 minute**
+
+https://github.com/user-attachments/assets/e7248347-ec50-4d6a-a137-6644b101d623
+
+**How it works · 1 minute**
+
 https://github.com/user-attachments/assets/e552c250-6c12-45aa-a8ff-d0abe264eecd
 
 Atlas helps researchers and patient organizations explore how rare diseases, gene variants, published evidence, and research resources connect. The aim is to make a research question easier to investigate: **what is known, which source supports it, what might be reusable, and what still needs checking?**
