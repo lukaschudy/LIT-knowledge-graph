@@ -1,0 +1,27 @@
+{
+  "schema_version": "atlas-demo-scope-release-v1",
+  "worker": "varentik-atlas",
+  "version": "24aab8f1-e9d8-4bc3-8c12-de0b767bdef9",
+  "traffic_percent": 100,
+  "verified_at": "2026-10-04T08:17:20.578566+00:00",
+  "source_commit": "01f88d6",
+  "local_source_commit": "a9da35c",
+  "rollback_version": "ab5a8ebd-8a82-48d4-ad4c-36f767beb089",
+  "manifest_path": "deploy/cloudflare/demo-scope-build-manifest.json",
+  "manifest_sha256": "a2d212b4fb45c24c9d83fd8e061eac2915ad67a15e112cd89a29dc6fc2ad011f",
+  "answer_scope": "grin-reduced-function-v1",
+  "verification": {
+    "production_application_tests": 160,
+    "local_application_tests": 335,
+    "production_webgl_browser_checks": 28,
+    "production_canvas_browser_checks": 28,
+    "local_webgl_browser_checks": 28,
+    "live_search_outside_cluster": "ARX",
+    "live_grin_answer_after_outside_selection": true,
+    "live_outside_question_returns_scope_boundary": true,
+    "live_graph_nodes": 10035,
+    "local_default_answer_scope_verified": true,
+    "local_saved_workspace_unchanged": true
+  },
+  "search_boundary": "All available graph indexes; production publishes the HGNC/GRIN snapshot, not the complete local harvest."
+}
