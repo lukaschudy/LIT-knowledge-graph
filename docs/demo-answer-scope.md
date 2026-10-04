@@ -8,3 +8,9 @@ The demo answer scope is **GRIN2A/GRIN2B neurodevelopmental disorders**, focused
 - **Hosted demo:** source annotation lookup stays limited to the published GRIN bundle. It does not claim to run the local model or search private/full harvested data.
 
 Regression checks cover unrelated variant/asset questions, mixed outside-gene requests, global search followed by a cluster answer, HGNC identity mapping, retained citation scope, catalog cache separation, and finding/selecting an outside entity from the resolved view.
+
+## Published gene identity resolution
+
+HGNC:4585 resolves to gene:GRIN2A and HGNC:4586 to gene:GRIN2B through exact, unambiguous `properties.hgnc_id` matches on Gene records. Labels alone never merge identities. Search emits one gene result; old HGNC IDs remain valid for node, neighborhood and Ask Atlas requests. Both relationship sets attach to the canonical gene: GRIN2B has seven variant links plus one original source-record link. Source claims keep their IDs, provenance and original endpoints in resolution metadata; the raw record lookup remains unchanged.
+
+The public view therefore contains 10,033 unique nodes after resolving two duplicate pairs, retaining the 10,000-record dense input and all curated claims/evidence. This identity merge does not infer new biological relationships or promote unreviewed source relationships.

@@ -303,7 +303,7 @@ class WorkerTests(unittest.IsolatedAsyncioTestCase):
     async def test_grin2b_help_overview_works_for_public_and_reviewed_gene(self):
         from urllib.parse import urlencode
         question = 'What is known about GRIN2B from this knowledge graph, and where can I seek help?'
-        public = next(n for n in self.worker.PUBLIC.nodes.values() if n['id'].startswith('HGNC:') and n['label'] == 'GRIN2B')
+        public = next(n for n in self.worker.PUBLIC.harvested['nodes'] if n['id'].startswith('HGNC:') and n['label'] == 'GRIN2B')
         reviewed = next(n for n in self.worker.API.nodes.values() if n['label'] == 'GRIN2B')
         for context in (None, public['id'], reviewed['id']):
             with self.subTest(context=context):
@@ -321,7 +321,7 @@ class WorkerTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(len(answer['sections'][-1]['links']), 3)
 
     async def test_public_gene_identity_maps_to_its_demo_gene(self):
-        public = next(n for n in self.worker.PUBLIC.nodes.values() if n['id'].startswith('HGNC:') and n['label'] == 'GRIN2B')
+        public = next(n for n in self.worker.PUBLIC.harvested['nodes'] if n['id'].startswith('HGNC:') and n['label'] == 'GRIN2B')
         response = await self.app.fetch(request('/api/ask?q=What+evidence+is+available&node=' + public['id']))
         self.assertEqual(response.status, 200)
         self.assertNotEqual(response.json()['mode'], 'demo_scope_boundary')

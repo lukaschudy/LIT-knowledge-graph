@@ -16,6 +16,8 @@ Open **Ask Atlas** in the graph. The demo question is already filled in—press 
 
 > Why is GRIN2B p.Ser541Arg core while p.Cys461Phe is provisional? Compare the WT measurements and conflicting evidence.
 
+The published graph unifies the HGNC and curated GRIN2A/GRIN2B gene records using their exact HGNC identifiers. Searching either the gene symbol or HGNC ID selects one gene node with its source-record and curated variant connections together. Original source pointers, claim IDs and evidence remain intact.
+
 Search for **GRIN2B**, select it and choose **Ask about this** for an editable “What is known about GRIN2B from this knowledge graph, and where can I seek help?” question. The hosted answer gives a concise variant-evidence summary and separately curated links for family support, research participation and researcher resources. External support links are signposts, not new graph claims or personalized clinical recommendations; see [curation notes](docs/grin2b-help-overview.md).
 
 The answer links to source-reported classifications, selected measurements, and the underlying records. In the evidence viewer, compare the variant with its **wild-type (WT)** reference and inspect the original experimental conditions.

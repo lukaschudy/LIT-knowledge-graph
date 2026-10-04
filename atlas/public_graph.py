@@ -8,8 +8,42 @@ class PublicGraphAPI:
     def __init__(self, harvested, reviewed):
         self.harvested = harvested
         self.reviewed = reviewed
-        self.nodes = {n['id']: n for n in harvested['nodes'] + reviewed['nodes']}
-        self.claims = {c['id']: c for c in harvested['claims'] + reviewed['claims']}
+        # Resolve only exact, unambiguous HGNC identifiers on Gene records.
+        # Display names and aliases alone are not evidence of identity.
+        hgnc_targets = {}
+        for node in reviewed['nodes']:
+            hgnc = node.get('properties', {}).get('hgnc_id')
+            if node.get('type') == 'Gene' and isinstance(hgnc, str) and re.fullmatch(r'HGNC:[0-9]+', hgnc):
+                hgnc_targets.setdefault(hgnc, []).append(node)
+        self.alias_map = {}
+        self.nodes = {n['id']: n for n in harvested['nodes']}
+        merged = {}
+        for node in harvested['nodes']:
+            matches = hgnc_targets.get(node['id'], [])
+            if node.get('type') != 'Gene' or len(matches) != 1:
+                continue
+            target = matches[0]
+            if node['id'] == target['id']:
+                continue
+            self.alias_map[node['id']] = target['id']
+            merged[target['id']] = {
+                **node, **target,
+                'aliases': list(dict.fromkeys([*node.get('aliases', []), *target.get('aliases', []), node['id']])),
+                'properties': {**node.get('properties', {}), **target.get('properties', {})},
+                'identity_resolution': {'rule': 'exact_hgnc_id', 'source_ids': [node['id'], target['id']]},
+            }
+            del self.nodes[node['id']]
+        for node in reviewed['nodes']:
+            self.nodes[node['id']] = merged.get(node['id'], node)
+        self.display_rows = list({self.canonical_id(n['id']): self.nodes[self.canonical_id(n['id'])]
+                                  for n in harvested['nodes']}.values())
+        self.claims = {}
+        for claim in harvested['claims'] + reviewed['claims']:
+            subject, obj = self.canonical_id(claim['subject']), self.canonical_id(claim['object'])
+            if (subject, obj) != (claim['subject'], claim['object']):
+                claim = {**claim, 'subject': subject, 'object': obj,
+                         'identity_resolution': {'original_subject': claim['subject'], 'original_object': claim['object']}}
+            self.claims[claim['id']] = claim
         self.datasets = {d['id']: d for d in harvested['public_datasets']}
         self.records = {}
         self.records_by_dataset = {}
@@ -22,6 +56,9 @@ class PublicGraphAPI:
         for claim in self.claims.values():
             self.neighbors.setdefault(claim['subject'], set()).add(claim['object'])
             self.neighbors.setdefault(claim['object'], set()).add(claim['subject'])
+
+    def canonical_id(self, identifier):
+        return self.alias_map.get(identifier, identifier)
 
     def provenance(self, row):
         p = dict(row.get('provenance', {}))
@@ -57,8 +94,8 @@ class PublicGraphAPI:
         if path == '/api/harvest/graph':
             limit = integer('limit', 10000, 10000)
             offset = integer('offset', 0)
-            focus = one('focus')
-            rows = self.harvested['nodes']
+            focus = self.canonical_id(one('focus'))
+            rows = self.display_rows
             if focus:
                 if focus not in self.nodes:
                     return missing
@@ -67,7 +104,7 @@ class PublicGraphAPI:
                 ids = [focus, *sorted(self.neighbors.get(focus, set()) - {focus})]
                 rows = [self.nodes[n] for n in ids if n in self.nodes]
             page = rows[offset:offset+limit]
-            selected = {n['id']: n for n in page + self.reviewed['nodes']}
+            selected = {n['id']: self.nodes[n['id']] for n in page + self.reviewed['nodes']}
             claims = [c for c in self.claims.values() if c['subject'] in selected and c['object'] in selected]
             return 200, {**{k:v for k,v in self.reviewed.items() if k not in ['nodes','claims']}, 'dataset': {**self.reviewed['dataset'], 'title': 'Public HGNC snapshot and reviewed GRIN evidence'}, 'nodes': list(selected.values()), 'claims': claims, 'harvest': {'total_nodes': len(rows), 'shown_nodes': len(selected), 'shown_edges': len(claims), 'next_offset': offset+limit if offset+limit<len(rows) else None, 'offset': offset, 'limit': limit, 'focus': focus or None, 'note': 'Public HGNC snapshot. Harvest relationships remain unreviewed.'}}
         if path == '/api/harvest/search':
@@ -83,7 +120,7 @@ class PublicGraphAPI:
                         results.append(node)
             return 200, {'results': results, 'total': total}
         if path == '/api/harvest/node':
-            n = self.nodes.get(one('id'))
+            n = self.nodes.get(self.canonical_id(one('id')))
             return (200, {'node': n, 'provenance': self.provenance(n)}) if n else missing
         if path == '/api/harvest/claim':
             c = self.claims.get(one('id'))

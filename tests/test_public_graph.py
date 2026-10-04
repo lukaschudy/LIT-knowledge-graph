@@ -97,3 +97,60 @@ class PublicGraphTests(unittest.TestCase):
         empty = PublicGraphAPI({'nodes': [{'id': 'a', 'label': 'a', 'aliases': []}],
                                 'claims': [], 'public_datasets': []}, {'nodes': [], 'claims': []})
         self.assertEqual(empty.request('/api/harvest/search', {'q': ['[]']})[1]['total'], 0)
+
+    def test_grin_search_resolves_to_one_gene_with_both_relationship_sets(self):
+        for symbol, hgnc, expected in [('GRIN2B', 'HGNC:4586', 8), ('GRIN2A', 'HGNC:4585', 4)]:
+            canonical = 'gene:' + symbol
+            for query in (symbol, hgnc):
+                _, search = self.api.request('/api/harvest/search', {'q': [query]})
+                genes = [n for n in search['results'] if n.get('type') == 'Gene' and n['label'] == symbol]
+                self.assertEqual([n['id'] for n in genes], [canonical])
+                self.assertIn(hgnc, genes[0]['aliases'])
+            _, graph = self.api.request('/api/harvest/graph', {'focus': [hgnc], 'limit': ['10000']})
+            self.assertEqual(graph['harvest']['focus'], canonical)
+            self.assertNotIn(hgnc, {n['id'] for n in graph['nodes']})
+            linked = [c for c in graph['claims'] if canonical in (c['subject'], c['object'])]
+            self.assertEqual(len(linked), expected)
+            self.assertTrue(any(c['predicate'] == 'AFFECTS' for c in linked))
+            self.assertTrue(any(c['predicate'] == 'MERGED_INTO' for c in linked))
+            self.assertEqual(len(self.api.neighbors[canonical]), expected)
+
+    def test_legacy_id_lookup_retains_source_pointer_and_original_claim_endpoints(self):
+        _, legacy = self.api.request('/api/harvest/node', {'id': ['HGNC:4586']})
+        _, canonical = self.api.request('/api/harvest/node', {'id': ['gene:GRIN2B']})
+        self.assertEqual(legacy, canonical)
+        self.assertEqual(legacy['node']['properties']['hgnc_id'], 'HGNC:4586')
+        self.assertTrue(legacy['provenance']['source_urls'])
+        claim = next(c for c in self.api.harvested['claims'] if c['object'] == 'HGNC:4586')
+        _, data = self.api.request('/api/harvest/claim', {'id': [claim['id']]})
+        self.assertEqual(data['claim']['object'], 'gene:GRIN2B')
+        self.assertEqual(data['claim']['identity_resolution']['original_object'], 'HGNC:4586')
+        self.assertEqual(data['claim']['provenance'], claim['provenance'])
+        _, record = self.api.request('/api/harvest/record', {'id': [legacy['node']['provenance']['id']]})
+        original = next(n for n in self.api.harvested['nodes']
+                        if n.get('provenance', {}).get('id') == legacy['node']['provenance']['id'])
+        self.assertEqual(record['node'], original)
+
+    def test_gene_merge_preserves_all_claim_ids_evidence_and_input_snapshots(self):
+        from copy import deepcopy
+        harvested, reviewed = deepcopy(self.api.harvested), deepcopy(self.api.reviewed)
+        api = PublicGraphAPI(harvested, reviewed)
+        _, graph = api.request('/api/harvest/graph', {'limit': ['10000']})
+        self.assertEqual(len(graph['nodes']), len(harvested['nodes']) + len(reviewed['nodes']) - 2)
+        self.assertEqual({c['id'] for c in graph['claims']}, {c['id'] for c in harvested['claims'] + reviewed['claims']})
+        self.assertEqual(graph['evidence'], reviewed['evidence'])
+        self.assertEqual(harvested, self.api.harvested)
+        self.assertEqual(reviewed, self.api.reviewed)
+
+    def test_names_types_and_ambiguous_hgnc_annotations_do_not_merge(self):
+        harvested = {'nodes': [{'id': 'HGNC:1', 'label': 'SAME', 'type': 'Gene'},
+                               {'id': 'HGNC:2', 'label': 'SAME', 'type': 'Protein'},
+                               {'id': 'HGNC:3', 'label': 'SAME', 'type': 'Gene'}],
+                     'claims': [], 'public_datasets': []}
+        reviewed = {'nodes': [{'id': 'gene:a', 'label': 'SAME', 'type': 'Gene'},
+                              {'id': 'gene:b', 'label': 'SAME', 'type': 'Gene', 'properties': {'hgnc_id': 'HGNC:2'}},
+                              {'id': 'gene:c', 'label': 'SAME', 'type': 'Gene', 'properties': {'hgnc_id': 'HGNC:3'}},
+                              {'id': 'gene:d', 'label': 'SAME', 'type': 'Gene', 'properties': {'hgnc_id': 'HGNC:3'}}], 'claims': []}
+        api = PublicGraphAPI(harvested, reviewed)
+        self.assertEqual(api.alias_map, {})
+        self.assertEqual(len(api.nodes), 7)

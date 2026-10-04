@@ -114,10 +114,11 @@ def atlas_response(path, query):
     # the complete request first so malformed IDs/claims cannot be discarded.
     context = API._one(query, 'node') if path == '/api/ask' else None
     if (status == 404 and payload.get('error', {}).get('code') == 'node_not_found'
-            and context in PUBLIC.nodes):
-        node = PUBLIC.nodes[context]
+            and PUBLIC.canonical_id(context) in PUBLIC.nodes):
+        node = PUBLIC.nodes[PUBLIC.canonical_id(context)]
         question = API._one(query, 'q')
-        canonical = next((n['id'] for n in API.nodes.values() if n['type'] == 'Gene' and node['type'] == 'Gene' and n['label'].casefold() == node['label'].casefold()), None)
+        canonical = PUBLIC.canonical_id(context)
+        canonical = canonical if canonical in API.nodes else None
         if canonical:
             return API.request(path, {**query, 'node': [canonical]})
         outside = mentioned_external_genes(question, PUBLIC.nodes.values(), API.nodes)
