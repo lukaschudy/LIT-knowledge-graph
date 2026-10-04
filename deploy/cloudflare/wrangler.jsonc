@@ -1,0 +1,23 @@
+{
+  "name": "varentik-atlas",
+  "account_id": "1c2d9256d0ca5ee0e291be94d3d132fc",
+  "main": "build/worker.py",
+  "compatibility_date": "2026-10-03",
+  "compatibility_flags": [
+    "python_workers"
+  ],
+  "workers_dev": true,
+  "assets": {
+    "directory": "build/public",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  },
+  "routes": [
+    {
+      "pattern": "atlas.varentik.com",
+      "custom_domain": true
+    }
+  ]
+}

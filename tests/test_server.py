@@ -65,6 +65,19 @@ class AtlasServerTests(unittest.TestCase):
         self.assertEqual(result["disease"]["label"], "Delta syndrome")
         self.assertTrue(result["next_questions"])
 
+    def test_questions_cite_recorded_claims_and_preserve_mismatch(self):
+        _, answer = self.get_json("/api/ask?q=Why+are+Aurora+and+Cinder+connected%3F")
+        self.assertEqual(answer["mode"], "graph_lookup")
+        self.assertIn("opposite directions", answer["answer"])
+        self.assertIn("demo:claim-c-effect", answer["claim_ids"])
+        self.assertTrue(answer["synthetic"])
+
+    def test_questions_reject_unknown_claim_context(self):
+        with self.assertRaises(HTTPError) as caught:
+            urlopen(self.base + "/api/ask?q=What+evidence%3F&claim=missing", timeout=2)
+        self.assertEqual(caught.exception.code, 400)
+        caught.exception.close()
+
     def test_only_explicit_web_assets_are_served(self):
         with urlopen(self.base + "/") as response:
             self.assertEqual(response.status, 200)

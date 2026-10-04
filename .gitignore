@@ -12,3 +12,9 @@ data/*.sqlite-*
 build/
 dist/
 *.egg-info/
+
+.wrangler/
+node_modules/
+python_modules/
+
+.venv-workers/

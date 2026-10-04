@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlsplit
 
-from .reasoning import AtlasReasoner
+from .http_api import AtlasAPI
 
 
 WEB_DIR = Path(__file__).with_name("web")
@@ -18,7 +18,12 @@ _ASSETS = {
     "/": ("index.html", "text/html; charset=utf-8"),
     "/index.html": ("index.html", "text/html; charset=utf-8"),
     "/explore": ("explore.html", "text/html; charset=utf-8"),
+    "/records": ("records.html", "text/html; charset=utf-8"),
+    "/graph.css": ("graph.css", "text/css; charset=utf-8"),
+    "/graph.js": ("graph.js", "text/javascript; charset=utf-8"),
     "/cover.css": ("cover.css", "text/css; charset=utf-8"),
+    "/transition.css": ("transition.css", "text/css; charset=utf-8"),
+    "/transition.js": ("transition.js", "text/javascript; charset=utf-8"),
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
     "/styles.css": ("styles.css", "text/css; charset=utf-8"),
     "/fonts/instrument-sans-latin-wght-normal.woff2": ("fonts/instrument-sans-latin-wght-normal.woff2", "font/woff2"),
@@ -28,31 +33,6 @@ _ASSETS = {
 }
 
 
-def _index_by_id(bundle: dict[str, Any], collection: str) -> dict[str, dict[str, Any]]:
-    return {item["id"]: item for item in bundle.get(collection, []) if isinstance(item, dict) and item.get("id")}
-
-
-def _node_terms(node: dict[str, Any]) -> list[str]:
-    properties = node.get("properties", {})
-    return [str(value) for value in [node["id"], node["label"], *node["aliases"]]
-            if isinstance(value, (str, int, float))]
-
-
-def _node_label(node: dict[str, Any]) -> str:
-    return str(node.get("name") or node.get("label") or node.get("symbol") or node.get("id") or "Untitled node")
-
-
-def _references(row: dict[str, Any], *keys: str) -> list[str]:
-    result: list[str] = []
-    for key in keys:
-        value = row.get(key, [])
-        if isinstance(value, str):
-            result.append(value)
-        elif isinstance(value, list):
-            result.extend(str(item) for item in value if isinstance(item, (str, int)))
-    return list(dict.fromkeys(result))
-
-
 def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> ThreadingHTTPServer:
     """Create a testable threaded server around a startup snapshot of ``store``.
 
@@ -60,17 +40,7 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> Thre
     served from the immutable bundle snapshot, which also keeps SQLite-backed
     stores safe from cross-thread connection use.
     """
-    bundle = store.bundle()
-    stats = store.stats()
-    reasoner = AtlasReasoner(bundle)
-    nodes = _index_by_id(bundle, "nodes")
-    claims = _index_by_id(bundle, "claims")
-    evidence = _index_by_id(bundle, "evidence")
-    sources = _index_by_id(bundle, "sources")
-    node_terms = {node_id: [term.casefold() for term in _node_terms(node)] for node_id, node in nodes.items()}
-    evidence_by_claim: dict[str, list[dict[str, Any]]] = {}
-    for row in bundle["evidence"]:
-        evidence_by_claim.setdefault(row["claim_id"], []).append(row)
+    api = AtlasAPI(store.bundle(), store.stats())
 
     class AtlasHandler(BaseHTTPRequestHandler):
         server_version = "ResearchAtlas/1.0"
@@ -124,78 +94,9 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765) -> Thre
                 return
             self._send(200, body, content_type)
 
-        def _one(self, query: dict[str, list[str]], key: str) -> str | None:
-            values = query.get(key, [])
-            if len(values) != 1:
-                return None
-            value = values[0].strip()
-            return value or None
-
         def _api(self, path: str, query: dict[str, list[str]]) -> None:
-            if path == "/api/health":
-                self._json(200, {"status": "ok", "synthetic": bool(bundle["dataset"]["synthetic"]), "dataset": bundle["dataset"]})
-                return
-            if path == "/api/stats":
-                self._json(200, {"dataset": bundle["dataset"], "stats": stats})
-                return
-            if path == "/api/graph":
-                self._json(200, bundle)
-                return
-            if path == "/api/search":
-                term = self._one(query, "q")
-                if term is None:
-                    self._error(400, "missing_query", "Enter a name, synonym, or identifier to search the atlas.")
-                    return
-                folded = term.casefold()
-                matches: list[tuple[int, dict[str, Any]]] = []
-                for node_id, terms in node_terms.items():
-                    node = nodes[node_id]
-                    if folded in terms:
-                        score = 0
-                    elif any(folded in value for value in terms):
-                        score = 1
-                    else:
-                        continue
-                    matches.append((score, node))
-                matches.sort(key=lambda item: (item[0], _node_label(item[1]).casefold(), str(item[1].get("id"))))
-                self._json(200, {"query": term, "total": len(matches), "results": [node for _, node in matches[:40]]})
-                return
-            if path == "/api/explore":
-                disease_id = self._one(query, "disease")
-                if disease_id is None:
-                    self._error(400, "missing_disease", "Choose a disease to explore.")
-                    return
-                node = nodes.get(disease_id)
-                if node is None:
-                    self._error(404, "disease_not_found", "That disease is not in this atlas dataset.")
-                    return
-                if str(node.get("type", node.get("kind", ""))).casefold() != "disease":
-                    self._error(400, "not_a_disease", "Choose a disease node to explore connections.")
-                    return
-                result = reasoner.explore(disease_id)
-                self._json(200, result)
-                return
-            if path == "/api/claim":
-                claim_id = self._one(query, "id")
-                if claim_id is None:
-                    self._error(400, "missing_claim", "Choose an evidence claim to inspect.")
-                    return
-                claim = claims.get(claim_id)
-                if claim is None:
-                    self._error(404, "claim_not_found", "That claim is not in this atlas dataset.")
-                    return
-                claim_evidence = evidence_by_claim.get(claim_id, [])
-                support_rows = [row for row in claim_evidence if row["stance"] == "supports"]
-                contradiction_rows = [row for row in claim_evidence if row["stance"] == "contradicts"]
-                source_ids = list(dict.fromkeys(row["source_id"] for row in claim_evidence))
-                self._json(200, {
-                    "claim": claim,
-                    "support": support_rows,
-                    "contradictions": contradiction_rows,
-                    "sources": [sources[item] for item in dict.fromkeys(source_ids) if item in sources],
-                })
-                return
-            self._error(404, "api_not_found", "That atlas endpoint does not exist.")
+            status, payload = api.request(path, query)
+            self._json(status, payload)
 
         def do_POST(self) -> None:  # noqa: N802
             self._error(405, "method_not_allowed", "This atlas is read-only.")

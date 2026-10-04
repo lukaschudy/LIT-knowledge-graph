@@ -746,13 +746,17 @@
       document.querySelector("#footer-dataset").textContent = textValue(graph.dataset?.title, "A local, read-only research map");
       const entityTotal = statsPayload.stats?.nodes ?? statsPayload.stats?.node_count ?? nodes;
       input.title = `Search ${Number(entityTotal).toLocaleString()} mapped entities`;
-      renderHome();
+      const firstDisease = graph.nodes.filter(node => node.type === "Disease").sort((a,b) => a.label.localeCompare(b.label))[0];
+      if (new URLSearchParams(location.search).get("view") === "graph" && firstDisease) await explore(firstDisease.id);
+      else renderHome();
     } catch (error) {
       workspace.replaceChildren();
       noticeText(error.message || "The local dataset could not be opened.", "notice--error");
       const unavailable = el("div", "empty-state empty-state--large");
       append(unavailable, el("span", "empty-icon", "⌁"), el("h2", "", "Atlas is unavailable"), el("p", "", "Start the local atlas server and refresh this page to load its dataset."));
       workspace.append(unavailable);
+    } finally {
+      window.dispatchEvent(new Event("atlas:ready"));
     }
   }
 

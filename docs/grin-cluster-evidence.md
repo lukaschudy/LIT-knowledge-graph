@@ -64,6 +64,8 @@ Verify unchanged reviewer drafts, identical source packets, preserved table-cell
 
 Open <http://127.0.0.1:18769/>. The existing TopK literature-search pilot remains available through the viewer's search link. This new source-audited bundle is separate from the earlier TopK-indexed curated bundle; it has not been silently uploaded or substituted into the search collection.
 
+The Cloudflare build now includes the reviewed bundle at `/cluster` and connects `/explore` → Ask Atlas to the same annotations. Variant comparison answers include primary-source classifications, selected measured WT comparisons, separately labeled calculated predictions, unresolved issues and paper links. This is deterministic annotation lookup, not an LLM model. The deployment contains all observation metadata and bounded cited table/supplement excerpts; longer source passages remain in the local snapshot. See `deploy/cloudflare/README.txt` for release commands.
+
 ## Coverage limits
 
 The scope is the existing ten selected protein variants across seven papers, including functionally opposing and unresolved controls. It is not every GRIN variant in those papers or the entire harvested literature corpus. Main tables, available text and the Myers supplement are covered within that scope. Other unavailable supplements, unquantified figures, transcript/allele identity conflicts and ambiguous protocols remain in the coverage and issue records. Protein/construct identity is not equivalent to a fully normalized genomic allele.

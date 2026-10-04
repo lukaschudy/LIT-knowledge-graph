@@ -71,6 +71,9 @@ def main(argv=None):
             parser.error('Database does not exist. Run `python -m atlas demo` or ingest a validated bundle first.')
         if args.command in ('demo','ingest'):
             bundle = json.loads((FIXTURE if args.command == 'demo' else Path(args.bundle)).read_text(encoding='utf-8'))
+            if args.command == 'demo':
+                from atlas.demo import expand_demo
+                bundle = expand_demo(bundle)
             errors = validate_bundle(bundle)
             if errors:
                 dump({'valid':False,'errors':errors})
