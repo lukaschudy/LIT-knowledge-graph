@@ -254,17 +254,14 @@
     };
     const normal=random=>Math.sqrt(-2*Math.log(Math.max(.0001,random())))*Math.cos(2*Math.PI*random());
     if(nodes.length>1200){
-      // Dense harvested slices use a stable seeded scatter instead of 160 force
-      // iterations. Positions remain a display layout, never a similarity score.
-      const groupOf=n=>n.properties?.harvest_dataset||n.properties?.dataset||n.type||'records';
-      const groups=[...new Set(nodes.map(groupOf))],counts=new Map();
-      nodes.forEach(n=>counts.set(groupOf(n),(counts.get(groupOf(n))||0)+1));
-      const centers=new Map(),golden=Math.PI*(3-Math.sqrt(5));
-      groups.forEach((id,index)=>{const radius=35*Math.sqrt(index),angle=index*golden;centers.set(id,{x:Math.cos(angle)*radius,y:Math.sin(angle)*radius,z:0});});
+      // A bounded volume keeps a round silhouette from every orbit angle.
+      // Seed by identity, not record count, so paging never rearranges the globe.
+      // This is a display layout, never a biological similarity score.
+      const globeRadius=720;
       nodes.forEach(n=>{
-        const random=randomFor(n.id),center=centers.get(groupOf(n)),spread=24+Math.sqrt(counts.get(groupOf(n)))*9;
-        const angle=random()*Math.PI*2,radius=Math.sqrt(random())*spread;
-        n.wx=center.x+Math.cos(angle)*radius;n.wy=center.y+Math.sin(angle)*radius;n.wz=Math.max(-spread,Math.min(spread,normal(random)*spread*.65));
+        const random=randomFor(n.id),azimuth=random()*Math.PI*2,vertical=random()*2-1;
+        const radius=globeRadius*Math.cbrt(random()),ring=Math.sqrt(1-vertical*vertical);
+        n.wx=Math.cos(azimuth)*ring*radius;n.wy=vertical*radius;n.wz=Math.sin(azimuth)*ring*radius;
         n.vx=0;n.vy=0;n.vz=0;
       });
       nodes.forEach(n=>{n.degree=0;});edges.forEach(e=>{e.a.degree++;e.b.degree++;});
@@ -369,13 +366,16 @@
     if (!nodes.length) return;
     const minX=Math.min(...nodes.map(n=>n.x)),maxX=Math.max(...nodes.map(n=>n.x));
     const minY=Math.min(...nodes.map(n=>n.y)),maxY=Math.max(...nodes.map(n=>n.y));
-    const padX=width<650?24:48, top=90, bottom=75;
-    const fitScale=Math.min((width-padX*2)/Math.max(100,maxX-minX),(height-top-bottom)/Math.max(100,maxY-minY));
-    view.k=Math.max(immersive?.15:MIN_ZOOM,Math.min(3,fitScale*(immersive?(nodes.length>DENSE_GRAPH_THRESHOLD?3.2:1.35):1)));
-    const center=nodes.length>DENSE_GRAPH_THRESHOLD
-      ?nodes.reduce((point,n)=>({x:point.x+n.x/nodes.length,y:point.y+n.y/nodes.length}),{x:0,y:0})
-      :{x:(minX+maxX)/2,y:(minY+maxY)/2};
-    view.x=width/2-center.x*view.k;
+    const globe=immersive&&nodes.length>DENSE_GRAPH_THRESHOLD;
+    // Leave a quiet left margin on wide screens. Narrow screens keep the whole
+    // globe reachable, with space above and below for search and Ask Atlas.
+    const wide=width>=900&&width/height>=1.15;
+    const left=globe&&wide?width*.28:width<650?24:48;
+    const right=globe&&wide?32:left,top=globe&&wide?36:90,bottom=globe&&wide?36:75;
+    const fitScale=Math.min((width-left-right)/Math.max(100,maxX-minX),(height-top-bottom)/Math.max(100,maxY-minY));
+    view.k=Math.max(MIN_ZOOM,Math.min(3,fitScale*(immersive&&!globe?1.35:1)));
+    const center={x:(minX+maxX)/2,y:(minY+maxY)/2};
+    view.x=left+(width-left-right)/2-center.x*view.k;
     view.y=top+(height-top-bottom)/2-center.y*view.k;
     applyCamera();
   }
