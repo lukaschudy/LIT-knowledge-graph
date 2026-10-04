@@ -1,5 +1,7 @@
 # Atlas — evidence for rare-disease research
 
+https://github.com/user-attachments/assets/e552c250-6c12-45aa-a8ff-d0abe264eecd
+
 Atlas helps researchers and patient organizations explore how rare diseases, gene variants, published evidence, and research resources connect. The aim is to make a research question easier to investigate: **what is known, which source supports it, what might be reusable, and what still needs checking?**
 
 Our first working case focuses on **GRIN2A- and GRIN2B-related neurodevelopmental disorders**, with particular attention to variants with published evidence of reduced NMDA-receptor function. The demo includes uncertain and opposing cases so that users can inspect the limits of that grouping.
