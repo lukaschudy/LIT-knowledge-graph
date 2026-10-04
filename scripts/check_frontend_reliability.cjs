@@ -27,6 +27,20 @@ const delay = ms => new Promise(resolve=>setTimeout(resolve,ms));
  }
  try{
  if(!process.env.ATLAS_ENDURANCE_ONLY&&!process.env.ATLAS_PROFILE_ONLY){
+ await fixture('ask selected uses a natural editable question and structured help',async(page,routes)=>{
+  routes.set('/api/research/state',route=>route.fulfill({status:404,json:{}}));
+  routes.set('/api/harvest/graph',route=>{const data=graph();data.nodes[0].label='GRIN2B';return route.fulfill({json:data});});
+  let sent;
+  routes.set('/api/ask',async(route,url)=>{sent=url.searchParams.get('q');await route.fulfill({json:{answer:'Curated summary',sections:[{title:'What this graph knows',text:'Selected variant evidence.',links:[]},{title:'Where to seek help',text:'External support resources.',links:[{label:'Family support',url:'https://grin2b.com/connect-with-us/',description:'Parent community.'},{label:'Unsafe',url:'javascript:alert(1)'}]}]}});});
+  await page.reload();await page.waitForFunction(()=>document.body.dataset.workspaceReady==='false'&&!!document.querySelector('#network').dataset.nodeCount);
+  await page.locator('#node-search').fill('GRIN2B');await page.locator('#node-search').press('Enter');await page.locator('#ask-selected').click();
+  const draft='What is known about GRIN2B from this knowledge graph, and where can I seek help?';
+  assert.equal(await page.locator('#question').inputValue(),draft);
+  await page.locator('#send-question').click();await page.getByRole('heading',{name:'Where to seek help'}).waitFor();
+  assert.equal(sent,draft);assert.equal(await page.getByRole('link',{name:'Family support'}).getAttribute('href'),'https://grin2b.com/connect-with-us/');
+  assert.equal(await page.getByRole('link',{name:'Unsafe',exact:true}).count(),0);
+  assert.equal(await page.locator('#question').inputValue(),'');
+ });
  await fixture('search remains global while viewing a resolved cluster',async(page,routes)=>{
   routes.set('/api/harvest/search',route=>route.fulfill({json:{results:[node('outside','other')]}}));
   routes.set('/api/harvest/graph',(route,url)=>route.fulfill({json:url.searchParams.get('focus')?{...graph(1),nodes:[node('outside','other')]}:graph()}));

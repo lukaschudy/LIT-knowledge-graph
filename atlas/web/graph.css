@@ -102,6 +102,10 @@
 .chat-message { font-size:14px; line-height:1.6; margin:0 0 20px; overflow-wrap:anywhere; }
 .chat-message.user { background:#edf3ee; padding:10px 14px; margin-left:30px; border-radius:15px 15px 4px 15px; }
 .chat-message p { margin:0 0 10px; line-height:1.65; }
+.answer-section { margin-bottom:18px; }
+.answer-section h3 { font-size:14px; font-weight:600; color:#164e38; margin:0 0 6px; }
+.answer-resource a { color:#164e38; text-decoration:underline; text-underline-offset:3px; }
+.answer-resource span { display:block; color:#697566; font-size:12px; margin-top:3px; }
 .chat-message .answer-label { font-size:10px; color:#8b9782; margin-bottom:7px; }
 .chat-citations { display:flex; flex-wrap:wrap; gap:5px; margin-top:10px; }
 .chat-citations button { border:1px solid #dce5d4; background:#f7f9f2; border-radius:6px; padding:5px 8px; color:#607951; font-size:10px; }

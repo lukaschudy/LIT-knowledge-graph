@@ -1085,7 +1085,7 @@
   function openChat(){ $('chat-panel').hidden=false;$('chat-toggle').setAttribute('aria-expanded','true');$('question').focus(); }
   function closeChat(){ $('chat-panel').hidden=true;$('chat-toggle').setAttribute('aria-expanded','false');window.dispatchEvent(new Event('atlas:voice-cancel'));$('chat-toggle').focus(); }
   $('chat-toggle').onclick=()=>$('chat-panel').hidden?openChat():closeChat();$('chat-close').onclick=closeChat;
-  $('ask-selected').onclick=()=>{openChat();$('question').value=selected?`How does ${label(byId.get(selected))} relate to the GRIN2A/GRIN2B demo cluster?`:'';};
+  $('ask-selected').onclick=()=>{openChat();$('question').value=selected?`What is known about ${label(byId.get(selected))} from this knowledge graph, and where can I seek help?`:'';};
   $('chat-panel').addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closeChat();}});
   $('chat-form').onsubmit=e=>{e.preventDefault();ask();};
   $('question').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();ask();}};
@@ -1102,10 +1102,22 @@
       if(!selectedHarvest&&lastAnswer?.claim_ids?.length&&/\b(this|that|these|those)\b/i.test(question)&&/\b(evidence|sources?|support|proof|papers?)\b/i.test(question))lastAnswer.claim_ids.slice(0,100).forEach(id=>params.append('claim',id));
       const response=await fetch(`/api/ask?${params}`,{signal:controller.signal}),data=await response.json();if(!response.ok)throw new Error(data.error?.message||'The graph could not answer just now.');
       if(answerSelection===selectionGeneration)lastAnswer=data;
-      reply.replaceChildren(make('div','answer-label',data.answer_scope?`Atlas · ${data.answer_scope.label}`:data.synthetic?'Atlas · fictional demo records':'Atlas · graph records'),make('p','',data.answer));
+      reply.replaceChildren(make('div','answer-label',data.answer_scope?`Atlas · ${data.answer_scope.label}`:data.synthetic?'Atlas · fictional demo records':'Atlas · graph records'));
+      if(Array.isArray(data.sections)&&data.sections.length){
+        for(const section of data.sections){
+          const block=make('section','answer-section');block.append(make('h3','',section.title),make('p','',section.text));
+          for(const resource of section.links||[]){
+            try{const url=new URL(resource.url,location.origin);if(!['http:','https:'].includes(url.protocol))continue;
+              const item=make('p','answer-resource'),a=make('a','',resource.label);a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';item.append(a);
+              if(resource.description)item.append(make('span','',resource.description));block.append(item);
+            }catch(_){}
+          }
+          reply.append(block);
+        }
+      }else for(const paragraph of String(data.answer||'').split(/\n\n+/))reply.append(make('p','',paragraph));
       if(data.claim_ids?.length){const refs=make('div','chat-citations');data.claim_ids.forEach((id,i)=>{const claim=bundle.claims.find(c=>c.id===id);if(!claim)return;const b=make('button','',`[${i+1}] ${claim.predicate.replaceAll('_',' ').toLowerCase()}`);b.type='button';b.title=`${byId.get(claim.subject)?.label} → ${byId.get(claim.object)?.label}`;b.onclick=()=>openClaim(id);refs.append(b);});reply.append(refs);}
     }catch(error){reply.replaceChildren(make('p','',error.name==='AbortError'?'The answer request timed out. Please try again.':error.message||'The answer could not be loaded. Try again.'));if(!$('question').value)$('question').value=question;}
-    finally{clearTimeout(timeout);busy=false;$('send-question').disabled=false;box.scrollTop=box.scrollHeight;}
+    finally{clearTimeout(timeout);busy=false;$('send-question').disabled=false;box.scrollTop=reply.querySelector('.answer-section')?reply.offsetTop-box.offsetTop:box.scrollHeight;}
   }
 
   document.addEventListener('click',e=>{if(!e.target.closest('.graph-search'))hideResults();if(!e.target.closest('#graph-options')&&!e.target.closest('#options-toggle')){$('graph-options').hidden=true;$('options-toggle').setAttribute('aria-expanded','false');}});
