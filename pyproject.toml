@@ -17,4 +17,4 @@ include = ["atlas*"]
 
 [tool.setuptools.package-data]
 "atlas.search" = ["web.html"]
-atlas = ["web/*.html", "web/*.js", "web/*.css", "web/fonts/*.woff2", "web/fonts/*LICENSE.txt", "web/images/*.png", "web/images/*.txt"]
+atlas = ["cluster_web.html", "web/*.html", "web/*.js", "web/*.css", "web/fonts/*.woff2", "web/fonts/*LICENSE.txt", "web/images/*.png", "web/images/*.txt"]
