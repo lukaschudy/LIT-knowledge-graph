@@ -149,8 +149,11 @@ class TopKRetrieverTests(unittest.TestCase):
             self.client.rows = [chunk | {"passage": "altered quote", "score": 1}]
             with self.assertRaises(TopKError): self.retriever.search("Aurora")
 
-    def test_needs_explicit_index_and_valid_snapshot_version(self):
-        with self.assertRaises(TopKError): self.retriever.search("Aurora")
+    def test_empty_existing_snapshot_is_readable_and_invalid_version_rejected(self):
+        with patch.dict(sys.modules, topk_sdk_modules()):
+            self.assertEqual(self.retriever.search("Aurora"), [])
+        self.assertFalse(self.retriever.status()["query_verified"])
+        self.assertIsNone(self.client.upserted)
         with self.assertRaises(ValueError):
             TopKRetriever([self.documents[0] | {"version": "sha256:wrong"}], collection="atlas-test", client=self.client)
 

@@ -42,6 +42,11 @@ def main(argv=None):
     p.add_argument('--retrieval', choices=('local', 'topk'), default='local')
     p.add_argument('--host', choices=('127.0.0.1', 'localhost'), default='127.0.0.1')
     p.add_argument('--port', type=int, default=8767)
+    p.add_argument('--graph-db', type=Path, default=ROOT / 'data/graph/harvest.sqlite')
+    p = sub.add_parser('build-graph', help='Stream every registered harvested source into a resumable disk-backed graph')
+    p.add_argument('--source-root', type=Path, required=True)
+    p.add_argument('--output', type=Path, default=ROOT / 'data/graph/harvest.sqlite')
+    p.add_argument('--batch-size', type=int, default=5000)
     p = sub.add_parser('index-research', help='Explicitly upload the loaded source slice to the configured TopK semantic collection')
     p.add_argument('--documents', default=str(ROOT / 'data/curated/neuro_documents.json'))
     p = sub.add_parser('index-neuro', help='Index and verify the neuro source excerpts in their separate TopK collection')
@@ -76,6 +81,17 @@ def main(argv=None):
     p.add_argument('--output', required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command == 'build-graph':
+            from atlas.harvest_graph.build import build
+            import time
+            last = [0, None]
+            def progress(stats):
+                now = time.monotonic()
+                if now - last[0] >= 10 or stats.get('current_dataset') != last[1] or stats['status'] != 'building':
+                    print(json.dumps(stats), flush=True)
+                    last[:] = [now, stats.get('current_dataset')]
+            dump(build(args.source_root, args.output, progress=progress, batch_size=args.batch_size))
+            return 0
         if args.command == 'index-neuro':
             from atlas.catalog import index_neuro
             try:
@@ -115,10 +131,17 @@ def main(argv=None):
             catalog = EvidenceCatalog(ROOT, env_file=args.env_file, mode=args.search)
             workspace = ResearchWorkspace(bundle, documents, request, path=args.workspace, client=client,
                 retrieval=args.retrieval, catalog=catalog, assistant=AtlasAssistant(client, catalog))
+            harvest = None
+            if args.graph_db.is_file():
+                from atlas.harvest_graph.store import HarvestGraph
+                import sqlite3
+                with sqlite3.connect(args.graph_db) as conn:
+                    source_root = conn.execute("SELECT value FROM metadata WHERE key='source_root'").fetchone()[0]
+                harvest = HarvestGraph(args.graph_db, source_root)
             with GraphStore() as store:
                 store.load_bundle(workspace._active_bundle())
                 print(f'Atlas: http://{args.host}:{args.port}/explore', flush=True)
-                serve(store, args.host, args.port, workspace=workspace)
+                serve(store, args.host, args.port, workspace=workspace, harvest=harvest)
             return 0
         if args.command == 'validate':
             bundle = json.loads(Path(args.bundle).read_text(encoding='utf-8'))

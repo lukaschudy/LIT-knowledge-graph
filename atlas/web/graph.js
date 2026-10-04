@@ -19,11 +19,16 @@
   const label = n => n.label.replace(/ \(fictional\)$/,'');
   const short = s => s.length > 31 ? s.slice(0,29) + '…' : s;
   const families = {
-    Disease:'disease', Variant:'variant', Gene:'gene', Mechanism:'biology', Phenotype:'biology',
+    Disease:'disease', Variant:'variant', Gene:'gene', Protein:'gene', Mechanism:'biology', Phenotype:'biology', Pathway:'biology', OntologyTerm:'biology',
+    SearchQuery:'research', DataRecord:'research', Dataset:'research',
   };
   const family = n => families[n.type] || 'research';
   let bundle, nodes = [], edges = [], byId = new Map(), selected = null, hovered = null;
-  let workspaceState = null, pendingWorkspaceState = null, animationLoopStarted = false;
+  let workspaceState = null, pendingWorkspaceState = null, animationLoopStarted = false, workspaceGraphSignature = '';
+  let harvestBase = null, harvestCoverage = null, harvestRequest = 0, searchRequest = 0, searchTimer = 0;
+  let harvestLimit = 10000, harvestOffset = 0, harvestLoading = false, harvestError = '', nextHarvestOffset = null;
+  let expandedFocusId = null, expandedFocusNextOffset = 0, expandedFocusDone = false;
+  let harvestDatasets = [], selectedDatasetId = '', recordPage = 0, recordRequest = 0;
   let view = { x:0,y:0,k:1 }, width = innerWidth, height = innerHeight, busy = false, claimRequest = 0;
   let recognition = null, listening = false;
   let lastAnswer = null, searchTerm = '', searchMatches = new Set(), searchLead = null;
@@ -208,6 +213,24 @@
       return ()=>{seed+=0x6D2B79F5;let t=seed;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;};
     };
     const normal=random=>Math.sqrt(-2*Math.log(Math.max(.0001,random())))*Math.cos(2*Math.PI*random());
+    if(nodes.length>1200){
+      // Dense harvested slices use a stable seeded scatter instead of 160 force
+      // iterations. Positions remain a display layout, never a similarity score.
+      const groupOf=n=>n.properties?.harvest_dataset||n.properties?.dataset||n.type||'records';
+      const groups=[...new Set(nodes.map(groupOf))],counts=new Map();
+      nodes.forEach(n=>counts.set(groupOf(n),(counts.get(groupOf(n))||0)+1));
+      const centers=new Map(),golden=Math.PI*(3-Math.sqrt(5));
+      groups.forEach((id,index)=>{const radius=35*Math.sqrt(index),angle=index*golden;centers.set(id,{x:Math.cos(angle)*radius,y:Math.sin(angle)*radius,z:0});});
+      nodes.forEach(n=>{
+        const random=randomFor(n.id),center=centers.get(groupOf(n)),spread=24+Math.sqrt(counts.get(groupOf(n)))*9;
+        const angle=random()*Math.PI*2,radius=Math.sqrt(random())*spread;
+        n.wx=center.x+Math.cos(angle)*radius;n.wy=center.y+Math.sin(angle)*radius;n.wz=normal(random)*spread*.18;
+        n.vx=0;n.vy=0;n.vz=0;
+      });
+      nodes.forEach(n=>{n.degree=0;});edges.forEach(e=>{e.a.degree++;e.b.degree++;});
+      nodes.forEach(n=>project(n));
+      return;
+    }
     const groups=[...new Set(nodes.map(n=>n.properties?.demo_community ?? 'original'))];
     const centers=new Map(),extent=Math.pow(nodes.length/471,.25);
     for(const id of groups){
@@ -349,6 +372,8 @@
     selected=id; hovered=null; lastAnswer=null;searchTerm='';searchMatches.clear();searchLead=null;$('node-search').value='';
     const node=byId.get(id);
     $('selection').hidden=!node;
+    $('inspect-selected').hidden=!isHarvestNode(node);
+    $('harvest-expand').disabled=harvestLoading||!isHarvestNode(node)||(expandedFocusId===id&&expandedFocusDone);
     if (node) {
       $('selection-name').textContent=label(node); $('selection-type').textContent=node.type;
       if (center) { cameraTransition={start:performance.now(),x:view.x,y:view.y,toX:width/2-node.x*view.k,toY:height/2-node.y*view.k}; }
@@ -394,24 +419,213 @@
   }
   function setWorkspaceState(data) {
     if(!data||!Array.isArray(data.nodes)||!Array.isArray(data.claims))return;
+    if(workspaceState&&workspaceState.revision===data.revision&&bundle)return;
+    const signature=JSON.stringify([
+      data.nodes.map(node=>[node.id,node.label,node.type]),
+      data.claims.map(claim=>[claim.id,claim.review_status,(claim.evidence||[]).map(evidence=>[evidence.source_id,evidence.excerpt,evidence.source_version])]),
+      (data.sources||[]).map(source=>[source.id||source.source_id,source.title,source.url]),
+      (data.documents||[]).map(document=>[document.source_id,document.version])
+    ]);
+    if(signature===workspaceGraphSignature){workspaceState=data;return;}
+    workspaceGraphSignature=signature;
     workspaceState=data;
+    composeGraph();
+  }
+  function composeGraph(){
+    const base=harvestBase||bundle;if(!base)return;
     const previous=new Map(nodes.map(node=>[node.id,node]));
-    const nextNodes=data.nodes.map(node=>({...node}));
-    const nodeIds=new Set(nextNodes.map(node=>node.id));
-    const activeClaims=data.claims.filter(claim=>claim.review_status!=='rejected'&&nodeIds.has(claim.subject)&&nodeIds.has(claim.object));
-    const previousSources=new Map((bundle?.sources||[]).map(source=>[source.id,source]));
-    for(const source of data.sources||[])previousSources.set(source.id||source.source_id,source);
-    for(const doc of data.documents||[])if(!previousSources.has(doc.source_id))previousSources.set(doc.source_id,{id:doc.source_id,title:doc.title,url:doc.url,version:doc.version,license:doc.license});
-    bundle={...bundle,dataset:data.dataset||bundle.dataset,nodes:nextNodes,claims:activeClaims,
-      evidence:activeClaims.flatMap(claim=>(claim.evidence||[]).map(evidence=>({...evidence,claim_id:claim.id}))),
-      sources:[...previousSources.values()]};
-    nodes=nextNodes;byId=new Map(nodes.map(node=>[node.id,node]));
+    const nodesById=new Map((base.nodes||[]).map(node=>[node.id,{...node}]));
+    if(workspaceState)for(const node of workspaceState.nodes){
+      const existing=nodesById.get(node.id);
+      nodesById.set(node.id,existing?{...existing,...node,properties:{...existing.properties,...node.properties,harvest:existing.properties?.harvest||node.properties?.harvest}}:{...node});
+    }
+    const claimsById=new Map((base.claims||[]).map(claim=>[claim.id,claim]));
+    if(workspaceState)for(const claim of workspaceState.claims)if(claim.review_status!=='rejected')claimsById.set(claim.id,claim);
+    const allNodes=[...nodesById.values()],nodeIds=new Set(allNodes.map(node=>node.id));
+    const allClaims=[...claimsById.values()].filter(claim=>nodeIds.has(claim.subject)&&nodeIds.has(claim.object));
+    const evidenceByKey=new Map();
+    for(const evidence of base.evidence||[])evidenceByKey.set(`${evidence.claim_id}:${evidence.id||evidence.source_id||evidence.locator}`,evidence);
+    if(workspaceState)for(const claim of workspaceState.claims)for(const evidence of claim.evidence||[])evidenceByKey.set(`${claim.id}:${evidence.id||evidence.source_id||evidence.locator}`,{...evidence,claim_id:claim.id});
+    const sourcesById=new Map();
+    for(const source of [...(base.sources||[]),...(workspaceState?.sources||[])])sourcesById.set(source.id||source.source_id,source);
+    for(const doc of workspaceState?.documents||[])if(!sourcesById.has(doc.source_id))sourcesById.set(doc.source_id,{id:doc.source_id,title:doc.title,url:doc.url,version:doc.version,license:doc.license});
+    const previousView={...view};
+    bundle={...base,dataset:base.dataset||workspaceState?.dataset,nodes:allNodes,claims:allClaims,evidence:[...evidenceByKey.values()],sources:[...sourcesById.values()]};
+    nodes=allNodes;byId=new Map(nodes.map(node=>[node.id,node]));
     nodes.forEach(node=>{const old=previous.get(node.id);if(old){for(const key of ['wx','wy','wz'])if(Number.isFinite(old[key]))node[key]=old[key];}});
     if(selected&&!byId.has(selected))selected=null;
-    searchMatches.clear();searchLead=null;searchTerm='';$('node-search').value='';
-    const previousView={...view};render();view=previousView;applyCamera();paintPositions();highlight();
-    if(selected)select(selected);
+    const currentSearch=$('node-search').value;searchMatches.clear();searchLead=null;searchTerm='';
+    const keepSelection=selected;
+    render();view=previousView;applyCamera();paintPositions();highlight();
+    if(keepSelection){selected=keepSelection;highlight();}
+    if(currentSearch)$('node-search').value=currentSearch;
   }
+  function isHarvestNode(node){return !!(node?.properties?.harvest||node?.properties?.harvest_dataset||String(node?.id||'').startsWith('record:'));}
+  function updateHarvestControls(message=''){
+    const status=$('harvest-status'),meta=harvestBase?.harvest||{},total=harvestCoverage||{};
+    if(message||harvestError){status.textContent=message||harvestError;return;}
+    const metaTotals=meta.totals||{};
+    const shownNodes=Number(harvestBase?.nodes?.length??meta.shown_nodes??0),shownEdges=Number(harvestBase?.claims?.length??meta.shown_edges??0);
+    const totalNodes=Number(total.total_nodes??metaTotals.total_nodes??shownNodes),totalEdges=Number(total.total_edges??metaTotals.total_edges??shownEdges),records=Number(total.total_records??metaTotals.total_records??0);
+    const datasetCount=Number(total.total_datasets??total.dataset_count??metaTotals.total_datasets??(Array.isArray(total.datasets)?total.datasets.length:0));
+    const processed=Number(total.processed_records||0),build=String(total.build_status||'');
+    status.textContent=`${shownNodes.toLocaleString()} of ${totalNodes.toLocaleString()} nodes · ${shownEdges.toLocaleString()} of ${totalEdges.toLocaleString()} relations · ${records.toLocaleString()} source rows across ${datasetCount.toLocaleString()} datasets${processed?` · ${processed.toLocaleString()} processed`:''}${build?` · ${build}`:''}.${nextHarvestOffset!==null?' This is a bounded graph view.':''}`;
+    $('harvest-next').disabled=harvestLoading||nextHarvestOffset===null;
+    $('harvest-expand').disabled=harvestLoading||!selected||!isHarvestNode(byId.get(selected))||(expandedFocusId===selected&&expandedFocusDone);
+    $('harvest-reload').disabled=harvestLoading;$('harvest-limit').disabled=harvestLoading;
+  }
+  async function loadHarvestStatus(){
+    try{const response=await fetch('/api/harvest/status');if(!response.ok)throw new Error('Harvest coverage is unavailable.');harvestCoverage=await response.json();updateHarvestControls();}
+    catch(_){updateHarvestControls('Harvest coverage is not available on this server. The currently loaded graph may be a curated subset.');}
+  }
+  function unionRows(oldRows,newRows,key){const rowKey=row=>row[key]??row.evidence_id??(row.claim_id?`${row.claim_id}:${row.source_id}:${row.locator}`:JSON.stringify(row));const map=new Map((oldRows||[]).map(row=>[rowKey(row),row]));for(const row of newRows||[])map.set(rowKey(row),row);return [...map.values()];}
+  async function loadHarvestGraph({offset=0,focus=null,append=false,limit=harvestLimit}={}){
+    const requestId=++harvestRequest;
+    harvestLoading=true;harvestError='';updateHarvestControls(focus?'Expanding the selected neighborhood…':'Loading a bounded graph view…');
+    try{
+      const params=new URLSearchParams({limit:String(limit),offset:String(offset)});if(focus)params.set('focus',focus);
+      const response=await fetch(`/api/harvest/graph?${params}`);if(!response.ok)throw new Error(`Harvest graph request failed (${response.status}).`);
+      const incoming=await response.json();
+      if(requestId!==harvestRequest)return false;
+      if(!Array.isArray(incoming.nodes)||!Array.isArray(incoming.claims))throw new Error('The harvest graph returned an unexpected shape.');
+      if(append&&harvestBase){
+        harvestBase={...harvestBase,...incoming,
+          nodes:unionRows(harvestBase.nodes,incoming.nodes,'id'),claims:unionRows(harvestBase.claims,incoming.claims,'id'),
+          evidence:unionRows(harvestBase.evidence,incoming.evidence,'id'),sources:unionRows(harvestBase.sources,incoming.sources,'id')};
+      }else harvestBase=incoming;
+      const meta=incoming.harvest||{};
+      if(focus){expandedFocusId=focus;expandedFocusNextOffset=meta.next_offset??null;expandedFocusDone=meta.next_offset==null;}
+      else nextHarvestOffset=meta.next_offset??null;
+      harvestLimit=limit;harvestOffset=offset;
+      composeGraph();updateHarvestControls();
+      $('all-labels').disabled=nodes.length>1200;
+      if(nodes.length>1200)$('all-labels').checked=false;
+      $('all-labels').title=nodes.length>1200?'Showing every label is disabled for a dense graph view. Search or select a node to reveal its label.':'';
+      $('graph-status').hidden=!!nodes.length;
+      return true;
+    }catch(error){if(requestId===harvestRequest){harvestError=error.message;updateHarvestControls(error.message);}return false;}
+    finally{if(requestId===harvestRequest){harvestLoading=false;updateHarvestControls();}}
+  }
+  $('harvest-reload').addEventListener('click',()=>{harvestBase=null;harvestOffset=0;nextHarvestOffset=null;loadHarvestGraph({limit:Number($('harvest-limit').value)||10000});});
+  $('harvest-limit').addEventListener('change',()=>{harvestBase=null;harvestOffset=0;nextHarvestOffset=null;loadHarvestGraph({limit:Number($('harvest-limit').value)||10000});});
+  $('harvest-next').addEventListener('click',()=>{
+    if(nextHarvestOffset!==null)loadHarvestGraph({offset:nextHarvestOffset,append:true,limit:harvestLimit});
+  });
+  $('harvest-expand').addEventListener('click',()=>{
+    if(!selected||!isHarvestNode(byId.get(selected)))return;
+    if(expandedFocusId===selected&&expandedFocusDone)return;
+    const offset=expandedFocusId===selected?expandedFocusNextOffset:0;
+    loadHarvestGraph({focus:selected,offset,append:true,limit:harvestLimit});
+  });
+  $('harvest-browse').addEventListener('click',async()=>{
+    const dialog=$('harvest-datasets-dialog');if(!dialog.open)dialog.showModal();
+    if(!harvestDatasets.length)await loadHarvestDatasets();
+    else if(selectedDatasetId)loadHarvestRecords();
+  });
+  $('harvest-datasets-close').addEventListener('click',()=>$('harvest-datasets-dialog').close());
+  $('harvest-dataset-select').addEventListener('change',()=>{selectedDatasetId=$('harvest-dataset-select').value;recordPage=0;loadHarvestRecords();});
+  $('harvest-dataset-filter').addEventListener('input',renderDatasetOptions);
+  $('harvest-record-previous').addEventListener('click',()=>{if(recordPage>0){recordPage--;loadHarvestRecords();}});
+  $('harvest-record-next').addEventListener('click',()=>{recordPage++;loadHarvestRecords();});
+  function datasetId(dataset){const raw=dataset.dataset_id??dataset.id??'';const match=String(raw).match(/(\d+)$/);return match?.[1]||String(raw);}
+  function datasetLabel(dataset){return dataset.label||dataset.key||dataset.path||`Dataset ${datasetId(dataset)}`;}
+  function renderDatasetOptions(){
+    const select=$('harvest-dataset-select'),query=$('harvest-dataset-filter').value.trim().toLowerCase(),current=selectedDatasetId;
+    const filtered=harvestDatasets.filter(dataset=>`${datasetLabel(dataset)} ${dataset.key||''} ${dataset.path||''} ${datasetId(dataset)}`.toLowerCase().includes(query));
+    select.replaceChildren();filtered.forEach(dataset=>{
+      const count=Number(dataset.processed_rows??dataset.expected_rows??0),option=new Option(`${datasetLabel(dataset)} · ${count.toLocaleString()} rows`,datasetId(dataset));select.add(option);
+    });
+    selectedDatasetId=filtered.some(dataset=>datasetId(dataset)===current)?current:(filtered[0]?datasetId(filtered[0]):'');select.value=selectedDatasetId;
+    if(selectedDatasetId)loadHarvestRecords();else{$('harvest-record-list').replaceChildren();$('harvest-record-status').textContent='No dataset matches this filter.';}
+  }
+  async function loadHarvestDatasets(){
+    $('harvest-record-status').textContent='Loading dataset catalog…';
+    try{
+      const response=await fetch('/api/harvest/datasets');if(!response.ok)throw new Error('Dataset catalog is unavailable.');const payload=await response.json();
+      harvestDatasets=Array.isArray(payload)?payload:Array.isArray(payload.datasets)?payload.datasets:[];
+      renderDatasetOptions();
+    }catch(error){$('harvest-record-status').textContent=error.message;$('harvest-record-list').replaceChildren();}
+  }
+  async function loadHarvestRecords(){
+    if(!selectedDatasetId)return;const requestId=++recordRequest;
+    $('harvest-record-status').textContent='Loading source records…';$('harvest-record-next').disabled=true;
+    try{
+      const params=new URLSearchParams({dataset:selectedDatasetId,page:String(recordPage),limit:'50'}),response=await fetch(`/api/harvest/records?${params}`);
+      if(!response.ok)throw new Error('This dataset page could not be loaded.');const data=await response.json();if(requestId!==recordRequest)return;
+      recordPage=Number(data.page||0);const records=Array.isArray(data.records)?data.records:[],total=Number(data.total||0),pages=Math.max(1,Math.ceil(total/Number(data.limit||50)));
+      $('harvest-record-status').textContent=`${datasetLabel(harvestDatasets.find(dataset=>datasetId(dataset)===selectedDatasetId)||{})} · page ${recordPage+1} of ${pages} · ${total.toLocaleString()} total rows`;
+      const list=$('harvest-record-list');list.replaceChildren();
+      if(!records.length)list.append(make('p','','No records are available on this page.'));
+      records.forEach(pointer=>{
+        const row=make('article','harvest-record-item'),details=make('p');
+        const rowNumber=pointer.row??pointer.one_based_row??'unknown',path=pointer.path||pointer.dataset_key||'';
+        details.textContent=`Row ${rowNumber}${path?` · ${path}`:''}${pointer.sha256?` · SHA-256 ${pointer.sha256}`:''}`;
+        const button=make('button','workspace-button','Inspect record');button.type='button';
+        const id=pointer.id||pointer.record_id||`record:${selectedDatasetId}:${rowNumber}`;
+        button.addEventListener('click',()=>openHarvestNode(id));
+        row.append(details,button);list.append(row);
+      });
+      $('harvest-record-previous').disabled=recordPage<=0;$('harvest-record-next').disabled=(recordPage+1)*Number(data.limit||50)>=total;
+    }catch(error){if(requestId===recordRequest){$('harvest-record-status').textContent=error.message;$('harvest-record-list').replaceChildren();}}
+  }
+  async function fetchHarvestNode(id){
+    const response=await fetch(`/api/harvest/node?${new URLSearchParams({id})}`);if(!response.ok)throw new Error('The harvested record could not be loaded.');
+    const payload=await response.json();if(payload.node===null)return null;
+    const node=payload.node||payload;
+    if(!payload.record&&node.properties?.record){
+      const pointer=node.properties.record,pointerId=typeof pointer==='string'?pointer:pointer.id||pointer.record_id||`record:${pointer.dataset_id}:${pointer.row}`;
+      const record=await fetchHarvestRecord(pointerId);if(record)return {...payload,...record,node};
+    }
+    return {...payload,node};
+  }
+  async function fetchHarvestRecord(id){
+    const response=await fetch(`/api/harvest/record?${new URLSearchParams({id})}`);if(!response.ok)return null;return response.json();
+  }
+  function appendHarvestNode(node){
+    if(!harvestBase)harvestBase={nodes:[],claims:[],evidence:[],sources:[],dataset:{title:'Harvested graph'}};
+    harvestBase.nodes=unionRows(harvestBase.nodes,[node],'id');composeGraph();
+  }
+  function renderHarvestRecordDetails(data,titleFallback='Harvested source record'){
+    const dialog=$('record-dialog'),content=$('record-content'),node=data.node||data,record=data.record||node.record||{},raw=record.data??data.data??null;
+    const provenance=record.provenance||data.provenance||node.provenance||{};
+    $('record-kind').textContent='Harvested source · unreviewed';
+    $('record-title').textContent=node.label||node.title||data.label||titleFallback;
+    content.replaceChildren();
+    content.append(make('p','harvest-record-warning','This is a raw harvested record or provenance pointer. It has not been machine-checked as a graph assertion or scientifically reviewed.'));
+    const meta=[];
+    if(provenance.dataset||data.dataset||node.properties?.harvest_dataset)meta.push(`Dataset · ${provenance.dataset||data.dataset||node.properties.harvest_dataset}`);
+    if(provenance.path||data.path)meta.push(`File · ${provenance.path||data.path}`);
+    if(provenance.row||data.row)meta.push(`Row · ${provenance.row||data.row}`);
+    if(provenance.sha256||data.sha256)meta.push(`SHA-256 · ${provenance.sha256||data.sha256}`);
+    if(meta.length)content.append(make('p','',meta.join(' · ')));
+    const urls=[...(Array.isArray(provenance.source_urls)?provenance.source_urls:[]),...(Array.isArray(record.source_urls)?record.source_urls:[])];
+    [...new Set(urls)].forEach(url=>{try{const parsed=new URL(url);if(['http:','https:'].includes(parsed.protocol))content.append(linkForHarvestSource(parsed.href));}catch(_){}});
+    const licenses=provenance.licenses||record.licenses||[];if(licenses.length)content.append(make('p','',`License metadata · ${Array.isArray(licenses)?licenses.join(' · '):String(licenses)}`));
+    const json=make('pre','harvest-record-json',raw===null?JSON.stringify(data,null,2):typeof raw==='string'?raw:JSON.stringify(raw,null,2));content.append(json);
+    if(!dialog.open)dialog.showModal();
+  }
+  function linkForHarvestSource(url){const link=make('a','','Open recorded source URL ↗');link.href=url;link.target='_blank';link.rel='noopener noreferrer';return link;}
+  async function openHarvestNode(id){
+    const request=++claimRequest,dialog=$('record-dialog');$('record-content').replaceChildren(make('p','','Loading harvested source details…'));$('record-kind').textContent='Harvested source';$('record-title').textContent=label(byId.get(id)||{label:id});if(!dialog.open)dialog.showModal();
+    try{const data=String(id).startsWith('record:')?await fetchHarvestRecord(id):await fetchHarvestNode(id);if(request!==claimRequest)return;if(!data)throw new Error('No harvested record was returned for this node.');renderHarvestRecordDetails({...data,node:data.node||byId.get(id)||{label:id}},label(byId.get(id)||{label:id}));}
+    catch(error){if(request===claimRequest)$('record-content').replaceChildren(make('p','',error.message));}
+  }
+  async function openHarvestClaim(id){
+    const request=++claimRequest,dialog=$('record-dialog');$('record-content').replaceChildren(make('p','','Loading harvested relationship provenance…'));$('record-kind').textContent='Harvested relationship · unreviewed';$('record-title').textContent='Harvested graph relation';if(!dialog.open)dialog.showModal();
+    try{
+      const response=await fetch(`/api/harvest/claim?${new URLSearchParams({id})}`);if(!response.ok)throw new Error('This harvested relationship could not be loaded.');
+      const data=await response.json(),claim=data.claim||data,subject=byId.get(claim.subject)?.label||claim.subject||'Record',object=byId.get(claim.object)?.label||claim.object||'Record';
+      if(request!==claimRequest)return;
+      const pointer=claim.context?.record||data.record_pointer||data.provenance?.record||null;
+      let record=data.record?data:null;
+      if(!record&&pointer){const pointerId=typeof pointer==='string'?pointer:pointer.id||pointer.record_id||`record:${pointer.dataset_id}:${pointer.row}`;record=await fetchHarvestRecord(pointerId);}
+      if(request!==claimRequest)return;
+      renderHarvestRecordDetails(record||{node:{label:`${subject} → ${object}`},record:{data:claim},provenance:data.provenance||{}},`${subject} → ${object}`);
+      const content=$('record-content'),relation=make('p','harvest-relation',`${subject} · ${String(claim.predicate||'related to').replaceAll('_',' ')} · ${object}`);content.prepend(relation);
+      const status=make('p','harvest-record-warning','This harvested relation is unreviewed raw-source context. It is not an approved scientific assertion.');content.insertBefore(status,relation.nextSibling);
+    }catch(error){if(request===claimRequest)$('record-content').replaceChildren(make('p','',error.message));}
+  }
+  $('inspect-selected').addEventListener('click',()=>{if(selected&&isHarvestNode(byId.get(selected)))openHarvestNode(selected);});
   window.addEventListener('atlas:workspace-updated',event=>{
     const incoming=event.detail?.state;
     if(!incoming)return;
@@ -434,18 +648,46 @@
     searchMatches=new Set(matches.map(n=>n.id));searchLead=matches[0]?.id||null;highlight();
     if(!searchTerm){hideResults();return;}
     matches.slice(0,12).forEach(n=>{
-      const b=make('button','',label(n));b.type='button';b.append(make('small','',n.type));
+      const b=make('button','',label(n));b.type='button';b.dataset.nodeId=n.id;b.append(make('small','',n.type));
       b.addEventListener('click',()=>{select(n.id,true);n.el.focus();});
       b.addEventListener('focus',()=>{searchLead=n.id;highlight();});results.append(b);
     });
-    if(!matches.length)results.append(make('p','','No matching nodes.'));
+    if(!matches.length)results.append(make('p','','Searching the loaded graph and full harvest index…'));
     results.hidden=false;$('node-search').setAttribute('aria-expanded','true');
+    clearTimeout(searchTimer);const requestId=++searchRequest;
+    if(searchTerm)searchTimer=setTimeout(()=>searchHarvest(searchTerm,requestId),220);
+  }
+  async function searchHarvest(query,requestId){
+    const resultsElement=$('node-results');
+    try{
+      const response=await fetch(`/api/harvest/search?${new URLSearchParams({q:query,limit:'40'})}`);if(!response.ok)throw new Error('');
+      const data=await response.json();if(requestId!==searchRequest||query!==$('node-search').value.toLowerCase().trim())return;
+      const results=resultsElement,matches=Array.isArray(data.results)?data.results:[];
+      const existing=new Set([...results.querySelectorAll('[data-node-id]')].map(button=>button.dataset.nodeId));
+      if(matches.length){const pending=results.querySelector('p');if(pending)pending.remove();}
+      if(matches.length)results.append(make('p','harvest-search-heading',`Harvest index · ${Number(data.total||matches.length).toLocaleString()} matches`));
+      matches.forEach(result=>{
+        const node=result.node||result,id=node.id||result.node_id;if(!id||existing.has(id))return;existing.add(id);
+        if(!searchLead)searchLead=id;
+        const button=make('button','harvest-search-result',node.label||result.label||id);button.type='button';button.dataset.harvestResult='true';button.dataset.nodeId=id;
+        button.append(make('small','',`${node.type||result.type||'Harvest record'}${node.properties?.harvest_dataset?` · ${node.properties.harvest_dataset}`:''}`));
+        button.addEventListener('click',async()=>{
+          hideResults();$('node-search').blur();
+          if(byId.has(id)){select(id,true);byId.get(id)?.el.focus({preventScroll:true});return;}
+          await loadHarvestGraph({focus:id,append:true,limit:harvestLimit});
+          if(byId.has(id)){select(id,true);byId.get(id)?.el.focus({preventScroll:true});}
+          else {const raw=await fetchHarvestNode(id);if(raw?.node){appendHarvestNode(raw.node);select(id,true);}}
+        });
+        results.append(button);
+      });
+      if(!matches.length&&!results.querySelector('button'))results.replaceChildren(make('p','','No match in the loaded graph or harvest index.'));
+    }catch(_){if(requestId===searchRequest&&!resultsElement.querySelector('button'))resultsElement.replaceChildren(make('p','','The harvest search index is unavailable; try a broader loaded-graph search.'));}
   }
   $('node-search').addEventListener('input',searchNodes);
   $('node-search').addEventListener('keydown',e=>{
     if(e.key==='Escape'){$('node-search').value='';searchNodes();}
     if(e.key==='ArrowDown'){e.preventDefault();$('node-results').querySelector('button')?.focus();}
-    if(e.key==='Enter'&&searchLead){e.preventDefault();const id=searchLead;select(id,true);byId.get(id)?.el.focus();}
+    if(e.key==='Enter'&&searchLead){e.preventDefault();const id=searchLead;if(byId.has(id)){select(id,true);byId.get(id)?.el.focus();}else $('node-results').querySelector(`[data-node-id="${CSS.escape(id)}"]`)?.click();}
   });
   $('node-results').addEventListener('keydown',e=>{const items=[...$('node-results').querySelectorAll('button')],i=items.indexOf(document.activeElement);if(e.key==='ArrowDown'){e.preventDefault();items[(i+1)%items.length]?.focus();}if(e.key==='ArrowUp'){e.preventDefault();items[(i-1+items.length)%items.length]?.focus();}if(e.key==='Escape'){$('node-search').focus();hideResults();}});
 
@@ -503,6 +745,7 @@
   window.addEventListener('resize',()=>{width=innerWidth;height=innerHeight;sizeCanvas();fit();});
 
   async function openClaim(id) {
+    if(String(id).startsWith('harvest:edge:')){openHarvestClaim(id);return;}
     const workspaceClaim=workspaceState?.claims?.find(claim=>claim.id===id);
     if(workspaceClaim){openWorkspaceClaim(workspaceClaim);return;}
     const request=++claimRequest;const dialog=$('record-dialog');
@@ -544,7 +787,8 @@
     content.append(make('p','','Recorded evidence is a research starting point, not a clinical conclusion.'));
     if(!dialog.open)dialog.showModal();
   }
-  $('record-close').onclick=()=>$('record-dialog').close();
+  $('record-close').onclick=()=>{claimRequest++;$('record-dialog').close();};
+  $('record-dialog').addEventListener('cancel',()=>{claimRequest++;});
 
   function openChat(){ $('workspace-panel').hidden=true;$('workspace-toggle').setAttribute('aria-expanded','false');$('chat-panel').hidden=false;$('chat-toggle').setAttribute('aria-expanded','true');$('question').focus(); }
   function closeChat(){ $('chat-panel').hidden=true;$('chat-toggle').setAttribute('aria-expanded','false');$('voice-consent').hidden=true;recognition?.abort();$('chat-toggle').focus(); }
@@ -555,13 +799,16 @@
   $('question').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask();}};
   async function ask() {
     const question=$('question').value.trim();if(!question||busy)return;
+    const selectedNode=byId.get(selected),selectedHarvest=isHarvestNode(selectedNode);
+    const query=selectedHarvest?`Selected harvest-index record: ${label(selectedNode)}. The configured cited-source search may not cover the full harvest. User question: ${question}`:question;
     busy=true;$('send-question').disabled=true;recognition?.abort();
     const box=$('chat-messages');
     box.append(make('div','chat-message user',question));$('question').value='';
+    if(selectedHarvest)box.append(make('p','harvest-ask-scope',`Selected harvest record: ${label(selectedNode)}. The question is sent as text context; the cited-source search may not cover all harvested records.`));
     const reply=make('div','chat-message answer');reply.append(make('p','','Looking through the graph…'));box.append(reply);box.scrollTop=box.scrollHeight;
     try{
-      const params=new URLSearchParams({q:question});if(selected)params.set('node',selected);
-      if(lastAnswer?.claim_ids?.length&&/\b(this|that|these|those)\b/i.test(question)&&/\b(evidence|sources?|support|proof|papers?)\b/i.test(question))lastAnswer.claim_ids.slice(0,100).forEach(id=>params.append('claim',id));
+      const params=new URLSearchParams({q:query});if(selected&&!selectedHarvest)params.set('node',selected);
+      if(!selectedHarvest&&lastAnswer?.claim_ids?.length&&/\b(this|that|these|those)\b/i.test(question)&&/\b(evidence|sources?|support|proof|papers?)\b/i.test(question))lastAnswer.claim_ids.slice(0,100).forEach(id=>params.append('claim',id));
       const response=await fetch(`/api/ask?${params}`),data=await response.json();if(!response.ok)throw new Error(data.error?.message||'The graph could not answer just now.');
       lastAnswer=data;
       reply.replaceChildren(make('div','answer-label',data.synthetic?'Atlas · fictional demo records':'Atlas · graph records'),make('p','',data.answer));
@@ -593,9 +840,16 @@
 
   async function init() {
     try{
-      const response=await fetch('/api/graph');if(!response.ok)throw new Error('The graph could not be loaded. Refresh to try again.');bundle=await response.json();
-      nodes=bundle.nodes.map(n=>({...n}));byId=new Map(nodes.map(n=>[n.id,n]));
-      if(pendingWorkspaceState){const pending=pendingWorkspaceState;pendingWorkspaceState=null;setWorkspaceState(pending);}else render();document.fonts.ready.then(placeLabels);
+      const statusRequest=loadHarvestStatus();
+      const loaded=await loadHarvestGraph({limit:harvestLimit,offset:0});
+      if(!loaded){
+        const response=await fetch('/api/graph');if(!response.ok)throw new Error('The graph could not be loaded. Refresh to try again.');
+        harvestBase=null;harvestError='The harvest projection is unavailable. Showing the smaller curated graph view.';
+        bundle=await response.json();nodes=bundle.nodes.map(node=>({...node}));byId=new Map(nodes.map(node=>[node.id,node]));render();updateHarvestControls();
+      }
+      await statusRequest;
+      if(pendingWorkspaceState){const pending=pendingWorkspaceState;pendingWorkspaceState=null;setWorkspaceState(pending);}
+      document.fonts.ready.then(placeLabels);
       $('graph-status').hidden=!!nodes.length;if(!nodes.length)$('graph-status').textContent='No entities have been added yet.';
     }catch(error){$('graph-status').textContent=error.message;$('chat-toggle').disabled=true;$('node-search').disabled=true;}
     finally{window.dispatchEvent(new Event('atlas:ready'));}

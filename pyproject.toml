@@ -12,6 +12,7 @@ dependencies = []
 [project.optional-dependencies]
 topk = ["topk-sdk==0.15.0"]
 search = ["topk-sdk==0.15.0"]
+graph = ["indexed-gzip==1.10.3"]
 
 [tool.setuptools.packages.find]
 include = ["atlas*"]

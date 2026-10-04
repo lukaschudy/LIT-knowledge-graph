@@ -1,0 +1,487 @@
+{
+  "verified_at": "2026-10-04T01:32:05.845616+00:00",
+  "snapshot_id": "726adcb28ffedfc74d60121eca4521e2e8c226b2d6a5a0c3ed6875d4ead00455",
+  "stats": {
+    "total_nodes": 8914689,
+    "total_edges": 53429267,
+    "total_records": 21746825,
+    "processed_records": 21746825,
+    "total_datasets": 105,
+    "completed_datasets": 105,
+    "status": "complete"
+  },
+  "entity_types": {
+    "Announcement": 1,
+    "Assertion": 38033,
+    "AssertionClassification": 27,
+    "Disease": 108977,
+    "Drug": 3094,
+    "EvidenceRecord": 5014,
+    "Gene": 274296,
+    "Genotype": 50857,
+    "Grant": 44842,
+    "HomologyGroup": 21928,
+    "OntologyTerm": 44254,
+    "Organization": 141547,
+    "Pathway": 23604,
+    "Person": 762688,
+    "Phenotype": 26574,
+    "Protein": 100733,
+    "Publication": 2228342,
+    "Resource": 5,
+    "SearchQuery": 37845,
+    "Species": 12,
+    "Strain": 124518,
+    "Study": 89771,
+    "Variant": 4787727
+  },
+  "datasets": [
+    {
+      "key": "clingen/gene_disease_validity",
+      "records": 3695
+    },
+    {
+      "key": "clingen/gene_disease_validity_lumping_splitting",
+      "records": 3695
+    },
+    {
+      "key": "clingen/gene_dosage",
+      "records": 1715
+    },
+    {
+      "key": "clingen/gene_dosage_all",
+      "records": 2233
+    },
+    {
+      "key": "clinicaltrials_gov/rare_disease_studies",
+      "records": 89770
+    },
+    {
+      "key": "clinvar/gene_condition_source_id",
+      "records": 13493
+    },
+    {
+      "key": "clinvar/variant_summary",
+      "records": 9223698
+    },
+    {
+      "key": "crossref_grin/cited_works",
+      "records": 7
+    },
+    {
+      "key": "europe_pmc_diseases/articles",
+      "records": 2122515
+    },
+    {
+      "key": "europe_pmc_diseases/queries",
+      "records": 424
+    },
+    {
+      "key": "europe_pmc_diseases/query_membership",
+      "records": 2557876
+    },
+    {
+      "key": "europe_pmc_diseases/search_vocabulary",
+      "records": 37410
+    },
+    {
+      "key": "europe_pmc_preprints/rare_disease_related_preprints",
+      "records": 2579
+    },
+    {
+      "key": "europe_pmc_recheck/comparison_206177d6ec3cf2c24960",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/comparison_242efaff2a0dee070e31",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/comparison_3cef87535f5c51960bd0",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/comparison_602a3e7e4363cdb2530b",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/comparison_61f806b5812bc8824646",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/comparison_680ed806be5d77913035",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/comparison_e109ef110814d9f6e1a3",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/identifiers_206177d6ec3cf2c24960",
+      "records": 113602
+    },
+    {
+      "key": "europe_pmc_recheck/identifiers_242efaff2a0dee070e31",
+      "records": 20707
+    },
+    {
+      "key": "europe_pmc_recheck/identifiers_3cef87535f5c51960bd0",
+      "records": 6427
+    },
+    {
+      "key": "europe_pmc_recheck/identifiers_602a3e7e4363cdb2530b",
+      "records": 72906
+    },
+    {
+      "key": "europe_pmc_recheck/identifiers_61f806b5812bc8824646",
+      "records": 130627
+    },
+    {
+      "key": "europe_pmc_recheck/identifiers_680ed806be5d77913035",
+      "records": 117155
+    },
+    {
+      "key": "europe_pmc_recheck/identifiers_e109ef110814d9f6e1a3",
+      "records": 3633
+    },
+    {
+      "key": "europe_pmc_recheck/recovered_articles",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/recovered_articles_206177d6ec3cf2c24960",
+      "records": 2
+    },
+    {
+      "key": "europe_pmc_recheck/recovered_articles_242efaff2a0dee070e31",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/recovered_articles_3cef87535f5c51960bd0",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/recovered_articles_680ed806be5d77913035",
+      "records": 1
+    },
+    {
+      "key": "europe_pmc_recheck/recovered_articles_e109ef110814d9f6e1a3",
+      "records": 1
+    },
+    {
+      "key": "gencc/assertions",
+      "records": 30328
+    },
+    {
+      "key": "genetic_alliance_uk/member_organizations",
+      "records": 260
+    },
+    {
+      "key": "go/human_annotations",
+      "records": 906445
+    },
+    {
+      "key": "go/ontology",
+      "records": 48345
+    },
+    {
+      "key": "grants_gov/opportunities",
+      "records": 785
+    },
+    {
+      "key": "grants_gov/opportunity_detail_endpoint_probe",
+      "records": 1
+    },
+    {
+      "key": "grin_clinvar/variant_archives",
+      "records": 4397
+    },
+    {
+      "key": "grin_literature/grin_gene_citations",
+      "records": 7775
+    },
+    {
+      "key": "grin_primary_tables/table_rows",
+      "records": 687
+    },
+    {
+      "key": "grin_reference/clingen_gene_disease_validity",
+      "records": 2
+    },
+    {
+      "key": "grin_reference/clingen_gene_disease_validity_lumping_splitting",
+      "records": 2
+    },
+    {
+      "key": "grin_reference/clingen_gene_dosage",
+      "records": 2
+    },
+    {
+      "key": "grin_reference/clinvar_variant_summary",
+      "records": 8760
+    },
+    {
+      "key": "grin_reference/gencc_assertions",
+      "records": 19
+    },
+    {
+      "key": "grin_reference/go_human_annotations",
+      "records": 312
+    },
+    {
+      "key": "grin_reference/hgnc_hgnc_complete_set",
+      "records": 2
+    },
+    {
+      "key": "grin_reference/hpo_disease_phenotypes",
+      "records": 218
+    },
+    {
+      "key": "grin_reference/hpo_genes_to_disease",
+      "records": 10
+    },
+    {
+      "key": "grin_reference/hpo_genes_to_phenotype",
+      "records": 216
+    },
+    {
+      "key": "grin_reference/mgi_hmd_humanphenotype",
+      "records": 2
+    },
+    {
+      "key": "grin_reference/mgi_mgi_diseasegenemodel",
+      "records": 15
+    },
+    {
+      "key": "grin_reference/mgi_mgi_genepheno",
+      "records": 75
+    },
+    {
+      "key": "grin_reference/mgi_mgi_phenotypicallele",
+      "records": 43
+    },
+    {
+      "key": "grin_reference/reactome_UniProt2Reactome_All_Levels",
+      "records": 69
+    },
+    {
+      "key": "grin_reference/uniprot_reviewed_human",
+      "records": 2
+    },
+    {
+      "key": "grin_resources/announcements",
+      "records": 1
+    },
+    {
+      "key": "grin_resources/resources",
+      "records": 5
+    },
+    {
+      "key": "grin_resources/study_records",
+      "records": 1
+    },
+    {
+      "key": "grin_supplements/myers2023_supplement_pages",
+      "records": 9
+    },
+    {
+      "key": "hgnc/hgnc_complete_set",
+      "records": 45187
+    },
+    {
+      "key": "hgnc/withdrawn",
+      "records": 5291
+    },
+    {
+      "key": "hpo/disease_phenotype_annotations",
+      "records": 286651
+    },
+    {
+      "key": "hpo/genes_to_disease",
+      "records": 16099
+    },
+    {
+      "key": "hpo/genes_to_phenotype",
+      "records": 333983
+    },
+    {
+      "key": "hpo/ontology_terms",
+      "records": 20483
+    },
+    {
+      "key": "mgi/hmd_humanphenotype",
+      "records": 28880
+    },
+    {
+      "key": "mgi/hom_allorganism",
+      "records": 96200
+    },
+    {
+      "key": "mgi/mgi_diseasegenemodel",
+      "records": 13915
+    },
+    {
+      "key": "mgi/mgi_diseasemousemodel",
+      "records": 15500
+    },
+    {
+      "key": "mgi/mgi_genepheno",
+      "records": 283275
+    },
+    {
+      "key": "mgi/mgi_geno_diseasedo",
+      "records": 54008
+    },
+    {
+      "key": "mgi/mgi_geno_notdiseasedo",
+      "records": 1214
+    },
+    {
+      "key": "mgi/mgi_phenotypicallele",
+      "records": 141601
+    },
+    {
+      "key": "mgi/mgi_strain",
+      "records": 124519
+    },
+    {
+      "key": "mondo/obo_stanzas",
+      "records": 63561
+    },
+    {
+      "key": "mondo/owl_axioms",
+      "records": 472285
+    },
+    {
+      "key": "nih_reporter/grin_projects",
+      "records": 1528
+    },
+    {
+      "key": "nih_reporter/rare_disease_projects",
+      "records": 42558
+    },
+    {
+      "key": "open_targets/drug_candidates",
+      "records": 9421
+    },
+    {
+      "key": "open_targets/grin_gene_disease_evidence",
+      "records": 5014
+    },
+    {
+      "key": "open_targets/rare_diseases",
+      "records": 5388
+    },
+    {
+      "key": "open_targets/target_associations",
+      "records": 2844448
+    },
+    {
+      "key": "orphadata/classifications",
+      "records": 48261
+    },
+    {
+      "key": "orphadata/cross_references",
+      "records": 11645
+    },
+    {
+      "key": "orphadata/epidemiology",
+      "records": 6728
+    },
+    {
+      "key": "orphadata/genes",
+      "records": 4245
+    },
+    {
+      "key": "orphadata/natural_history",
+      "records": 7790
+    },
+    {
+      "key": "orphadata/phenotypes",
+      "records": 4357
+    },
+    {
+      "key": "pmc_grin_oa/fulltext_retry_queue",
+      "records": 44
+    },
+    {
+      "key": "pmc_grin_oa/grin_html_full_text",
+      "records": 26
+    },
+    {
+      "key": "pmc_grin_oa/grin_licensed_full_text",
+      "records": 329
+    },
+    {
+      "key": "pmc_grin_oa/license_metadata",
+      "records": 626
+    },
+    {
+      "key": "pmc_grin_oa/no_pmcid_queue",
+      "records": 599
+    },
+    {
+      "key": "pmc_grin_oa/rights_review_queue",
+      "records": 283
+    },
+    {
+      "key": "pubmed/rare_disease_citations",
+      "records": 54131
+    },
+    {
+      "key": "raresource/diseases",
+      "records": 7200
+    },
+    {
+      "key": "raresource/genes",
+      "records": 4512
+    },
+    {
+      "key": "reactome/ReactomePathways",
+      "records": 23603
+    },
+    {
+      "key": "reactome/ReactomePathwaysRelation",
+      "records": 23717
+    },
+    {
+      "key": "reactome/UniProt2Reactome_All_Levels",
+      "records": 942792
+    },
+    {
+      "key": "ror/organizations",
+      "records": 141528
+    },
+    {
+      "key": "uniprot/reviewed_human",
+      "records": 20431
+    }
+  ],
+  "sqlite_quick_check": "ok",
+  "source_rows_inspected": 195,
+  "row_sample_policy": "First and last row of each dataset; first row compared with independent sequential gzip read.",
+  "all_dataset_counts_match": true,
+  "all_offset_file_lengths_match": true,
+  "required_query_indexes_present": true,
+  "index_bytes": 4744593408,
+  "seek_and_offset_bytes": 308598185,
+  "adapter_sha256": "152557e28e5ae47bff940cb1a8aa991c9189a3e510964913bb236c935a9fa7cf",
+  "scientific_review_status": "Unreviewed source relationships; original records retained. No bulk TopK embeddings or model extraction.",
+  "smoke_checks": {
+    "default_harvest_view_nodes": 10000,
+    "default_harvest_view_relationships": 5346,
+    "graph_lookup_seconds": 0.106,
+    "exact_or_prefix_entity_search_seconds": 0.003,
+    "epg5_expanded_visible_nodes": 12767,
+    "epg5_expanded_visible_relationships": 10848,
+    "browser_widths": [
+      390,
+      1440
+    ],
+    "browser_errors": [],
+    "raw_epg5_record_verified": true,
+    "application_tests": 183,
+    "harvest_tests": 51,
+    "search_tests": 15
+  }
+}

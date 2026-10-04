@@ -8,7 +8,7 @@ From the repository root with Python 3.11 or later:
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install -e '.[topk]'
+.venv/bin/pip install -e '.[topk,graph]'
 .venv/bin/python -m atlas app --env-file .env --search topk --provider codex
 ```
 
@@ -20,7 +20,7 @@ For explicit offline retrieval, use `--search local`. This still needs a model f
 
 ## What is connected
 
-- **Graph:** the default combines the real neuro and GRIN curated bundles: 45 entities, 53 assertions and 16 sources before session changes. The displayed graph updates after extraction or rejection.
+- **Graph:** the [full harvest index](full-harvest-graph.md) adds dense browsing over all 105 available datasets and 21,746,825 source records. The curated neuro/GRIN overlay starts with 45 entities, 53 assertions and 16 sources. Workspace changes preserve the broader projection. Choose a node budget, search the complete entity index, expand neighborhoods and inspect original source rows.
 - **TopK:** 15,502 GRIN passages and 19 chunks from four neuro source snapshots are separate collections. The neuro read-back checks every field, and its semantic queries use strong consistency so recent writes are searchable. Index receipts are in `data/curated/topk-*-index.json`.
 - **Ask Atlas:** selected-node graph context and retrieved passages go to Astra. Software validates returned graph IDs and citation numbers. Source cards retain exact canonical passage text, source URL, locator and review classification. This verifies provenance, not the correctness of every model interpretation.
 - **Literature:** search either scope from the graph drawer. “Use passage” imports the catalog's canonical text as a versioned source. Curated annotation cards link to existing claims; they cannot be imported as if they were original paper text.
@@ -38,13 +38,13 @@ The selected planning scope remains EPG5/Vici, with WDR45/BPAN and AP4B1/SPG47 c
 4. Open **Plan** to see the Vici request and separate passed, blocked and unresolved gates. Run one gap investigation if useful; zero additions is a valid result when a passage does not answer the question.
 5. Open **Brief**, edit and download a cited discussion draft.
 
-Use the fictional acceptance fixture for a staged ready-for-discussion demonstration. Do not present fixture approvals as expert review of real papers. The wider harvest contains 21,746,825 normalized records; it has not all been indexed or extracted into this graph. The broad-pathway baseline is a candidate lookup, not a measured comparison with other products; 10× remains an evaluation target.
+Use the fictional acceptance fixture for a staged ready-for-discussion demonstration. Do not present fixture approvals as expert review of real papers. All 21,746,825 harvested records are addressable through the full graph index; they have not all been scientifically extracted, reviewed or embedded in TopK. The broad-pathway baseline is a candidate lookup, not a measured comparison with other products; 10× remains an evaluation target.
 
 ## Persistence and limits
 
 The default workspace is `data/workspaces/atlas.json` (ignored). `--workspace PATH` selects another file; `--bundle`, `--documents` and `--request` override the seeds. Run one server process per workspace. Writes are atomic and revision checked. A changed seed requires a fresh workspace so old review decisions cannot silently apply to new evidence. Imports retain source identity, content hash, original locator, URL and license. The workspace accepts up to 50 source documents.
 
-This local server binds to loopback. It is not a multi-user authenticated service. Review attestations record a person's decision without authenticating expertise. Bulk source refresh, automatic entity creation and a background maintenance watcher remain future work.
+This local server binds to loopback. It is not a multi-user authenticated service. Review attestations record a person's decision without authenticating expertise. The harvest builder creates source-identified entities and relationships in a separate index. Automatic source refresh and a background maintenance watcher remain future work.
 
 The [sanitized integration run](research/integrated-smoke-2026-10-04.json) records live TopK retrieval, Astra chat, source import/extraction, bounded investigation and brief generation. Timings are from individual development calls.
 

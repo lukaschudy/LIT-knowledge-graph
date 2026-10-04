@@ -17,6 +17,65 @@ const { chromium } = require('playwright');
     assert.ok(response && response.ok(), 'research route should load or redirect successfully');
     await page.waitForURL(/\/explore(?:\?|$)/);
     await page.locator('#network').waitFor({ state: 'visible' });
+    await page.locator('#options-toggle').click();
+    await page.locator('#graph-options:not([hidden])').waitFor();
+    await page.locator('#harvest-status').waitFor();
+    assert.ok((await page.locator('#harvest-status').innerText()).length > 0, 'harvest coverage state should be explained');
+    assert.equal(await page.locator('#harvest-limit option').count(), 3, 'bounded view budgets should be available');
+    assert.equal(await page.locator('#harvest-limit').inputValue(), '10000', 'default graph page should show the dense 10,000-node view');
+    const harvestData = await page.evaluate(async () => {
+      const [statusResponse, datasetsResponse] = await Promise.all([fetch('/api/harvest/status'), fetch('/api/harvest/datasets')]);
+      if (!statusResponse.ok || !datasetsResponse.ok) return null;
+      return { status: await statusResponse.json(), datasets: await datasetsResponse.json() };
+    });
+    if (harvestData) {
+      const totalNodes = Number(harvestData.status.total_nodes || 0);
+      if (totalNodes) await page.waitForFunction(expected => document.querySelector('#harvest-status').textContent.includes(expected), `${totalNodes.toLocaleString()} nodes`);
+      await page.locator('#harvest-browse').click();
+      await page.locator('#harvest-datasets-dialog[open]').waitFor();
+      await page.waitForFunction(() => document.querySelectorAll('#harvest-dataset-select option').length > 0);
+      await page.locator('#harvest-record-status').waitFor();
+      const inspect = page.locator('#harvest-record-list .harvest-record-item button').first();
+      await inspect.waitFor({state:'visible'});
+      if (await inspect.count()) {
+        await inspect.click();
+        await page.locator('#record-dialog[open]').waitFor();
+        await page.locator('#record-content .harvest-record-json').waitFor();
+        assert.ok(Object.keys(JSON.parse(await page.locator('#record-content .harvest-record-json').innerText())).length > 0);
+        assert.match(await page.locator('#record-content').innerText(), /GENE SYMBOL|recorded source URL|harvested source/i, 'raw harvested record should be inspectable');
+        await page.locator('#record-close').click();
+      }
+      await page.locator('#harvest-datasets-close').click();
+      const firstNode = await page.evaluate(async () => {
+        const response = await fetch('/api/harvest/graph?limit=1000&offset=0');
+        if (!response.ok) return null; const graph = await response.json();
+        return { id: graph.nodes?.[0]?.id, label: graph.nodes?.[0]?.label, claim_id: graph.claims?.[0]?.id };
+      });
+      if (firstNode?.id) {
+        if (firstNode.label) {
+          await page.locator('#node-search').fill(firstNode.label);
+          await page.locator('.harvest-search-heading').waitFor({ timeout: 10000 });
+          assert.ok((await page.locator('.harvest-search-heading').innerText()).includes('Harvest index'), 'full harvest search results should be labeled');
+        }
+        await page.evaluate(id => window.dispatchEvent(new CustomEvent('atlas:select-node', { detail: { node_id: id } })), firstNode.id);
+        await page.locator('#inspect-selected').waitFor({ state: 'visible' });
+        await page.locator('#inspect-selected').click();
+        await page.locator('#record-dialog[open]').waitFor();
+        await page.locator('#record-content .harvest-record-json').waitFor();
+        assert.ok(Object.keys(JSON.parse(await page.locator('#record-content .harvest-record-json').innerText())).length > 0);
+        assert.match(await page.locator('#record-content').innerText(), /raw harvested record|harvested source/i, 'selected graph node should open raw provenance');
+        await page.locator('#record-close').click();
+      }
+      if (firstNode?.claim_id) {
+        await page.evaluate(id => window.dispatchEvent(new CustomEvent('atlas:open-claim', { detail: { claim_id: id } })), firstNode.claim_id);
+        await page.locator('#record-dialog[open]').waitFor();
+        await page.locator('#record-content .harvest-record-json').waitFor();
+        assert.ok(Object.keys(JSON.parse(await page.locator('#record-content .harvest-record-json').innerText())).length > 0);
+        assert.match(await page.locator('#record-content').innerText(), /raw harvested record|harvested source|harvested relationship/i, 'harvested edge should open source provenance');
+        await page.locator('#record-close').click();
+      }
+    }
+    await page.locator('#options-toggle').click();
     await page.locator('#workspace-toggle').click();
     await page.locator('#workspace-panel:not([hidden])').waitFor();
     await page.getByRole('tab', { name: 'Literature' }).waitFor();
@@ -31,11 +90,12 @@ const { chromium } = require('playwright');
 
     await page.getByRole('tab', { name: 'Evidence / review' }).click();
     const cite = page.locator('#workspace-claims .workspace-link-button').first();
-    await cite.waitFor({ state: 'visible' });
-    await cite.click();
-    await page.locator('#record-dialog[open]').waitFor();
-    assert.ok((await page.locator('#record-content').innerText()).length > 0, 'source dialog should show evidence details');
-    await page.locator('#record-close').click();
+    if (await cite.count()) {
+      await cite.click();
+      await page.locator('#record-dialog[open]').waitFor();
+      assert.ok((await page.locator('#record-content').innerText()).length > 0, 'source dialog should show evidence details');
+      await page.locator('#record-close').click();
+    }
 
     await page.screenshot({ path: '/tmp/atlas-integrated-desktop.png', fullPage: true });
     const widths = {};

@@ -63,7 +63,7 @@ def _references(row: dict[str, Any], *keys: str) -> list[str]:
     return list(dict.fromkeys(result))
 
 
-def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None) -> ThreadingHTTPServer:
+def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None, harvest=None) -> ThreadingHTTPServer:
     """Create a testable threaded server around a startup snapshot of ``store``.
 
     The store and reasoner are only touched on this calling thread. Requests are
@@ -152,6 +152,9 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
             return value or None
 
         def _api(self, path: str, query: dict[str, list[str]]) -> None:
+            if path.startswith("/api/harvest/"):
+                self._harvest_api(path, query)
+                return
             if workspace is None and path == "/api/ask":
                 status, payload = AtlasAPI(bundle, stats).request(path, query)
                 self._json(status, payload)
@@ -338,6 +341,47 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
             except Exception:
                 self._error(500, "workspace_error", "The action could not be saved. Reload the workspace to check its current state.")
 
+        def _harvest_api(self, path, query):
+            if harvest is None:
+                self._error(404, "harvest_unavailable", "Build the harvested graph with atlas build-graph before opening the full source graph.")
+                return
+            def integer(name, default, low, high):
+                value = self._one(query, name)
+                value = int(value) if value is not None else default
+                if not low <= value <= high: raise ValueError(f"{name} is outside the supported range.")
+                return value
+            try:
+                route = path.removeprefix('/api/harvest/')
+                if route == 'status': result = harvest.status()
+                elif route == 'graph': result = harvest.graph(limit=integer('limit',3000,100,10000), offset=integer('offset',0,0,10**10), focus=self._one(query,'focus'))
+                elif route == 'search': result = harvest.search(self._one(query,'q') or '', limit=integer('limit',40,1,100))
+                elif route == 'datasets': result = harvest.datasets()
+                elif route == 'records': result = harvest.records(integer('dataset',0,1,100000), page=integer('page',0,0,10**10), limit=integer('limit',50,1,200))
+                elif route in ('node','claim','record'):
+                    identifier = self._one(query,'id')
+                    if not identifier: raise ValueError('Supply one record identifier.')
+                    if route == 'node': result = harvest.node(identifier)
+                    elif route == 'claim': result = harvest.claim(identifier)
+                    else:
+                        prefix, did, row = identifier.split(':')
+                        if prefix != 'record': raise ValueError('Invalid record identifier.')
+                        result = harvest.record(int(did),int(row))
+                    if result is None: raise KeyError(identifier)
+                    # Store methods expose immutable source pointers; resolve raw
+                    # metadata only on inspection, never into a giant graph response.
+                    pointer = result.get('provenance', result.get('record'))
+                    if route == 'record': pointer = result
+                    if isinstance(pointer,dict) and pointer.get('path'):
+                        from .harvest_graph.source_reader import read_record
+                        result = {**result,'record':read_record(harvest.path,harvest.source_root,pointer)}
+                else:
+                    self._error(404,'api_not_found','Unknown harvested graph endpoint.'); return
+                self._json(200,result)
+            except KeyError:
+                self._error(404,'record_not_found','That entity or source record is not present in the imported graph.')
+            except (ValueError,TypeError) as exc:
+                self._error(400,'invalid_graph_request',str(exc)[:300])
+
         def _atlas_search(self, target_workspace, body: dict) -> None:
             query = body.get("q")
             top_k = body.get("top_k", 8)
@@ -380,9 +424,9 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
     return ThreadingHTTPServer((host, port), AtlasHandler)
 
 
-def serve(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None) -> None:
+def serve(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None, harvest=None) -> None:
     """Run the atlas server until interrupted."""
-    server = create_server(store, host, port, workspace=workspace)
+    server = create_server(store, host, port, workspace=workspace, harvest=harvest)
     try:
         server.serve_forever()
     finally:

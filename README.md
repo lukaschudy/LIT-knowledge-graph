@@ -3,12 +3,13 @@
 The main graph now connects **TopK search → Astra answers and extraction → evidence review → deterministic recommendations → editable brief**. Open `/explore`; the former `/research` page redirects there. See [setup and demo instructions](docs/research-workspace.md).
 
 ```bash
+python3 -m atlas build-graph --source-root /path/to/harvest-repository
 python3 -m atlas app --env-file .env --search topk --provider codex
 ```
 
-Install the `topk` extra and prepare the verified local passage export first, as described in the setup guide. This local app uses the signed-in Codex CLI or an OpenAI API key; credentials stay on the server.
+Install the `topk` and `graph` extras and prepare the verified local passage export first, as described in the setup guide. This local app uses the signed-in Codex CLI or an OpenAI API key; credentials stay on the server.
 
-**Connected data:** 45 real entities and 53 curated assertions, plus **15,502 GRIN passages and 19 neuro passages** in separate verified TopK collections. Search results retain source URLs, exact text, locators and review status. The wider harvest contains 21,746,825 normalized records across 40 collections; [harvest coverage](docs/harvest-coverage.md) is distinct from the focused [TopK pilot](docs/topk-search.md).
+**Connected data:** the full harvest graph covers **21,746,825 source records across 105 datasets**, indexing **8,914,689 entities and 53,429,267 source relationships**, with dense views, full-index entity search and original-record inspection. See [build and browsing instructions](docs/full-harvest-graph.md). The focused review/planning layer starts with 45 real entities and 53 curated assertions, plus **15,502 GRIN passages and 19 neuro passages** in separate verified TopK collections. Search results retain source URLs, exact text, locators and review status. [Harvest coverage](docs/harvest-coverage.md) includes 40 source collections, including unavailable sources; the full graph indexes the 105 locally available datasets. This is distinct from the focused [TopK passage index](docs/topk-search.md).
 
 The planning scope is **EPG5 / Vici syndrome**, with WDR45 / BPAN and AP4B1 / SPG47 as candidate comparators. New extracted claims stay unreviewed; unresolved scientific, maintainer and access gates remain visible. No real candidate is made ready by an AI-generated answer alone.
 
@@ -121,7 +122,7 @@ Download the interactive files and open them in a browser; GitHub displays their
 - [Proposed recommendation loops and model architecture](docs/architecture/recommendation-loops.md)
 - [Implemented decision engine, critical review and assay-reuse demo](docs/architecture/decision-engine.md)
 
-This repository documents how to acquire and model the sources. It includes a selected curated biomedical source slice, a synthetic acceptance graph and an offline HPOA converter; it does not contain a comprehensive graph across rare diseases or production-wide ingestion connectors. Access and reuse conditions vary by provider; evidence and unresolved dependencies are recorded per source.
+This repository includes harvested-source graph adapters, a resumable bulk indexer, a curated biomedical evidence slice, a synthetic acceptance graph and an offline HPOA converter. The graph covers available local harvests; missing source access and unsupported semantic mappings remain visible through the source records. Access and reuse conditions vary by provider; evidence and unresolved dependencies are recorded per source.
 
 ## Reproduce the PDF extraction
 

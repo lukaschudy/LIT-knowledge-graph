@@ -307,8 +307,11 @@
   async function askLive(question, context) {
     if (!workspace.state?.model?.available) { status('Ask Atlas is unavailable because no live model provider is configured.', 'warning'); return; }
     const box = $('#chat-messages'), input = $('#question'); const reply = el('div', 'chat-message answer');
-    box.append(el('div', 'chat-message user', question), reply); reply.append(el('p', '', 'Checking the selected graph context and cited sources…')); box.scrollTop = box.scrollHeight;
-    const payload = { revision: revision(), question, ...(context.node_id ? { node_id: context.node_id } : {}), ...(context.claim_ids?.length ? { claim_ids: context.claim_ids.slice(0, 100) } : {}) };
+    box.append(el('div', 'chat-message user', question));
+    const scopedQuestion = context.harvest_label ? `Selected harvested record: ${context.harvest_label}. This selection is provided as text context only; the configured retrieval corpus may not cover all harvested records. User question: ${question}` : question;
+    if (context.harvest_label) box.append(el('p', 'workspace-muted', `Selected harvest node “${context.harvest_label}” is context text only. Ask Atlas searches its configured source corpus, which may be narrower than the full harvest.`));
+    box.append(reply); reply.append(el('p', '', 'Checking the selected graph context and cited sources…')); box.scrollTop = box.scrollHeight;
+    const payload = { revision: revision(), question: scopedQuestion, ...(context.node_id ? { node_id: context.node_id } : {}), ...(context.claim_ids?.length ? { claim_ids: context.claim_ids.slice(0, 100) } : {}) };
     try {
       const job = await request('/api/atlas/ask', { method: 'POST', body: payload });
       if (job.status === 'completed') { showAskResult(job.outcome?.answer, job, reply); if (input.value === question) input.value = ''; await refresh(); }
@@ -372,7 +375,18 @@
     $('#chat-messages').scrollTop = $('#chat-messages').scrollHeight;
   }
   window.AtlasWorkspace = { get active() { return workspace.active; }, askLive, refresh };
-  $('#chat-form').addEventListener('submit', event => { if (!workspace.active) return; event.preventDefault(); event.stopImmediatePropagation(); const question = $('#question').value.trim(); if (!question || workspace.asking) return; workspace.asking = true; $('#send-question').disabled = true; const claimIds = workspace.selected?.node_id ? rows(workspace.state?.claims).filter(claim => claim.subject === workspace.selected.node_id || claim.object === workspace.selected.node_id).map(claim => claim.id) : workspace.lastAskClaimIds; window.AtlasWorkspace.askLive(question, { node_id: workspace.selected?.node_id, claim_ids: claimIds }).finally(() => { workspace.asking = false; $('#send-question').disabled = !workspace.state?.model?.available; }); }, true);
+  $('#chat-form').addEventListener('submit', event => {
+    if (!workspace.active) return;
+    event.preventDefault(); event.stopImmediatePropagation();
+    const question = $('#question').value.trim(); if (!question || workspace.asking) return;
+    workspace.asking = true; $('#send-question').disabled = true;
+    const selectedId = workspace.selected?.node_id, inWorkspace = !!selectedId && rows(workspace.state?.nodes).some(node => node.id === selectedId);
+    const claimIds = inWorkspace ? rows(workspace.state?.claims).filter(claim => claim.subject === selectedId || claim.object === selectedId).map(claim => claim.id) : selectedId ? [] : workspace.lastAskClaimIds;
+    const harvestLabel = selectedId && !inWorkspace ? safe(workspace.selected?.node?.label || selectedId) : null;
+    window.AtlasWorkspace.askLive(question, { ...(inWorkspace ? { node_id: selectedId } : {}), claim_ids: claimIds, ...(harvestLabel ? { harvest_label: harvestLabel } : {}) }).finally(() => {
+      workspace.asking = false; $('#send-question').disabled = !workspace.state?.model?.available;
+    });
+  }, true);
   $('#question').addEventListener('keydown', event => { if (workspace.active && event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); event.stopImmediatePropagation(); $('#chat-form').requestSubmit(); } }, true);
   refresh({ quiet: true });
 })();
