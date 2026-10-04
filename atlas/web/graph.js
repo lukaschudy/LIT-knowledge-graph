@@ -54,7 +54,7 @@
   let needsProjection = true, needsPaint = true, overlayDirty = true, labelScale = 0;
   let depthOrder = [], edgeBatches = [], pixelRatio = 1, lastOverlay = 0;
   const DENSE_GRAPH_THRESHOLD=1200, HIT_CELL=32;
-  let overlayNodes=[],overlayEdges=[],overlayAnchors=[],hitGrid=new Map();
+  let overlayNodes=[],overlayEdges=[],overlayAnchors=[],hitGrid=new Map(),hitGridDirty=true;
   let hoverTimer = 0, hoverCandidate = null, sceneTransition = null, cameraTransition = null;
   let wheelZoom=null,wheelUntil=0;
   const MIN_ZOOM=.015,MAX_ZOOM=12;
@@ -70,6 +70,11 @@
     hoverTimer=setTimeout(()=>setHover(id),id?130:100);
   }
   function nodeAt(e) {
+    if(hitGridDirty){
+      hitGrid.clear();
+      for(const n of nodes){if(!n.inViewport||n.hidden)continue;const key=`${Math.floor(n.screenX/HIT_CELL)}:${Math.floor(n.screenY/HIT_CELL)}`;if(!hitGrid.has(key))hitGrid.set(key,[]);hitGrid.get(key).push(n);}
+      hitGridDirty=false;
+    }
     const rect=svg.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
     const current=byId.get(hovered);
     // The same point stays under hover and click, even where SVG hit circles overlap.
@@ -117,7 +122,8 @@
   }
   const nodeLayer = $('nodes');
   function sizeCanvas() {
-    pixelRatio=Math.min(devicePixelRatio||1,2);
+    // Keep SVG labels at native resolution; cap the dense particle layer.
+    pixelRatio=Math.min(devicePixelRatio||1,nodes.length>DENSE_GRAPH_THRESHOLD?1:2);
     canvas.width=Math.round(width*pixelRatio);canvas.height=Math.round(height*pixelRatio);
   }
   sizeCanvas();
@@ -177,11 +183,10 @@
   }
   function drawGraph() {
     const sqrtZoom=Math.sqrt(view.k);
-    hitGrid.clear();
+    hitGridDirty=true;
     nodes.forEach(n=>{
       n.screenX=view.x+n.x*view.k;n.screenY=view.y+n.y*view.k;n.screenR=Math.max(.65,n.radius*n.perspective*sqrtZoom);
       n.inViewport=n.screenX>-32&&n.screenX<width+32&&n.screenY>-32&&n.screenY<height+32;
-      if(n.inViewport&&!n.hidden){const key=`${Math.floor(n.screenX/HIT_CELL)}:${Math.floor(n.screenY/HIT_CELL)}`;if(!hitGrid.has(key))hitGrid.set(key,[]);hitGrid.get(key).push(n);}
     });
     if(gpu){gpu.draw(depthOrder,edgeBatches,colors,width,height,pixelRatio);return;}
     ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);ctx.clearRect(0,0,width,height);
@@ -483,7 +488,7 @@
     $('links').replaceChildren();nodeLayer.replaceChildren();
     const contestedClaims=new Set(bundle.evidence.filter(r=>r.stance==='contradicts').map(r=>r.claim_id));
     edges=bundle.claims.filter(c=>byId.has(c.subject)&&byId.has(c.object)).map(c=>({claim:c,a:byId.get(c.subject),b:byId.get(c.object)}));
-    layout();
+    layout();sizeCanvas();
     overlayNodes=[];overlayEdges=[];hitGrid.clear();
     edges.forEach(e=>{const contested=e.claim.context?.negated===true||contestedClaims.has(e.claim.id);e.kind=contested?'contested':e.claim.assertion_type==='inferred'?'inferred':'normal';});
     nodes.forEach(n=>{n.radius=2+Math.min(3.3,Math.sqrt(n.degree)*.66);n.el=n.hit=n.text=null;});

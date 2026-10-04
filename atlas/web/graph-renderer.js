@@ -39,6 +39,12 @@
         void main(){
           float extent=max(sphere.x*2.8,(sphere.x+6.)*step(.01,sphere.y));
           vec2 p=(gl_PointCoord-.5)*2.*extent;float d=length(p);float r=sphere.x;
+          // Tiny distant nodes need no expensive lighting or glow calculation.
+          if(r<2.5 && sphere.y<.01){
+            float alpha=(1.-smoothstep(max(0.,r-.5),r+.4,d))*tint.a;
+            if(alpha<.003)discard;
+            gl_FragColor=vec4(tint.rgb*alpha,alpha);return;
+          }
           float core=1.-smoothstep(r-.6,r+.4,d);
           float light=1.-smoothstep(0.,1.4,length(p/max(r,.65)+vec2(.35,.4)));
           vec3 color=mix(tint.rgb*.72,tint.rgb,light);
@@ -53,7 +59,7 @@
       `);
       function stream(p,attributes,stride){
         const buffer=gl.createBuffer();buffers.push(buffer);
-        return {p,buffer,stride,attributes:attributes.map(([name,size,offset])=>({location:gl.getAttribLocation(p,name),size,offset})),viewport:gl.getUniformLocation(p,'viewport'),data:new Float32Array(0)};
+        return {p,buffer,stride,attributes:attributes.map(([name,size,offset])=>({location:gl.getAttribLocation(p,name),size,offset})),viewport:gl.getUniformLocation(p,'viewport'),data:new Float32Array(0),capacity:0};
       }
       const lines=stream(edgeProgram,[['position',2,0],['color',4,2],['dash',2,6]],8);
       const points=stream(nodeProgram,[['position',2,0],['radius',1,2],['color',4,3],['effects',2,7]],9);
@@ -63,7 +69,8 @@
       function reserve(stream,size){if(stream.data.length<size)stream.data=new Float32Array(Math.ceil(size/4096)*4096);}
       function upload(stream,length,width,height){
         gl.useProgram(stream.p);gl.bindBuffer(gl.ARRAY_BUFFER,stream.buffer);
-        gl.bufferData(gl.ARRAY_BUFFER,stream.data.subarray(0,length),gl.DYNAMIC_DRAW);
+        if(stream.capacity<stream.data.byteLength){gl.bufferData(gl.ARRAY_BUFFER,stream.data.byteLength,gl.DYNAMIC_DRAW);stream.capacity=stream.data.byteLength;}
+        gl.bufferSubData(gl.ARRAY_BUFFER,0,stream.data.subarray(0,length));
         for(let i=0;i<6;i++)gl.disableVertexAttribArray(i);
         for(const a of stream.attributes){gl.enableVertexAttribArray(a.location);gl.vertexAttribPointer(a.location,a.size,gl.FLOAT,false,stream.stride*4,a.offset*4);}
         gl.uniform2f(stream.viewport,width,height);

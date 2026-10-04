@@ -179,7 +179,7 @@
 /* Quiet glass controls keep the constellation dominant. */
 .graph-page .brand { color:#e1f5fa; text-shadow:0 0 22px #6ae2e54a; }
 .graph-page .brand-mark { filter:drop-shadow(0 0 5px #6ee8df88); }
-.graph-search, .graph-options, .selection, .chat-panel { backdrop-filter:blur(18px); box-shadow:0 16px 50px #0005,inset 0 1px #b8eff00c; }
+.graph-search, .graph-options, .selection, .chat-panel { backdrop-filter:none; box-shadow:0 16px 50px #0005,inset 0 1px #b8eff00c; }
 .chat-toggle { border:1px solid #70d9d1; background:#0a222de8; color:#b8fff0; box-shadow:0 0 26px #3df3d321,inset 0 0 16px #4dfde00a; }
 .send-question { color:#061620; }
 .node-label { stroke:#08111f; }

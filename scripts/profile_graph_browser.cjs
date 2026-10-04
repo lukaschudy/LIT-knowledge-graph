@@ -4,7 +4,7 @@ const fs=require('node:fs');
 (async()=>{
  const browser=await chromium.launch({headless:true});
  try{
- const page=await browser.newPage({viewport:{width:1440,height:900}});
+ const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:Number(process.env.DPR||1)});
  const errors=[];page.on('pageerror',e=>{errors.push(e.message);console.error(e.message);});
  await page.route('**/graph.js',async route=>{
   const response=await route.fetch();let code=process.env.GRAPH_SCRIPT ? fs.readFileSync(process.env.GRAPH_SCRIPT,'utf8') : await response.text();
