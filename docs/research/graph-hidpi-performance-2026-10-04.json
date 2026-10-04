@@ -1,0 +1,144 @@
+{
+  "environment": "Sequential local headless Chromium runs at 1440x900 and deviceScaleFactor=2, matching the 2x pixel ratio of the in-app browser. Single-run measurements are hardware dependent.",
+  "baseline_commit": "330653f",
+  "before": {
+    "startupMs": 3101,
+    "renderer": "webgl",
+    "graph": {
+      "nodes": 10045,
+      "claims": 5399
+    },
+    "dom": {
+      "elements": 273,
+      "nodeTargets": 32,
+      "edgeTargets": 0
+    },
+    "idle": {
+      "frames": {
+        "samples": 42,
+        "medianMs": 66.6,
+        "p95Ms": 66.7,
+        "maxMs": 83.4
+      },
+      "timings": {
+        "drawGraph": {
+          "samples": 42,
+          "medianMs": 3.5,
+          "p95Ms": 5.7,
+          "maxMs": 6.3
+        },
+        "syncOverlay": {
+          "samples": 16,
+          "medianMs": 0.1,
+          "p95Ms": 0.3,
+          "maxMs": 0.3
+        }
+      }
+    },
+    "interaction": {
+      "frames": {
+        "samples": 109,
+        "medianMs": 16.8,
+        "p95Ms": 66.6,
+        "maxMs": 66.7
+      },
+      "timings": {
+        "drawGraph": {
+          "samples": 50,
+          "medianMs": 3.3,
+          "p95Ms": 6.8,
+          "maxMs": 7.6
+        },
+        "syncOverlay": {
+          "samples": 3,
+          "medianMs": 0.2,
+          "p95Ms": 0.2,
+          "maxMs": 0.2
+        },
+        "nodeAt": {
+          "samples": 2,
+          "medianMs": 0.4,
+          "p95Ms": 0.4,
+          "maxMs": 0.4
+        },
+        "highlight": {
+          "samples": 1,
+          "medianMs": 11.6,
+          "p95Ms": 11.6,
+          "maxMs": 11.6
+        }
+      }
+    },
+    "errors": []
+  },
+  "after": {
+    "startupMs": 3067,
+    "renderer": "webgl",
+    "graph": {
+      "nodes": 10045,
+      "claims": 5399
+    },
+    "dom": {
+      "elements": 273,
+      "nodeTargets": 32,
+      "edgeTargets": 0
+    },
+    "idle": {
+      "frames": {
+        "samples": 151,
+        "medianMs": 16.7,
+        "p95Ms": 16.8,
+        "maxMs": 16.8
+      },
+      "timings": {
+        "drawGraph": {
+          "samples": 76,
+          "medianMs": 1.4,
+          "p95Ms": 2.7,
+          "maxMs": 3.5
+        },
+        "syncOverlay": {
+          "samples": 19,
+          "medianMs": 0.2,
+          "p95Ms": 0.2,
+          "maxMs": 0.2
+        }
+      }
+    },
+    "interaction": {
+      "frames": {
+        "samples": 121,
+        "medianMs": 16.7,
+        "p95Ms": 16.8,
+        "maxMs": 33.4
+      },
+      "timings": {
+        "nodeAt": {
+          "samples": 2,
+          "medianMs": 1.8,
+          "p95Ms": 1.8,
+          "maxMs": 1.8
+        },
+        "drawGraph": {
+          "samples": 59,
+          "medianMs": 1.7,
+          "p95Ms": 6,
+          "maxMs": 7.9
+        },
+        "syncOverlay": {
+          "samples": 3,
+          "medianMs": 0.1,
+          "p95Ms": 0.4,
+          "maxMs": 0.4
+        },
+        "highlight": {
+          "samples": 1,
+          "medianMs": 13.8,
+          "p95Ms": 13.8,
+          "maxMs": 13.8
+        }
+      }
+    },
+    "errors": []
+  }
+}

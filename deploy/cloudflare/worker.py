@@ -4,6 +4,9 @@ from urllib.parse import parse_qs, urlsplit
 from workers import WorkerEntrypoint, Response
 from atlas.http_api import AtlasAPI
 from snapshot import BUNDLE, STATS
+from dense_snapshot import BUNDLE as DENSE
+from atlas.public_graph import PublicGraphAPI
+PUBLIC = PublicGraphAPI(DENSE, BUNDLE)
 from cluster_snapshot import CLUSTER, EXCERPTS
 
 API = AtlasAPI(BUNDLE, STATS, CLUSTER)
@@ -29,7 +32,9 @@ class Default(WorkerEntrypoint):
         else:
             try:
                 query = parse_qs(url.query, keep_blank_values=True, max_num_fields=150)
-                if url.path == '/api/evidence':
+                if url.path.startswith('/api/harvest/') or url.path in ('/api/voice/status', '/api/resolved/status'):
+                    status, payload = PUBLIC.request(url.path, query)
+                elif url.path == '/api/evidence':
                     record = RECORDS.get(query.get('id', [''])[0])
                     if record is None:
                         status, payload = 404, {'error': 'Unknown observation or claim'}
@@ -43,7 +48,12 @@ class Default(WorkerEntrypoint):
                         status, payload = 200, {'record': record, 'spans': spans,
                             'notice': 'Published table cells and selected supplement rows are shown below. Longer source passages remain in the reviewed local snapshot; use the paper link and locators to inspect them.'}
                 else:
+                    # The dense HGNC projection is discovery context, not reviewed GRIN evidence.
+                    outside = url.path == '/api/ask' and query.get('node', [''])[0] not in API.nodes and bool(query.get('node'))
+                    if outside: query.pop('node', None); query.pop('claim', None)
                     status, payload = API.request(url.path, query)
+                    if outside and status == 200 and isinstance(payload.get('answer'), str):
+                        payload['answer'] = 'The selected HGNC entity is outside the reviewed GRIN cluster. ' + payload['answer']
             except ValueError:
                 status, payload = 400, {"error": {"code": "invalid_query", "message": "Use fewer query parameters."}}
             except Exception:

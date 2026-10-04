@@ -57,3 +57,20 @@ Maintenance version: 32f3629f-473d-40ec-9bbb-9e3139cc10a1
 To restore the main site, remove the varentik.com/* route from the Cloudflare
 zone Workers Routes page and from deploy/maintenance/wrangler.jsonc. The
 varentik-landing Worker and its apex custom-domain binding remain intact.
+
+Dense graph release (2026-10-04):
+The graph now includes the fixed public 10,000-node HGNC source projection and
+35 reviewed GRIN nodes. Source relationships remain explicitly unreviewed.
+The snapshot is data/curated/hgnc_dense_snapshot.json.gz; the read-only API supports
+bounded graph paging, neighborhoods, entity search and source provenance links.
+It contains HGNC gene/protein metadata from the first 10,000 local harvest nodes;
+it does not publish the 8.9-million-node local store or research workspace.
+Ask Atlas retains source-annotation lookup. Local Codex/TopK and Whisper services
+are not deployed into this Worker. The reviewed /cluster and /api/evidence routes
+remain available, and the chat retains its paper and evidence links.
+Dense rendering uses a 1x pixel budget, GPU buffer reuse and lazy pointer indexing;
+SVG labels and controls remain at native display resolution.
+
+Active dense-graph version: 16284df3-d5e5-45d2-b7a8-9534270c5673 (100% traffic).
+Verified release: deploy/cloudflare/dense-release.json
+Rollback: uv run pywrangler versions deploy 7337a382-13f2-4951-a2b9-4a24bc9ecaa3@100% --yes

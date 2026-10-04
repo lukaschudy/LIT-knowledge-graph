@@ -1,5 +1,6 @@
 """Build an allowlisted Cloudflare deployment of the reviewed GRIN cluster."""
 import json
+import gzip
 from pathlib import Path
 import shutil
 import sys
@@ -31,7 +32,7 @@ def build():
 """)
     package = target / 'atlas'
     package.mkdir(exist_ok=True)
-    for name in ['__init__.py', 'http_api.py', 'reasoning.py', 'questions.py', 'cluster_questions.py']:
+    for name in ['__init__.py', 'http_api.py', 'reasoning.py', 'questions.py', 'cluster_questions.py', 'public_graph.py']:
         shutil.copy2(ROOT / 'atlas' / name, package / name)
     shutil.copy2(ROOT / 'deploy/cloudflare/worker.py', target / 'worker.py')
     cluster = json.loads((ROOT / 'data/curated/grin_cluster_demo_v2.json').read_text())
@@ -55,6 +56,10 @@ def build():
     finally:
         store.close()
     (target / 'snapshot.py').write_text('import json\nBUNDLE = json.loads(' + repr(json.dumps(bundle, separators=(',', ':'))) + ')\nSTATS = ' + repr(stats) + '\n')
+    dense = json.loads(gzip.decompress((ROOT / 'data/curated/hgnc_dense_snapshot.json.gz').read_bytes()))
+    if dense['dataset']['synthetic'] or len(dense['nodes']) != 10000:
+        raise ValueError('Expected the public 10,000-node HGNC snapshot.')
+    (target / 'dense_snapshot.py').write_text('import json\nBUNDLE = json.loads(' + repr(json.dumps(dense, separators=(',', ':'))) + ')\n')
     # Include cited table cells and short selected supplement rows, not entire papers.
     sources = json.loads((ROOT / 'data/processed/benchmarks/grin-development-v1/sources.json').read_text())
     if digest(sources) != cluster['sources_sha256']:

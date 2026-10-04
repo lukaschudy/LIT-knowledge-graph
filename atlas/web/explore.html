@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="dark">
   <title>Atlas — Graph</title>
   <link rel="preload" href="/fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/graph.css">
+  <link rel="stylesheet" href="/workspace.css">
   <link rel="stylesheet" href="/transition.css">
   <script src="/transition.js"></script>
+  <script src="/graph-renderer.js" defer></script>
   <script src="/graph.js" defer></script>
+  <script src="/workspace.js" defer></script>
+  <script src="/voice.js" defer></script>
 </head>
 <body class="graph-page">
   <a class="skip-link" href="#node-search">Search graph nodes</a>
@@ -30,19 +34,31 @@
   </header>
   <section id="graph-options" class="graph-options" aria-label="Graph options" hidden>
     <h2>Graph</h2>
-    <a class="graph-text-button" href="/cluster">GRIN annotations · 340 observations ↗</a>
     <div class="graph-option-controls">
     <label><input id="ambient-motion" type="checkbox" checked> Gentle motion</label>
     <label><input id="all-labels" type="checkbox"> Show all labels</label>
     <label><input id="show-connections" type="checkbox" checked> Show connections</label>
     <label><input id="local-view" type="checkbox"> Selected neighborhood</label>
     </div>
-    <div class="graph-legend"><span class="legend-disease">Diseases</span><span class="legend-variant">Variants</span><span class="legend-gene">Genes</span><span class="legend-biology">Mechanisms & traits</span><span class="legend-research">Research & people</span></div>
-    <button id="help-button" class="graph-text-button">How to explore</button>
+    <details class="harvest-controls" aria-label="Graph data scope">
+      <summary>Data</summary>
+      <label for="graph-scope">View</label>
+      <select id="graph-scope"><option value="harvest" selected>All harvested data</option><option value="resolved">Resolved neuro overview</option></select>
+      <p id="resolved-status" role="status" aria-live="polite">Loading resolved neuro overview…</p>
+      <p id="harvest-status" role="status" aria-live="polite">Loading graph coverage…</p>
+      <label for="harvest-limit">Nodes per page</label>
+      <select id="harvest-limit"><option value="120" selected>120 nodes</option><option value="300">300 nodes</option><option value="1000">1,000 nodes</option></select>
+      <div class="harvest-actions"><button id="harvest-reload" type="button" class="graph-text-button">Load this view</button><button id="harvest-next" type="button" class="graph-text-button">Browse next page</button><button id="harvest-expand" type="button" class="graph-text-button" disabled>Expand selected neighborhood</button></div>
+      <button id="harvest-browse" type="button" class="graph-text-button harvest-browse">Browse every harvested source record ↗</button>
+    </details>
+    <div class="graph-colors"><label for="graph-colors">Colour by</label><select id="graph-colors"><option value="groups" selected>Connected groups</option><option value="type">Entity type</option></select></div>
+    <div id="group-legend" class="group-legend"><div class="group-swatches" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>Connected groups · colours repeat</p></div>
+    <div id="type-legend" class="graph-legend" hidden><span class="legend-disease">Diseases</span><span class="legend-variant">Variants</span><span class="legend-gene">Genes & proteins</span><span class="legend-biology">Mechanisms, pathways & traits</span><span class="legend-research">Researchers, papers & assets</span></div>
   </section>
   <section id="selection" class="selection" aria-label="Selected node" hidden>
     <div><span id="selection-type"></span><h1 id="selection-name"></h1></div>
     <button id="ask-selected" class="graph-text-button">Ask about this</button>
+    <button id="inspect-selected" class="graph-text-button" type="button" hidden>Inspect source and identity</button>
     <button id="clear-selection" class="graph-icon" aria-label="Clear selection">×</button>
   </section>
   <button id="chat-toggle" class="chat-toggle" aria-expanded="false" aria-controls="chat-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4m4-7v10m4-13v16m4-13v10m4-7v4"/></svg><span>Ask Atlas</span></button>
@@ -51,12 +67,11 @@
     <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>
     <form id="chat-form" class="chat-form">
       <label class="sr-only" for="question">Ask a question about the graph</label>
-      <textarea id="question" rows="2" maxlength="1000" placeholder="Message Atlas…" required></textarea>
-      <div class="chat-actions"><button id="voice-button" type="button" class="graph-icon" aria-label="Dictate a question"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 11v1a6 6 0 0 0 12 0v-1m-6 7v4m-3 0h6"/></svg></button><span id="voice-status" role="status"></span><button id="send-question" class="send-question" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div>
+      <textarea id="question" rows="2" maxlength="1000" placeholder="Ask about evidence, connections or next steps…" required></textarea>
+      <div class="chat-actions"><button id="voice-button" type="button" class="graph-icon" aria-label="Dictate a question"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 11v1a6 6 0 0 0 12 0v-1m-6 7v4m-3 0h6"/></svg></button><span id="voice-status" role="status" aria-live="polite"></span><button id="cancel-recording" type="button" class="graph-text-button" hidden>Cancel</button><button id="send-question" class="send-question" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div>
     </form>
-    <div id="voice-consent" class="voice-consent" hidden><p>Your browser may send audio to its speech service. The transcript stays a draft until you send it.</p><button id="start-voice">Start dictation</button><button id="cancel-voice">Cancel</button></div>
   </section>
   <dialog id="record-dialog" class="record-dialog" aria-labelledby="record-title"><header><div><p id="record-kind"></p><h2 id="record-title">Evidence</h2></div><button id="record-close" class="graph-icon" aria-label="Close evidence">×</button></header><div id="record-content"></div></dialog>
-  <dialog id="graph-help" class="graph-help" aria-labelledby="help-title"><header><h2 id="help-title">Follow the evidence.</h2><button id="help-close" class="graph-icon" aria-label="Close guide">×</button></header><p>Drag to rotate. Shift-drag to pan. Scroll or pinch to zoom. Select a node to follow its connections; select a line to inspect its evidence.</p><p>Search makes every node keyboard-accessible. On the canvas, arrow keys rotate, + / − zoom, and 0 fits the graph. Colors distinguish record types. Their positions and distances are a layout choice, not an embedding or a measure of biological similarity.</p><p>Lines are recorded assertions. Dashed lines are inferred; rust lines have counter-evidence or negative assertions. <a href="/records">Open evidence workspace ↗</a></p><p>Ask Atlas looks up the loaded records. It is not a general-purpose AI or clinical advice service.</p></dialog>
+  <dialog id="harvest-datasets-dialog" class="record-dialog harvest-datasets-dialog" aria-labelledby="harvest-datasets-title"><header><div><p>Atlas / source records</p><h2 id="harvest-datasets-title">Browse harvested data</h2></div><button id="harvest-datasets-close" class="graph-icon" aria-label="Close dataset browser">×</button></header><div class="harvest-browser-controls"><label for="harvest-dataset-filter">Find dataset</label><input id="harvest-dataset-filter" type="search" placeholder="Filter datasets"><label for="harvest-dataset-select">Dataset</label><select id="harvest-dataset-select"></select><p id="harvest-record-status" role="status" aria-live="polite"></p><div><button id="harvest-record-previous" type="button" class="workspace-button">Previous page</button> <button id="harvest-record-next" type="button" class="workspace-button">Next page</button></div></div><div id="harvest-record-list" class="harvest-record-list"></div></dialog>
 </body>
 </html>

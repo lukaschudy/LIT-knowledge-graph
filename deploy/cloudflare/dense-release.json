@@ -1,0 +1,36 @@
+{
+  "schema_version": "atlas-dense-production-release-v1",
+  "deployed_at": "2026-10-04T03:03:04.336651+00:00",
+  "worker": "varentik-atlas",
+  "version": "16284df3-d5e5-45d2-b7a8-9534270c5673",
+  "traffic_percent": 100,
+  "url": "https://atlas.varentik.com/explore",
+  "previous_version": "7337a382-13f2-4951-a2b9-4a24bc9ecaa3",
+  "frontend_source_commit": "ade8751",
+  "production_nodes": 10035,
+  "public_hgnc_nodes": 10000,
+  "reviewed_grin_nodes": 35,
+  "validation": {
+    "public_graph_tests": 4,
+    "webgl_and_canvas_interaction_checks": true,
+    "production_dom_count": 10035,
+    "production_webgl": true,
+    "production_canvas_width": 1280,
+    "production_viewport_width": 1280,
+    "production_device_pixel_ratio": 2,
+    "production_reviewed_chat_and_five_citation_links": true
+  },
+  "limitations": [
+    "Production uses a fixed public HGNC projection, not the full local harvest store.",
+    "Ask Atlas retains the reviewed GRIN annotation lookup; local Codex/TopK and Whisper services are not deployed."
+  ],
+  "sha256": {
+    "atlas/web/graph.js": "0bb2e1f559fd87fbbc3b962e3e59ad042a1e5b36f5873d5d82d80981099fc0a2",
+    "atlas/web/graph-renderer.js": "e5d1942ae8a88e5614e65c14f3ba372a8b31782216e7ab4ae1856a9ada02c398",
+    "atlas/web/graph.css": "94ac9a98b3fb1e6f0d439bcd99597aa62655280603c67adf6535a771437f6cb9",
+    "atlas/web/explore.html": "97bd84e0c4a1c0af2c2adc233bfbd31ae6421acf8b522dd5ca5f628b69dfbe1e",
+    "atlas/public_graph.py": "4e79b9c4a0ea1695001435c53dc7c5804d5701bbf8cdab835504faf381590663",
+    "deploy/cloudflare/worker.py": "ae934cb3f97a96d61954712d94bdabd7588f11acc60df07bf5c5ba4bfbb4f4e3",
+    "data/curated/hgnc_dense_snapshot.json.gz": "8673edbc095100db4639a7e5de13831c245f072909ae3abff219498e7d2853c9"
+  }
+}
