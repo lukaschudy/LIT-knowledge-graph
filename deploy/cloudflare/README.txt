@@ -104,9 +104,9 @@ remain available, and the chat retains its paper and evidence links.
 Dense rendering uses a 1x pixel budget, GPU buffer reuse and lazy pointer indexing;
 SVG labels and controls remain at native display resolution.
 
-Active dense-graph version: 030e29bd-30fc-410d-b79a-c68643e94963 (100% traffic).
+Active dense-graph version: 0b393da6-08c4-4983-ba6b-f23110a3db9c (100% traffic).
 Verified release: deploy/cloudflare/dense-release.json
-Rollback: uv run pywrangler versions deploy f5421d3f-af17-4290-bb1d-754623c07994@100% --yes
+Rollback: uv run pywrangler versions deploy 030e29bd-30fc-410d-b79a-c68643e94963@100% --yes
 
 Nodes keep fixed world positions during pointer gestures; dragging orbits the camera.
 The current theme uses a white background, dark lotus-green branding and the original
@@ -126,3 +126,7 @@ view leaves whitespace on the left on wide screens and centers the globe on mobi
 Ask Atlas opens with an editable, ready-to-send GRIN variant comparison.
 The verified release and sealed manifest are demo-draft-release.json and
 demo-draft-build-manifest.json. HGVS protein prefixes remain inside the demo scope.
+
+Selected GRIN2B knowledge/help questions now return a concise curated graph
+overview and external support signposts. Verified release: grin2b-help-release.json;
+exact deployed manifest: grin2b-help-build-manifest.json.

@@ -1,0 +1,21 @@
+{
+  "schema_version": "atlas-grin2b-help-release-v1",
+  "worker": "varentik-atlas",
+  "version": "0b393da6-08c4-4983-ba6b-f23110a3db9c",
+  "traffic_percent": 100,
+  "verified_at": "2026-10-04T10:03:34.739565+00:00",
+  "source_commit": "f27598e",
+  "local_frontend_commit": "31a20e2",
+  "rollback_version": "030e29bd-30fc-410d-b79a-c68643e94963",
+  "manifest_path": "deploy/cloudflare/grin2b-help-build-manifest.json",
+  "manifest_sha256": "fa482ceedd34b1d73bb95363cebade38612f38574c1a9ca0b32294c63d31b478",
+  "verification": {
+    "application_tests": 164,
+    "focused_production_browser_checks": 4,
+    "focused_local_browser_checks": 2,
+    "live_search_select_ask_send_verified": true,
+    "live_structured_answer_and_external_support_links_verified": true,
+    "live_graph_nodes": 10035
+  },
+  "scope": "Hosted deterministic GRIN2B gene overview; local frontend question and section rendering updated, local model answer pipeline unchanged."
+}
