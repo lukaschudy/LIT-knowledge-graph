@@ -1,0 +1,652 @@
+{
+  "scope_id": "grin-ai-annotation-pilot-table2-v1",
+  "description": "Development pilot: all variant rows and four functional endpoints in Swanger 2016 main Table 2, with matching WT controls. Table 3 and other article text provide context only. Not whole-paper annotation.",
+  "document_ids": [
+    "PMC5142120"
+  ],
+  "source_table": {
+    "html_table_number": 8,
+    "published_label": "Table 2",
+    "variant_rows": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
+    ],
+    "control_rows": [
+      2,
+      21
+    ],
+    "endpoint_columns": [
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "cells": [
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:c61cef3d5fdf3e8dad6d",
+      "row": 3,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:d99bb3ca9db14b8fc9c5",
+      "row": 3,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:95e5f17849a933216d2f",
+      "row": 3,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:8ff13e39f07c8438f8e7",
+      "row": 3,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:b4aefd2317b8025210f7",
+      "row": 4,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:ad78ce045a7a8430927c",
+      "row": 4,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:e58ce08b76b7c19d64a1",
+      "row": 4,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:4dd59014ea1fec8ff3c9",
+      "row": 4,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:29b35030f500de90f8b3",
+      "row": 5,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:705b5708f5d4d8539c75",
+      "row": 5,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:caa86bb38eff156ca8fd",
+      "row": 5,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:7a813e191c6fec904fb4",
+      "row": 5,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:290ff55c968b117f1005",
+      "row": 6,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:621f7b195599e7e7636f",
+      "row": 6,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:c52d1a13ad2590be7ae3",
+      "row": 6,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:5a61bf74ca1452e0d883",
+      "row": 6,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:9a2453dccb1cc9aaf860",
+      "row": 7,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:82d19cab36536ce9c2d1",
+      "row": 7,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:fba6cdfb5b2cc181cea4",
+      "row": 7,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:5656655436e8fc781cf6",
+      "row": 7,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:19228f7dfb1e920ae4b0",
+      "row": 8,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:50f4775b2c46af01d29f",
+      "row": 8,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:aa0f9fdd5bf8479ea3f1",
+      "row": 8,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:e27abd859e08090a3cd3",
+      "row": 8,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:1ebfa07c3721e783d612",
+      "row": 9,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:77124579643e8462c7bc",
+      "row": 9,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:5ae7296d64c262aa17cc",
+      "row": 9,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:187f940b1ab8dda0cc3f",
+      "row": 9,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:a7afa11680df1022ac23",
+      "row": 10,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:b90a06739763af55949b",
+      "row": 10,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:787df2ab8dd3cf76f788",
+      "row": 10,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:3006a161a7ed1ac25f6d",
+      "row": 10,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:ba629317b1b79ece35c8",
+      "row": 11,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:5078c58141e27c44553b",
+      "row": 11,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:d031a572c1bac76ccf22",
+      "row": 11,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:aabecd4df103ae528058",
+      "row": 11,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:84fa8d284a94a2a5c2eb",
+      "row": 12,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:82becb8288208f8b28a0",
+      "row": 12,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:7e1245fd02990fff1c50",
+      "row": 12,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:01419ad5ead6401c09ee",
+      "row": 12,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:64eb0904a957991e1d94",
+      "row": 13,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:a28901554736299f01af",
+      "row": 13,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:d845ce296aca7871ae99",
+      "row": 13,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:206397e16bd0ce30e9c0",
+      "row": 13,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:8cc130a7bbfde34199e1",
+      "row": 14,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:c13da00f6f243109eb21",
+      "row": 14,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:f428b7b2ca16d005c505",
+      "row": 14,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:05ff38795a20146711fa",
+      "row": 14,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:5db26b44ece85101288f",
+      "row": 15,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:b5d32370e39248135d0e",
+      "row": 15,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:6b339944297fb8985069",
+      "row": 15,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:613415b3a22b920ea50f",
+      "row": 15,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:bb37a1c1163e80013dfb",
+      "row": 16,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:cc431bba456f6e540d32",
+      "row": 16,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:82cbabbc8aa0c6087256",
+      "row": 16,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:4573c92ec11c1fd5cf30",
+      "row": 16,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:555f9e83197ff024edcd",
+      "row": 17,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:7a97c286586a2248b61a",
+      "row": 17,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:6cef95be02f7c5110538",
+      "row": 17,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:61699cfb878cf146ee74",
+      "row": 17,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:e58e77a629891415e2bc",
+      "row": 18,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:779f90d7d0d6c8ea9e21",
+      "row": 18,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:ecdc5ef1b066bfa73251",
+      "row": 18,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:f2c89c5dd305c6e89dfc",
+      "row": 18,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:789eccd35c6154d8b62e",
+      "row": 19,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:58db034f494bcd7d42a4",
+      "row": 19,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:f6afd7fda972d64d89c0",
+      "row": 19,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:214c67bcc40f6217608d",
+      "row": 19,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:6ea0f6284da8accdb448",
+      "row": 20,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:565254dd200e70125680",
+      "row": 20,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:2187151b400dd0d89f21",
+      "row": 20,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:e3e21933e0c13bc7f5cd",
+      "row": 20,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:3e3b0c9344a371551d23",
+      "row": 22,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:13f45a4c20858eda8d4e",
+      "row": 22,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:66e273be0dbb4a6cbd53",
+      "row": 22,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:9b769eaa2e8b67d8a587",
+      "row": 22,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:4a2254a3349e2bc9bbf8",
+      "row": 23,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:451ab2826395e2b1187f",
+      "row": 23,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:fc9e7ac842ad841d0d7d",
+      "row": 23,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:37842c1e85b120bee35a",
+      "row": 23,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:a99d00d1076e9dcbd56e",
+      "row": 24,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:75861d86d888fd675787",
+      "row": 24,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:e4ad4b4fdab97ae8d282",
+      "row": 24,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:aec0c911e0e781775744",
+      "row": 24,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:7c4c50557a1a7c4f3a01",
+      "row": 25,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:072f8e0275ae4a795de6",
+      "row": 25,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:0225c8116f1af3f24da3",
+      "row": 25,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:9c72eb5503f1cc6d1067",
+      "row": 25,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:018955f101c663590e05",
+      "row": 26,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:1686bd8a74c2d718f5f8",
+      "row": 26,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:f3ac628d3bc672ae458d",
+      "row": 26,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:1ab66c09286647091931",
+      "row": 26,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:3c668898f21732ac9d9b",
+      "row": 27,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:e4db248bd509862fe99c",
+      "row": 27,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:2fb80959eae849815d8b",
+      "row": 27,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:a0fd346cb384d953749b",
+      "row": 27,
+      "column": 7
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:a33cfa8ab812b076ee0d",
+      "row": 28,
+      "column": 4
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:cf16602cd6ed926e82d4",
+      "row": 28,
+      "column": 5
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:dc975cd0c20e8eb1ebb8",
+      "row": 28,
+      "column": 6
+    },
+    {
+      "document_id": "PMC5142120",
+      "unit_id": "PMC5142120:html:b955c87681043a86a1b4",
+      "row": 28,
+      "column": 7
+    }
+  ],
+  "annotation_type": "independent_ai_development_draft",
+  "decisions": "excluded from this extraction-only pilot"
+}
