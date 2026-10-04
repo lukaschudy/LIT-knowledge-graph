@@ -49,6 +49,9 @@ site. Do not use *.varentik.com/*, which would also hide Atlas and other subdoma
 Initial published Atlas version: afea32e7-07c4-4df5-a999-f698b69754e4
 Last synthetic deployment before the reviewed-data release:
   d744f6ea-3cc8-410e-9a5a-bc6e6ebcae0e
+Reviewed GRIN deployment (100% traffic; production browser checks passed):
+  7337a382-13f2-4951-a2b9-4a24bc9ecaa3
+Release provenance and verification: deploy/cloudflare/release.json
 Maintenance version: 32f3629f-473d-40ec-9bbb-9e3139cc10a1
 
 To restore the main site, remove the varentik.com/* route from the Cloudflare

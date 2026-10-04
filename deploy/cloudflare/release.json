@@ -1,0 +1,54 @@
+{
+  "schema_version": "cloudflare-reviewed-grin-release-v1",
+  "released_at": "2026-10-04T02:52:00.080053+00:00",
+  "worker": "varentik-atlas",
+  "version_id": "7337a382-13f2-4951-a2b9-4a24bc9ecaa3",
+  "traffic_percent": 100,
+  "previous_version_id": "d744f6ea-3cc8-410e-9a5a-bc6e6ebcae0e",
+  "code_commit": "14d1911808db1dc7c242c1b22578760779bd5808",
+  "urls": {
+    "chat": "https://atlas.varentik.com/explore",
+    "cluster": "https://atlas.varentik.com/cluster"
+  },
+  "reference_sha256": "9aae6d8ed8b5f6278ffed2108d393645b4622e706f3d6182b2b0bd10b89e0728",
+  "counts": {
+    "documents": 7,
+    "observations": 340,
+    "claims": 53,
+    "by_document": {
+      "PMC10641759": 54,
+      "PMC10973091": 14,
+      "PMC11046977": 16,
+      "PMC5142120": 51,
+      "PMC5656050": 4,
+      "PMC7554152": 38,
+      "PMC10508039": 163
+    },
+    "verified_table_cells": 152,
+    "prose_supplement_observations": 188,
+    "variants": 10,
+    "tiers": {
+      "core_likely_reduced": 6,
+      "provisional_possible_reduced": 1,
+      "opposing_control": 2,
+      "unresolved_control": 1
+    }
+  },
+  "checks": {
+    "application_tests": 62,
+    "benchmark_tests": 56,
+    "local_cloudflare_runtime_routes_passed": true,
+    "production_comparison_question_passed": true,
+    "production_citation_links": 5,
+    "production_cluster_counts_verified": true,
+    "production_classification_excerpt_verified": true,
+    "browser_console_errors": 0
+  },
+  "publication_scope": "Real GRIN graph, all reviewed observation metadata, source-reported claims, bounded table/supplement excerpts and deterministic annotation lookup. Full harvested corpus, TopK service and long source text are not deployed.",
+  "files": {
+    "data/curated/grin_cluster_demo_v2.json": "0fd210259d27635dc78a24b0b5f9eaee75ffecd5aa34b6dc33b9741796601480",
+    "deploy/cloudflare/build/snapshot.py": "8e6563d19e17163444780e3c7cf3e167cfb92d10bec51e05a8c2c238e70d1987",
+    "deploy/cloudflare/build/cluster_snapshot.py": "08c4df1291f52dfe2234937dbcb901d898b5b15a6eac2cfbc119ff17eb4fc791",
+    "docs/demo-screenshots/cloudflare-grin-chat.png": "e746a3e5b501217d794402139222eabe2635bcc1b00fc78ffb4997c14c255b75"
+  }
+}
