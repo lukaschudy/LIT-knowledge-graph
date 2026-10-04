@@ -1,6 +1,8 @@
 # LIT rare-disease knowledge graph
 
-> **Start the research workspace:** run `python3 -m atlas research --workspace /tmp/atlas-vici-session.json` and open <http://127.0.0.1:8767/research>. It follows a bounded question through loaded sources, model-assisted extraction, explicit human review, assay-reuse gates and a cited working brief. See the [local workspace guide](docs/research-workspace.md) for providers, data scope and limitations.
+> **Integrated workflow in progress:** see [ATLAS.md](ATLAS.md) and the [workspace guide](docs/research-workspace.md).
+
+**Current data and search:** the accessible harvest contains 21,746,825 normalized records across 40 collections; see the [coverage report](docs/harvest-coverage.md). The verified [TopK pilot](docs/topk-search.md) indexes 15,502 GRIN evidence passages; this focused index is separate from the full harvest.
 
 
 Research and extraction planning for the **AI Atlas for the World’s Rare Diseases** challenge. The interactive workspace defaults to a small curated slice of real EPG5/Vici and assay literature. Synthetic acceptance and visual demos are explicitly fictional; the earlier curated GRIN evidence slice is retained separately.

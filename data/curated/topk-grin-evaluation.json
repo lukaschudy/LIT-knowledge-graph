@@ -1,0 +1,532 @@
+{
+  "evaluated_at": "2026-10-04T00:13:29.123680+00:00",
+  "snapshot_id": "59a91ad391350ab590b232a4",
+  "collection": "lit-grin-evidence-v1",
+  "benchmark_type": "development regression; known curated cases, not held-out",
+  "summaries": {
+    "keyword": {
+      "cases": 10,
+      "hit_at_5": 1.0,
+      "mrr_at_5": 0.8666666666666667,
+      "median_latency_ms": 997.85,
+      "identity_and_citations_pass": true
+    },
+    "semantic": {
+      "cases": 10,
+      "hit_at_5": 1.0,
+      "mrr_at_5": 1.0,
+      "median_latency_ms": 1000.5,
+      "identity_and_citations_pass": true
+    },
+    "hybrid": {
+      "cases": 10,
+      "hit_at_5": 1.0,
+      "mrr_at_5": 0.95,
+      "median_latency_ms": 1998.85,
+      "identity_and_citations_pass": true
+    }
+  },
+  "runs": [
+    {
+      "case": "g483r",
+      "mode": "keyword",
+      "query": "GRIN2A G483R glutamate potency and reduced receptor function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 567.4,
+      "evidence_ids": [
+        "evidence:003",
+        "evidence:001",
+        "evidence:002",
+        "evidence:004"
+      ]
+    },
+    {
+      "case": "a716t",
+      "mode": "keyword",
+      "query": "GRIN2A p.Ala716Thr reduced charge transfer",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 522.1,
+      "evidence_ids": [
+        "evidence:007",
+        "evidence:006",
+        "evidence:005",
+        "evidence:008"
+      ]
+    },
+    {
+      "case": "d731n",
+      "mode": "keyword",
+      "query": "GRIN2A D731N small current amplitude",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 997.7,
+      "evidence_ids": [
+        "evidence:011",
+        "evidence:010",
+        "evidence:012",
+        "evidence:009"
+      ]
+    },
+    {
+      "case": "e413g",
+      "mode": "keyword",
+      "query": "GRIN2B E413G loss of function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1017.9,
+      "evidence_ids": [
+        "evidence:015",
+        "evidence:014",
+        "evidence:013",
+        "evidence:016"
+      ]
+    },
+    {
+      "case": "s541r",
+      "mode": "keyword",
+      "query": "GRIN2B S541R reduced NMDA receptor function",
+      "hit_at_5": true,
+      "reciprocal_rank": 0.3333333333333333,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 981.4,
+      "evidence_ids": [
+        "evidence:022",
+        "evidence:021",
+        "evidence:024",
+        "evidence:023",
+        "evidence:025"
+      ]
+    },
+    {
+      "case": "p553t",
+      "mode": "keyword",
+      "query": "GRIN2B P553T impaired receptor function",
+      "hit_at_5": true,
+      "reciprocal_rank": 0.3333333333333333,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 997.2,
+      "evidence_ids": [
+        "evidence:027",
+        "evidence:026",
+        "evidence:028",
+        "evidence:029"
+      ]
+    },
+    {
+      "case": "s541g_control",
+      "mode": "keyword",
+      "query": "GRIN2B S541G functional classification",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1000.3,
+      "evidence_ids": [
+        "evidence:032",
+        "evidence:031",
+        "evidence:030",
+        "evidence:033"
+      ]
+    },
+    {
+      "case": "a639v_control",
+      "mode": "keyword",
+      "query": "GRIN2B A639V functional classification",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1002.1,
+      "evidence_ids": [
+        "evidence:038",
+        "evidence:036",
+        "evidence:035",
+        "evidence:034",
+        "evidence:037"
+      ]
+    },
+    {
+      "case": "c461f_provisional",
+      "mode": "keyword",
+      "query": "GRIN2B C461F possible loss of function uncertainty",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 998.0,
+      "evidence_ids": [
+        "evidence:019",
+        "evidence:017",
+        "evidence:020",
+        "evidence:018"
+      ]
+    },
+    {
+      "case": "r540h_unresolved",
+      "mode": "keyword",
+      "query": "GRIN2B R540H indeterminate function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1006.4,
+      "evidence_ids": [
+        "evidence:041",
+        "evidence:040",
+        "evidence:042",
+        "evidence:039"
+      ]
+    },
+    {
+      "case": "g483r",
+      "mode": "semantic",
+      "query": "GRIN2A G483R glutamate potency and reduced receptor function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1214.4,
+      "evidence_ids": [
+        "evidence:003",
+        "evidence:004",
+        "evidence:002",
+        "evidence:001"
+      ]
+    },
+    {
+      "case": "a716t",
+      "mode": "semantic",
+      "query": "GRIN2A p.Ala716Thr reduced charge transfer",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 876.9,
+      "evidence_ids": [
+        "evidence:007",
+        "evidence:008",
+        "evidence:006",
+        "evidence:005"
+      ]
+    },
+    {
+      "case": "d731n",
+      "mode": "semantic",
+      "query": "GRIN2A D731N small current amplitude",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1000.8,
+      "evidence_ids": [
+        "evidence:011",
+        "evidence:012",
+        "evidence:010",
+        "evidence:009"
+      ]
+    },
+    {
+      "case": "e413g",
+      "mode": "semantic",
+      "query": "GRIN2B E413G loss of function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 981.1,
+      "evidence_ids": [
+        "evidence:016",
+        "evidence:013",
+        "evidence:015",
+        "evidence:014"
+      ]
+    },
+    {
+      "case": "s541r",
+      "mode": "semantic",
+      "query": "GRIN2B S541R reduced NMDA receptor function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1019.2,
+      "evidence_ids": [
+        "evidence:024",
+        "evidence:023",
+        "evidence:025",
+        "evidence:022",
+        "evidence:021"
+      ]
+    },
+    {
+      "case": "p553t",
+      "mode": "semantic",
+      "query": "GRIN2B P553T impaired receptor function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1004.2,
+      "evidence_ids": [
+        "evidence:029",
+        "evidence:028",
+        "evidence:027",
+        "evidence:026"
+      ]
+    },
+    {
+      "case": "s541g_control",
+      "mode": "semantic",
+      "query": "GRIN2B S541G functional classification",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 981.5,
+      "evidence_ids": [
+        "evidence:032",
+        "evidence:033",
+        "evidence:030",
+        "evidence:031"
+      ]
+    },
+    {
+      "case": "a639v_control",
+      "mode": "semantic",
+      "query": "GRIN2B A639V functional classification",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1000.2,
+      "evidence_ids": [
+        "evidence:036",
+        "evidence:038",
+        "evidence:037",
+        "evidence:034",
+        "evidence:035"
+      ]
+    },
+    {
+      "case": "c461f_provisional",
+      "mode": "semantic",
+      "query": "GRIN2B C461F possible loss of function uncertainty",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 990.9,
+      "evidence_ids": [
+        "evidence:019",
+        "evidence:017",
+        "evidence:020",
+        "evidence:018"
+      ]
+    },
+    {
+      "case": "r540h_unresolved",
+      "mode": "semantic",
+      "query": "GRIN2B R540H indeterminate function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1006.7,
+      "evidence_ids": [
+        "evidence:042",
+        "evidence:041",
+        "evidence:039",
+        "evidence:040"
+      ]
+    },
+    {
+      "case": "g483r",
+      "mode": "hybrid",
+      "query": "GRIN2A G483R glutamate potency and reduced receptor function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1921.5,
+      "evidence_ids": [
+        "evidence:003",
+        "evidence:001",
+        "evidence:004",
+        "evidence:002"
+      ]
+    },
+    {
+      "case": "a716t",
+      "mode": "hybrid",
+      "query": "GRIN2A p.Ala716Thr reduced charge transfer",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 2006.5,
+      "evidence_ids": [
+        "evidence:007",
+        "evidence:006",
+        "evidence:008",
+        "evidence:005"
+      ]
+    },
+    {
+      "case": "d731n",
+      "mode": "hybrid",
+      "query": "GRIN2A D731N small current amplitude",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 2070.1,
+      "evidence_ids": [
+        "evidence:011",
+        "evidence:012",
+        "evidence:010",
+        "evidence:009"
+      ]
+    },
+    {
+      "case": "e413g",
+      "mode": "hybrid",
+      "query": "GRIN2B E413G loss of function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1919.8,
+      "evidence_ids": [
+        "evidence:015",
+        "evidence:016",
+        "evidence:013",
+        "evidence:014"
+      ]
+    },
+    {
+      "case": "s541r",
+      "mode": "hybrid",
+      "query": "GRIN2B S541R reduced NMDA receptor function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1998.9,
+      "evidence_ids": [
+        "evidence:024",
+        "evidence:022",
+        "evidence:023",
+        "evidence:021",
+        "evidence:025"
+      ]
+    },
+    {
+      "case": "p553t",
+      "mode": "hybrid",
+      "query": "GRIN2B P553T impaired receptor function",
+      "hit_at_5": true,
+      "reciprocal_rank": 0.5,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 2096.4,
+      "evidence_ids": [
+        "evidence:027",
+        "evidence:029",
+        "evidence:028",
+        "evidence:026"
+      ]
+    },
+    {
+      "case": "s541g_control",
+      "mode": "hybrid",
+      "query": "GRIN2B S541G functional classification",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1910.3,
+      "evidence_ids": [
+        "evidence:032",
+        "evidence:031",
+        "evidence:033",
+        "evidence:030"
+      ]
+    },
+    {
+      "case": "a639v_control",
+      "mode": "hybrid",
+      "query": "GRIN2B A639V functional classification",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1995.8,
+      "evidence_ids": [
+        "evidence:038",
+        "evidence:036",
+        "evidence:037",
+        "evidence:035",
+        "evidence:034"
+      ]
+    },
+    {
+      "case": "c461f_provisional",
+      "mode": "hybrid",
+      "query": "GRIN2B C461F possible loss of function uncertainty",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 1998.8,
+      "evidence_ids": [
+        "evidence:019",
+        "evidence:017",
+        "evidence:020",
+        "evidence:018"
+      ]
+    },
+    {
+      "case": "r540h_unresolved",
+      "mode": "hybrid",
+      "query": "GRIN2B R540H indeterminate function",
+      "hit_at_5": true,
+      "reciprocal_rank": 1.0,
+      "exact_variant_filter_pass": true,
+      "citations_pass": true,
+      "latency_ms": 2079.5,
+      "evidence_ids": [
+        "evidence:041",
+        "evidence:042",
+        "evidence:040",
+        "evidence:039"
+      ]
+    }
+  ],
+  "discovery_does_not_create_claims": true,
+  "discovery_source_ids": [
+    "PMC9873235",
+    "PMC9873235",
+    "PMC9873235",
+    "PMC9873235",
+    "PMC5427847"
+  ],
+  "passed": true,
+  "limitations": [
+    "Exact gene/protein filters are intentionally enabled for variant queries.",
+    "Hit@5 requires at least one expected classified evidence card; it is not recall over all relevant literature.",
+    "No expert relevance judgments or held-out cross-disease benchmark yet.",
+    "Cold/warm cache and network effects are not controlled; latency is descriptive only."
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-10-03T22:51:27.201119+00:00",
+  "created_at": "2026-10-03T23:44:05.986607+00:00",
   "deep_record_scan": true,
   "sources": [
     {
@@ -41,7 +41,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "clinicaltrials_gov",
@@ -88,7 +89,8 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "clinvar",
@@ -115,7 +117,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "crossref_grin",
@@ -135,29 +138,49 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "europe_pmc_diseases",
-      "manifest_sha256": "d67fd5dae0f735666360f53ed1664bc34ec8dd83edbb512202b065efbf482fe5",
-      "manifest_updated_at": "2026-10-03T22:50:37.321223+00:00",
-      "status": "in_progress",
+      "manifest_sha256": "600e40268479e073a5ce210840271e46cef28a5a25ab65f0373778825a0c8261",
+      "manifest_updated_at": "2026-10-03T23:42:09.029609+00:00",
+      "status": "complete_for_scope",
       "scope": "Exhaustive cursor results for recorded rare-disease name phrases in titles/abstracts; retrieval candidates, not biological evidence.",
-      "artifacts": 1685,
-      "raw_bytes": 9705116790,
+      "artifacts": 2831,
+      "raw_bytes": 16220520516,
       "datasets": [
         {
           "dataset": "search_vocabulary",
           "records": 37410,
-          "bytes": 578234,
+          "bytes": 628454,
           "verified_records": 37410,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "queries",
+          "records": 424,
+          "bytes": 493920,
+          "verified_records": 424,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "articles",
+          "records": 2122515,
+          "bytes": 2441986287,
+          "verified_records": 2122515,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "query_membership",
+          "records": 2557876,
+          "bytes": 19745442,
+          "verified_records": 2557876,
           "negative_qualifier_records": 0
         }
       ],
       "errors": [],
-      "warnings": [
-        "Source acquisition is not marked complete for its declared scope"
-      ]
+      "warnings": []
     },
     {
       "source": "europe_pmc_preprints",
@@ -182,16 +205,17 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "europe_pmc_recheck",
-      "manifest_sha256": "b69cd8574ec05003ad43c67788cde882d55fdd3400574c2faefac7ce3a155f8d",
-      "manifest_updated_at": "2026-10-03T22:36:46.764169+00:00",
+      "manifest_sha256": "3780849892b6300e4d8234ef297eb405786c176dbd1880b392af4cb94c1cf5be",
+      "manifest_updated_at": "2026-10-03T23:32:05.557583+00:00",
       "status": "complete_for_scope",
       "scope": null,
-      "artifacts": 75,
-      "raw_bytes": 6298455,
+      "artifacts": 482,
+      "raw_bytes": 41644466,
       "datasets": [
         {
           "dataset": "identifiers_602a3e7e4363cdb2530b",
@@ -213,6 +237,125 @@
           "bytes": 2949,
           "verified_records": 1,
           "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "identifiers_242efaff2a0dee070e31",
+          "records": 20707,
+          "bytes": 146452,
+          "verified_records": 20707,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "comparison_242efaff2a0dee070e31",
+          "records": 1,
+          "bytes": 270,
+          "verified_records": 1,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "identifiers_e109ef110814d9f6e1a3",
+          "records": 3633,
+          "bytes": 27878,
+          "verified_records": 3633,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "comparison_e109ef110814d9f6e1a3",
+          "records": 1,
+          "bytes": 271,
+          "verified_records": 1,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "identifiers_3cef87535f5c51960bd0",
+          "records": 6427,
+          "bytes": 47601,
+          "verified_records": 6427,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "comparison_3cef87535f5c51960bd0",
+          "records": 1,
+          "bytes": 273,
+          "verified_records": 1,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "identifiers_206177d6ec3cf2c24960",
+          "records": 113602,
+          "bytes": 745293,
+          "verified_records": 113602,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "comparison_206177d6ec3cf2c24960",
+          "records": 1,
+          "bytes": 283,
+          "verified_records": 1,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "identifiers_680ed806be5d77913035",
+          "records": 117155,
+          "bytes": 767016,
+          "verified_records": 117155,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "comparison_680ed806be5d77913035",
+          "records": 1,
+          "bytes": 276,
+          "verified_records": 1,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "identifiers_61f806b5812bc8824646",
+          "records": 130627,
+          "bytes": 852957,
+          "verified_records": 130627,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "comparison_61f806b5812bc8824646",
+          "records": 1,
+          "bytes": 259,
+          "verified_records": 1,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "recovered_articles_242efaff2a0dee070e31",
+          "records": 1,
+          "bytes": 2454,
+          "verified_records": 1,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "recovered_articles_e109ef110814d9f6e1a3",
+          "records": 1,
+          "bytes": 3229,
+          "verified_records": 1,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "recovered_articles_3cef87535f5c51960bd0",
+          "records": 1,
+          "bytes": 2854,
+          "verified_records": 1,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "recovered_articles_206177d6ec3cf2c24960",
+          "records": 2,
+          "bytes": 5459,
+          "verified_records": 2,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "recovered_articles_680ed806be5d77913035",
+          "records": 1,
+          "bytes": 2030,
+          "verified_records": 1,
+          "negative_qualifier_records": 0
         }
       ],
       "errors": [],
@@ -230,7 +373,8 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "gencc",
@@ -250,7 +394,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "genetic_alliance_uk",
@@ -270,7 +415,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "genetic_alliance_us",
@@ -284,7 +430,8 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "global_genes",
@@ -298,7 +445,8 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "go",
@@ -325,7 +473,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "grants_gov",
@@ -454,7 +603,8 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "grin_clinvar",
@@ -474,7 +624,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "grin_literature",
@@ -787,7 +938,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "grin_primary",
@@ -801,7 +953,8 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "grin_primary_pages",
@@ -813,7 +966,8 @@
       "raw_bytes": 2196643,
       "datasets": [],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "grin_primary_tables",
@@ -833,7 +987,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "grin_primary_xml",
@@ -847,7 +1002,8 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "grin_reference",
@@ -972,7 +1128,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "grin_resources",
@@ -1006,7 +1163,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "grin_supplements",
@@ -1026,7 +1184,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "hgnc",
@@ -1053,7 +1212,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "hpo",
@@ -1094,7 +1254,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "mgi",
@@ -1170,7 +1331,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "mondo",
@@ -1197,7 +1359,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "nih_reporter",
@@ -5029,7 +5192,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "nord",
@@ -5043,7 +5207,8 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "omim",
@@ -5057,12 +5222,13 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "open_targets",
-      "manifest_sha256": "316f9cdda3554eb1bb17aa447bff635cf2f4a05e1e69b59dcda6d47a75fb6cac",
-      "manifest_updated_at": "2026-10-03T22:50:57.149733+00:00",
+      "manifest_sha256": "7d082c2d929cbe2b510a41c967056fc53c5452dcf225f9181ef93f33f57edfaa",
+      "manifest_updated_at": "2026-10-03T23:23:55.454269+00:00",
       "status": "partial",
       "scope": {
         "rare_source_rows": 7200,
@@ -6412,7 +6578,7 @@
           "MONDO_8000008",
           "MONDO_8000024"
         ],
-        "target_associations_captured": 496930,
+        "target_associations_captured": 2844448,
         "diseases_with_over_100_target_associations": [
           {
             "disease_id": "MONDO_0000023",
@@ -31460,20 +31626,250 @@
         "target_association_expected_calls": 909,
         "target_association_failed_pages": [],
         "target_association_page_size": 100,
-        "target_association_coverage_complete": false,
+        "target_association_coverage_complete": true,
         "resolved_disease_ids": 5388,
         "mapped_mondo_ids_not_returned": 1342,
         "target_association_uniqueness_audit": {
+          "rows": 2844448,
+          "distinct_disease_target_pairs": 2844448,
+          "duplicate_rows": 0,
+          "diseases_audited": 5388,
+          "distinct_target_count_mismatches": 0,
+          "diseases_with_distinct_target_count_mismatch": 0,
+          "mismatch_details": [],
+          "initial_offset_page_audit": {
+            "rows": 2844448,
+            "distinct_disease_target_pairs": 2791217,
+            "duplicate_rows": 53231,
+            "diseases_audited": 5388,
+            "diseases_with_distinct_target_count_mismatch": 1775,
+            "method": "distinct (disease_id,target.id) and per-disease distinct target counts over the original concatenated 100-row offset pages; exact raw artifacts retained",
+            "query_tie_behavior": "overlap occurs across adjacent pages at tied association scores, with identical score and source component payloads"
+          },
+          "repair": {
+            "affected_diseases": 37,
+            "repaired_diseases": 37,
+            "requests": 314,
+            "raw_files": [
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-10ebb0016ad76d6b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-939887ba73607fff.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-41f7ae2ed386b957.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c382a56acf3bff1d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5db67757e726d847.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-44eafa158f3b619d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-460c96573e29bf15.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-409d162d344ab41b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8af9f8fca516dff6.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-dc5d43ba4e98c9e0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b8408e4b177ac96a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-42ee62c810da6c92.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-53bd532d4cc15739.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b9edef94d6a39f2d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-61d5d7cd30b31ef5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f4dc536af2665959.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-099c5b2102d5a032.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0f114f991451616f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f977f955d04cd230.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-35cbdb92a5387537.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-feb99c4946fe6b23.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-4facc49f0d8fc3cc.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f9a73dd5a8320ce8.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-887b5941e5c24ded.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-98a021e7e4a64bd2.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-70fc9815db02b6a2.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c4c312c00c62e892.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-a66750ac91eabc2a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-432203ae29e06467.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-32df035055b8b0ed.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-24e052054463faec.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8267a9b3382b0194.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c846ee57b17b50c7.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-dcd2c81d1062d169.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f1a8909b1c98d3d3.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-940f9edccbf9ad68.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c4d171554369cd07.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1cea0454d706a27f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7e4efd71b49f321f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ad64de1128fe5d32.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1b55918c22eac66c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-a4f5079402b04e91.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7b05215391455d19.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6ae47b3e06112a0c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-2829884d16afcbd1.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8a1205adccee6ab5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-2ba5ccc1a0ac1e3f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b8d3f6a82e64a1f0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-167253003fadeeeb.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1194fe232a0173d5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-395d91315db43f89.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ad722b3ba5dd4046.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-eb571160463f3dd8.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6eb91ff7530b77b0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6e156b72fc3070ed.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-62a1029796c35035.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8fa041f0e539fc53.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-938d5575b73af1b5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-70a759e573714a27.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-3fa2313aecbf6c10.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-33edf6ee70da4501.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-352c979731cf59ac.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1d665baf68f1db07.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-e7586174aaa81f34.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-27c3245a471133b1.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7b56f22762497871.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6df092f490f80e19.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-dad84a6a74cd1f2c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1f35e7185cfdfede.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-211b8a75e9356907.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-631ce4b4e691dc5c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-a3604dea9d6d872b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1632be961a8bf58f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6f1243b277fbab2e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d9cdf4ad76ce6062.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ead0d5f9ffac42c2.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f5e7b14360c798c3.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8cb26684c9b7f7ac.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-12d7e3088b6a4cbf.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d98ee84892ea10de.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-04d1b7a3367edcc9.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-cb1a03ccdcdc4c18.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-627a79a4f622a131.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c155fdab4b85100f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-a95459fb48e40a1f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8692a7d5aaf21f40.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f51db4ba61d4b368.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-e5efaa3b85ae7273.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-10d921f33d4abc16.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9ff831d3fdb6bbb0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d7fede113b4437eb.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-200dc1c74f33c8aa.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-074c9890e6bda0d7.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b9376e50af0656cd.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0ff7fe52e9bf7af4.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b88b82908e1888c9.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c4cb2a938014f1e5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-4ad21729a10b8d6c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b47672161da92fdb.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-cd64a39365fc027c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-352307c36a1b8978.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-4191cab332b2fc68.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0ed6f409e4d418fd.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1738cf967fbedb50.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8245f5b0d874d432.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-51d164c9013ef8d0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-90fd8bff28df8714.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7b731eb81c113084.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-58ad6191206d46c8.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-2944fdbf6e96526b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9db0365ff041d870.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c9de119a86a90a02.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b6a4dcb7505ac24f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ae56699feff99e57.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b132a6010c8ea16e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1d9794e5311cff7e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ee8408cd2e09fad0.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b5197766857a7552.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6cc8c026baf86a58.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7d1f933395f37968.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8d78be796c69b6db.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-af35670b3f03a24f.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0ecbe2314d265aa2.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-417f322f4d5486e5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-e181a3d0137b7f2d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-21bd6d4e54dd5dbd.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-32415b2d6d19071e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-6b0c7e5de286310c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0cf061ea67d1898d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-48701b1f721f1ff9.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-aa76e390ad8de529.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-fee90cb5345a50dc.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-62d81cad90d74a78.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-941a29a6dee3a03e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7bea4819f0f6ea3a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d4953a61fafcbef7.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5a110e4a1934302c.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-074b0e20dc68f24a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-fb76ad5a66acabbd.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-540d44213cdc819a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-683ef34c786d949b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c868607965a3c589.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ccb80425d54a1852.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-62de7687532d5ef8.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-97844cd6d9489aef.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-68d5783110ec2c28.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9885195f56fafa3d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d76d90e3cb5f56c3.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f0061d8972538271.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1be1625248b28489.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-1baa1191a1798641.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-551dd5afcc8dc23b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-92a37cd09abb8de6.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-2b8fa2e4d755a678.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5806d2f198d81339.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9a1b56a25f5f6e9e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0faf4a68d0867dab.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-f41321fa9d98cc49.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-bdc411e6e96b45d3.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-16a64d49e473f1b2.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-cfaacbf958fb1318.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d592a8cf55d4dade.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9b9870017fd8b3de.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b6a933f61e4ff6ed.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-4caf2e248991b550.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-0b175a2d8766eb61.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-18fad59821b7e1f3.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9c18edf4c98ea5d8.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9377e63dcfa7efb9.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5d1aa30e618d4f15.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-c8893d41c2c72320.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-9ca1dd7d34102b13.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-153bf2da9ad27d47.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-83c38e13088758ab.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5e7861d8476fac2d.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-d029d95b3a0c03fc.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-a05e2aca4818a119.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-8addba86d9365c46.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-b0f47974161343d5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-7e9b4554652179e5.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-4b8b6dd2e4b989eb.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-3488e8cde61c1d6e.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-71326db1d385be5b.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-5664f1bb653d5d1a.json",
+              "data/raw/harvest/open_targets/target-associations-unique-prefix-ea180de6dd15d913.json"
+            ],
+            "parent_prefix_partitions_verified": 37,
+            "parent_prefix_partitions": 37,
+            "parent_prefix_count_mismatches": [],
+            "root_partition_count_mismatches": [],
+            "query_failures": [],
+            "root_partitions": 4,
+            "root_partitions_verified": 37,
+            "root_prefixes": [
+              "ENSG000000",
+              "ENSG000001",
+              "ENSG000002",
+              "ENSG000003"
+            ]
+          },
+          "current_pre_repair_audit": {
+            "rows": 2844448,
+            "distinct_disease_target_pairs": 2806164,
+            "duplicate_rows": 38284,
+            "diseases_audited": 5388
+          }
+        },
+        "original_offset_page_overlap_audit": {
           "rows": 2844448,
           "distinct_disease_target_pairs": 2791217,
           "duplicate_rows": 53231,
           "diseases_audited": 5388,
           "diseases_with_distinct_target_count_mismatch": 1775,
-          "repair_status": "pending; exact full-page and disjoint target-prefix repair will replace discrepant diseases; original raw page artifacts are retained"
+          "method": "distinct (disease_id,target.id) and per-disease distinct target counts over the original concatenated 100-row offset pages; exact raw artifacts retained",
+          "query_tie_behavior": "overlap occurs across adjacent pages at tied association scores, with identical score and source component payloads"
         }
       },
-      "artifacts": 1201,
-      "raw_bytes": 721606807,
+      "artifacts": 1592,
+      "raw_bytes": 1080565587,
       "datasets": [
         {
           "dataset": "rare_diseases",
@@ -31485,7 +31881,7 @@
         {
           "dataset": "target_associations",
           "records": 2844448,
-          "bytes": 101722492,
+          "bytes": 101402217,
           "verified_records": 2844448,
           "negative_qualifier_records": 0
         },
@@ -31562,7 +31958,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "orphanet_expert_resources",
@@ -31576,12 +31973,13 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "pmc_grin_oa",
-      "manifest_sha256": "6a36bc58d0e97641c0b3ec68b79a5c75d05ce925d662090a99122a8319d4fc55",
-      "manifest_updated_at": "2026-10-03T22:48:44.244741+00:00",
+      "manifest_sha256": "465d9a2d9f2386d38c6171c244e73cb27c2851cbf3da52511e2222637373a098",
+      "manifest_updated_at": "2026-10-03T23:19:02.727582+00:00",
       "status": "partial_fulltext_retrieval",
       "scope": {
         "pubmed_citations_scanned": 7775,
@@ -31808,10 +32206,14 @@
             "PMC7554152"
           ],
           "title_abstract_mesh_regex": "mutation|variant|encephalopathy|neurodevelopment|loss[ -]?of[ -]?function"
-        }
+        },
+        "downloaded_html_records": 26,
+        "distinct_fulltext_articles_jats_or_html": 355,
+        "fulltext_fetch_unresolved_after_html": 18,
+        "xml_retry_queue_note": "Original 44 XML/body failures remain recorded; nested HTML outcomes identify the 26 recovered in HTML."
       },
-      "artifacts": 1198,
-      "raw_bytes": 59017601,
+      "artifacts": 1242,
+      "raw_bytes": 65597272,
       "datasets": [
         {
           "dataset": "license_metadata",
@@ -31844,8 +32246,15 @@
         {
           "dataset": "fulltext_retry_queue",
           "records": 44,
-          "bytes": 4475,
+          "bytes": 5516,
           "verified_records": 44,
+          "negative_qualifier_records": 0
+        },
+        {
+          "dataset": "grin_html_full_text",
+          "records": 26,
+          "bytes": 552954,
+          "verified_records": 26,
           "negative_qualifier_records": 0
         }
       ],
@@ -32573,7 +32982,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "rareconnect",
@@ -32587,7 +32997,8 @@
       "errors": [],
       "warnings": [
         "Source acquisition is not marked complete for its declared scope"
-      ]
+      ],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "raresource",
@@ -32614,7 +33025,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "reactome",
@@ -32648,7 +33060,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "ror",
@@ -32668,7 +33081,8 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     },
     {
       "source": "uniprot",
@@ -32688,13 +33102,14 @@
         }
       ],
       "errors": [],
-      "warnings": []
+      "warnings": [],
+      "structural_validation_reused_from": "2026-10-03T22:51:27.201119+00:00"
     }
   ],
   "totals": {
     "sources": 40,
-    "records": 16673821,
-    "raw_bytes": 18289502738,
+    "records": 21746825,
+    "raw_bytes": 25205790926,
     "errors": 0
   },
   "note": "Counts aggregate different entity/assertion/ontology/retrieval record types and are not a count of unique entities. Source-level completeness is limited to declared scope."
