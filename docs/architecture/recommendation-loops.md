@@ -1,6 +1,6 @@
 # Proposed evidence and recommendation loops
 
-Planning snapshot: 3 October 2026. This document records the intended architecture, not completed integrations or measured performance. The repository includes a runnable atlas, a synthetic acceptance fixture and a separately curated [GRIN demo](../grin-demo.md). See the [atlas architecture](atlas.md) for the implemented evidence boundary; live TopK/Astra integration and the full loops below remain proposed.
+Design snapshot: 3 October 2026. Read the [submission implementation map](../submission.md#canonical-version-and-implementation-boundaries) for current status. The public demo uses deterministic GRIN lookup; the separate research branch now implements model retrieval, extraction/review, action gates and bounded follow-up. Some loops below remain proposed, including autonomous refresh and comparative evaluation. This document preserves the design rationale and is not a statement that every component runs in the public deployment.
 
 ## Product outcome
 

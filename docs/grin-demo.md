@@ -1,5 +1,7 @@
 # GRIN real-data demonstration
 
+For the current public submission, follow the [canonical judge walkthrough](submission.md#judge-walkthrough) and [pinned reproduction instructions](../README.md#reproduce-the-documented-public-version). This page retains the smaller curated graph and legacy local-server workflow; its 35-node count describes that component, not the complete public globe.
+
 This reproducible pilot connects **selected GRIN2A and GRIN2B variants with published receptor-function evidence** to an existing registry, assay service and a research discussion brief. It uses real literature and public resource descriptions. Scientific interpretation and participant eligibility remain subject to expert review.
 
 ## Data and cluster
