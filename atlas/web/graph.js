@@ -25,8 +25,8 @@
   const family = n => families[n.type] || 'research';
   let bundle, nodes = [], edges = [], byId = new Map(), selected = null, hovered = null;
   let workspaceState = null, pendingWorkspaceState = null, animationLoopStarted = false, workspaceGraphSignature = '';
-  let harvestBase = null, harvestCoverage = null, harvestRequest = 0, searchRequest = 0, searchTimer = 0;
-  let harvestLimit = 10000, harvestOffset = 0, harvestLoading = false, harvestError = '', nextHarvestOffset = null;
+  let harvestBase = null, resolvedBase = null, dataMode = 'resolved', harvestCoverage = null, harvestRequest = 0, searchRequest = 0, searchTimer = 0;
+  let harvestLimit = 10000, resolvedLimit = 120, harvestOffset = 0, harvestLoading = false, harvestError = '', resolvedError = '', nextHarvestOffset = null, resolvedNextOffset = null, scopeGeneration=0;
   let expandedFocusId = null, expandedFocusNextOffset = 0, expandedFocusDone = false;
   let harvestDatasets = [], selectedDatasetId = '', recordPage = 0, recordRequest = 0;
   let view = { x:0,y:0,k:1 }, width = innerWidth, height = innerHeight, busy = false, claimRequest = 0;
@@ -330,14 +330,14 @@
     const minX=Math.min(...nodes.map(n=>n.x)),maxX=Math.max(...nodes.map(n=>n.x));
     const minY=Math.min(...nodes.map(n=>n.y)),maxY=Math.max(...nodes.map(n=>n.y));
     const padX=width<650?24:48, top=90, bottom=75;
-    view.k=Math.max(.15,Math.min(3,(width-padX*2)/Math.max(100,maxX-minX),(height-top-bottom)/Math.max(100,maxY-minY)));
+    view.k=Math.max(.04,Math.min(3,(width-padX*2)/Math.max(100,maxX-minX),(height-top-bottom)/Math.max(100,maxY-minY)));
     view.x=width/2-(minX+maxX)/2*view.k;
     view.y=top+(height-top-bottom)/2-(minY+maxY)/2*view.k;
     applyCamera();
   }
   function zoom(factor,x=width/2,y=height/2) {
     cameraTransition=null;
-    const next=Math.max(.12,Math.min(4,view.k*factor)), ratio=next/view.k;
+    const next=Math.max(.04,Math.min(4,view.k*factor)), ratio=next/view.k;
     view.x=x-(x-view.x)*ratio; view.y=y-(y-view.y)*ratio; view.k=next; applyCamera();
   }
   function highlight() {
@@ -372,14 +372,16 @@
     selected=id; hovered=null; lastAnswer=null;searchTerm='';searchMatches.clear();searchLead=null;$('node-search').value='';
     const node=byId.get(id);
     $('selection').hidden=!node;
-    $('inspect-selected').hidden=!isHarvestNode(node);
-    $('harvest-expand').disabled=harvestLoading||!isHarvestNode(node)||(expandedFocusId===id&&expandedFocusDone);
+    $('inspect-selected').hidden=!(isHarvestNode(node)||isResolvedNode(node));
+    $('inspect-selected').textContent=isResolvedNode(node)?'Inspect identity and sources':'Inspect harvested record';
+    $('harvest-expand').disabled=harvestLoading||!(isHarvestNode(node)||isResolvedNode(node))||(expandedFocusId===id&&expandedFocusDone);
     if (node) {
       $('selection-name').textContent=label(node); $('selection-type').textContent=node.type;
       if (center) { cameraTransition={start:performance.now(),x:view.x,y:view.y,toX:width/2-node.x*view.k,toY:height/2-node.y*view.k}; }
     }
     highlight(); hideResults();
-    window.dispatchEvent(new CustomEvent('atlas:node-select',{detail:{node_id:id,node:node?{id:node.id,label:label(node),type:node.type}:null}}));
+    const workspaceId=workspaceNodeId(id);
+    window.dispatchEvent(new CustomEvent('atlas:node-select',{detail:{node_id:workspaceId,graph_node_id:id,node:node?{id:workspaceId,graph_id:id,label:label(node),type:node.type}:null}}));
   }
   function render() {
     $('links').replaceChildren();nodeLayer.replaceChildren();
@@ -431,16 +433,20 @@
     workspaceState=data;
     composeGraph();
   }
-  function composeGraph(){
-    const base=harvestBase||bundle;if(!base)return;
+  function composeGraph(preserveCamera=true){
+    const base=currentBase()||bundle;if(!base)return;
     const previous=new Map(nodes.map(node=>[node.id,node]));
+    const aliases=base.resolution?.alias_map||{};
+    const canonical=id=>aliases[id]||id;
     const nodesById=new Map((base.nodes||[]).map(node=>[node.id,{...node}]));
     if(workspaceState)for(const node of workspaceState.nodes){
-      const existing=nodesById.get(node.id);
-      nodesById.set(node.id,existing?{...existing,...node,properties:{...existing.properties,...node.properties,harvest:existing.properties?.harvest||node.properties?.harvest}}:{...node});
+      const id=canonical(node.id),existing=nodesById.get(id);
+      if(dataMode==='resolved'&&!existing)continue;
+      const merged=existing?{...existing,...node,id,label:existing.label||node.label,aliases:[...new Set([...(existing.aliases||[]),...(node.aliases||[]),node.id])],properties:{...node.properties,...existing.properties}}:{...node,id,aliases:[...(node.aliases||[]),...(id!==node.id?[node.id]:[])]};
+      nodesById.set(id,merged);
     }
     const claimsById=new Map((base.claims||[]).map(claim=>[claim.id,claim]));
-    if(workspaceState)for(const claim of workspaceState.claims)if(claim.review_status!=='rejected')claimsById.set(claim.id,claim);
+    if(workspaceState)for(const claim of workspaceState.claims){if(claim.review_status==='rejected')claimsById.delete(claim.id);else claimsById.set(claim.id,{...claim,subject:canonical(claim.subject),object:canonical(claim.object)});}
     const allNodes=[...nodesById.values()],nodeIds=new Set(allNodes.map(node=>node.id));
     const allClaims=[...claimsById.values()].filter(claim=>nodeIds.has(claim.subject)&&nodeIds.has(claim.object));
     const evidenceByKey=new Map();
@@ -449,34 +455,86 @@
     const sourcesById=new Map();
     for(const source of [...(base.sources||[]),...(workspaceState?.sources||[])])sourcesById.set(source.id||source.source_id,source);
     for(const doc of workspaceState?.documents||[])if(!sourcesById.has(doc.source_id))sourcesById.set(doc.source_id,{id:doc.source_id,title:doc.title,url:doc.url,version:doc.version,license:doc.license});
-    const previousView={...view};
+    const hadGraph=nodes.length>0,previousView={...view};
     bundle={...base,dataset:base.dataset||workspaceState?.dataset,nodes:allNodes,claims:allClaims,evidence:[...evidenceByKey.values()],sources:[...sourcesById.values()]};
     nodes=allNodes;byId=new Map(nodes.map(node=>[node.id,node]));
     nodes.forEach(node=>{const old=previous.get(node.id);if(old){for(const key of ['wx','wy','wz'])if(Number.isFinite(old[key]))node[key]=old[key];}});
     if(selected&&!byId.has(selected))selected=null;
     const currentSearch=$('node-search').value;searchMatches.clear();searchLead=null;searchTerm='';
     const keepSelection=selected;
-    render();view=previousView;applyCamera();paintPositions();highlight();
+    render();
+    if(hadGraph&&preserveCamera){view=previousView;applyCamera();paintPositions();}
+    highlight();
     if(keepSelection){selected=keepSelection;highlight();}
     if(currentSearch)$('node-search').value=currentSearch;
   }
-  function isHarvestNode(node){return !!(node?.properties?.harvest||node?.properties?.harvest_dataset||String(node?.id||'').startsWith('record:'));}
+  function currentBase(){return dataMode==='resolved'?resolvedBase:harvestBase;}
+  function canonicalNodeId(id){return (currentBase()?.resolution?.alias_map||{})[id]||id;}
+  function isHarvestNode(node){return dataMode==='harvest'&&!!(node?.properties?.harvest||node?.properties?.harvest_dataset||String(node?.id||'').startsWith('record:'));}
+  function isResolvedNode(node){return dataMode==='resolved'&&!!node&&(!!node.properties?.resolved||!!node.identity||!!node.properties?.identity_resolution||!!currentBase()?.resolution||String(node.id||'').startsWith('resolved:'));}
+  function workspaceNodeId(id){
+    const aliases=currentBase()?.resolution?.alias_map||{};
+    if(workspaceState?.nodes?.some(node=>node.id===id))return id;
+    const member=Object.keys(aliases).find(key=>aliases[key]===id&&workspaceState?.nodes?.some(node=>node.id===key));
+    return member||aliases[id]||id;
+  }
   function updateHarvestControls(message=''){
     const status=$('harvest-status'),meta=harvestBase?.harvest||{},total=harvestCoverage||{};
-    if(message||harvestError){status.textContent=message||harvestError;return;}
+    if(message||harvestError){status.textContent=message||harvestError;}
+    else {
     const metaTotals=meta.totals||{};
     const shownNodes=Number(harvestBase?.nodes?.length??meta.shown_nodes??0),shownEdges=Number(harvestBase?.claims?.length??meta.shown_edges??0);
     const totalNodes=Number(total.total_nodes??metaTotals.total_nodes??shownNodes),totalEdges=Number(total.total_edges??metaTotals.total_edges??shownEdges),records=Number(total.total_records??metaTotals.total_records??0);
     const datasetCount=Number(total.total_datasets??total.dataset_count??metaTotals.total_datasets??(Array.isArray(total.datasets)?total.datasets.length:0));
     const processed=Number(total.processed_records||0),build=String(total.build_status||'');
     status.textContent=`${shownNodes.toLocaleString()} of ${totalNodes.toLocaleString()} nodes · ${shownEdges.toLocaleString()} of ${totalEdges.toLocaleString()} relations · ${records.toLocaleString()} source rows across ${datasetCount.toLocaleString()} datasets${processed?` · ${processed.toLocaleString()} processed`:''}${build?` · ${build}`:''}.${nextHarvestOffset!==null?' This is a bounded graph view.':''}`;
-    $('harvest-next').disabled=harvestLoading||nextHarvestOffset===null;
-    $('harvest-expand').disabled=harvestLoading||!selected||!isHarvestNode(byId.get(selected))||(expandedFocusId===selected&&expandedFocusDone);
+    }
+    $('harvest-status').hidden=dataMode!=='harvest';
+    const active=dataMode==='resolved'?resolvedBase:harvestBase,metaActive=active?.harvest||{};
+    const cursor=dataMode==='resolved'?resolvedNextOffset:nextHarvestOffset;
+    const shown=Number(active?.nodes?.length??metaActive.shown_nodes??0),totalVisible=Number(metaActive.total_nodes??shown);
+    const resolution=resolvedBase?.resolution,stats=resolution?.stats||{};
+    const rawNodes=Number(harvestCoverage?.total_nodes||0),rawRecords=Number(harvestCoverage?.total_records||0),rawDatasets=Number(harvestCoverage?.total_datasets||0);
+    $('resolved-status').textContent=resolvedError||`Resolved neuro graph · ${shown.toLocaleString()} shown of ${totalVisible.toLocaleString()} resolved nodes · ${Number(stats.identity_merges||0).toLocaleString()} identity merges · ${Number(stats.conflicts||0).toLocaleString()} conflicts kept visible. Full harvest remains available separately: ${rawNodes.toLocaleString()} nodes, ${rawRecords.toLocaleString()} source rows across ${rawDatasets.toLocaleString()} datasets.`;
+    $('resolved-status').hidden=dataMode!=='resolved';
+    $('harvest-next').disabled=harvestLoading||cursor==null;
+    $('harvest-expand').disabled=harvestLoading||!(isHarvestNode(byId.get(selected))||isResolvedNode(byId.get(selected)))||(expandedFocusId===selected&&expandedFocusDone);
     $('harvest-reload').disabled=harvestLoading;$('harvest-limit').disabled=harvestLoading;
+    $('harvest-limit').innerHTML=dataMode==='resolved'?'<option value="120">120 nodes</option><option value="300">300 nodes</option><option value="1000">1,000 nodes</option>':'<option value="1000">1,000 nodes</option><option value="3000">3,000 nodes</option><option value="10000">10,000 nodes</option>';
+    $('harvest-limit').value=String(dataMode==='resolved'?resolvedLimit:harvestLimit);
+    $('harvest-browse').hidden=dataMode!=='harvest';
+    $('harvest-next').textContent=dataMode==='resolved'?'Load more resolved records':'Browse next page';
+  }
+  function restorePageState(base,mode){
+    const meta=base?.harvest||{},focus=meta.focus||null,cursor=meta.next_offset??null;
+    if(mode==='resolved')resolvedNextOffset=cursor;else nextHarvestOffset=cursor;
+    expandedFocusId=focus;expandedFocusNextOffset=focus?cursor:null;expandedFocusDone=!!focus&&cursor==null;
   }
   async function loadHarvestStatus(){
     try{const response=await fetch('/api/harvest/status');if(!response.ok)throw new Error('Harvest coverage is unavailable.');harvestCoverage=await response.json();updateHarvestControls();}
     catch(_){updateHarvestControls('Harvest coverage is not available on this server. The currently loaded graph may be a curated subset.');}
+  }
+  async function loadResolvedGraph({offset=0,focus=null,append=false,limit=resolvedLimit}={}){
+    const requestId=++harvestRequest;harvestLoading=true;resolvedError='';updateHarvestControls(focus?'Loading the selected neuro neighborhood…':'Loading the resolved neuro overview…');
+    try{
+      const params=new URLSearchParams({limit:String(limit),offset:String(offset)});if(focus)params.set('focus',focus);
+      const response=await fetch(`/api/resolved/graph?${params}`);if(!response.ok)throw new Error(`Resolved neuro graph unavailable (${response.status}).`);
+      const incoming=await response.json();if(requestId!==harvestRequest)return false;
+      if(!Array.isArray(incoming.nodes)||!Array.isArray(incoming.claims))throw new Error('Resolved graph returned an unexpected shape.');
+      if(append&&resolvedBase){resolvedBase={...resolvedBase,...incoming,nodes:unionRows(resolvedBase.nodes,incoming.nodes,'id'),claims:unionRows(resolvedBase.claims,incoming.claims,'id'),evidence:unionRows(resolvedBase.evidence,incoming.evidence,'id'),sources:unionRows(resolvedBase.sources,incoming.sources,'id'),resolution:incoming.resolution||resolvedBase.resolution};}
+      else resolvedBase=incoming;
+      const meta=incoming.harvest||{};resolvedNextOffset=meta.next_offset??null;
+      if(focus){expandedFocusId=focus;expandedFocusNextOffset=meta.next_offset??null;expandedFocusDone=meta.next_offset==null;}else if(offset===0){expandedFocusId=null;expandedFocusNextOffset=null;expandedFocusDone=false;}
+      resolvedLimit=limit;dataMode='resolved';$('graph-scope').value='resolved';composeGraph(append);updateHarvestControls();
+      $('all-labels').disabled=nodes.length>1200;if(nodes.length>1200)$('all-labels').checked=false;
+      $('all-labels').title=nodes.length>1200?'Showing every label is disabled for a dense graph view. Search or select a node to reveal its label.':'';
+      $('graph-status').hidden=!!nodes.length;return true;
+    }catch(error){if(requestId===harvestRequest){resolvedError=error.message;updateHarvestControls();}return false;}
+    finally{if(requestId===harvestRequest){harvestLoading=false;updateHarvestControls();}}
+  }
+  async function loadResolvedStatus(){
+    try{const response=await fetch('/api/resolved/status');if(!response.ok)throw new Error();const data=await response.json();resolvedError=data.available===false?'Resolved neuro view is not available yet.': '';if(data.resolution)resolvedBase={...(resolvedBase||{}),resolution:data.resolution};else if(data.alias_map||data.stats)resolvedBase={...(resolvedBase||{}),resolution:{scope:data.scope||'neuro',alias_map:data.alias_map||{},stats:data.stats||{},default_focus:data.default_focus}};updateHarvestControls();return data;}
+    catch(_){resolvedError='Resolved neuro view is not available on this server yet.';updateHarvestControls();return null;}
   }
   function unionRows(oldRows,newRows,key){const rowKey=row=>row[key]??row.evidence_id??(row.claim_id?`${row.claim_id}:${row.source_id}:${row.locator}`:JSON.stringify(row));const map=new Map((oldRows||[]).map(row=>[rowKey(row),row]));for(const row of newRows||[])map.set(rowKey(row),row);return [...map.values()];}
   async function loadHarvestGraph({offset=0,focus=null,append=false,limit=harvestLimit}={}){
@@ -495,9 +553,9 @@
       }else harvestBase=incoming;
       const meta=incoming.harvest||{};
       if(focus){expandedFocusId=focus;expandedFocusNextOffset=meta.next_offset??null;expandedFocusDone=meta.next_offset==null;}
-      else nextHarvestOffset=meta.next_offset??null;
+      else {nextHarvestOffset=meta.next_offset??null;if(offset===0){expandedFocusId=null;expandedFocusNextOffset=null;expandedFocusDone=false;}}
       harvestLimit=limit;harvestOffset=offset;
-      composeGraph();updateHarvestControls();
+      dataMode='harvest';$('graph-scope').value='harvest';composeGraph(append);updateHarvestControls();
       $('all-labels').disabled=nodes.length>1200;
       if(nodes.length>1200)$('all-labels').checked=false;
       $('all-labels').title=nodes.length>1200?'Showing every label is disabled for a dense graph view. Search or select a node to reveal its label.':'';
@@ -506,13 +564,41 @@
     }catch(error){if(requestId===harvestRequest){harvestError=error.message;updateHarvestControls(error.message);}return false;}
     finally{if(requestId===harvestRequest){harvestLoading=false;updateHarvestControls();}}
   }
-  $('harvest-reload').addEventListener('click',()=>{harvestBase=null;harvestOffset=0;nextHarvestOffset=null;loadHarvestGraph({limit:Number($('harvest-limit').value)||10000});});
-  $('harvest-limit').addEventListener('change',()=>{harvestBase=null;harvestOffset=0;nextHarvestOffset=null;loadHarvestGraph({limit:Number($('harvest-limit').value)||10000});});
+  async function switchDataMode(mode){
+    const generation=++scopeGeneration;
+    ++harvestRequest;harvestLoading=false;
+    dataMode=mode;$('graph-scope').value=mode;harvestError='';resolvedError='';updateHarvestControls();
+    if(mode==='resolved'){
+      if(resolvedBase?.nodes?.length){restorePageState(resolvedBase,'resolved');composeGraph(false);updateHarvestControls();return;}
+      const ok=await loadResolvedGraph({offset:0,limit:resolvedLimit});
+      if(generation!==scopeGeneration)return;
+      if(!ok){dataMode='harvest';$('graph-scope').value='harvest';if(!harvestBase)await loadHarvestGraph({limit:harvestLimit,offset:0});harvestError='Resolved neuro view is unavailable; showing harvested graph data.';updateHarvestControls();}
+    }else{
+      if(harvestBase){restorePageState(harvestBase,'harvest');composeGraph(false);updateHarvestControls();}else await loadHarvestGraph({limit:harvestLimit,offset:0});
+    }
+  }
+  $('graph-scope').addEventListener('change',()=>switchDataMode($('graph-scope').value));
+  $('harvest-reload').addEventListener('click',()=>{
+    if(dataMode==='resolved'){resolvedBase=null;resolvedNextOffset=null;loadResolvedGraph({limit:Number($('harvest-limit').value)||120});}
+    else{harvestBase=null;harvestOffset=0;nextHarvestOffset=null;loadHarvestGraph({limit:Number($('harvest-limit').value)||10000});}
+  });
+  $('harvest-limit').addEventListener('change',()=>{
+    if(dataMode==='resolved'){resolvedBase=null;resolvedNextOffset=null;resolvedLimit=Number($('harvest-limit').value)||120;loadResolvedGraph({limit:resolvedLimit});}
+    else{harvestBase=null;harvestOffset=0;nextHarvestOffset=null;harvestLimit=Number($('harvest-limit').value)||10000;loadHarvestGraph({limit:harvestLimit});}
+  });
   $('harvest-next').addEventListener('click',()=>{
-    if(nextHarvestOffset!==null)loadHarvestGraph({offset:nextHarvestOffset,append:true,limit:harvestLimit});
+    if(dataMode==='resolved'){
+      const cursor=expandedFocusId?expandedFocusNextOffset:resolvedNextOffset;
+      if(cursor!==null)loadResolvedGraph({focus:expandedFocusId||null,offset:cursor,append:true,limit:resolvedLimit});
+    }else if(nextHarvestOffset!==null)loadHarvestGraph({offset:nextHarvestOffset,append:true,limit:harvestLimit});
   });
   $('harvest-expand').addEventListener('click',()=>{
-    if(!selected||!isHarvestNode(byId.get(selected)))return;
+    if(!selected||!(isHarvestNode(byId.get(selected))||isResolvedNode(byId.get(selected))))return;
+    if(dataMode==='resolved'){
+      const same=expandedFocusId===selected,offset=same?expandedFocusNextOffset:0;
+      if(!same)resolvedBase=null;
+      loadResolvedGraph({focus:selected,offset,append:same,limit:resolvedLimit});return;
+    }
     if(expandedFocusId===selected&&expandedFocusDone)return;
     const offset=expandedFocusId===selected?expandedFocusNextOffset:0;
     loadHarvestGraph({focus:selected,offset,append:true,limit:harvestLimit});
@@ -610,6 +696,51 @@
     try{const data=String(id).startsWith('record:')?await fetchHarvestRecord(id):await fetchHarvestNode(id);if(request!==claimRequest)return;if(!data)throw new Error('No harvested record was returned for this node.');renderHarvestRecordDetails({...data,node:data.node||byId.get(id)||{label:id}},label(byId.get(id)||{label:id}));}
     catch(error){if(request===claimRequest)$('record-content').replaceChildren(make('p','',error.message));}
   }
+  function addSafeSourceLink(container,url,labelText='Open source ↗'){
+    try{const target=new URL(url);if(!['http:','https:'].includes(target.protocol))return;const a=make('a','',labelText);a.href=target.href;a.target='_blank';a.rel='noopener noreferrer';container.append(a);}catch(_){}
+  }
+  async function openResolvedNode(id){
+    const request=++claimRequest,node=byId.get(id),dialog=$('record-dialog');
+    $('record-kind').textContent='Resolved neuro entity · machine-checked identity';$('record-title').textContent=label(node||{label:id});$('record-content').replaceChildren(make('p','','Loading identity and source provenance…'));if(!dialog.open)dialog.showModal();
+    try{
+      const response=await fetch(`/api/resolved/node?${new URLSearchParams({id})}`);if(!response.ok)throw new Error('Resolved identity details could not be loaded.');const data=await response.json();if(request!==claimRequest)return;
+      const content=$('record-content');content.replaceChildren();
+      content.append(make('p','harvest-record-warning','Identity resolution is machine-checked, not scientific review. Source conflicts and unresolved mentions remain distinct from accepted identity decisions.'));
+      const identity=data.identity||{},members=Array.isArray(identity.members)?identity.members:[],decisions=Array.isArray(identity.decisions)?identity.decisions:[],conflicts=Array.isArray(identity.conflicts)?identity.conflicts:[];
+      content.append(make('h3','','Identity members'));
+      if(members.length){const list=make('ul','resolved-member-list');members.forEach(member=>list.append(make('li','',typeof member==='string'?member:[member.id||member.member_id,member.label,member.type].filter(Boolean).join(' · '))));content.append(list);}else content.append(make('p','','No identity members were returned.'));
+      const pointers=new Map();
+      const addPointer=value=>{if(!value)return;const row=typeof value==='string'?{id:value}:value,id=row.id||row.record_id||(row.dataset_id&&row.row?`record:${row.dataset_id}:${row.row}`:null);if(id&&String(id).startsWith('record:'))pointers.set(id,row);};
+      const provenance=data.provenance||{},identityProvenance=identity.provenance||{};
+      for(const member of [...(provenance.original_nodes||[]),...(identityProvenance.original_nodes||[])])addPointer(member.provenance?.record||member.provenance);
+      for(const edge of [...(provenance.identity_links||[]),...(identityProvenance.identity_links||[]),...decisions])addPointer(edge.provenance?.record||edge.link?.provenance?.record||edge.link?.provenance);
+      for(const pointer of [node?.provenance,node?.properties?.record])addPointer(pointer?.record||pointer);
+      if(pointers.size){content.append(make('h3','','Original source records'));pointers.forEach((pointer,recordId)=>{const button=make('button','workspace-link-button',`Open original record · ${pointer.dataset_key||pointer.dataset||'source'} · row ${pointer.row??'?'}`);button.type='button';button.addEventListener('click',()=>openHarvestNode(recordId));content.append(button);});}
+      content.append(make('h3','','Accepted identity decisions'));
+      if(decisions.length){decisions.forEach(decision=>{const card=make('article','resolved-proof'),link=decision.link||{},prov=decision.provenance||link.provenance||{},record=prov.record||{};card.append(make('strong','',String(decision.decision||decision.status||'accepted identity decision').replaceAll('_',' ')),make('p','',decision.rationale||decision.reason||decision.note||`${link.subject||''} ${link.rule||''} ${link.object||''}`.trim()||'Recorded machine identity mapping.'));if(record.id)card.append(make('small','',`${record.dataset_key||record.dataset||'Source record'} · row ${record.row??'unknown'}${record.sha256?` · SHA-256 ${record.sha256}`:''}`));const urls=[...(Array.isArray(record.source_urls)?record.source_urls:[]),...(decision.source_url?[decision.source_url]:[])];[...new Set(urls)].forEach(url=>addSafeSourceLink(card,url));content.append(card);});}else content.append(make('p','','No accepted identity decision detail was returned.'));
+      content.append(make('h3','','Conflicts and unresolved source mentions'));
+      if(conflicts.length){conflicts.forEach(conflict=>{const card=make('article','resolved-conflict'),prov=conflict.provenance||conflict.link?.provenance||{},record=prov.record||{};card.append(make('strong','',conflict.label||conflict.kind||'Source conflict'),make('p','',conflict.message||conflict.reason||conflict.excerpt||JSON.stringify(conflict)));if(record.id)card.append(make('small','',`${record.dataset_key||record.dataset||'Source record'} · row ${record.row??'unknown'}${record.sha256?` · SHA-256 ${record.sha256}`:''}`));const urls=[...(Array.isArray(record.source_urls)?record.source_urls:[]),...(conflict.source_url?[conflict.source_url]:[])];[...new Set(urls)].forEach(url=>addSafeSourceLink(card,url));content.append(card);});}else content.append(make('p','','No conflicts were recorded for this resolved entity.'));
+      const sourceProvenance=data.provenance||data.properties?.provenance||{};
+      const mention=identity.mention||data.mention||sourceProvenance.mention;
+      if(mention){
+        content.append(make('h3','','Unresolved source mention'));
+        if(mention.mention)content.append(make('p','',`Mention · ${mention.mention}`));
+        if(mention.excerpt||mention.text)content.append(make('blockquote','',mention.excerpt||mention.text));
+        if(mention.source_id)content.append(make('small','',`${mention.source_id}${mention.source_version?` · ${mention.source_version}`:''}${mention.locator?` · ${mention.locator}`:''}${mention.mention_locator?` · ${mention.mention_locator}`:''}`));
+        if(mention.title)content.append(make('p','',mention.title));
+        const source=[...(workspaceState?.documents||[]),...(workspaceState?.sources||[])].find(row=>(row.source_id||row.id)===mention.source_id);
+        addSafeSourceLink(content,mention.url||source?.url,'Open mention source ↗');
+        if(mention.metadata_status)content.append(make('small','',`Metadata status · ${mention.metadata_status}`));
+      }
+      const metadataStatus=data.metadata_status||node?.properties?.metadata_status||sourceProvenance.metadata_status;
+      if(metadataStatus)content.append(make('p','',`Source metadata status · ${metadataStatus}`));
+      const provenanceRows=Array.isArray(sourceProvenance.original_nodes)?sourceProvenance.original_nodes:[];
+      provenanceRows.forEach(row=>{const source=row.provenance||{};if(source.url)addSafeSourceLink(content,source.url,`Open source page · ${row.node_id||'original node'} ↗`);for(const url of source.source_urls||[])addSafeSourceLink(content,url,`Open recorded source URL ↗`);});
+      if(sourceProvenance.url)addSafeSourceLink(content,sourceProvenance.url,'Open source page ↗');
+      if(sourceProvenance){content.append(make('h3','','Source provenance'));content.append(make('pre','harvest-record-json',JSON.stringify(sourceProvenance,null,2)));}
+      content.append(make('p','','Relationships remain evidence scoped; identity resolution does not approve the biological claims attached to an entity.'));
+    }catch(error){if(request===claimRequest)$('record-content').replaceChildren(make('p','',error.message));}
+  }
   async function openHarvestClaim(id){
     const request=++claimRequest,dialog=$('record-dialog');$('record-content').replaceChildren(make('p','','Loading harvested relationship provenance…'));$('record-kind').textContent='Harvested relationship · unreviewed';$('record-title').textContent='Harvested graph relation';if(!dialog.open)dialog.showModal();
     try{
@@ -625,7 +756,7 @@
       const status=make('p','harvest-record-warning','This harvested relation is unreviewed raw-source context. It is not an approved scientific assertion.');content.insertBefore(status,relation.nextSibling);
     }catch(error){if(request===claimRequest)$('record-content').replaceChildren(make('p','',error.message));}
   }
-  $('inspect-selected').addEventListener('click',()=>{if(selected&&isHarvestNode(byId.get(selected)))openHarvestNode(selected);});
+  $('inspect-selected').addEventListener('click',()=>{if(!selected)return;const node=byId.get(selected);if(isResolvedNode(node))openResolvedNode(selected);else if(isHarvestNode(node))openHarvestNode(selected);});
   window.addEventListener('atlas:workspace-updated',event=>{
     const incoming=event.detail?.state;
     if(!incoming)return;
@@ -633,7 +764,7 @@
     setWorkspaceState(incoming);
   });
   window.addEventListener('atlas:select-node',event=>{
-    const id=event.detail?.node_id;
+    const id=canonicalNodeId(event.detail?.node_id||'');
     if(!id||!byId.has(id))return;
     select(id,true);byId.get(id)?.el.focus({preventScroll:true});
   });
@@ -652,7 +783,7 @@
       b.addEventListener('click',()=>{select(n.id,true);n.el.focus();});
       b.addEventListener('focus',()=>{searchLead=n.id;highlight();});results.append(b);
     });
-    if(!matches.length)results.append(make('p','','Searching the loaded graph and full harvest index…'));
+    if(!matches.length)results.append(make('p','',dataMode==='resolved'?'Searching the loaded resolved neuro graph…':'Searching the loaded graph and full harvest index…'));
     results.hidden=false;$('node-search').setAttribute('aria-expanded','true');
     clearTimeout(searchTimer);const requestId=++searchRequest;
     if(searchTerm)searchTimer=setTimeout(()=>searchHarvest(searchTerm,requestId),220);
@@ -660,12 +791,13 @@
   async function searchHarvest(query,requestId){
     const resultsElement=$('node-results');
     try{
-      const response=await fetch(`/api/harvest/search?${new URLSearchParams({q:query,limit:'40'})}`);if(!response.ok)throw new Error('');
+      const resolved=dataMode==='resolved',endpoint=resolved?'/api/resolved/search':'/api/harvest/search';
+      const response=await fetch(`${endpoint}?${new URLSearchParams({q:query,limit:'40'})}`);if(!response.ok)throw new Error('');
       const data=await response.json();if(requestId!==searchRequest||query!==$('node-search').value.toLowerCase().trim())return;
-      const results=resultsElement,matches=Array.isArray(data.results)?data.results:[];
+      const results=resultsElement,matches=Array.isArray(data.results)?data.results:Array.isArray(data.nodes)?data.nodes:[];
       const existing=new Set([...results.querySelectorAll('[data-node-id]')].map(button=>button.dataset.nodeId));
       if(matches.length){const pending=results.querySelector('p');if(pending)pending.remove();}
-      if(matches.length)results.append(make('p','harvest-search-heading',`Harvest index · ${Number(data.total||matches.length).toLocaleString()} matches`));
+      if(matches.length)results.append(make('p','harvest-search-heading',`${resolved?'Resolved neuro index':'Harvest index'} · ${Number(data.total||matches.length).toLocaleString()} matches`));
       matches.forEach(result=>{
         const node=result.node||result,id=node.id||result.node_id;if(!id||existing.has(id))return;existing.add(id);
         if(!searchLead)searchLead=id;
@@ -674,9 +806,10 @@
         button.addEventListener('click',async()=>{
           hideResults();$('node-search').blur();
           if(byId.has(id)){select(id,true);byId.get(id)?.el.focus({preventScroll:true});return;}
-          await loadHarvestGraph({focus:id,append:true,limit:harvestLimit});
+          if(dataMode==='resolved')await loadResolvedGraph({focus:id,offset:0,append:false,limit:resolvedLimit});
+          else await loadHarvestGraph({focus:id,append:true,limit:harvestLimit});
           if(byId.has(id)){select(id,true);byId.get(id)?.el.focus({preventScroll:true});}
-          else {const raw=await fetchHarvestNode(id);if(raw?.node){appendHarvestNode(raw.node);select(id,true);}}
+          else if(dataMode==='harvest'){const raw=await fetchHarvestNode(id);if(raw?.node){appendHarvestNode(raw.node);select(id,true);}}
         });
         results.append(button);
       });
@@ -744,10 +877,40 @@
   $('help-close').onclick=()=>$('graph-help').close();
   window.addEventListener('resize',()=>{width=innerWidth;height=innerHeight;sizeCanvas();fit();});
 
+  async function openResolvedClaim(id){
+    const request=++claimRequest,dialog=$('record-dialog');$('record-kind').textContent='Resolved graph assertion · source review status';$('record-title').textContent='Loading assertion…';$('record-content').replaceChildren(make('p','','Loading source-scoped claim details…'));if(!dialog.open)dialog.showModal();
+    try{
+      const response=await fetch(`/api/resolved/claim?${new URLSearchParams({id})}`);if(!response.ok)throw new Error('Resolved claim details could not be loaded.');const data=await response.json();if(request!==claimRequest)return;
+      const claim=data.claim||data,subject=byId.get(claim.subject),object=byId.get(claim.object);$('record-title').textContent=`${subject?label(subject):claim.subject||'Entity'} → ${object?label(object):claim.object||'Entity'}`;
+      $('record-kind').textContent=`${String(claim.predicate||'assertion').replaceAll('_',' ').toLowerCase()} · ${String(claim.review_status||'unreviewed').replaceAll('_',' ')}`;
+      const content=$('record-content');content.replaceChildren();
+      content.append(make('p','harvest-record-warning','Resolved entities do not make their attached biological relationships approved. Evidence below is source-scoped; confidence or extraction scores are not calibrated scientific probabilities.'));
+      const context=Object.entries(claim.context||{}).map(([key,value])=>`${key.replaceAll('_',' ')}: ${String(value).replaceAll('_',' ')}`).join(' · ');if(context)content.append(make('p','',context));
+      if(claim.extraction_confidence!==undefined)content.append(make('small','',`Machine extraction score · ${claim.extraction_confidence} (${claim.confidence_calibration||'uncalibrated'}); this is not a scientific confidence estimate.`));
+      const sources=Array.isArray(data.sources)?data.sources:[],support=Array.isArray(data.support)?data.support:[],contradictions=Array.isArray(data.contradictions)?data.contradictions:[];
+      const evidence=[...support.map(row=>({...row,stance:row.stance||'supports'})),...contradictions.map(row=>({...row,stance:'contradicts'}))];
+      if(!evidence.length)content.append(make('p','','No source excerpt is attached to this resolved relationship.'));
+      evidence.forEach(row=>{
+        const source=sources.find(item=>(item.id||item.source_id)===row.source_id),card=make('article',row.stance==='contradicts'?'counter':'resolved-proof');
+        card.append(make('strong','',row.stance==='contradicts'?'Counter-evidence':'Supporting source excerpt'),make('blockquote','',row.excerpt||'Exact source text was not returned.'),make('p','',source?.title||row.source_id||'Source metadata unavailable'),make('small','',`${row.locator||'Locator unavailable'} · ${String(row.review_status||claim.review_status||'unreviewed').replaceAll('_',' ')}${row.source_version?` · ${row.source_version}`:''}${row.confidence!==undefined?` · machine score ${row.confidence} (not calibrated)`:''}`));
+        if(source){
+          const authors=Array.isArray(source.authors)?source.authors.join(', '):source.authors;
+          const metadata=[authors,source.year,source.pmid?`PMID ${source.pmid}`:'',source.doi?`DOI ${source.doi}`:''].filter(Boolean).join(' · ');
+          if(metadata)card.append(make('p','',metadata));
+          card.append(make('p','',`${source.version||source.retrieved_at||'Version not recorded'} · ${source.license||'reuse terms not recorded'}`));
+          if(source.metadata_status)card.append(make('small','',`Source metadata status · ${source.metadata_status}`));
+          addSafeSourceLink(card,source.url||source.provenance?.url);
+        }
+        content.append(card);
+      });
+      content.append(make('p','','A graph relation is a source-backed candidate assertion, not a treatment recommendation or clinical conclusion.'));
+    }catch(error){if(request===claimRequest)$('record-content').replaceChildren(make('p','',error.message));}
+  }
   async function openClaim(id) {
     if(String(id).startsWith('harvest:edge:')){openHarvestClaim(id);return;}
     const workspaceClaim=workspaceState?.claims?.find(claim=>claim.id===id);
     if(workspaceClaim){openWorkspaceClaim(workspaceClaim);return;}
+    if(dataMode==='resolved'&&(String(id).startsWith('resolved:')||resolvedBase?.claims?.some(claim=>claim.id===id))){openResolvedClaim(id);return;}
     const request=++claimRequest;const dialog=$('record-dialog');
     $('record-kind').textContent='Recorded assertion';$('record-title').textContent='Evidence';$('record-content').replaceChildren(make('p','','Loading the source records…'));if(!dialog.open)dialog.showModal();
     try {
@@ -799,15 +962,15 @@
   $('question').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask();}};
   async function ask() {
     const question=$('question').value.trim();if(!question||busy)return;
-    const selectedNode=byId.get(selected),selectedHarvest=isHarvestNode(selectedNode);
-    const query=selectedHarvest?`Selected harvest-index record: ${label(selectedNode)}. The configured cited-source search may not cover the full harvest. User question: ${question}`:question;
+    const selectedNode=byId.get(selected),selectedHarvest=isHarvestNode(selectedNode),workspaceId=workspaceNodeId(selected),selectedInWorkspace=!!workspaceId&&workspaceState?.nodes?.some(node=>node.id===workspaceId);
+    const selectedContext=(selectedHarvest||isResolvedNode(selectedNode)&&!selectedInWorkspace)?`Selected ${selectedHarvest?'harvest':'resolved neuro'} graph entity: ${label(selectedNode)}. The cited-source assistant searches its configured source corpus, which is narrower than the full graph. User question: ${question}`:question;
     busy=true;$('send-question').disabled=true;recognition?.abort();
     const box=$('chat-messages');
     box.append(make('div','chat-message user',question));$('question').value='';
-    if(selectedHarvest)box.append(make('p','harvest-ask-scope',`Selected harvest record: ${label(selectedNode)}. The question is sent as text context; the cited-source search may not cover all harvested records.`));
+    if(selectedHarvest||isResolvedNode(selectedNode)&&!selectedInWorkspace)box.append(make('p','harvest-ask-scope',`Selected ${selectedHarvest?'harvest':'resolved neuro'} entity: ${label(selectedNode)}. The question is sent as text context; the configured cited-source search does not cover the full graph.`));
     const reply=make('div','chat-message answer');reply.append(make('p','','Looking through the graph…'));box.append(reply);box.scrollTop=box.scrollHeight;
     try{
-      const params=new URLSearchParams({q:query});if(selected&&!selectedHarvest)params.set('node',selected);
+      const params=new URLSearchParams({q:selectedContext});if(selectedInWorkspace&&!selectedHarvest)params.set('node',workspaceId);
       if(!selectedHarvest&&lastAnswer?.claim_ids?.length&&/\b(this|that|these|those)\b/i.test(question)&&/\b(evidence|sources?|support|proof|papers?)\b/i.test(question))lastAnswer.claim_ids.slice(0,100).forEach(id=>params.append('claim',id));
       const response=await fetch(`/api/ask?${params}`),data=await response.json();if(!response.ok)throw new Error(data.error?.message||'The graph could not answer just now.');
       lastAnswer=data;
@@ -840,12 +1003,16 @@
 
   async function init() {
     try{
-      const statusRequest=loadHarvestStatus();
-      const loaded=await loadHarvestGraph({limit:harvestLimit,offset:0});
+      const statusRequest=Promise.all([loadHarvestStatus(),loadResolvedStatus()]);
+      const loaded=await loadResolvedGraph({limit:resolvedLimit,offset:0});
       if(!loaded){
-        const response=await fetch('/api/graph');if(!response.ok)throw new Error('The graph could not be loaded. Refresh to try again.');
-        harvestBase=null;harvestError='The harvest projection is unavailable. Showing the smaller curated graph view.';
-        bundle=await response.json();nodes=bundle.nodes.map(node=>({...node}));byId=new Map(nodes.map(node=>[node.id,node]));render();updateHarvestControls();
+        dataMode='harvest';$('graph-scope').value='harvest';
+        const fallback=await loadHarvestGraph({limit:harvestLimit,offset:0});
+        if(!fallback){
+          const response=await fetch('/api/graph');if(!response.ok)throw new Error('The graph could not be loaded. Refresh to try again.');
+          harvestBase=null;harvestError='The harvest projection is unavailable. Showing the smaller curated graph view.';
+          bundle=await response.json();nodes=bundle.nodes.map(node=>({...node}));byId=new Map(nodes.map(node=>[node.id,node]));render();updateHarvestControls();
+        }
       }
       await statusRequest;
       if(pendingWorkspaceState){const pending=pendingWorkspaceState;pendingWorkspaceState=null;setWorkspaceState(pending);}

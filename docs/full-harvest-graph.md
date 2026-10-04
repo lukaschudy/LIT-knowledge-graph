@@ -17,6 +17,8 @@ The source repository must contain `data/harvest-manifests/*.json` and the norma
 
 The builder checks compressed-file SHA-256 hashes, byte counts and final row counts. It commits checkpoints every 5,000 records and resumes when rerun against the same snapshot. It pauses if disk space falls below its reserve. Source snapshots must remain unchanged; use a new output index for a changed harvest. Index files and local workspaces are ignored by Git.
 
+The app defaults to the [resolved neuro neighborhood](neuro-entity-resolution.md) when its artifact is available. Choose **All harvested data** to use the broad source graph described below.
+
 ## Explore a dense graph
 
 - Choose the number of nodes to display, up to **10,000 per page**. Loading further pages or neighborhoods adds to the visible graph; reset the view to clear accumulated pages. The full store is larger than the current canvas.

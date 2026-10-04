@@ -43,6 +43,14 @@ def main(argv=None):
     p.add_argument('--host', choices=('127.0.0.1', 'localhost'), default='127.0.0.1')
     p.add_argument('--port', type=int, default=8767)
     p.add_argument('--graph-db', type=Path, default=ROOT / 'data/graph/harvest.sqlite')
+    p.add_argument('--resolved-graph', type=Path, default=ROOT / 'data/graph/neuro-resolved.json')
+    p = sub.add_parser('resolve-neuro', help='Resolve neuro identities and extract unreviewed source-backed relationships')
+    p.add_argument('--graph-db', type=Path, default=ROOT / 'data/graph/harvest.sqlite')
+    p.add_argument('--output', type=Path, default=ROOT / 'data/graph/neuro-resolved.json')
+    p.add_argument('--provider', choices=('auto','codex','openai'), default='codex')
+    p.add_argument('--model')
+    p.add_argument('--model-timeout', type=int, default=180)
+    p.add_argument('--no-extract', action='store_true', help='Build registry/metadata identities without a model call')
     p = sub.add_parser('build-graph', help='Stream every registered harvested source into a resumable disk-backed graph')
     p.add_argument('--source-root', type=Path, required=True)
     p.add_argument('--output', type=Path, default=ROOT / 'data/graph/harvest.sqlite')
@@ -81,6 +89,18 @@ def main(argv=None):
     p.add_argument('--output', required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command == 'resolve-neuro':
+            from atlas.neuro_ingestion import build_neuro
+            from atlas.ai import ModelClient, ModelError
+            client = None if args.no_extract else ModelClient(args.provider,args.model,args.model_timeout)
+            try:
+                result = build_neuro(ROOT,args.graph_db,args.output,client=client,extract=not args.no_extract,
+                                     progress=lambda row: print(json.dumps(row),flush=True))
+            except ModelError as exc:
+                print(f'Atlas extraction error ({exc.code}): {exc}',file=sys.stderr)
+                return 1
+            dump(result['resolution']['stats'])
+            return 0
         if args.command == 'build-graph':
             from atlas.harvest_graph.build import build
             import time
@@ -138,10 +158,14 @@ def main(argv=None):
                 with sqlite3.connect(args.graph_db) as conn:
                     source_root = conn.execute("SELECT value FROM metadata WHERE key='source_root'").fetchone()[0]
                 harvest = HarvestGraph(args.graph_db, source_root)
+            resolved = None
+            if args.resolved_graph.is_file():
+                from atlas.resolved_graph import ResolvedGraph
+                resolved = ResolvedGraph(args.resolved_graph, harvest=harvest)
             with GraphStore() as store:
                 store.load_bundle(workspace._active_bundle())
                 print(f'Atlas: http://{args.host}:{args.port}/explore', flush=True)
-                serve(store, args.host, args.port, workspace=workspace, harvest=harvest)
+                serve(store, args.host, args.port, workspace=workspace, harvest=harvest, resolved=resolved)
             return 0
         if args.command == 'validate':
             bundle = json.loads(Path(args.bundle).read_text(encoding='utf-8'))

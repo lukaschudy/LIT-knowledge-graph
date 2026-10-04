@@ -19,10 +19,15 @@ const { chromium } = require('playwright');
     await page.locator('#network').waitFor({ state: 'visible' });
     await page.locator('#options-toggle').click();
     await page.locator('#graph-options:not([hidden])').waitFor();
-    await page.locator('#harvest-status').waitFor();
+    await page.locator('#harvest-status').waitFor({state:'attached'});
     assert.ok((await page.locator('#harvest-status').innerText()).length > 0, 'harvest coverage state should be explained');
-    assert.equal(await page.locator('#harvest-limit option').count(), 3, 'bounded view budgets should be available');
-    assert.equal(await page.locator('#harvest-limit').inputValue(), '10000', 'default graph page should show the dense 10,000-node view');
+    assert.equal(await page.locator('#graph-scope option').count(), 2, 'resolved and full-harvest scopes should both be available');
+    const resolvedAvailable = await page.evaluate(async () => { const r = await fetch('/api/resolved/status'); return r.ok; });
+    assert.equal(await page.locator('#graph-scope').inputValue(), resolvedAvailable ? 'resolved' : 'harvest', 'use resolved neuro by default when the route is available');
+    await page.locator('#graph-scope').selectOption('harvest');
+    await page.locator('#harvest-status').waitFor({state:'visible'});
+    assert.equal(await page.locator('#harvest-limit option').count(), 3, 'full-harvest page budgets should be available');
+    assert.equal(await page.locator('#harvest-limit').inputValue(), '10000', 'all-harvest view defaults to the dense 10,000-node page');
     const harvestData = await page.evaluate(async () => {
       const [statusResponse, datasetsResponse] = await Promise.all([fetch('/api/harvest/status'), fetch('/api/harvest/datasets')]);
       if (!statusResponse.ok || !datasetsResponse.ok) return null;
@@ -72,6 +77,40 @@ const { chromium } = require('playwright');
         await page.locator('#record-content .harvest-record-json').waitFor();
         assert.ok(Object.keys(JSON.parse(await page.locator('#record-content .harvest-record-json').innerText())).length > 0);
         assert.match(await page.locator('#record-content').innerText(), /raw harvested record|harvested source|harvested relationship/i, 'harvested edge should open source provenance');
+        await page.locator('#record-close').click();
+      }
+    }
+    if (resolvedAvailable) {
+      await page.locator('#options-toggle').click();
+      await page.locator('#graph-options:not([hidden])').waitFor();
+      await page.locator('#graph-scope').selectOption('resolved');
+      await page.locator('#resolved-status').waitFor({state:'visible'});
+      await page.waitForFunction(() => document.querySelectorAll('#nodes .net-node').length > 0);
+      assert.equal(await page.locator('#harvest-limit').inputValue(), '120', 'resolved neuro defaults to a focused page');
+      const resolved = await page.evaluate(async () => { const r = await fetch('/api/resolved/graph?limit=120'); return r.ok ? r.json() : null; });
+      assert.ok(resolved?.nodes?.length, 'resolved overview should return graph nodes');
+      await page.evaluate(id => window.dispatchEvent(new CustomEvent('atlas:select-node', {detail:{node_id:id}})), resolved.nodes[0].id);
+      await page.locator('#inspect-selected').waitFor({state:'visible'});
+      await page.locator('#inspect-selected').click();
+      await page.locator('#record-dialog[open]').waitFor();
+      await page.getByRole('heading', {name:'Identity members'}).waitFor();
+      assert.ok((await page.locator('#record-content').innerText()).length > 40, 'resolved node inspector should show identity/provenance details');
+      const originalRecord = page.locator('#record-content .workspace-link-button').filter({hasText:'Open original record'}).first();
+      await originalRecord.waitFor({state:'visible'});
+      await originalRecord.click();
+      await page.locator('#record-content .harvest-record-json').waitFor();
+      assert.ok(Object.keys(JSON.parse(await page.locator('#record-content .harvest-record-json').innerText())).length > 0, 'resolved identity member should open its original source row');
+      await page.locator('#record-close').click();
+      const resolvedClaim = resolved.claims?.find(claim => String(claim.id).startsWith('claim:extracted:'));
+      if (resolvedClaim) {
+        const claimDetails = await page.evaluate(async id => { const r = await fetch(`/api/resolved/claim?id=${encodeURIComponent(id)}`); return r.ok ? r.json() : null; }, resolvedClaim.id);
+        assert.ok(claimDetails?.support?.[0]?.excerpt, 'an extracted model claim should have a source-grounded excerpt');
+        await page.evaluate(id => window.dispatchEvent(new CustomEvent('atlas:open-claim', {detail:{claim_id:id}})), resolvedClaim.id);
+        await page.locator('#record-dialog[open]').waitFor();
+        const quote = page.locator('#record-content blockquote').first();
+        await quote.waitFor({state:'visible'});
+        assert.equal(await quote.innerText(), claimDetails.support[0].excerpt, 'model claim inspector must display the exact source quote');
+        assert.match(await page.locator('#record-content').innerText(), /not calibrated|not approved/i, 'machine confidence must not be presented as scientific certainty');
         await page.locator('#record-close').click();
       }
     }

@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-04",
+  "scope": "bounded neuro identity and extraction layer",
+  "harvest_snapshot_id": "726adcb28ffedfc74d60121eca4521e2e8c226b2d6a5a0c3ed6875d4ead00455",
+  "artifact_sha256": "a4d79908c7e67af58297475ea035bafcc3c0135f6097f9a1284f9c7ba48389e1",
+  "stats": {
+    "entities": 1056,
+    "type_corrections": 124,
+    "input_identities": 1090,
+    "identity_merges": 34,
+    "conflicts": 0,
+    "extracted_claims": 44,
+    "claims": 2734,
+    "evidence_rows": 134,
+    "source_documents": 4,
+    "unresolved_mentions": 58
+  },
+  "entity_types": {
+    "Assertion": 27,
+    "Variant": 281,
+    "Gene": 205,
+    "Phenotype": 223,
+    "Genotype": 2,
+    "HomologyGroup": 1,
+    "Disease": 274,
+    "Person": 28,
+    "Publication": 4,
+    "Protein": 3,
+    "Asset": 3,
+    "Mechanism": 5
+  },
+  "model_runs": [
+    {
+      "source_id": "wdr45-bpan-2023",
+      "cached": true,
+      "metadata": {
+        "provider": "codex",
+        "model": "gpt-6-astra",
+        "duration_ms": 144692,
+        "usage": null,
+        "mode": "live",
+        "extraction": "entity_relation",
+        "confidence_calibration": "uncalibrated",
+        "review_status": "unreviewed"
+      },
+      "claims": 15,
+      "entities": 11
+    },
+    {
+      "source_id": "ap4b1-atg9a-2024",
+      "cached": true,
+      "metadata": {
+        "provider": "codex",
+        "model": "gpt-6-astra",
+        "duration_ms": 108740,
+        "usage": null,
+        "mode": "live",
+        "extraction": "entity_relation",
+        "confidence_calibration": "uncalibrated",
+        "review_status": "unreviewed"
+      },
+      "claims": 14,
+      "entities": 16
+    },
+    {
+      "source_id": "ap4b1-fibroblast-2021",
+      "cached": true,
+      "metadata": {
+        "provider": "codex",
+        "model": "gpt-6-astra",
+        "duration_ms": 62566,
+        "usage": null,
+        "mode": "live",
+        "extraction": "entity_relation",
+        "confidence_calibration": "uncalibrated",
+        "review_status": "unreviewed"
+      },
+      "claims": 6,
+      "entities": 5
+    },
+    {
+      "source_id": "epg5-vici-fusion-2018",
+      "cached": true,
+      "metadata": {
+        "provider": "codex",
+        "model": "gpt-6-astra",
+        "duration_ms": 72154,
+        "usage": null,
+        "mode": "live",
+        "extraction": "entity_relation",
+        "confidence_calibration": "uncalibrated",
+        "review_status": "unreviewed"
+      },
+      "claims": 9,
+      "entities": 8
+    }
+  ],
+  "validation": {
+    "evidence_quotes_and_source_hashes_checked": 134,
+    "claim_endpoints_checked": 2734,
+    "new_model_evidence_review_status": "unreviewed",
+    "app_tests": 215,
+    "harvest_tests": 51,
+    "search_tests": 15,
+    "cached_rebuild_made_model_calls": false
+  },
+  "local_api_sample_ms": {
+    "overview_120": 30.2,
+    "focused_120": 7.31,
+    "search": 4.23,
+    "identity_detail": 1.0
+  },
+  "limitations": [
+    "Only the bounded neuro layer is resolved; all 105 raw datasets remain available separately.",
+    "Three source snapshots retain PMCID-only publication identities because author/PMID/DOI metadata is not present in the harvested article collection.",
+    "No scientific expert review or comparative discovery-performance claim.",
+    "Model durations measure these four local Codex calls, not an online request latency guarantee."
+  ]
+}

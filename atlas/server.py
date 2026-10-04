@@ -63,7 +63,7 @@ def _references(row: dict[str, Any], *keys: str) -> list[str]:
     return list(dict.fromkeys(result))
 
 
-def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None, harvest=None) -> ThreadingHTTPServer:
+def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None, harvest=None, resolved=None) -> ThreadingHTTPServer:
     """Create a testable threaded server around a startup snapshot of ``store``.
 
     The store and reasoner are only touched on this calling thread. Requests are
@@ -152,6 +152,9 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
             return value or None
 
         def _api(self, path: str, query: dict[str, list[str]]) -> None:
+            if path.startswith("/api/resolved/"):
+                self._resolved_api(path, query)
+                return
             if path.startswith("/api/harvest/"):
                 self._harvest_api(path, query)
                 return
@@ -341,6 +344,35 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
             except Exception:
                 self._error(500, "workspace_error", "The action could not be saved. Reload the workspace to check its current state.")
 
+        def _resolved_api(self, path, query):
+            if resolved is None:
+                self._error(404, 'resolved_unavailable', 'Build the neuro identity layer with atlas resolve-neuro.')
+                return
+            def integer(name, default, low, high):
+                value = self._one(query, name)
+                value = int(value) if value is not None else default
+                if not low <= value <= high: raise ValueError(f'{name} is outside the supported range.')
+                return value
+            try:
+                if any(len(values) != 1 for values in query.values()):
+                    raise ValueError('Query parameters must occur once.')
+                route = path.removeprefix('/api/resolved/')
+                if route == 'status': result = resolved.status()
+                elif route == 'graph': result = resolved.graph(limit=integer('limit',120,2,1000), offset=integer('offset',0,0,10**10), focus=self._one(query,'focus'))
+                elif route == 'search': result = resolved.search(self._one(query,'q') or '', limit=integer('limit',40,1,100))
+                elif route in ('node','claim'):
+                    identifier = self._one(query,'id')
+                    if not identifier: raise ValueError('Supply one identifier.')
+                    result = resolved.node(identifier) if route == 'node' else resolved.claim(identifier)
+                    if result is None: raise KeyError(identifier)
+                else:
+                    self._error(404,'api_not_found','Unknown resolved graph endpoint.'); return
+                self._json(200,result)
+            except KeyError:
+                self._error(404,'entity_not_found','That entity or claim is outside the resolved neuro layer.')
+            except (ValueError,TypeError) as exc:
+                self._error(400,'invalid_graph_request',str(exc)[:300])
+
         def _harvest_api(self, path, query):
             if harvest is None:
                 self._error(404, "harvest_unavailable", "Build the harvested graph with atlas build-graph before opening the full source graph.")
@@ -424,9 +456,9 @@ def create_server(store: Any, host: str = "127.0.0.1", port: int = 8765, *, work
     return ThreadingHTTPServer((host, port), AtlasHandler)
 
 
-def serve(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None, harvest=None) -> None:
+def serve(store: Any, host: str = "127.0.0.1", port: int = 8765, *, workspace=None, harvest=None, resolved=None) -> None:
     """Run the atlas server until interrupted."""
-    server = create_server(store, host, port, workspace=workspace, harvest=harvest)
+    server = create_server(store, host, port, workspace=workspace, harvest=harvest, resolved=resolved)
     try:
         server.serve_forever()
     finally:

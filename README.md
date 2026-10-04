@@ -4,12 +4,15 @@ The main graph now connects **TopK search → Astra answers and extraction → e
 
 ```bash
 python3 -m atlas build-graph --source-root /path/to/harvest-repository
+python3 -m atlas resolve-neuro --provider codex
 python3 -m atlas app --env-file .env --search topk --provider codex
 ```
 
 Install the `topk` and `graph` extras and prepare the verified local passage export first, as described in the setup guide. This local app uses the signed-in Codex CLI or an OpenAI API key; credentials stay on the server.
 
 **Connected data:** the full harvest graph covers **21,746,825 source records across 105 datasets**, indexing **8,914,689 entities and 53,429,267 source relationships**, with dense views, full-index entity search and original-record inspection. See [build and browsing instructions](docs/full-harvest-graph.md). The focused review/planning layer starts with 45 real entities and 53 curated assertions, plus **15,502 GRIN passages and 19 neuro passages** in separate verified TopK collections. Search results retain source URLs, exact text, locators and review status. [Harvest coverage](docs/harvest-coverage.md) includes 40 source collections, including unavailable sources; the full graph indexes the 105 locally available datasets. This is distinct from the focused [TopK passage index](docs/topk-search.md).
+
+**Default graph:** a resolved neuro neighborhood, starting at 120 entities and expandable on selection. Inspect canonical identities, original source records and quoted evidence; switch to the full harvest for broader exploration. [Entity ingestion and resolution](docs/neuro-entity-resolution.md) explains identity rules, model extraction, setup and current coverage.
 
 The planning scope is **EPG5 / Vici syndrome**, with WDR45 / BPAN and AP4B1 / SPG47 as candidate comparators. New extracted claims stay unreviewed; unresolved scientific, maintainer and access gates remain visible. No real candidate is made ready by an AI-generated answer alone.
 

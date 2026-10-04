@@ -38,22 +38,25 @@
     <label><input id="show-connections" type="checkbox" checked> Show connections</label>
     <label><input id="local-view" type="checkbox"> Selected neighborhood</label>
     </div>
-    <section class="harvest-controls" aria-label="Harvested graph coverage">
-      <h3>Harvested records</h3>
+    <section class="harvest-controls" aria-label="Graph data scope">
+      <h3>Graph scope</h3>
+      <label for="graph-scope">View</label>
+      <select id="graph-scope"><option value="resolved" selected>Resolved neuro overview</option><option value="harvest">All harvested data</option></select>
+      <p id="resolved-status" role="status" aria-live="polite">Loading resolved neuro overview…</p>
       <p id="harvest-status" role="status" aria-live="polite">Loading graph coverage…</p>
       <label for="harvest-limit">Nodes per page</label>
-      <select id="harvest-limit"><option value="1000">1,000 nodes</option><option value="3000">3,000 nodes</option><option value="10000" selected>10,000 nodes</option></select>
+      <select id="harvest-limit"><option value="120" selected>120 nodes</option><option value="300">300 nodes</option><option value="1000">1,000 nodes</option></select>
       <div class="harvest-actions"><button id="harvest-reload" type="button" class="graph-text-button">Load this view</button><button id="harvest-next" type="button" class="graph-text-button">Browse next page</button><button id="harvest-expand" type="button" class="graph-text-button" disabled>Expand selected neighborhood</button></div>
       <button id="harvest-browse" type="button" class="graph-text-button harvest-browse">Browse every harvested source record ↗</button>
-      <p class="harvest-note">Each page is capped by the selected size; browsing adds pages and the visible total stays explicit. Graph positions are a display layout, not a biological similarity score. Ask Atlas uses its configured sources, not all harvested records.</p>
+      <p class="harvest-note">The resolved neuro view applies identity decisions and keeps source conflicts visible. All harvested data is available in its separate bounded view. Graph positions are a display layout, not a biological similarity score.</p>
     </section>
-    <div class="graph-legend"><span class="legend-disease">Diseases</span><span class="legend-variant">Variants</span><span class="legend-gene">Genes & proteins</span><span class="legend-biology">Mechanisms, pathways & traits</span><span class="legend-research">Search & data provenance</span></div>
+    <div class="graph-legend"><span class="legend-disease">Diseases</span><span class="legend-variant">Variants</span><span class="legend-gene">Genes & proteins</span><span class="legend-biology">Mechanisms, pathways & traits</span><span class="legend-research">Researchers, papers & assets</span></div>
     <button id="help-button" class="graph-text-button">How to explore</button>
   </section>
   <section id="selection" class="selection" aria-label="Selected node" hidden>
     <div><span id="selection-type"></span><h1 id="selection-name"></h1></div>
     <button id="ask-selected" class="graph-text-button">Ask about this</button>
-    <button id="inspect-selected" class="graph-text-button" type="button" hidden>Inspect harvested record</button>
+    <button id="inspect-selected" class="graph-text-button" type="button" hidden>Inspect source and identity</button>
     <button id="clear-selection" class="graph-icon" aria-label="Clear selection">×</button>
   </section>
   <button id="chat-toggle" class="chat-toggle" aria-expanded="false" aria-controls="chat-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4m4-7v10m4-13v16m4-13v10m4-7v4"/></svg><span>Ask Atlas</span></button>

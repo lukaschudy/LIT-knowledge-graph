@@ -1,0 +1,12 @@
+{
+  "scope": "neuro-autophagy",
+  "description": "Explicit project identity anchors, checked against local HGNC and MONDO source records. These map identity only, not scientific review or assay suitability.",
+  "anchors": [
+    {"local_id":"gene:EPG5","registry_id":"HGNC:29331","type":"Gene","registry_label":"EPG5"},
+    {"local_id":"gene:WDR45","registry_id":"HGNC:28912","type":"Gene","registry_label":"WDR45"},
+    {"local_id":"gene:AP4B1","registry_id":"HGNC:572","type":"Gene","registry_label":"AP4B1"},
+    {"local_id":"disease:vici","registry_id":"MONDO:0009452","type":"Disease","registry_label":"Vici syndrome"},
+    {"local_id":"disease:bpan","registry_id":"MONDO:0010476","type":"Disease","registry_label":"neurodegeneration with brain iron accumulation 5"},
+    {"local_id":"disease:spg47","registry_id":"MONDO:0013551","type":"Disease","registry_label":"hereditary spastic paraplegia 47"}
+  ]
+}
