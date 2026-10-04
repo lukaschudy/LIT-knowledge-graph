@@ -104,9 +104,9 @@ remain available, and the chat retains its paper and evidence links.
 Dense rendering uses a 1x pixel budget, GPU buffer reuse and lazy pointer indexing;
 SVG labels and controls remain at native display resolution.
 
-Active dense-graph version: f5421d3f-af17-4290-bb1d-754623c07994 (100% traffic).
+Active dense-graph version: 030e29bd-30fc-410d-b79a-c68643e94963 (100% traffic).
 Verified release: deploy/cloudflare/dense-release.json
-Rollback: uv run pywrangler versions deploy 24aab8f1-e9d8-4bc3-8c12-de0b767bdef9@100% --yes
+Rollback: uv run pywrangler versions deploy f5421d3f-af17-4290-bb1d-754623c07994@100% --yes
 
 Nodes keep fixed world positions during pointer gestures; dragging orbits the camera.
 The current theme uses a white background, dark lotus-green branding and the original
@@ -122,3 +122,7 @@ demo-scope-release.json, with the exact deployed manifest in demo-scope-build-ma
 The globe layout release is recorded in globe-release.json with its sealed manifest
 in globe-build-manifest.json. Dense nodes occupy a stable 3D sphere. The opening
 view leaves whitespace on the left on wide screens and centers the globe on mobile.
+
+Ask Atlas opens with an editable, ready-to-send GRIN variant comparison.
+The verified release and sealed manifest are demo-draft-release.json and
+demo-draft-build-manifest.json. HGVS protein prefixes remain inside the demo scope.

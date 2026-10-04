@@ -1,19 +1,19 @@
 {
   "schema_version": "atlas-dense-production-release-v1",
-  "deployed_at": "2026-10-04T08:26:08.606462+00:00",
+  "deployed_at": "2026-10-04T09:02:01.927785+00:00",
   "worker": "varentik-atlas",
-  "version": "f5421d3f-af17-4290-bb1d-754623c07994",
+  "version": "030e29bd-30fc-410d-b79a-c68643e94963",
   "traffic_percent": 100,
   "url": "https://atlas.varentik.com/explore",
-  "previous_version": "24aab8f1-e9d8-4bc3-8c12-de0b767bdef9",
-  "frontend_source_commit": "a19ce47",
+  "previous_version": "24d6ea62-557c-4724-973f-a6fc66eadb9f",
+  "frontend_source_commit": "09c73fe",
   "production_nodes": 10035,
   "public_hgnc_nodes": 10000,
   "reviewed_grin_nodes": 35,
   "validation": {
-    "production_browser_checks": 56,
-    "local_browser_checks": 28,
-    "live_globe_verified": true,
+    "application_tests": 162,
+    "focused_browser_checks": 4,
+    "live_demo_question_verified": true,
     "production_dom_count": 10035,
     "vendor_files_verified": 29,
     "sealed_generated_files": 37,
@@ -27,12 +27,14 @@
     "atlas/web/graph.js": "5e6cce4299e36d001a8ed73da87cbe4264bc39ce845fc36c39a88d34bf1d244f",
     "atlas/web/graph-renderer.js": "2e2a7ad40836d79bbf49dfbbe472cc3dbdbb1b95a082f1b193fb34211a1a102a",
     "atlas/web/graph.css": "3652af5307e676360f0c5ccfcfbccf4889501c2f7cd4ee8a510d021cf5e80dcf",
-    "atlas/web/explore.html": "aeba219007049cc68623a3fa1726fe2a4befdd88c06e1ac9d3f0b7d2f227c0d8",
+    "atlas/web/explore.html": "7653e460f387ffa148a930a5c3972bebfd8646e746c9d6c07b8439ff461662b5",
     "atlas/public_graph.py": "9c442501175d1148d4d1442f1228db7664685e5c5ee173c359387fe5a8c05346",
     "deploy/cloudflare/worker.py": "7d9fb999ee41f13484668e7b6660524945f6a446938e57311367e7fc2a89ab96",
     "data/curated/hgnc_dense_snapshot.json.gz": "8673edbc095100db4639a7e5de13831c245f072909ae3abff219498e7d2853c9",
     "deploy/cloudflare/wrangler.jsonc": "5e8bff3396e73538e545e63878d16e5393fbf9479e65ee8f8264eb17a080ab0e",
-    "atlas/proposals.py": "4e5f51ea6444ded88869ab31a877abf64d452b09383ed99a8dfb6db075568534"
+    "atlas/proposals.py": "4e5f51ea6444ded88869ab31a877abf64d452b09383ed99a8dfb6db075568534",
+    "atlas/demo_scope.py": "2e92bb50b850313d4c31d4c5f0640930f1d1bcccc4f20602c543f8ec49f4249e"
   },
-  "release_receipt": "deploy/cloudflare/globe-release.json"
+  "release_receipt": "deploy/cloudflare/demo-draft-release.json",
+  "rollback_version": "f5421d3f-af17-4290-bb1d-754623c07994"
 }

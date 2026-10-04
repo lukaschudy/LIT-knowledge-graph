@@ -1,0 +1,20 @@
+{
+  "schema_version": "atlas-demo-draft-release-v1",
+  "worker": "varentik-atlas",
+  "version": "030e29bd-30fc-410d-b79a-c68643e94963",
+  "traffic_percent": 100,
+  "verified_at": "2026-10-04T09:02:01.927785+00:00",
+  "source_commit": "09c73fe",
+  "local_source_commit": "5d65e9b",
+  "rollback_version": "f5421d3f-af17-4290-bb1d-754623c07994",
+  "manifest_path": "deploy/cloudflare/demo-draft-build-manifest.json",
+  "manifest_sha256": "054e1d15e6424952e45ffed7c3673fb8140450581e1803b23a9eea319362973b",
+  "verification": {
+    "application_tests": 162,
+    "focused_browser_checks": 4,
+    "local_protein_notation_test": true,
+    "live_unedited_demo_question_returns_both_variant_evidence": true,
+    "live_draft_edit_survives_close_reopen": true
+  },
+  "change": "Editable demo question prefilled on page load; HGVS protein notation does not trigger the external-gene scope boundary."
+}
