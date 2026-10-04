@@ -6,7 +6,7 @@
   // One palette serves the canvas, labels, and the tucked-away legend.
   const paletteStyle=getComputedStyle(document.body);
   const graphPaper=paletteStyle.getPropertyValue('--graph-paper').trim();
-  const colors=Object.fromEntries(['disease','variant','gene','biology','research'].map(key=>[key,paletteStyle.getPropertyValue(`--graph-${key}`).trim()]));
+  const colors=Object.fromEntries(['disease','variant','gene','biology','research','group-teal','group-blue','group-purple','group-coral','group-gold','group-pink'].map(key=>[key,paletteStyle.getPropertyValue(`--graph-${key}`).trim()]));
   const glows=Object.fromEntries(Object.entries(colors).map(([key,color])=>{
     const sprite=document.createElement('canvas');sprite.width=64;sprite.height=64;
     const brush=sprite.getContext('2d'),glow=brush.createRadialGradient(32,32,1,32,32,32);
@@ -181,12 +181,12 @@
       if(!n.inViewport||n.weight<.01||(!n.ring&&n.degree<6))continue;
       const r=n.screenR,extent=r*(2.8+n.ring);
       ctx.globalAlpha=(.3+n.ring*.35)*n.weight;
-      ctx.drawImage(glows[family(n)],n.screenX-extent,n.screenY-extent,extent*2,extent*2);
+      ctx.drawImage(glows[n.colorKey],n.screenX-extent,n.screenY-extent,extent*2,extent*2);
     }
     for(const n of depthOrder){
       if(!n.inViewport||n.weight<.01)continue;
       const r=n.screenR,x=n.screenX,y=n.screenY;
-      const color=colors[family(n)],depthAlpha=Math.max(.66,Math.min(1,.9-n.depth/1000));
+      const color=colors[n.colorKey],depthAlpha=Math.max(.66,Math.min(1,.9-n.depth/1000));
       if(n.ring>.01){
         ctx.globalAlpha=n.ring;ctx.strokeStyle=graphPaper;ctx.lineWidth=3;
         ctx.beginPath();ctx.arc(x,y,r+3,0,Math.PI*2);ctx.stroke();
@@ -340,9 +340,13 @@
     const minX=Math.min(...nodes.map(n=>n.x)),maxX=Math.max(...nodes.map(n=>n.x));
     const minY=Math.min(...nodes.map(n=>n.y)),maxY=Math.max(...nodes.map(n=>n.y));
     const padX=width<650?24:48, top=90, bottom=75;
-    view.k=Math.max(dataMode==='harvest'?.15:.04,Math.min(3,(width-padX*2)/Math.max(100,maxX-minX),(height-top-bottom)/Math.max(100,maxY-minY)));
-    view.x=width/2-(minX+maxX)/2*view.k;
-    view.y=top+(height-top-bottom)/2-(minY+maxY)/2*view.k;
+    const fitScale=Math.min((width-padX*2)/Math.max(100,maxX-minX),(height-top-bottom)/Math.max(100,maxY-minY));
+    view.k=Math.max(dataMode==='harvest'?.15:.04,Math.min(3,fitScale*(nodes.length>DENSE_GRAPH_THRESHOLD?1.45:1.15)));
+    const center=nodes.length>DENSE_GRAPH_THRESHOLD
+      ?nodes.reduce((point,n)=>({x:point.x+n.x/nodes.length,y:point.y+n.y/nodes.length}),{x:0,y:0})
+      :{x:(minX+maxX)/2,y:(minY+maxY)/2};
+    view.x=width/2-center.x*view.k;
+    view.y=top+(height-top-bottom)/2-center.y*view.k;
     applyCamera();
   }
   function zoom(factor,x=width/2,y=height/2) {
@@ -420,6 +424,29 @@
       }
     }
   }
+  function assignColors() {
+    const grouped=$('graph-colors').value==='groups';
+    const palette=['group-teal','group-blue','group-purple','group-coral','group-gold','group-pink'];
+    // Connected components describe only links in the loaded view. They are
+    // display groups, not inferred biological communities or similarity scores.
+    const parent=new Map(nodes.map(n=>[n.id,n.id]));
+    function root(id){let r=id;while(parent.get(r)!==r)r=parent.get(r);while(id!==r){const next=parent.get(id);parent.set(id,r);id=next;}return r;}
+    if(grouped)for(const e of edges){const a=root(e.a.id),b=root(e.b.id);if(a!==b)parent.set(a<b?b:a,a<b?a:b);}
+    for(const n of nodes){
+      let hash=2166136261;
+      if(grouped)for(const c of root(n.id)){hash^=c.charCodeAt(0);hash=Math.imul(hash,16777619);}
+      n.colorKey=grouped?palette[(hash>>>0)%palette.length]:family(n);
+    }
+    $('type-legend').hidden=grouped;$('group-legend').hidden=!grouped;
+    const batches=new Map();
+    edges.forEach(e=>{
+      const key=`${e.kind}:${e.a.colorKey}`;
+      if(!batches.has(key))batches.set(key,{kind:e.kind,color:e.kind==='contested'?'#b55b3b':colors[e.a.colorKey],edges:[]});
+      batches.get(key).edges.push(e);
+    });
+    edgeBatches=[...batches.values()];
+    needsPaint=true;
+  }
   function render() {
     $('links').replaceChildren();nodeLayer.replaceChildren();
     const contestedClaims=new Set(bundle.evidence.filter(r=>r.stance==='contradicts').map(r=>r.claim_id));
@@ -431,13 +458,7 @@
     overlayAnchors=[...nodes].sort((a,b)=>b.degree-a.degree||a.id.localeCompare(b.id)).slice(0,32);
     svg.dataset.nodeCount=String(nodes.length);svg.dataset.claimCount=String(edges.length);
     svg.setAttribute('aria-label',`Atlas knowledge graph: ${nodes.length.toLocaleString()} nodes. Drag to rotate; scroll to zoom. Shift-drag to pan. Search to select any entity and inspect its connections.`);
-    const batches=new Map();
-    edges.forEach(e=>{
-      const key=`${e.kind}:${family(e.a)}`;
-      if(!batches.has(key))batches.set(key,{kind:e.kind,color:e.kind==='contested'?'#b55b3b':colors[family(e.a)],edges:[]});
-      batches.get(key).edges.push(e);
-    });
-    edgeBatches=[...batches.values()];
+    assignColors();
     svg.classList.toggle('show-connections',$('show-connections').checked);svg.classList.toggle('all-labels',$('all-labels').checked);
     paintPositions();fit();highlight();
     if(!animationLoopStarted){animationLoopStarted=true;requestAnimationFrame(animate);}
@@ -895,6 +916,7 @@
   $('clear-selection').onclick=()=>select(null);
   $('all-labels').onchange=e=>{svg.classList.toggle('all-labels',e.target.checked);applyCamera();};
   $('local-view').onchange=highlight;
+  $('graph-colors').onchange=assignColors;
   $('show-connections').onchange=e=>{svg.classList.toggle('show-connections',e.target.checked);highlight();};
   $('options-toggle').onclick=()=>{const open=$('graph-options').hidden;$('graph-options').hidden=!open;$('options-toggle').setAttribute('aria-expanded',String(open));};
   $('help-button').onclick=()=>{$('graph-options').hidden=true;$('options-toggle').setAttribute('aria-expanded','false');$('graph-help').showModal();};

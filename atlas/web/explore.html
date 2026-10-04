@@ -51,7 +51,9 @@
       <button id="harvest-browse" type="button" class="graph-text-button harvest-browse">Browse every harvested source record ↗</button>
       <p class="harvest-note">The resolved neuro view applies identity decisions and keeps source conflicts visible. All harvested data is available in its separate bounded view. Graph positions are a display layout, not a biological similarity score.</p>
     </section>
-    <div class="graph-legend"><span class="legend-disease">Diseases</span><span class="legend-variant">Variants</span><span class="legend-gene">Genes & proteins</span><span class="legend-biology">Mechanisms, pathways & traits</span><span class="legend-research">Researchers, papers & assets</span></div>
+    <div class="graph-colors"><label for="graph-colors">Colour by</label><select id="graph-colors"><option value="groups" selected>Connected groups</option><option value="type">Entity type</option></select></div>
+    <div id="group-legend" class="group-legend"><div class="group-swatches" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>Linked nodes share a colour. Colours repeat across separate groups; they do not indicate biological similarity.</p></div>
+    <div id="type-legend" class="graph-legend" hidden><span class="legend-disease">Diseases</span><span class="legend-variant">Variants</span><span class="legend-gene">Genes & proteins</span><span class="legend-biology">Mechanisms, pathways & traits</span><span class="legend-research">Researchers, papers & assets</span></div>
     <button id="help-button" class="graph-text-button">How to explore</button>
   </section>
   <section id="selection" class="selection" aria-label="Selected node" hidden>
@@ -61,7 +63,7 @@
     <button id="clear-selection" class="graph-icon" aria-label="Clear selection">×</button>
   </section>
   <button id="chat-toggle" class="chat-toggle" aria-expanded="false" aria-controls="chat-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4m4-7v10m4-13v16m4-13v10m4-7v4"/></svg><span>Ask Atlas</span></button>
-  <button id="workspace-toggle" class="workspace-toggle" aria-expanded="false" aria-controls="workspace-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4m4-7v10m4-13v16m4-13v10m4-7v4"/></svg><span>Research</span></button>
+  <button id="workspace-toggle" class="workspace-toggle" aria-expanded="false" aria-controls="workspace-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5C7 3 4 3 2 4v14c3-1 6-1 9 1M11 6v5M4 8h3M4 11h3"/><circle cx="16" cy="12" r="4"/><path d="m19 15 3 4"/></svg><span>Research</span></button>
   <section id="chat-panel" class="chat-panel" role="dialog" aria-label="Ask Atlas" hidden>
     <header class="chat-head"><h2>Atlas</h2><button id="chat-close" class="graph-icon" aria-label="Close chat">×</button></header>
     <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>

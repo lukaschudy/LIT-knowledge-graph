@@ -3,6 +3,8 @@
  --green:#126344; --green-soft:#eaf5ee; --green-light:#d9eddf;
  --graph-disease:#2868d7; --graph-variant:#d98220; --graph-gene:#00885c;
  --graph-biology:#8854c7; --graph-research:#c64c71;
+ --graph-group-teal:#078b79; --graph-group-blue:#3478d2; --graph-group-purple:#8959c5;
+ --graph-group-coral:#db7057; --graph-group-gold:#bf8c27; --graph-group-pink:#c6548e;
  min-width:320px; margin:0; height:100dvh; overflow:hidden; background:#f8f9f5; color:#2c3a31; }
 .graph-stage { position:fixed; inset:0; padding:0; margin:0; max-width:none; background:var(--graph-paper); }
 #network { display:block; width:100%; height:100%; touch-action:none; cursor:grab; outline:none; }
@@ -149,3 +151,17 @@
 #network.interacting .node-label, #network.interacting .edge-target { visibility:hidden; }
 .net-node.search-lead .node-label { opacity:1; }
 .is-searching .net-node.dimmed .node-label { opacity:0; }
+
+.graph-colors { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:16px; }
+.graph-colors label { font-size:12px; }
+.graph-colors select { min-width:0; max-width:165px; border:1px solid #dfe5db; border-radius:8px; padding:7px; background:#fffefb; color:#354c3d; font:inherit; font-size:12px; }
+.group-legend { padding:16px 3px; }
+.group-legend p { margin:9px 0 0; font-size:11px; line-height:1.5; color:#6c7c70; }
+.group-swatches { display:flex; gap:9px; }
+.group-swatches i { width:12px; height:12px; border-radius:50%; }
+.group-swatches i:nth-child(1) { background:var(--graph-group-teal); }
+.group-swatches i:nth-child(2) { background:var(--graph-group-blue); }
+.group-swatches i:nth-child(3) { background:var(--graph-group-purple); }
+.group-swatches i:nth-child(4) { background:var(--graph-group-coral); }
+.group-swatches i:nth-child(5) { background:var(--graph-group-gold); }
+.group-swatches i:nth-child(6) { background:var(--graph-group-pink); }
