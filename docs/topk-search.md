@@ -86,7 +86,7 @@ For CLI search, copy the exact `snapshot_id` from the export manifest:
 
 ## Upload and verification
 
-Uploads use deterministic IDs, at most 100 documents / 1 MB per batch, no document larger than 64 KB, and at most four concurrent writes. The process paces API calls to two per second and retries transient request-limit errors with bounded backoff. Account-wide quotas also cover other clients, so these limits are not a guarantee that requests cannot be throttled.
+Uploads use deterministic IDs, at most 100 documents / 1 MB per batch, no document larger than 64 KB, and one write worker by default. `--workers` allows up to four concurrent writes when account capacity permits. The process paces API calls to two per second and retries transient request-limit errors with bounded backoff. Account-wide quotas also cover other clients, so these limits are not a guarantee that requests cannot be throttled.
 
 Checkpoints advance only through contiguous acknowledged batches. An interrupted write is safely replayed using the same IDs. After all writes complete, one identical document is rewritten to establish a final read-consistency barrier; LSN strings are never compared as if their ordering were known. Every exported ID and every stored field is then read back and compared with the local export before the index is marked verified.
 

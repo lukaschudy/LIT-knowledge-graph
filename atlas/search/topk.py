@@ -99,7 +99,7 @@ def save_json(path, value):
     temporary.replace(path)
 
 
-def ingest(client, collection, export_path, state_path, region, *, create=False, progress=None, workers=4):
+def ingest(client, collection, export_path, state_path, region, *, create=False, progress=None, workers=1):
     """Resume only an identical export/target. Acknowledgements precede checkpoints."""
     export_path, state_path = Path(export_path), Path(state_path)
     if not 1 <= workers <= 4:

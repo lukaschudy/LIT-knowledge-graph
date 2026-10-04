@@ -21,6 +21,7 @@ def main():
     upload.add_argument("--export", type=Path, required=True)
     upload.add_argument("--checkpoint", type=Path, required=True)
     upload.add_argument("--create", action="store_true")
+    upload.add_argument("--workers", type=int, default=1, help="One to four upload workers; default one for account quotas")
     query = sub.add_parser("query")
     query.add_argument("text")
     query.add_argument("--snapshot", required=True)
@@ -43,7 +44,7 @@ def main():
                       "collections": repr(client.collections().list())}
         elif args.command == "ingest":
             result = ingest(client, collection, args.export, args.checkpoint,
-                            config.get("TOPK_REGION") or DEFAULT_REGION, create=args.create,
+                            config.get("TOPK_REGION") or DEFAULT_REGION, create=args.create, workers=args.workers,
                             progress=lambda row: print(json.dumps(row), file=sys.stderr, flush=True))
         else:
             result = search(client, collection, args.text, args.snapshot, k=args.k,
