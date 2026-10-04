@@ -6,7 +6,7 @@ The form retains the question and accepts an item name/type, description and opt
 
 ## Review and storage
 
-The public API only accepts submissions and returns minimal receipt status by unguessable receipt ID. It never lists proposals or returns their descriptions. Signed-in account administrators can inspect the namespace and its SQL data in Cloudflare Durable Objects Data Studio. Select the `varentik-atlas` / `ProposalInbox` namespace and the object named `review-inbox-v1` (the first instance appears after submission). Inspect:
+The public API only accepts submissions and returns minimal receipt status by unguessable receipt ID. It never lists proposals or returns their descriptions. Signed-in account administrators can inspect the namespace and its SQL data in Cloudflare Durable Objects Data Studio. Select the `varentik-atlas` / `ProposalInbox` namespace and its populated object (the Worker addresses this singleton using `getByName("review-inbox-v1")`; the dashboard may display its opaque object ID instead). Inspect:
 
 ```sql
 SELECT id, created_at, status, payload FROM proposals ORDER BY created_at DESC;

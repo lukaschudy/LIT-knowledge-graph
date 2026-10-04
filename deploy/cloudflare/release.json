@@ -1,14 +1,15 @@
 {
   "schema_version": "cloudflare-reviewed-grin-release-v1",
-  "released_at": "2026-10-04T02:52:00.080053+00:00",
+  "released_at": "2026-10-04T03:07:43.443888+00:00",
   "worker": "varentik-atlas",
-  "version_id": "7337a382-13f2-4951-a2b9-4a24bc9ecaa3",
+  "version_id": "0f478062-2884-4b2c-8f8f-2a8a35ffecbd",
   "traffic_percent": 100,
-  "previous_version_id": "d744f6ea-3cc8-410e-9a5a-bc6e6ebcae0e",
-  "code_commit": "14d1911808db1dc7c242c1b22578760779bd5808",
+  "previous_version_id": "7337a382-13f2-4951-a2b9-4a24bc9ecaa3",
+  "code_commit": "bb70f7c6ac2456f693d03780683d1225d417ee65",
   "urls": {
     "chat": "https://atlas.varentik.com/explore",
-    "cluster": "https://atlas.varentik.com/cluster"
+    "cluster": "https://atlas.varentik.com/cluster",
+    "propose": "https://atlas.varentik.com/propose"
   },
   "reference_sha256": "9aae6d8ed8b5f6278ffed2108d393645b4622e706f3d6182b2b0bd10b89e0728",
   "counts": {
@@ -44,11 +45,29 @@
     "production_classification_excerpt_verified": true,
     "browser_console_errors": 0
   },
-  "publication_scope": "Real GRIN graph, all reviewed observation metadata, source-reported claims, bounded table/supplement excerpts and deterministic annotation lookup. Full harvested corpus, TopK service and long source text are not deployed.",
+  "publication_scope": "Real GRIN graph, all reviewed observation metadata, source-reported claims, bounded table/supplement excerpts and deterministic annotation lookup. Full harvested corpus, TopK service and long source text are not deployed. Missing-item proposals are stored in a private pending-review inbox; suggestions do not mutate the graph.",
   "files": {
     "data/curated/grin_cluster_demo_v2.json": "0fd210259d27635dc78a24b0b5f9eaee75ffecd5aa34b6dc33b9741796601480",
     "deploy/cloudflare/build/snapshot.py": "8e6563d19e17163444780e3c7cf3e167cfb92d10bec51e05a8c2c238e70d1987",
     "deploy/cloudflare/build/cluster_snapshot.py": "08c4df1291f52dfe2234937dbcb901d898b5b15a6eac2cfbc119ff17eb4fc791",
-    "docs/demo-screenshots/cloudflare-grin-chat.png": "e746a3e5b501217d794402139222eabe2635bcc1b00fc78ffb4997c14c255b75"
+    "docs/demo-screenshots/cloudflare-grin-chat.png": "e746a3e5b501217d794402139222eabe2635bcc1b00fc78ffb4997c14c255b75",
+    "docs/demo-screenshots/cloudflare-proposal-chat.png": "da5fa55ad14eaf0eac237410ecfcec486c355f980ea89219ad640844aefee4b2",
+    "docs/demo-screenshots/cloudflare-proposal-receipt.png": "b04c4140faa088305321c8f66a7e2b503a14f324bde9e48e0e168c74a04cd0bb",
+    "deploy/cloudflare/build/worker.py": "28fa2c027de6084133068bb8c9daa56f24dda540639014d66a5dc110bd0d5f9d",
+    "deploy/cloudflare/build/public/proposal.js": "6ac2e24ee948536cc2868df9de35c112e9b7f1a24d69b2ef423eacfd4dab37d5",
+    "deploy/cloudflare/build/public/propose.html": "de6e21ee78bc26d21777509e9baba621ec4d637c39b380c631943fa5d9b4e6b4"
+  },
+  "storage_migration_version_id": "6bd8800d-87f5-4d91-b87d-48dd5545f36c",
+  "proposal_checks": {
+    "application_tests": 70,
+    "local_create_retry_receipt_passed": true,
+    "cross_origin_rejected": true,
+    "private_listing_rejected": true,
+    "production_chat_gap_and_prefill_passed": true,
+    "production_record_search_button_passed": true,
+    "production_submit_and_reload_passed": true,
+    "production_test_receipt": "d4dddc34-e6ee-473b-82ae-fd523b043680",
+    "test_receipt_notice": "Clearly labelled QA submission; not biological evidence. Pending review, not in graph.",
+    "asset_source": "committed snapshot only"
   }
 }
