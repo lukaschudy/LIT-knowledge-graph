@@ -35,6 +35,13 @@ The quotation-heavy annotations, reviewer drafts, source snapshots, visual audit
 .venv/bin/python -m atlas.cluster_demo serve --port 18769
 ```
 
+Verify unchanged reviewer drafts, identical source packets, preserved table-cell coverage, exact evidence spans and an identical rebuilt bundle, and regenerate the receipt:
+
+```bash
+.venv/bin/python -m atlas.benchmark.cluster_receipt \
+  --output data/benchmarks/grin-v1/cluster-annotation-receipt-v2.json
+```
+
 Open <http://127.0.0.1:18769/>. The existing TopK literature-search pilot remains available through the viewer's search link. This new source-audited bundle is separate from the earlier TopK-indexed curated bundle; it has not been silently uploaded or substituted into the search collection.
 
 ## Coverage limits

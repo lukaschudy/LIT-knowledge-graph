@@ -2,13 +2,16 @@ from copy import deepcopy
 import json
 import multiprocessing
 import socket
+import tempfile
 import time
 import unittest
+from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from atlas.benchmark.cluster_annotations import audit_table_cells, compare, validate
 from atlas.benchmark.contracts import digest
+from atlas.benchmark.cluster_receipt import receipt
 from atlas.cluster_demo import build, ratio, serve, tier_for
 from tests_benchmark.fixtures import example
 
@@ -173,6 +176,35 @@ class ClusterAnnotationTests(unittest.TestCase):
         finally:
             process.terminate()
             process.join(timeout=3)
+
+    def test_receipt_rejects_draft_changes_after_initial_comparison(self):
+        a, sources = fixture(); b = deepcopy(a); b["reviewer"] = "ai-b"
+        reference = deepcopy(a); reference["review_type"] = "source_audited_ai_reference"
+        ledger = {"documents": [dict(document_id=o["document_id"], title="Synthetic source", url="https://example.invalid",
+                  tables=[dict(table_id=o["table_id"], cells=[dict(row=o["row"], column=o["column"],
+                  text="30", unit_id=o["evidence"][0]["unit_id"])])]) for o in a["observations"]]}
+        curated = {"variants": [dict(gene="GRIN2B", reported_protein="p.Ser541Arg", variant_id="synthetic", cohort_tier="unresolved_control")]}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            def write(path, obj): path.write_text(json.dumps(obj))
+            for role in ("reviewer-a", "reviewer-b", "adjudicator"):
+                p = root / role; p.mkdir()
+                write(p / "sources.json", sources); write(p / "source-ledger.json", ledger)
+                for name in ("manifest.json", "CONTRACT.md", "source_contract.py", "cluster_contract.py", "myers-supplement.pdf"):
+                    (p / name).write_text("synthetic receipt test only")
+            write(root / "reviewer-a/annotations.json", a); write(root / "reviewer-b/annotations.json", b)
+            write(root / "adjudicator/adjudicated-reference.json", reference)
+            write(root / "adjudicator/audit-log.json", {"synthetic": True})
+            write(root / "agreement.json", compare(a, b, sources))
+            write(root / "curated.json", curated)
+            write(root / "bundle.json", build(reference, sources, curated, ledger))
+            result = receipt(root, root / "bundle.json", root / "curated.json")
+            self.assertTrue(result["validation"]["bundle_rebuild_equal"])
+            self.assertFalse(result["expert_reviewed"])
+            b["observations"][0]["measurement"]["estimate"] = "31"
+            write(root / "reviewer-b/annotations.json", b)
+            with self.assertRaisesRegex(ValueError, "drafts changed"):
+                receipt(root, root / "bundle.json", root / "curated.json")
 
 
 if __name__ == "__main__": unittest.main()
