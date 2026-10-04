@@ -103,7 +103,9 @@ class DemoRetriever:
 
 def mentioned_external_genes(question, nodes, allowed_ids):
     # Match gene symbols, not substrings (ARX must not match ARXES1).
-    tokens = set(re.findall(r'[a-z0-9]+(?:-[a-z0-9]+)*', question.casefold())) - _FOLLOWUP_WORDS
+    # HGVS protein prefixes (p.Ser541Arg / p.S541R) are not gene symbols.
+    gene_text = re.sub(r'\bp\.(?=\(?(?:[a-z]{3}|[a-z])\d)', '', question, flags=re.I)
+    tokens = set(re.findall(r'[a-z0-9]+(?:-[a-z0-9]+)*', gene_text.casefold())) - _FOLLOWUP_WORDS
     return [n for n in nodes if n.get('type') == 'Gene' and n['id'] not in allowed_ids
             and n.get('label', '').casefold() not in {'grin2a', 'grin2b'}
             and n.get('label', '').casefold() in tokens]
