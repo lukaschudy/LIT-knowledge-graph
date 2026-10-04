@@ -25,7 +25,7 @@
 .node-results p { padding:10px; margin:0; font-size:12px; }
 .graph-icon { display:grid; place-items:center; width:38px; height:38px; flex-shrink:0; padding:0; border:0; background:transparent; color:#617359; border-radius:50%; font-size:24px; line-height:1; }
 .graph-icon:hover { background:#e8eee2; color:#294934; }
-.graph-icon svg, .chat-toggle svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.graph-icon svg, .chat-toggle svg, .workspace-toggle svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
 #options-toggle { background:#fffefbbd; border:1px solid #dfe5db; }
 #options-toggle circle { fill:#fffefb; }
 .graph-options { position:fixed; top:82px; right:32px; width:286px; max-width:calc(100vw - 36px); max-height:calc(100dvh - 102px); overflow:auto; padding:22px; border:1px solid #dfe6df; background:#fefefc; border-radius:20px; box-shadow:0 16px 48px #183c2812,0 2px 6px #183c2806; z-index:5; font-family:"Instrument Sans",sans-serif; letter-spacing:-.01em; }
@@ -86,7 +86,7 @@
 .selection .graph-icon { width:27px; height:27px; font-size:20px; }
 .chat-toggle { position:fixed; right:32px; bottom:22px; display:flex; align-items:center; gap:11px; padding:14px 23px; border:2px solid #164e38; border-radius:28px; background:#fdfef9; color:#164e38; font-size:13px; font-weight:500; box-shadow:0 4px 18px #384c2710; }
 .chat-toggle:hover { background:#edf4ef; }
-.chat-toggle svg { stroke:currentColor; stroke-width:2; }
+.chat-toggle svg, .workspace-toggle svg { stroke:currentColor; stroke-width:2; }
 .chat-panel { position:fixed; right:26px; bottom:83px; width:370px; max-height:min(610px,calc(100dvh - 112px)); display:flex; flex-direction:column; background:#fffefbf7; backdrop-filter:blur(15px); border:1px solid #d9e2d0; border-radius:20px; box-shadow:0 18px 65px #2a40221a; z-index:6; overflow:hidden; }
 .chat-head { display:flex; flex-shrink:0; align-items:center; justify-content:space-between; padding:13px 16px 10px 20px; }
 .chat-head h2 { margin:0; font-size:14px; font-weight:500; letter-spacing:-.02em; }
