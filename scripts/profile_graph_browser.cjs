@@ -34,7 +34,8 @@ const fs=require('node:fs');
  const dom=await page.evaluate(()=>({elements:document.querySelectorAll('*').length,nodeTargets:document.querySelectorAll('#nodes .net-node').length,edgeTargets:document.querySelectorAll('#links .edge-group').length}));
  function summary(samples){const sorted=[...samples].sort((a,b)=>a-b);return {samples:sorted.length,medianMs:+(sorted[Math.floor(sorted.length*.5)]||0).toFixed(2),p95Ms:+(sorted[Math.floor(sorted.length*.95)]||0).toFixed(2),maxMs:+(sorted.at(-1)||0).toFixed(2)};}
  const summarize=section=>({frames:summary(section.frames),timings:Object.fromEntries(Object.entries(section.timings).map(([k,v])=>[k,summary(v)]))});
- const result={startupMs,graph:interaction.counts.at(-1),dom,idle:summarize(idle),interaction:summarize(interaction),errors};
+ const renderer=await page.locator('#graph-paint').getAttribute('data-renderer');
+ const result={startupMs,renderer,graph:interaction.counts.at(-1),dom,idle:summarize(idle),interaction:summarize(interaction),errors};
  if(process.env.OUTPUT)fs.writeFileSync(process.env.OUTPUT,JSON.stringify(result,null,2)+'\n');
  console.log(JSON.stringify(result,null,2));if(errors.length)process.exitCode=1;
  }finally{await browser.close();}

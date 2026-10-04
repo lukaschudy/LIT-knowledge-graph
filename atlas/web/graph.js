@@ -1,8 +1,16 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const svg = $('network'), camera = $('camera'), canvas = $('graph-paint');
-  const ctx = canvas.getContext('2d', {alpha:true});
+  const svg = $('network'), camera = $('camera');
+  let canvas = $('graph-paint'), gpu=window.createAtlasGraphRenderer?.(canvas), ctx;
+  function useCanvasRenderer(){
+    const replacement=canvas.cloneNode();canvas.replaceWith(replacement);canvas=replacement;
+    gpu=null;ctx=canvas.getContext('2d',{alpha:true});canvas.dataset.renderer='canvas';
+  }
+  if(gpu){
+    canvas.dataset.renderer='webgl';
+    canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();useCanvasRenderer();sizeCanvas();needsPaint=true;});
+  }else useCanvasRenderer();
   // One palette serves the canvas, labels, and the tucked-away legend.
   const paletteStyle=getComputedStyle(document.body);
   const graphPaper=paletteStyle.getPropertyValue('--graph-paper').trim();
@@ -48,6 +56,8 @@
   const DENSE_GRAPH_THRESHOLD=1200, HIT_CELL=32;
   let overlayNodes=[],overlayEdges=[],overlayAnchors=[],hitGrid=new Map();
   let hoverTimer = 0, hoverCandidate = null, sceneTransition = null, cameraTransition = null;
+  let wheelZoom=null,wheelUntil=0;
+  const MIN_ZOOM=.015,MAX_ZOOM=12;
   function setHover(id) {
     clearTimeout(hoverTimer);hoverCandidate=id;
     if(hovered===id)return;
@@ -76,7 +86,7 @@
     return nearest;
   }
   function hoverAt(e) {
-    if(e.pointerType==='touch'||gesture)return;
+    if(e.pointerType==='touch'||gesture||performance.now()<wheelUntil)return;
     queueHover(nodeAt(e));
   }
   function transitionScene() {
@@ -136,9 +146,17 @@
   function animate(time) {
     const elapsed=Math.min(50,time-(previousFrame||time));previousFrame=time;
     advanceTransitions(time);
+    if(wheelZoom){
+      const {k,x,y}=wheelZoom,remaining=Math.log(k/view.k);
+      if(reducedMotion.matches||Math.abs(remaining)<.001){zoom(k/view.k,x,y);wheelZoom=null;}
+      else zoom(Math.exp(remaining*(1-Math.exp(-elapsed/45))),x,y);
+    }
+    const wheeling=!!wheelZoom||time<wheelUntil;
+    svg.classList.toggle('interacting',!!gesture||wheeling);
     const editing=['INPUT','TEXTAREA'].includes(document.activeElement?.tagName);
-    const idle=!document.hidden&&time>idleAfter&&$('ambient-motion').checked&&!gesture&&!cameraTransition&&!sceneTransition&&!selected&&!hovered&&!searchTerm&&!editing&&$('chat-panel').hidden&&$('graph-options').hidden&&!document.querySelector('dialog[open]');
+    const idle=!document.hidden&&time>idleAfter&&$('ambient-motion').checked&&!wheeling&&!gesture&&!cameraTransition&&!sceneTransition&&!selected&&!hovered&&!searchTerm&&!editing&&$('chat-panel').hidden&&$('graph-options').hidden&&!document.querySelector('dialog[open]');
     if(idle){yaw+=elapsed*.000035;needsProjection=true;}
+    if(!wheeling&&!gesture?.moved&&overlayDirty)needsPaint=true;
     if(!document.hidden&&(needsPaint||needsProjection)&&(!idle||time-lastPaint>32)){
       if(needsProjection){
         const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
@@ -152,13 +170,12 @@
       }
       drawGraph();
       // During an orbit the canvas handles every frame; hit areas catch up on release.
-      if(!gesture?.moved&&overlayDirty&&(!idle||time-lastOverlay>120)){syncOverlay();lastOverlay=time;}
+      if(!gesture?.moved&&!wheeling&&overlayDirty&&(!idle||time-lastOverlay>120)){syncOverlay();lastOverlay=time;}
       needsPaint=false;lastPaint=time;
     }
     requestAnimationFrame(animate);
   }
   function drawGraph() {
-    ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);ctx.clearRect(0,0,width,height);
     const sqrtZoom=Math.sqrt(view.k);
     hitGrid.clear();
     nodes.forEach(n=>{
@@ -166,6 +183,8 @@
       n.inViewport=n.screenX>-32&&n.screenX<width+32&&n.screenY>-32&&n.screenY<height+32;
       if(n.inViewport&&!n.hidden){const key=`${Math.floor(n.screenX/HIT_CELL)}:${Math.floor(n.screenY/HIT_CELL)}`;if(!hitGrid.has(key))hitGrid.set(key,[]);hitGrid.get(key).push(n);}
     });
+    if(gpu){gpu.draw(depthOrder,edgeBatches,colors,width,height,pixelRatio);return;}
+    ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);ctx.clearRect(0,0,width,height);
     // Quantized opacity keeps fading edges batched instead of stroking each one.
     for(const batch of edgeBatches){
       const buckets=new Map();
@@ -348,13 +367,13 @@
     });
   }
   function fit(immersive=false) {
-    cameraTransition=null;
+    cameraTransition=null;wheelZoom=null;
     if (!nodes.length) return;
     const minX=Math.min(...nodes.map(n=>n.x)),maxX=Math.max(...nodes.map(n=>n.x));
     const minY=Math.min(...nodes.map(n=>n.y)),maxY=Math.max(...nodes.map(n=>n.y));
     const padX=width<650?24:48, top=90, bottom=75;
     const fitScale=Math.min((width-padX*2)/Math.max(100,maxX-minX),(height-top-bottom)/Math.max(100,maxY-minY));
-    view.k=Math.max(dataMode==='harvest'?.15:.04,Math.min(3,fitScale*(immersive?(nodes.length>DENSE_GRAPH_THRESHOLD?3.2:1.35):1)));
+    view.k=Math.max(immersive?.15:MIN_ZOOM,Math.min(3,fitScale*(immersive?(nodes.length>DENSE_GRAPH_THRESHOLD?3.2:1.35):1)));
     const center=nodes.length>DENSE_GRAPH_THRESHOLD
       ?nodes.reduce((point,n)=>({x:point.x+n.x/nodes.length,y:point.y+n.y/nodes.length}),{x:0,y:0})
       :{x:(minX+maxX)/2,y:(minY+maxY)/2};
@@ -364,7 +383,7 @@
   }
   function zoom(factor,x=width/2,y=height/2) {
     cameraTransition=null;
-    const next=Math.max(dataMode==='harvest'?.12:.04,Math.min(4,view.k*factor)), ratio=next/view.k;
+    const next=Math.max(MIN_ZOOM,Math.min(MAX_ZOOM,view.k*factor)), ratio=next/view.k;
     view.x=x-(x-view.x)*ratio; view.y=y-(y-view.y)*ratio; view.k=next; applyCamera();
   }
   function highlight() {
@@ -886,7 +905,7 @@
     if(e.button!==0)return;
     const id=nodeAt(e);
     e.preventDefault();svg.classList.add('pointer-focus');svg.focus({preventScroll:true});
-    cameraTransition=null;setHover(null);
+    cameraTransition=null;wheelZoom=null;setHover(null);
     pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});svg.setPointerCapture(e.pointerId);
     if(pointers.size===2){const p=[...pointers.values()];pinchDistance=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);if(gesture)gesture.moved=true;return;}
     svg.classList.add('interacting');
@@ -914,14 +933,23 @@
     const node=e.target.closest('[data-node]')?.dataset.node,claim=e.target.closest('[data-claim]')?.dataset.claim;
     if(node)select(node);else if(claim)openClaim(claim);
   });
-  svg.addEventListener('wheel',e=>{e.preventDefault();zoom(Math.exp(-e.deltaY*.0012),e.clientX,e.clientY);},{passive:false});
+  svg.addEventListener('wheel',e=>{
+    e.preventDefault();pauseMotion();cameraTransition=null;
+    // Firefox mice may report lines; trackpads usually report pixels.
+    const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?height:1);
+    if(!delta)return;
+    const rect=svg.getBoundingClientRect();
+    const factor=Math.exp(Math.max(-.7,Math.min(.7,-delta*.0018)));
+    wheelZoom={k:Math.max(MIN_ZOOM,Math.min(MAX_ZOOM,(wheelZoom?.k??view.k)*factor)),x:e.clientX-rect.left,y:e.clientY-rect.top};
+    wheelUntil=performance.now()+180;setHover(null);needsPaint=true;
+  },{passive:false});
   svg.addEventListener('keydown',e=>{
     svg.classList.remove('pointer-focus');
     const node=e.target.closest('[data-node]')?.dataset.node;
     const claim=e.target.closest('[data-claim]')?.dataset.claim;
     if(claim&&['Enter',' '].includes(e.key)){e.preventDefault();openClaim(claim);return;}
     if(node&&['Enter',' '].includes(e.key)){e.preventDefault();select(node);return;}
-    if(['+','=','-','0','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();cameraTransition=null;}
+    if(['+','=','-','0','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();cameraTransition=null;wheelZoom=null;}
     if(['+','='].includes(e.key))zoom(1.2);if(e.key==='-')zoom(1/1.2);if(e.key==='0')fit();
     const step=e.shiftKey?.2:.08;if(e.key==='ArrowLeft')yaw-=step;if(e.key==='ArrowRight')yaw+=step;if(e.key==='ArrowUp')pitch-=step;if(e.key==='ArrowDown')pitch+=step;pitch=Math.max(-1.2,Math.min(1.2,pitch));paintPositions();
     if(e.key==='Escape')select(null);

@@ -24,6 +24,7 @@ _ASSETS = {
     "/records": ("records.html", "text/html; charset=utf-8"),
     "/graph.css": ("graph.css", "text/css; charset=utf-8"),
     "/voice.js": ("voice.js", "text/javascript; charset=utf-8"),
+    "/graph-renderer.js": ("graph-renderer.js", "text/javascript; charset=utf-8"),
     "/graph.js": ("graph.js", "text/javascript; charset=utf-8"),
     "/transition.css": ("transition.css", "text/css; charset=utf-8"),
     "/transition.js": ("transition.js", "text/javascript; charset=utf-8"),

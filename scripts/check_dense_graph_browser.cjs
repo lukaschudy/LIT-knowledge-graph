@@ -4,7 +4,7 @@
 const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 (async () => {
-  const browser = await chromium.launch({headless:true});
+  const browser = await chromium.launch({headless:true,args:process.env.ATLAS_DISABLE_WEBGL?['--disable-webgl']:[]});
   try {
     const page = await browser.newPage({viewport:{width:1440,height:900}});
     const errors = [];
@@ -13,7 +13,7 @@ const { chromium } = require('playwright');
       const response = await route.fetch();
       const code = (await response.text()).replace('  init();', `
         window.__graphTest = {
-          snapshot:()=>({nodes:nodes.map(n=>({id:n.id,label:n.label,x:n.screenX,y:n.screenY,r:n.screenR,hidden:n.hidden,mounted:!!n.el})),hovered,selected}),
+          snapshot:()=>({view:{...view},wheeling:!!wheelZoom,nodes:nodes.map(n=>({id:n.id,label:n.label,x:n.screenX,y:n.screenY,r:n.screenR,hidden:n.hidden,mounted:!!n.el})),hovered,selected}),
           edge:()=>({id:edges[0].claim.id,subject:edges[0].a.id}),
           pick:(x,y,touch=false)=>nodeAt({clientX:x,clientY:y,pointerType:touch?'touch':'mouse'})
         };
@@ -25,6 +25,36 @@ const { chromium } = require('playwright');
     await page.waitForFunction(()=>document.body.dataset.workspaceReady==='true');
     await page.waitForTimeout(400);
     const originalCount = Number(await page.locator('#network').getAttribute('data-node-count'));
+    const renderer=await page.locator('#graph-paint').getAttribute('data-renderer');
+    assert.ok(['webgl','canvas'].includes(renderer));
+    if(renderer==='webgl')assert.equal(await page.evaluate(()=>document.querySelector('#graph-paint').getContext('webgl').getError()),0,'GPU shaders and buffers must render without errors');
+    // A physical wheel zooms around its cursor and returns to the same view.
+    await page.mouse.move(1100,600);
+    const start=await page.evaluate(()=>window.__graphTest.snapshot().view);
+    await page.mouse.wheel(0,-400);
+    await page.waitForFunction(k=>!window.__graphTest.snapshot().wheeling&&window.__graphTest.snapshot().view.k>k,start.k);
+    const zoomed=await page.evaluate(()=>window.__graphTest.snapshot().view);
+    assert.ok(zoomed.k>start.k*1.8,'wheel up must visibly zoom in');
+    assert.ok(Math.abs((1100-start.x)/start.k-(1100-zoomed.x)/zoomed.k)<.01,'keep the point under the mouse anchored');
+    await page.mouse.wheel(0,400);
+    await page.waitForFunction(()=>!window.__graphTest.snapshot().wheeling);
+    await page.waitForTimeout(250);
+    const restored=await page.evaluate(()=>window.__graphTest.snapshot().view);
+    assert.ok(Math.abs(restored.k-start.k)<.001,'wheel down must reverse wheel up');
+    // Browsers report wheel deltas in pixels, lines, or pages.
+    for(const mode of [1,2]){
+      const before=await page.evaluate(()=>window.__graphTest.snapshot().view.k);
+      await page.locator('#network').dispatchEvent('wheel',{deltaY:mode===1?-6:-.2,deltaMode:mode,clientX:1100,clientY:600});
+      await page.waitForFunction(k=>!window.__graphTest.snapshot().wheeling&&window.__graphTest.snapshot().view.k>k,before);
+      assert.ok((await page.evaluate(()=>window.__graphTest.snapshot().view.k))>before*1.1,'normalize line/page wheel deltas');
+    }
+    for(const [delta,limit] of [[1000,.015],[-1000,12]]){
+      await page.evaluate(delta=>{for(let i=0;i<24;i++)document.querySelector('#network').dispatchEvent(new WheelEvent('wheel',{deltaY:delta,clientX:1100,clientY:600,cancelable:true}));},delta);
+      await page.waitForFunction(k=>!window.__graphTest.snapshot().wheeling&&Math.abs(window.__graphTest.snapshot().view.k-k)<.0001,limit);
+    }
+    await page.locator('#network').press('0');
+    await page.waitForTimeout(250);
+
     assert.ok(await page.locator('#nodes .net-node').count() <= 40, 'dense overview must not create thousands of DOM targets');
     const target = await page.evaluate(()=>window.__graphTest.snapshot().nodes.find(n=>!n.mounted && n.x>300 && n.x<1000 && n.y>200 && n.y<650));
     assert.ok(target, 'test a node that has no DOM control');
@@ -68,7 +98,13 @@ const { chromium } = require('playwright');
     await page.locator('#record-dialog[open]').waitFor();
     await page.locator('#record-content .harvest-record-json').waitFor();
     await page.locator('#record-close').click();
+    if(renderer==='webgl'){
+      await page.evaluate(()=>document.querySelector('#graph-paint').getContext('webgl').getExtension('WEBGL_lose_context').loseContext());
+      await page.waitForFunction(()=>document.querySelector('#graph-paint').dataset.renderer==='canvas');
+      await page.mouse.move(1000,600);await page.mouse.wheel(0,-200);await page.waitForTimeout(350);
+      assert.equal(Number(await page.locator('#network').getAttribute('data-node-count')),originalCount,'context loss preserves the graph and zoom');
+    }
     assert.deepEqual(errors,[]);
-    console.log(JSON.stringify({pass:true,nodes:originalCount,targets:await page.locator('#nodes .net-node').count(),pickingMismatches:picks.length,errors},null,2));
+    console.log(JSON.stringify({pass:true,renderer,wheelModes:['pixels','lines','pages'],zoomRange:[.015,12],nodes:originalCount,targets:await page.locator('#nodes .net-node').count(),pickingMismatches:picks.length,errors},null,2));
   } finally { await browser.close(); }
 })().catch(e=>{console.error(e);process.exitCode=1;});

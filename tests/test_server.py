@@ -72,10 +72,11 @@ class AtlasServerTests(unittest.TestCase):
             self.assertIn(b"connected-biology.png", response.read())
         with urlopen(self.base + "/explore") as response:
             self.assertEqual(response.status, 200)
-            self.assertIn(b"Follow the evidence", response.read())
-        with urlopen(self.base + "/app.js") as response:
-            self.assertEqual(response.status, 200)
-            self.assertIn("javascript", response.headers["Content-Type"])
+            self.assertIn(b"/graph-renderer.js", response.read())
+        for asset in ("/app.js", "/graph-renderer.js"):
+            with urlopen(self.base + asset) as response:
+                self.assertEqual(response.status, 200)
+                self.assertIn("javascript", response.headers["Content-Type"])
         for name in ("instrument-sans-latin-wght-normal.woff2", "ibm-plex-sans-latin-wght-normal.woff2", "ibm-plex-mono-latin-400-normal.woff2"):
             with urlopen(self.base + "/fonts/" + name) as response:
                 self.assertEqual(response.headers["Content-Type"], "font/woff2")

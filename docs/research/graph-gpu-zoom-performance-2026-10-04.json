@@ -1,0 +1,151 @@
+{
+  "environment": "Local headless Chromium, 1440x900, 10,045 nodes and 5,399 claims; sequential single runs on the same server. Timings vary by hardware; this measures drawing and frame intervals, not guaranteed FPS.",
+  "baseline_commit": "044c261",
+  "before": {
+    "startupMs": 3136,
+    "graph": {
+      "nodes": 10045,
+      "claims": 5399
+    },
+    "dom": {
+      "elements": 272,
+      "nodeTargets": 32,
+      "edgeTargets": 0
+    },
+    "idle": {
+      "frames": {
+        "samples": 66,
+        "medianMs": 33.4,
+        "p95Ms": 50.1,
+        "maxMs": 66.7
+      },
+      "timings": {
+        "drawGraph": {
+          "samples": 65,
+          "medianMs": 6.5,
+          "p95Ms": 10.5,
+          "maxMs": 15.2
+        },
+        "syncOverlay": {
+          "samples": 18,
+          "medianMs": 0.2,
+          "p95Ms": 0.4,
+          "maxMs": 0.4
+        }
+      }
+    },
+    "interaction": {
+      "frames": {
+        "samples": 123,
+        "medianMs": 16.7,
+        "p95Ms": 50,
+        "maxMs": 83.3
+      },
+      "timings": {
+        "drawGraph": {
+          "samples": 45,
+          "medianMs": 6.9,
+          "p95Ms": 14.9,
+          "maxMs": 27.1
+        },
+        "nodeAt": {
+          "samples": 2,
+          "medianMs": 0.7,
+          "p95Ms": 0.7,
+          "maxMs": 0.7
+        },
+        "highlight": {
+          "samples": 1,
+          "medianMs": 16.8,
+          "p95Ms": 16.8,
+          "maxMs": 16.8
+        },
+        "syncOverlay": {
+          "samples": 2,
+          "medianMs": 0.4,
+          "p95Ms": 0.4,
+          "maxMs": 0.4
+        }
+      }
+    },
+    "errors": []
+  },
+  "after": {
+    "startupMs": 488,
+    "renderer": "webgl",
+    "graph": {
+      "nodes": 10045,
+      "claims": 5399
+    },
+    "dom": {
+      "elements": 273,
+      "nodeTargets": 32,
+      "edgeTargets": 0
+    },
+    "idle": {
+      "frames": {
+        "samples": 136,
+        "medianMs": 16.7,
+        "p95Ms": 33.3,
+        "maxMs": 33.4
+      },
+      "timings": {
+        "drawGraph": {
+          "samples": 75,
+          "medianMs": 3,
+          "p95Ms": 5.7,
+          "maxMs": 6.8
+        },
+        "syncOverlay": {
+          "samples": 19,
+          "medianMs": 0.1,
+          "p95Ms": 0.2,
+          "maxMs": 0.2
+        }
+      }
+    },
+    "interaction": {
+      "frames": {
+        "samples": 158,
+        "medianMs": 16.7,
+        "p95Ms": 33.4,
+        "maxMs": 50.1
+      },
+      "timings": {
+        "nodeAt": {
+          "samples": 2,
+          "medianMs": 0.3,
+          "p95Ms": 0.3,
+          "maxMs": 0.3
+        },
+        "drawGraph": {
+          "samples": 137,
+          "medianMs": 4.6,
+          "p95Ms": 8.3,
+          "maxMs": 10.3
+        },
+        "syncOverlay": {
+          "samples": 3,
+          "medianMs": 0.2,
+          "p95Ms": 0.2,
+          "maxMs": 0.2
+        },
+        "highlight": {
+          "samples": 1,
+          "medianMs": 11.9,
+          "p95Ms": 11.9,
+          "maxMs": 11.9
+        }
+      }
+    },
+    "errors": []
+  },
+  "validation": [
+    "Pixel, line, and page wheel deltas",
+    "Cursor anchored zoom and inverse wheel round trip",
+    "Zoom limits 0.015\u201312",
+    "Spatial picking after orbit and zoom",
+    "WebGL context loss falls back to Canvas",
+    "All checks repeated with WebGL disabled"
+  ]
+}
