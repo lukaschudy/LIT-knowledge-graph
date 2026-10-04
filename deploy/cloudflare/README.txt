@@ -71,9 +71,11 @@ remain available, and the chat retains its paper and evidence links.
 Dense rendering uses a 1x pixel budget, GPU buffer reuse and lazy pointer indexing;
 SVG labels and controls remain at native display resolution.
 
-Active dense-graph version: ed22a9b7-028b-4cb7-b734-d69b8f8b6b3c (100% traffic).
+Active dense-graph version: f5d059b4-8b9a-4748-bffa-8d720294e332 (100% traffic).
 Verified release: deploy/cloudflare/dense-release.json
-Rollback: uv run pywrangler versions deploy 16284df3-d5e5-45d2-b7a8-9534270c5673@100% --yes
+Rollback: uv run pywrangler versions deploy 0f478062-2884-4b2c-8f8f-2a8a35ffecbd@100% --yes
 
 Nodes keep fixed world positions during pointer gestures; dragging orbits the camera.
-The palette uses muted starfield colours and softer highlights instead of neon.
+The current theme uses a white background, dark lotus-green branding and the original
+multicolour node palette. Node positions remain fixed while dragging orbits the camera.
+The existing ProposalInbox binding and private proposal receipt workflow are preserved.
