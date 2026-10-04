@@ -1,9 +1,15 @@
 from copy import deepcopy
+import json
+import multiprocessing
+import socket
+import time
 import unittest
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from atlas.benchmark.cluster_annotations import audit_table_cells, compare, validate
 from atlas.benchmark.contracts import digest
-from atlas.cluster_demo import build, ratio, tier_for
+from atlas.cluster_demo import build, ratio, serve, tier_for
 from tests_benchmark.fixtures import example
 
 
@@ -128,6 +134,45 @@ class ClusterAnnotationTests(unittest.TestCase):
         self.assertTrue(result["members"][0]["tier_changed"])
         self.assertNotIn("quote", result["observations"][0]["evidence"][0])
         self.assertIn("locator", result["observations"][0]["evidence"][0])
+
+    def test_evidence_server_reconstructs_quotes_and_rejects_unknown_records(self):
+        a, sources = fixture()
+        row = deepcopy(a["observations"][0])
+        for span in row["evidence"] + row["comparator"]["evidence"]:
+            span.pop("quote", None)
+            span["locator"] = "synthetic table cell"
+        bundle = dict(sources_sha256=digest(sources), observations=[row], claims=[])
+        with socket.socket() as sock:
+            sock.bind(("127.0.0.1", 0))
+            port = sock.getsockname()[1]
+        process = multiprocessing.Process(target=serve, args=(bundle, sources, port), daemon=True)
+        process.start()
+        try:
+            base = f"http://127.0.0.1:{port}"
+            for _ in range(100):
+                try:
+                    with urlopen(base + "/api/cluster", timeout=1) as response:
+                        self.assertEqual(json.load(response), bundle)
+                    break
+                except URLError:
+                    time.sleep(.02)
+            else:
+                self.fail("Evidence server did not start")
+            with urlopen(base + "/api/evidence?id=" + row["id"], timeout=1) as response:
+                evidence = json.load(response)
+            self.assertEqual(len(evidence["spans"]), 1)
+            self.assertEqual(evidence["spans"][0]["quote"], "30")
+            with self.assertRaises(HTTPError) as missing:
+                urlopen(base + "/api/evidence?id=unknown", timeout=1)
+            self.assertEqual(missing.exception.code, 404)
+            missing.exception.close()
+            with self.assertRaises(HTTPError) as forbidden:
+                urlopen(Request(base + "/api/cluster", headers={"Host": "example.invalid"}), timeout=1)
+            self.assertEqual(forbidden.exception.code, 403)
+            forbidden.exception.close()
+        finally:
+            process.terminate()
+            process.join(timeout=3)
 
 
 if __name__ == "__main__": unittest.main()
