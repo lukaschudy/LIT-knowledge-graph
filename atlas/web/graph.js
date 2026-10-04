@@ -406,10 +406,10 @@
   $('node-search').addEventListener('input',searchNodes);
   $('node-search').addEventListener('keydown',e=>{
     if(e.key==='Escape'){$('node-search').value='';searchNodes();}
-    if(e.key==='ArrowDown'){e.preventDefault();$('node-results').querySelector('button')?.focus();}
+    if(e.key==='ArrowDown'){e.preventDefault();$('node-results').querySelector('button,a')?.focus();}
     if(e.key==='Enter'&&searchLead){e.preventDefault();const id=searchLead;select(id,true);byId.get(id)?.el.focus();}
   });
-  $('node-results').addEventListener('keydown',e=>{const items=[...$('node-results').querySelectorAll('button')],i=items.indexOf(document.activeElement);if(e.key==='ArrowDown'){e.preventDefault();items[(i+1)%items.length]?.focus();}if(e.key==='ArrowUp'){e.preventDefault();items[(i-1+items.length)%items.length]?.focus();}if(e.key==='Escape'){$('node-search').focus();hideResults();}});
+  $('node-results').addEventListener('keydown',e=>{const items=[...$('node-results').querySelectorAll('button,a')],i=items.indexOf(document.activeElement);if(e.key==='ArrowDown'){e.preventDefault();items[(i+1)%items.length]?.focus();}if(e.key==='ArrowUp'){e.preventDefault();items[(i-1+items.length)%items.length]?.focus();}if(e.key==='Escape'){$('node-search').focus();hideResults();}});
 
   svg.addEventListener('pointerdown',e=>{
     if(e.button!==0)return;
