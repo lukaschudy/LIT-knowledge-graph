@@ -16,6 +16,8 @@ Install the `topk` and `graph` extras and prepare the verified local passage exp
 
 **Voice:** Ask Atlas supports local microphone transcription into an editable question. No speech API key is needed. [Setup and controls](docs/research-workspace.md#voice-in-ask-atlas).
 
+**Quick demo:** open **Ask Atlas** and press **Send**. The editable draft is prefilled with: “Why is GRIN2B p.Ser541Arg core while p.Cys461Phe is provisional? Compare the WT measurements and conflicting evidence.” Closing and reopening chat preserves edits or an intentionally cleared draft.
+
 **Demo answer scope:** detailed evidence answers and recommendations stay focused on the GRIN2A/GRIN2B cluster; top search can find entities across the available graph indexes. For a disease outside that cluster, a matching record is enough to acknowledge: **“We have recorded this disease in the knowledge graph.”** This confirms record presence only, not reviewed disease mechanisms, validated relationships, or research recommendations. Only acknowledge a record when a lookup finds it; otherwise report a coverage gap. The hosted search covers its published snapshot, not the entire local harvest. See the [demo scope contract](docs/demo-answer-scope.md).
 
 The planning scope is **EPG5 / Vici syndrome**, with WDR45 / BPAN and AP4B1 / SPG47 as candidate comparators. New extracted claims stay unreviewed; unresolved scientific, maintainer and access gates remain visible. No real candidate is made ready by an AI-generated answer alone.
