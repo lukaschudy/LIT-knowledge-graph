@@ -12,7 +12,7 @@ This is a research prototype. Its evidence has been audited by AI annotators; hu
 
 ## Try it
 
-Open **Ask Atlas** in the graph and ask:
+Open **Ask Atlas** in the graph. The demo question is already filled in—press **Send**, or edit it first:
 
 > Why is GRIN2B p.Ser541Arg core while p.Cys461Phe is provisional? Compare the WT measurements and conflicting evidence.
 
