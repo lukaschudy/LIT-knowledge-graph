@@ -103,7 +103,7 @@
     try{
       const response=await fetch('/api/voice/status');const data=await response.json();
       available=response.ok&&data.available;
-      state('idle',available?'Dictate locally · microphone audio is not saved.':data.message||'Voice is unavailable on this server.');
+      state('idle',available?'Tap to dictate':data.message||'Voice is unavailable on this server.');
       button.title=available?'Record up to 60 seconds, then review the transcript.':status.textContent;
     }catch(_){state('idle','Voice could not connect. Reload Atlas to retry.');}
   })();

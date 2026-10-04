@@ -19,7 +19,7 @@ const fs=require('node:fs');
  });
  const started=Date.now();await page.goto(process.env.ATLAS_URL||'http://127.0.0.1:8767/explore');
  await page.waitForFunction(()=>window.__profile?.counts.some(x=>x.nodes>=10000));
- await page.waitForFunction(()=>document.querySelector('#workspace-brief')?.value);
+ await page.waitForFunction(()=>document.body.dataset.workspaceReady==='true');
  const startupMs=Date.now()-started;
  await page.waitForTimeout(2000);
  await page.evaluate(()=>{window.__profile.timings={};window.__profile.frames=[];window.__profile.startIdle();});

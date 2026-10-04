@@ -19,6 +19,7 @@ const { chromium } = require('playwright');
     await page.locator('#network').waitFor({ state: 'visible' });
     await page.locator('#options-toggle').click();
     await page.locator('#graph-options:not([hidden])').waitFor();
+    await page.locator('.harvest-controls summary').click();
     await page.locator('#harvest-status').waitFor({state:'attached'});
     assert.ok((await page.locator('#harvest-status').innerText()).length > 0, 'harvest coverage state should be explained');
     assert.equal(await page.locator('#graph-scope option').count(), 2, 'resolved and full-harvest scopes should both be available');
@@ -114,28 +115,11 @@ const { chromium } = require('playwright');
         await page.locator('#record-close').click();
       }
     }
-    await page.locator('#options-toggle').click();
-    await page.locator('#workspace-toggle').click();
-    await page.locator('#workspace-panel:not([hidden])').waitFor();
-    await page.getByRole('tab', { name: 'Literature' }).waitFor();
-    await page.getByRole('tab', { name: 'Evidence / review' }).click();
-    await page.locator('#workspace-claims').waitFor();
-    await page.getByRole('tab', { name: 'Plan' }).click();
-    await page.locator('#workspace-request-form').waitFor();
-    await page.getByRole('tab', { name: 'Brief' }).click();
-    const brief = page.locator('#workspace-brief');
-    await brief.waitFor();
-    assert.ok((await brief.inputValue()).length > 0, 'brief should be populated');
-
-    await page.getByRole('tab', { name: 'Evidence / review' }).click();
-    const cite = page.locator('#workspace-claims .workspace-link-button').first();
-    if (await cite.count()) {
-      await cite.click();
-      await page.locator('#record-dialog[open]').waitFor();
-      assert.ok((await page.locator('#record-content').innerText()).length > 0, 'source dialog should show evidence details');
-      await page.locator('#record-close').click();
-    }
-
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(()=>document.body.dataset.workspaceReady==='true');
+    assert.equal(await page.locator('#workspace-toggle').count(),0,'Ask Atlas is the sole research entry point');
+    assert.equal(await page.locator('#workspace-panel').count(),0,'remove the research popup');
+    assert.equal(await page.locator('#graph-help').count(),0,'remove the text-heavy help popup');
     await page.screenshot({ path: '/tmp/atlas-integrated-desktop.png', fullPage: true });
     const widths = {};
     for (const width of [1440, 390]) {
@@ -144,14 +128,12 @@ const { chromium } = require('playwright');
       assert.ok(widths[width].document <= width, `document overflows at ${width}px: ${JSON.stringify(widths[width])}`);
       assert.ok(widths[width].body <= width, `body overflows at ${width}px: ${JSON.stringify(widths[width])}`);
       await page.locator('#chat-toggle').click();
-      assert.equal(await page.locator('#workspace-panel').isVisible(), false, 'chat closes the research drawer');
       const sendIsUncovered = await page.locator('#send-question').evaluate(button => {
         const box = button.getBoundingClientRect();
         return !!document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)?.closest('#send-question');
       });
       assert.equal(sendIsUncovered, true, `Send button is obscured at ${width}px`);
       await page.locator('#chat-close').click();
-      await page.locator('#workspace-toggle').click();
     }
     assert.deepEqual(writes, [], 'QA must not submit any API writes');
     assert.deepEqual(errors, [], 'no JavaScript runtime errors');

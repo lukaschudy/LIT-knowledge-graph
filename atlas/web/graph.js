@@ -125,7 +125,7 @@
     const elapsed=Math.min(50,time-(previousFrame||time));previousFrame=time;
     advanceTransitions(time);
     const editing=['INPUT','TEXTAREA'].includes(document.activeElement?.tagName);
-    const idle=!document.hidden&&time>idleAfter&&$('ambient-motion').checked&&!gesture&&!cameraTransition&&!sceneTransition&&!selected&&!hovered&&!searchTerm&&!editing&&$('chat-panel').hidden&&$('workspace-panel').hidden&&$('graph-options').hidden&&!document.querySelector('dialog[open]');
+    const idle=!document.hidden&&time>idleAfter&&$('ambient-motion').checked&&!gesture&&!cameraTransition&&!sceneTransition&&!selected&&!hovered&&!searchTerm&&!editing&&$('chat-panel').hidden&&$('graph-options').hidden&&!document.querySelector('dialog[open]');
     if(idle){yaw+=elapsed*.000023;needsProjection=true;}
     if(!document.hidden&&(needsPaint||needsProjection)&&(!idle||time-lastPaint>32)){
       if(needsProjection){
@@ -334,14 +334,14 @@
       occupied.push(box);
     });
   }
-  function fit() {
+  function fit(immersive=false) {
     cameraTransition=null;
     if (!nodes.length) return;
     const minX=Math.min(...nodes.map(n=>n.x)),maxX=Math.max(...nodes.map(n=>n.x));
     const minY=Math.min(...nodes.map(n=>n.y)),maxY=Math.max(...nodes.map(n=>n.y));
     const padX=width<650?24:48, top=90, bottom=75;
     const fitScale=Math.min((width-padX*2)/Math.max(100,maxX-minX),(height-top-bottom)/Math.max(100,maxY-minY));
-    view.k=Math.max(dataMode==='harvest'?.15:.04,Math.min(3,fitScale*(nodes.length>DENSE_GRAPH_THRESHOLD?1.45:1.15)));
+    view.k=Math.max(dataMode==='harvest'?.15:.04,Math.min(3,fitScale*(immersive?(nodes.length>DENSE_GRAPH_THRESHOLD?3.2:1.35):1)));
     const center=nodes.length>DENSE_GRAPH_THRESHOLD
       ?nodes.reduce((point,n)=>({x:point.x+n.x/nodes.length,y:point.y+n.y/nodes.length}),{x:0,y:0})
       :{x:(minX+maxX)/2,y:(minY+maxY)/2};
@@ -460,7 +460,7 @@
     svg.setAttribute('aria-label',`Atlas knowledge graph: ${nodes.length.toLocaleString()} nodes. Drag to rotate; scroll to zoom. Shift-drag to pan. Search to select any entity and inspect its connections.`);
     assignColors();
     svg.classList.toggle('show-connections',$('show-connections').checked);svg.classList.toggle('all-labels',$('all-labels').checked);
-    paintPositions();fit();highlight();
+    paintPositions();fit(true);highlight();
     if(!animationLoopStarted){animationLoopStarted=true;requestAnimationFrame(animate);}
     window.dispatchEvent(new CustomEvent('atlas:graph-updated',{detail:{nodes:nodes.length,claims:edges.length}}));
   }
@@ -919,9 +919,7 @@
   $('graph-colors').onchange=assignColors;
   $('show-connections').onchange=e=>{svg.classList.toggle('show-connections',e.target.checked);highlight();};
   $('options-toggle').onclick=()=>{const open=$('graph-options').hidden;$('graph-options').hidden=!open;$('options-toggle').setAttribute('aria-expanded',String(open));};
-  $('help-button').onclick=()=>{$('graph-options').hidden=true;$('options-toggle').setAttribute('aria-expanded','false');$('graph-help').showModal();};
-  $('help-close').onclick=()=>$('graph-help').close();
-  window.addEventListener('resize',()=>{width=innerWidth;height=innerHeight;sizeCanvas();fit();});
+  window.addEventListener('resize',()=>{width=innerWidth;height=innerHeight;sizeCanvas();fit(true);});
 
   async function openResolvedClaim(id){
     const request=++claimRequest,dialog=$('record-dialog');$('record-kind').textContent='Resolved graph assertion · source review status';$('record-title').textContent='Loading assertion…';$('record-content').replaceChildren(make('p','','Loading source-scoped claim details…'));if(!dialog.open)dialog.showModal();
@@ -999,7 +997,7 @@
   $('record-close').onclick=()=>{claimRequest++;$('record-dialog').close();};
   $('record-dialog').addEventListener('cancel',()=>{claimRequest++;});
 
-  function openChat(){ $('workspace-panel').hidden=true;$('workspace-toggle').setAttribute('aria-expanded','false');$('chat-panel').hidden=false;$('chat-toggle').setAttribute('aria-expanded','true');$('question').focus(); }
+  function openChat(){ $('chat-panel').hidden=false;$('chat-toggle').setAttribute('aria-expanded','true');$('question').focus(); }
   function closeChat(){ $('chat-panel').hidden=true;$('chat-toggle').setAttribute('aria-expanded','false');window.dispatchEvent(new Event('atlas:voice-cancel'));$('chat-toggle').focus(); }
   $('chat-toggle').onclick=()=>$('chat-panel').hidden?openChat():closeChat();$('chat-close').onclick=closeChat;
   $('ask-selected').onclick=()=>{openChat();$('question').value=selected?`What is connected to ${label(byId.get(selected))}?`:'';};

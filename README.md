@@ -1,6 +1,6 @@
 # LIT rare-disease knowledge graph
 
-The main graph now connects **TopK search → Astra answers and extraction → evidence review → deterministic recommendations → editable brief**. Open `/explore`; the former `/research` page redirects there. See [setup and demo instructions](docs/research-workspace.md).
+The main graph uses **Ask Atlas** as its single research interface: TopK passages, Astra answers, graph evidence and deterministic planning context in one conversation. Sources expand on demand. Open `/explore`; the former `/research` page redirects there. Extraction, review and brief persistence remain backend workflows. See [setup and demo instructions](docs/research-workspace.md).
 
 ```bash
 python3 -m atlas build-graph --source-root /path/to/harvest-repository

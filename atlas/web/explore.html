@@ -39,8 +39,8 @@
     <label><input id="show-connections" type="checkbox" checked> Show connections</label>
     <label><input id="local-view" type="checkbox"> Selected neighborhood</label>
     </div>
-    <section class="harvest-controls" aria-label="Graph data scope">
-      <h3>Graph scope</h3>
+    <details class="harvest-controls" aria-label="Graph data scope">
+      <summary>Data</summary>
       <label for="graph-scope">View</label>
       <select id="graph-scope"><option value="harvest" selected>All harvested data</option><option value="resolved">Resolved neuro overview</option></select>
       <p id="resolved-status" role="status" aria-live="polite">Loading resolved neuro overview…</p>
@@ -49,12 +49,10 @@
       <select id="harvest-limit"><option value="120" selected>120 nodes</option><option value="300">300 nodes</option><option value="1000">1,000 nodes</option></select>
       <div class="harvest-actions"><button id="harvest-reload" type="button" class="graph-text-button">Load this view</button><button id="harvest-next" type="button" class="graph-text-button">Browse next page</button><button id="harvest-expand" type="button" class="graph-text-button" disabled>Expand selected neighborhood</button></div>
       <button id="harvest-browse" type="button" class="graph-text-button harvest-browse">Browse every harvested source record ↗</button>
-      <p class="harvest-note">The resolved neuro view applies identity decisions and keeps source conflicts visible. All harvested data is available in its separate bounded view. Graph positions are a display layout, not a biological similarity score.</p>
-    </section>
+    </details>
     <div class="graph-colors"><label for="graph-colors">Colour by</label><select id="graph-colors"><option value="groups" selected>Connected groups</option><option value="type">Entity type</option></select></div>
-    <div id="group-legend" class="group-legend"><div class="group-swatches" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>Linked nodes share a colour. Colours repeat across separate groups; they do not indicate biological similarity.</p></div>
+    <div id="group-legend" class="group-legend"><div class="group-swatches" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>Connected groups · colours repeat</p></div>
     <div id="type-legend" class="graph-legend" hidden><span class="legend-disease">Diseases</span><span class="legend-variant">Variants</span><span class="legend-gene">Genes & proteins</span><span class="legend-biology">Mechanisms, pathways & traits</span><span class="legend-research">Researchers, papers & assets</span></div>
-    <button id="help-button" class="graph-text-button">How to explore</button>
   </section>
   <section id="selection" class="selection" aria-label="Selected node" hidden>
     <div><span id="selection-type"></span><h1 id="selection-name"></h1></div>
@@ -63,58 +61,16 @@
     <button id="clear-selection" class="graph-icon" aria-label="Clear selection">×</button>
   </section>
   <button id="chat-toggle" class="chat-toggle" aria-expanded="false" aria-controls="chat-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4m4-7v10m4-13v16m4-13v10m4-7v4"/></svg><span>Ask Atlas</span></button>
-  <button id="workspace-toggle" class="workspace-toggle" aria-expanded="false" aria-controls="workspace-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5C7 3 4 3 2 4v14c3-1 6-1 9 1M11 6v5M4 8h3M4 11h3"/><circle cx="16" cy="12" r="4"/><path d="m19 15 3 4"/></svg><span>Research</span></button>
   <section id="chat-panel" class="chat-panel" role="dialog" aria-label="Ask Atlas" hidden>
     <header class="chat-head"><h2>Atlas</h2><button id="chat-close" class="graph-icon" aria-label="Close chat">×</button></header>
     <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>
     <form id="chat-form" class="chat-form">
       <label class="sr-only" for="question">Ask a question about the graph</label>
-      <textarea id="question" rows="2" maxlength="1000" placeholder="Message Atlas…" required></textarea>
+      <textarea id="question" rows="2" maxlength="1000" placeholder="Ask about evidence, connections or next steps…" required></textarea>
       <div class="chat-actions"><button id="voice-button" type="button" class="graph-icon" aria-label="Dictate a question"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 11v1a6 6 0 0 0 12 0v-1m-6 7v4m-3 0h6"/></svg></button><span id="voice-status" role="status" aria-live="polite"></span><button id="cancel-recording" type="button" class="graph-text-button" hidden>Cancel</button><button id="send-question" class="send-question" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div>
     </form>
   </section>
-  <section id="workspace-panel" class="workspace-panel" aria-label="Research workspace" hidden>
-    <header class="workspace-head"><div><p class="workspace-kicker">Atlas / Evidence workspace</p><h2>Research</h2><p id="workspace-status" class="workspace-status" role="status">Checking the loaded workspace…</p></div><button id="workspace-close" class="graph-icon" type="button" aria-label="Close research workspace">×</button></header>
-    <div class="workspace-coverage" id="workspace-coverage" aria-label="Research coverage"></div>
-    <div class="workspace-tabs" role="tablist" aria-label="Research workflow tabs">
-      <button id="tab-literature" type="button" role="tab" aria-selected="true" aria-controls="panel-literature" tabindex="0" data-workspace-tab="literature">Literature</button>
-      <button id="tab-evidence" type="button" role="tab" aria-selected="false" aria-controls="panel-evidence" tabindex="-1" data-workspace-tab="evidence">Evidence / review</button>
-      <button id="tab-plan" type="button" role="tab" aria-selected="false" aria-controls="panel-plan" tabindex="-1" data-workspace-tab="plan">Plan</button>
-      <button id="tab-brief" type="button" role="tab" aria-selected="false" aria-controls="panel-brief" tabindex="-1" data-workspace-tab="brief">Brief</button>
-    </div>
-    <div id="panel-literature" class="workspace-tab-panel" role="tabpanel" aria-labelledby="tab-literature">
-      <p class="workspace-intro">Search the currently loaded source corpus. A matching passage is a lead to inspect, not an established graph claim.</p>
-      <form id="literature-search-form" class="workspace-search-form"><label class="sr-only" for="literature-query">Search literature</label><input id="literature-query" type="search" maxlength="500" placeholder="Search a topic, readout, or method" required><button class="workspace-button workspace-button-primary" type="submit">Search</button></form>
-      <p id="literature-meta" class="workspace-muted" aria-live="polite"></p><div id="literature-results" class="workspace-results"></div>
-    </div>
-    <div id="panel-evidence" class="workspace-tab-panel" role="tabpanel" aria-labelledby="tab-evidence" hidden>
-      <div id="selection-context" class="selection-context"><strong>No graph node selected</strong><span>Choose a node to narrow the evidence list.</span></div>
-      <div class="workspace-list-heading"><h3>Claims in this evidence slice</h3><label class="workspace-filter-label"><input id="show-all-claims" type="checkbox"> Show all claims</label></div>
-      <div id="workspace-claims" class="workspace-claims"></div>
-    </div>
-    <div id="panel-plan" class="workspace-tab-panel" role="tabpanel" aria-labelledby="tab-plan" hidden>
-      <form id="workspace-request-form" class="workspace-request-form">
-        <label>Disease<select id="workspace-disease" name="disease_id" required></select></label>
-        <label>Mechanism<select id="workspace-mechanism" name="mechanism_id" required></select></label>
-        <label>Biological step<input name="mechanism_step" required maxlength="300"></label>
-        <label>Readout<input name="readout" required maxlength="300"></label>
-        <label>Species<input name="species" required maxlength="200"></label>
-        <label>Tissue or cell context<input name="tissue" required maxlength="200"></label>
-        <label>Developmental stage<input name="stage" maxlength="200" placeholder="Optional"></label>
-        <button class="workspace-button workspace-button-primary" type="submit">Reassess plan</button>
-      </form>
-      <div class="workspace-plan-intro"><p>A broad pathway baseline can help locate candidates. It does not establish assay eligibility. Every unresolved gate stays visible.</p><button id="workspace-investigate" class="workspace-button" type="button">Investigate evidence gaps</button></div>
-      <div id="workspace-analysis" class="workspace-analysis"></div><div id="workspace-neighborhood" class="workspace-neighborhood"></div>
-    </div>
-    <div id="panel-brief" class="workspace-tab-panel" role="tabpanel" aria-labelledby="tab-brief" hidden>
-      <p id="brief-status" class="workspace-intro">A cited discussion draft; verify the source and interpretation before use.</p><p id="brief-stale" class="workspace-stale" hidden>Source or review evidence has changed since this brief was prepared.</p>
-      <label class="sr-only" for="workspace-brief">Working brief in Markdown</label><textarea id="workspace-brief" class="workspace-brief" spellcheck="false" placeholder="Your cited research brief will appear here."></textarea>
-      <div class="workspace-brief-actions"><button id="brief-regenerate" class="workspace-button" type="button">Regenerate</button><button id="brief-ai" class="workspace-button" type="button">Draft with AI</button><button id="brief-save" class="workspace-button workspace-button-primary" type="button">Save</button><button id="brief-download" class="workspace-button workspace-button-text" type="button">Download .md</button></div>
-      <p class="workspace-muted">A saved draft stays in this workspace; it is not sent to anyone or automatically approved.</p>
-    </div>
-  </section>
   <dialog id="record-dialog" class="record-dialog" aria-labelledby="record-title"><header><div><p id="record-kind"></p><h2 id="record-title">Evidence</h2></div><button id="record-close" class="graph-icon" aria-label="Close evidence">×</button></header><div id="record-content"></div></dialog>
   <dialog id="harvest-datasets-dialog" class="record-dialog harvest-datasets-dialog" aria-labelledby="harvest-datasets-title"><header><div><p>Atlas / source records</p><h2 id="harvest-datasets-title">Browse harvested data</h2></div><button id="harvest-datasets-close" class="graph-icon" aria-label="Close dataset browser">×</button></header><div class="harvest-browser-controls"><label for="harvest-dataset-filter">Find dataset</label><input id="harvest-dataset-filter" type="search" placeholder="Filter datasets"><label for="harvest-dataset-select">Dataset</label><select id="harvest-dataset-select"></select><p id="harvest-record-status" role="status" aria-live="polite"></p><div><button id="harvest-record-previous" type="button" class="workspace-button">Previous page</button> <button id="harvest-record-next" type="button" class="workspace-button">Next page</button></div></div><div id="harvest-record-list" class="harvest-record-list"></div></dialog>
-  <dialog id="graph-help" class="graph-help" aria-labelledby="help-title"><header><h2 id="help-title">Follow the evidence.</h2><button id="help-close" class="graph-icon" aria-label="Close guide">×</button></header><p>Drag to rotate. Shift-drag to pan. Scroll or pinch to zoom. Select a node to follow its connections; select a line to inspect its evidence.</p><p>Search makes every node keyboard-accessible. On the canvas, arrow keys rotate, + / − zoom, and 0 fits the graph. Colors distinguish record types. Their positions and distances are a layout choice, not an embedding or a measure of biological similarity.</p><p>Lines are recorded assertions. Dashed lines are inferred; rust lines have counter-evidence or negative assertions. <button id="help-research-button" type="button" class="graph-text-button">Research</button> opens source search, claim review, and plan gates.</p><p>Harvested graph pages have a selectable per-page size. Browse further pages, expand one selected neighborhood, or search the full index. Browse source records to inspect rows that are not mapped to graph nodes. Harvested records are raw source data, not reviewed scientific assertions.</p><p>Ask Atlas uses the configured model and cited-source corpus. A harvested node selection is text context only, and retrieval may not cover all harvest records. Search results are leads, not approved graph claims. It is not a general-purpose AI or clinical advice service.</p></dialog>
 </body>
 </html>

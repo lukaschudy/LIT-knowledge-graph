@@ -1,6 +1,6 @@
 # Connected Atlas workspace
 
-The main graph at `/explore` now connects the source catalog, Astra, claim review and deterministic research planning. `/research` redirects to the graph; there is no separate research page.
+The main graph at `/explore` uses **Ask Atlas** for research questions, cited evidence, recommendations and next steps. The separate Research button, drawer and long help popup have been removed. `/research` redirects to the graph. The opening camera starts inside the dense network; press `0` with the graph focused to see its full extent.
 
 ## Run locally
 
@@ -23,20 +23,18 @@ For explicit offline retrieval, use `--search local`. This still needs a model f
 - **Graph:** the [full harvest index](full-harvest-graph.md) adds dense browsing over all 105 available datasets and 21,746,825 source records. The curated neuro/GRIN overlay starts with 45 entities, 53 assertions and 16 sources. Workspace changes preserve the broader projection. Choose a node budget, search the complete entity index, expand neighborhoods and inspect original source rows.
 - **TopK:** 15,502 GRIN passages and 19 chunks from four neuro source snapshots are separate collections. The neuro read-back checks every field, and its semantic queries use strong consistency so recent writes are searchable. Index receipts are in `data/curated/topk-*-index.json`.
 - **Ask Atlas:** selected-node graph context and retrieved passages go to Astra. Software validates returned graph IDs and citation numbers. Source cards retain exact canonical passage text, source URL, locator and review classification. This verifies provenance, not the correctness of every model interpretation.
-- **Literature:** search either scope from the graph drawer. “Use passage” imports the catalog's canonical text as a versioned source. Curated annotation cards link to existing claims; they cannot be imported as if they were original paper text.
-- **Extraction and review:** Astra proposes typed claims over registered entities. Each accepted proposal needs an exact, unique source span and remains unreviewed. Review requires an explicit person, rationale and source attestation. Rejected claims leave the active graph but stay in the audit history.
-- **Plan:** contextual gates assess assay fit, contradictions, review, maintainer and access evidence. Missing facts stay unresolved. One explicit investigation searches the catalog, imports at most one eligible source passage and extracts against the current gaps. It cannot approve its own output.
-- **Brief:** generate deterministic Markdown, request an AI draft, edit, save and download it. Evidence or question changes mark an earlier brief stale.
+- **Planning context:** Ask Atlas receives the current deterministic assessment, candidate gates and unresolved evidence gaps alongside the selected graph claims and retrieved sources. This context applies to the saved planning scope; chatting does not silently rewrite that scope or approve claims.
+- **Backend workflows:** source import, extraction, explicit human review, reassessment and brief persistence remain available through the existing workspace API. The removed drawer no longer exposes these editing forms. Research answers use the resulting evidence and assessment; they do not automatically execute data-changing workflows.
 
 The selected planning scope remains EPG5/Vici, with WDR45/BPAN and AP4B1/SPG47 comparators. GRIN supplies an additional search and graph slice. A shared pathway or retrieved passage does not establish transferability. Real maintainer/access evidence and qualified scientific reviews are still needed before the neuro candidates can be ready for discussion.
 
 ## Demo sequence
 
-1. Enter the main graph. Search/select **GRIN2B** and ask what the evidence says about **S541R**, including uncertainty. Open its citations.
-2. Open **Research → Literature**, search **EPG5 Vici autophagy fusion**, and use a source passage. Extract it; inspect the exact source span and the new unreviewed assertion.
-3. In **Evidence / review**, inspect the source and record a decision only if you have actually reviewed it. Rejection removes the edge from the active graph.
-4. Open **Plan** to see the Vici request and separate passed, blocked and unresolved gates. Run one gap investigation if useful; zero additions is a valid result when a passage does not answer the question.
-5. Open **Brief**, edit and download a cited discussion draft.
+1. Enter the graph, search/select **GRIN2B**, and open **Ask Atlas**.
+2. Ask what the evidence says about **S541R**, including uncertainty. Expand a cited source to inspect its exact excerpt or open a referenced graph claim.
+3. Ask about **EPG5 / Vici autophagy fusion**, what the current planning assessment supports, and which evidence gaps prevent a recommendation.
+4. Ask for a concise proposed next step or discussion summary. Verify citations and unresolved gates before treating the answer as a research decision.
+5. Use the microphone to dictate a follow-up, review the transcript and send it. Graph data controls remain under **Graph options → Data**.
 
 Use the fictional acceptance fixture for a staged ready-for-discussion demonstration. Do not present fixture approvals as expert review of real papers. All 21,746,825 harvested records are addressable through the full graph index; they have not all been scientifically extracted, reviewed or embedded in TopK. The broad-pathway baseline is a candidate lookup, not a measured comparison with other products; 10× remains an evaluation target.
 

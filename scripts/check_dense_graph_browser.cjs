@@ -22,7 +22,7 @@ const { chromium } = require('playwright');
     });
     await page.goto(process.env.ATLAS_URL || 'http://127.0.0.1:8767/explore');
     await page.waitForFunction(()=>Number(document.querySelector('#network').dataset.nodeCount)>=10000);
-    await page.waitForFunction(()=>document.querySelector('#workspace-brief')?.value);
+    await page.waitForFunction(()=>document.body.dataset.workspaceReady==='true');
     await page.waitForTimeout(400);
     const originalCount = Number(await page.locator('#network').getAttribute('data-node-count'));
     assert.ok(await page.locator('#nodes .net-node').count() <= 40, 'dense overview must not create thousands of DOM targets');
