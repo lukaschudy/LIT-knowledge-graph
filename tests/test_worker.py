@@ -300,6 +300,26 @@ class WorkerTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn('9.1 (7.2, 11)', response.json()['answer'])
         self.assertIn('Cys461Phe', response.json()['answer'])
 
+    async def test_grin2b_help_overview_works_for_public_and_reviewed_gene(self):
+        from urllib.parse import urlencode
+        question = 'What is known about GRIN2B from this knowledge graph, and where can I seek help?'
+        public = next(n for n in self.worker.PUBLIC.nodes.values() if n['id'].startswith('HGNC:') and n['label'] == 'GRIN2B')
+        reviewed = next(n for n in self.worker.API.nodes.values() if n['label'] == 'GRIN2B')
+        for context in (None, public['id'], reviewed['id']):
+            with self.subTest(context=context):
+                query = {'q': question, **({'node': context} if context else {})}
+                response = await self.app.fetch(request('/api/ask?' + urlencode(query)))
+                answer = response.json()
+                self.assertEqual(response.status, 200)
+                self.assertEqual(answer['mode'], 'curated_gene_overview')
+                self.assertIn('7 selected protein variants', answer['answer'])
+                self.assertIn('Possible LoF', answer['answer'])
+                self.assertEqual(len(answer['sections']), 3)
+                self.assertTrue(answer['citations'])
+                self.assertTrue(all('GRIN2A' not in n for n in answer['node_ids']))
+                self.assertEqual(answer['support_resources']['status'], 'external_signposts_not_graph_claims')
+                self.assertEqual(len(answer['sections'][-1]['links']), 3)
+
     async def test_public_gene_identity_maps_to_its_demo_gene(self):
         public = next(n for n in self.worker.PUBLIC.nodes.values() if n['id'].startswith('HGNC:') and n['label'] == 'GRIN2B')
         response = await self.app.fetch(request('/api/ask?q=What+evidence+is+available&node=' + public['id']))

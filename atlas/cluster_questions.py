@@ -13,6 +13,44 @@ def short_protein(protein):
     return re.sub(r"[A-Z][a-z]{2}", lambda m: AMINO.get(m[0], m[0]), protein.removeprefix("p."))
 
 
+def grin2b_overview(cluster):
+    """Bounded graph summary plus separately curated public support signposts."""
+    members = [v for v in cluster['members'] if v['gene'] == 'GRIN2B']
+    counts = {tier: sum(v['tier'] == tier for v in members) for tier in TIERS}
+    classifications = [c for c in cluster['claims'] if c['gene'] == 'GRIN2B'
+                       and c['predicate'] == 'author_functional_classification' and c['evidence_type'] == 'primary_report']
+    docs = {c['document_id'] for c in classifications}
+    sections = [
+        {'title': 'What this graph knows', 'text':
+         f"GRIN2B is recorded here with source-linked evidence for {len(members)} selected protein variants: "
+         f"{counts['core_likely_reduced']} core likely reduced-function, {counts['provisional_possible_reduced']} provisional, "
+         f"{counts['opposing_control']} opposing-function controls and {counts['unresolved_control']} unresolved control. "
+         "These categories describe individual variants, not the whole gene.", 'links': []},
+        {'title': 'What the evidence means', 'text':
+         "For example, S541R is in the core group; C461F remains provisional because the source-reported integrated classification is Possible LoF. "
+         "The graph retains experimental comparisons with wild type and conflicting reports. This is a selected research snapshot; AI source audit is complete and expert review is pending.",
+         'links': [{'label': 'Compare S541R evidence', 'url': '/cluster?variant=GRIN2B%3Ap.Ser541Arg'},
+                   {'label': 'Read C461F evidence', 'url': '/cluster?variant=GRIN2B%3Ap.Cys461Phe'}]},
+        {'title': 'Where to seek help', 'text':
+         "For personal care, discuss the exact variant with a clinical genetics or neurology team. These external resources offer different kinds of support:",
+         'links': [
+             {'label': 'GRIN2B Foundation — family support', 'url': 'https://grin2b.com/connect-with-us/',
+              'description': 'Connect with the parent and caregiver community.'},
+             {'label': 'Simons Searchlight — gene guide and research', 'url': 'https://www.simonssearchlight.org/research/what-we-study/grin2b/',
+              'description': 'Learn about GRIN2B and voluntary research participation.'},
+             {'label': 'GRIN2B Foundation — researcher resources', 'url': 'https://grin2b.com/for-researchers/',
+              'description': 'Find research resources and listed clinical centers; contact them about access.'}
+         ]}
+    ]
+    return {'answer': '\n\n'.join(s['title'] + '\n' + s['text'] for s in sections),
+            'sections': sections, 'mode': 'curated_gene_overview', 'synthetic': False,
+            'claim_ids': [], 'node_ids': [v['id'] for v in members], 'suggestions': [],
+            'annotation_claim_ids': [c['id'] for c in classifications],
+            'citations': [s for s in cluster['sources'] if s['document_id'] in docs],
+            'reference_sha256': cluster['reference_sha256'],
+            'support_resources': {'checked_on': '2026-10-04', 'status': 'external_signposts_not_graph_claims'}}
+
+
 def answer_cluster_question(cluster, question, context=None):
     q = question.casefold()
     if re.search(r"\b(treat|treatment|cure|dose|dosage|medication|diagnose|diagnosis)\b", q):
@@ -29,6 +67,10 @@ def answer_cluster_question(cluster, question, context=None):
                 '. This is a coverage gap, not evidence that the variant has no effect. You can propose an addition with a published source for review.',
                 'mode': 'source_annotation_lookup', 'synthetic': False, 'claim_ids': [],
                 'node_ids': [], 'suggestions': [], 'proposal': {'query': question, 'entry': 'chat'}}
+    if (genes == {'GRIN2B'} and not requested and not members
+            and not any(v['id'] == context for v in cluster['members'])
+            and re.search(r"\b(known|overview|help|support)\b", q)):
+        return grin2b_overview(cluster)
     if not members and context:
         members = [v for v in cluster["members"] if v["id"] == context]
     overview = re.search(r"\b(cluster|variants|annotations|observations)\b", q)

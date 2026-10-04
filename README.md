@@ -16,6 +16,8 @@ Open **Ask Atlas** in the graph. The demo question is already filled in—press 
 
 > Why is GRIN2B p.Ser541Arg core while p.Cys461Phe is provisional? Compare the WT measurements and conflicting evidence.
 
+Search for **GRIN2B**, select it and choose **Ask about this** for an editable “What is known about GRIN2B from this knowledge graph, and where can I seek help?” question. The hosted answer gives a concise variant-evidence summary and separately curated links for family support, research participation and researcher resources. External support links are signposts, not new graph claims or personalized clinical recommendations; see [curation notes](docs/grin2b-help-overview.md).
+
 The answer links to source-reported classifications, selected measurements, and the underlying records. In the evidence viewer, compare the variant with its **wild-type (WT)** reference and inspect the original experimental conditions.
 
 To try the missing-information flow, search for an item absent from the graph. **Propose an addition** opens a form with the search already filled in. Submit an item name, description, and optional source link; the suggestion is saved privately as **pending review**, with a receipt that survives page reloads. It does not become a verified graph claim automatically.

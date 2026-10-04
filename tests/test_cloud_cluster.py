@@ -82,3 +82,9 @@ class CloudClusterTests(unittest.TestCase):
             self.assertEqual(answer['answer_scope']['id'], 'grin-reduced-function-v1')
             self.assertNotEqual(answer['mode'], 'demo_scope_boundary')
             self.assertTrue(set(answer['node_ids']) <= self.api.nodes.keys())
+
+    def test_help_overview_does_not_replace_variant_or_clinical_answers(self):
+        for question in ['What is known about GRIN2B S541R?', 'What treatment should I use for GRIN2B?',
+                         'What is known about GRIN2A?']:
+            _, answer = self.api.request('/api/ask', {'q': [question]})
+            self.assertNotEqual(answer.get('mode'), 'curated_gene_overview')
