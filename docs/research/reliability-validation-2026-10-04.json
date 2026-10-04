@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-04",
+  "kind": "atlas-reliability-validation",
+  "python_matrix": [
+    {
+      "branch": "production",
+      "commit": "2968748",
+      "python": "3.11",
+      "suite_tests": {
+        "application": 155,
+        "harvest": 74,
+        "search": 15,
+        "benchmark": 56
+      },
+      "discovered_tests": 300,
+      "skipped": 0,
+      "passed": true,
+      "log_sha256": "0211cb6bb56b12437e5a648dd4045d1526fe4f15b87c48865e71a32a0c5e7149"
+    },
+    {
+      "branch": "production",
+      "commit": "2968748",
+      "python": "3.14",
+      "suite_tests": {
+        "application": 155,
+        "harvest": 74,
+        "search": 15,
+        "benchmark": 56
+      },
+      "discovered_tests": 300,
+      "skipped": 0,
+      "passed": true,
+      "log_sha256": "44289808292d3decbb32a3e32ba58b729ca339b3d653f0b90c4b30738cebc2bf"
+    },
+    {
+      "branch": "local",
+      "commit": "bf9d4a5",
+      "python": "3.11",
+      "suite_tests": {
+        "application": 330,
+        "harvest": 74,
+        "search": 15
+      },
+      "discovered_tests": 419,
+      "skipped": 1,
+      "passed": true,
+      "log_sha256": "628f8c10e9050e964dc55355b54c76e826b44d9b704cb66877346e10fdb426a2"
+    },
+    {
+      "branch": "local",
+      "commit": "bf9d4a5",
+      "python": "3.14",
+      "suite_tests": {
+        "application": 330,
+        "harvest": 74,
+        "search": 15
+      },
+      "discovered_tests": 419,
+      "skipped": 1,
+      "passed": true,
+      "log_sha256": "3f7ad2a56f84f62b9955fe5e3fa011ae8a9e6556898e9b2b87058f4c982fd848"
+    }
+  ],
+  "browser": {
+    "node_version": "20.20.2",
+    "playwright_version": "1.63.0",
+    "production_checks": 64,
+    "local_checks": 54,
+    "passed": true
+  },
+  "production_generated_files": 36,
+  "production_matches_deployed_hashes": true,
+  "vendor_files_authenticated": 29,
+  "test_resource_cleanup": {
+    "production_store_tests": 10,
+    "local_server_store_harvest_api_tests": 19,
+    "warnings": 0
+  },
+  "notes": [
+    "Local audio decoder dependency absent in lightweight CI; optional integration environment exercised that path separately.",
+    "Hosted GitHub Actions status is recorded separately; this report covers executed local and clean-source commands."
+  ],
+  "github_actions": [
+    {
+      "branch": "feat/atlas-production-performance",
+      "commit": "2968748b58a70d0e2ab865d40309b0fc1273b6af",
+      "run_id": 37176289095,
+      "event": "push",
+      "url": "https://github.com/lukaschudy/LIT-knowledge-graph/actions/runs/37176289095",
+      "conclusion": "success",
+      "jobs": [
+        "Python 3.11",
+        "Python 3.14",
+        "Offline Chromium"
+      ]
+    },
+    {
+      "branch": "feat/research-recommendations",
+      "commit": "bf9d4a5602fd313d230de9ee202c520e1427334e",
+      "run_id": 37176399846,
+      "event": "workflow_dispatch",
+      "url": "https://github.com/lukaschudy/LIT-knowledge-graph/actions/runs/37176399846",
+      "conclusion": "success",
+      "jobs": [
+        "Python 3.11",
+        "Python 3.14",
+        "Offline Chromium"
+      ]
+    }
+  ]
+}

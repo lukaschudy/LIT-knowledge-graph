@@ -1,0 +1,35 @@
+{
+  "schema": "atlas-local-runtime-endurance-v1",
+  "date": "2026-10-04",
+  "duration_seconds": 481.195,
+  "concurrent_readers": 8,
+  "read_requests": 137,
+  "failures": 0,
+  "final_graph_nodes": 10000,
+  "workspace_revision": 3,
+  "workspace_unchanged": true,
+  "policy": "assay-reuse-v3",
+  "initial_process": {
+    "rss_kib": 193624,
+    "open_fds": 8
+  },
+  "final_process": {
+    "rss_kib": 230288,
+    "open_fds": 9
+  },
+  "max_rss_kib": 230288,
+  "max_open_fds": 9,
+  "request_p95_ms": 33.7,
+  "limitations": [
+    "Read-only local HTTP exercise; no model calls, microphone use or acquisition.",
+    "One host and eight clients; not a production capacity claim."
+  ],
+  "warm_state_rss_range_kib": [
+    226812,
+    226820
+  ],
+  "notes": [
+    "RSS increased during initial thread/response allocation, then stayed within an 8 KiB range over the last five minutes of state polling.",
+    "The final 10,000-node graph request raised RSS by about 3.4 MiB above the polling plateau."
+  ]
+}
