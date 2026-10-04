@@ -22,6 +22,7 @@ The legacy read-only `atlas.server` serves the form assets but does not accept s
 
 ```sh
 .venv/bin/python scripts/build_cloudflare.py
+.venv/bin/python scripts/verify_cloudflare_build.py
 cd deploy/cloudflare
 ./.venv/bin/pywrangler dev --port 8788
 ```

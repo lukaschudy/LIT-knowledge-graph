@@ -18,6 +18,27 @@ class GraphStore:
     def __init__(self, path: str = ":memory:") -> None:
         self._conn = sqlite3.connect(path)
         self._conn.row_factory = sqlite3.Row
+        # Opening an unrelated SQLite file must not add Atlas tables or make
+        # its existing nodes eligible for destructive dataset replacement.
+        expected = {
+            'metadata': {'key', 'value'},
+            'nodes': {'id', 'type', 'label', 'aliases', 'payload'},
+            'sources': {'id', 'payload'},
+            'claims': {'id', 'subject', 'object', 'predicate', 'assertion_type', 'payload'},
+            'evidence': {'id', 'claim_id', 'source_id', 'payload'},
+            'coverage': {'id', 'source_id', 'entity_id', 'payload'},
+        }
+        try:
+            tables = {row[0] for row in self._conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+            if tables:
+                if not expected.keys() <= tables or any(
+                    not columns <= {row[1] for row in self._conn.execute(f'PRAGMA table_info({name})')}
+                    for name, columns in expected.items()
+                ):
+                    raise ValueError('This file is not a curated Atlas database. Choose a separate output path.')
+        except Exception:
+            self._conn.close()
+            raise
         self._conn.execute("PRAGMA foreign_keys = ON")
         self._conn.executescript("""
             CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL);

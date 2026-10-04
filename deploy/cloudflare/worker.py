@@ -1,15 +1,15 @@
-"""Cloudflare entrypoint for Atlas's shared, read-only Python API."""
+"""Cloudflare entrypoint for Atlas's bounded public API and private review inbox."""
 import json
 from urllib.parse import parse_qs, urlsplit
 from workers import WorkerEntrypoint, Response, DurableObject
-from atlas.http_api import AtlasAPI
-from atlas.proposals import SCHEMA, INDEX, MAX_BYTES, ProposalError, submit_proposal, proposal_status
+from atlas.http_api import AtlasAPI, error, query_error
+from atlas.proposals import SCHEMA, INDEX, MAX_BYTES, ProposalError, parse_proposal, submit_proposal, proposal_status, validate_receipt_id
 from snapshot import BUNDLE, STATS
 from dense_snapshot import BUNDLE as DENSE
 from atlas.public_graph import PublicGraphAPI
-PUBLIC = PublicGraphAPI(DENSE, BUNDLE)
 from cluster_snapshot import CLUSTER, EXCERPTS
 
+PUBLIC = PublicGraphAPI(DENSE, BUNDLE)
 API = AtlasAPI(BUNDLE, STATS, CLUSTER)
 RECORDS = {r['id']: r for r in CLUSTER['observations'] + CLUSTER['claims']}
 HEADERS = {
@@ -19,6 +19,41 @@ HEADERS = {
     "Referrer-Policy": "no-referrer",
     "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
 }
+
+
+def proposal_error(exc):
+    return error(exc.status, 'proposal_rejected', str(exc))
+
+
+async def proposal_body(request):
+    """Enforce the limit while reading, including bodies without Content-Length."""
+    length = request.headers.get('Content-Length')
+    if length is not None:
+        if not length or len(length) > 10 or not length.isascii() or not length.isdigit():
+            raise ProposalError('Invalid request body length.')
+        if int(length) > MAX_BYTES:
+            raise ProposalError('This proposal is too large.', 413)
+    data = bytearray()
+    stream = request.body
+    if stream:
+        reader = stream.getReader()
+        try:
+            while True:
+                chunk = await reader.read()
+                if chunk.done:
+                    break
+                if len(data) + chunk.value.byteLength > MAX_BYTES:
+                    await reader.cancel()
+                    raise ProposalError('This proposal is too large.', 413)
+                data.extend(chunk.value.to_bytes())
+        finally:
+            reader.releaseLock()
+    if length is not None and len(data) != int(length):
+        raise ProposalError('The request body length did not match.')
+    try:
+        return data.decode('utf-8')
+    except UnicodeDecodeError:
+        raise ProposalError('Use valid UTF-8 JSON text.') from None
 
 
 class ProposalInbox(DurableObject):
@@ -33,16 +68,59 @@ class ProposalInbox(DurableObject):
 
     async def submit(self, body):
         try:
-            status, receipt = submit_proposal(json.loads(body), self.execute)
-            return json.dumps({'status': status, 'payload': receipt})
-        except ProposalError as error:
-            return json.dumps({'status': error.status, 'payload': {'error': {'message': str(error)}}})
+            # Keep all SQL operations synchronous: the Durable Object serializes
+            # retries and new submissions, and its output gate confirms durability.
+            status, receipt = submit_proposal(parse_proposal(body), self.execute)
+        except ProposalError as exc:
+            status, receipt = proposal_error(exc)
+        return json.dumps({'status': status, 'payload': receipt})
 
     async def receipt(self, identifier):
         try:
-            return json.dumps({'status': 200, 'payload': proposal_status(identifier, self.execute)})
-        except ProposalError as error:
-            return json.dumps({'status': error.status, 'payload': {'error': {'message': str(error)}}})
+            status, payload = 200, proposal_status(identifier, self.execute)
+        except ProposalError as exc:
+            status, payload = proposal_error(exc)
+        return json.dumps({'status': status, 'payload': payload})
+
+
+def evidence_response(query):
+    invalid = query_error(query)
+    if invalid:
+        return invalid
+    identifier = query.get('id', [''])[0].strip()
+    if not identifier:
+        return error(400, 'missing_evidence', 'Choose an observation or claim to inspect.')
+    record = RECORDS.get(identifier)
+    if record is None:
+        return error(404, 'evidence_not_found', 'That observation or claim is not in this snapshot.')
+    spans, seen = [], set()
+    for span in record['evidence'] + record.get('comparator', {}).get('evidence', []):
+        key = f"{span['unit_id']}:{span['start']}:{span['end']}"
+        if key not in seen:
+            spans.append({**span, 'quote': EXCERPTS.get(key)})
+            seen.add(key)
+    return 200, {'record': record, 'spans': spans,
+                 'notice': 'Published table cells and selected supplement rows are shown below. Longer source passages remain in the reviewed local snapshot; use the paper link and locators to inspect them.'}
+
+
+def atlas_response(path, query):
+    status, payload = API.request(path, query)
+    # Only a known public entity can receive the HGNC scope response. Validate
+    # the complete request first so malformed IDs/claims cannot be discarded.
+    context = API._one(query, 'node') if path == '/api/ask' else None
+    if (status == 404 and payload.get('error', {}).get('code') == 'node_not_found'
+            and context in PUBLIC.nodes):
+        node = PUBLIC.nodes[context]
+        question = API._one(query, 'q')
+        return 200, {
+            'answer': f"{node['label']} is in the public HGNC snapshot, outside the reviewed GRIN evidence cluster. "
+                      'The snapshot provides discovery relationships and source provenance for this entity. '
+                      'No reviewed evidence answer is available for this selection; this is a coverage gap, '
+                      'not evidence that the entity has no effect.',
+            'mode': 'graph_lookup', 'synthetic': False, 'claim_ids': [], 'node_ids': [context],
+            'suggestions': [], 'proposal': {'query': question, 'entry': 'chat'},
+        }
+    return status, payload
 
 
 class Default(WorkerEntrypoint):
@@ -50,23 +128,16 @@ class Default(WorkerEntrypoint):
         if request.method == 'POST' and url.path == '/api/proposals':
             if request.headers.get('Origin') != f'{url.scheme}://{url.netloc}':
                 raise ProposalError('Submit the form from this Atlas site.', 403)
-            if (request.headers.get('Content-Type') or '').split(';')[0].strip() != 'application/json':
+            if (request.headers.get('Content-Type') or '').split(';')[0].strip().lower() != 'application/json':
                 raise ProposalError('Use the proposal form to submit JSON.', 415)
-            length = request.headers.get('Content-Length')
-            if not length or not length.isdigit():
-                raise ProposalError('A bounded request body is required.', 411)
-            if int(length) > MAX_BYTES:
-                raise ProposalError('This proposal is too large.', 413)
-            body = await request.text()
-            if len(body.encode()) > MAX_BYTES:
-                raise ProposalError('This proposal is too large.', 413)
-            try:
-                json.loads(body)
-            except ValueError:
-                raise ProposalError('Invalid JSON submission.') from None
+            body = await proposal_body(request)
+            parse_proposal(body)  # Reject invalid submissions before touching the inbox.
             result = await self.env.PROPOSAL_INBOX.getByName('review-inbox-v1').submit(body)
         elif request.method == 'GET' and url.path.startswith('/api/proposals/'):
-            result = await self.env.PROPOSAL_INBOX.getByName('review-inbox-v1').receipt(url.path.removeprefix('/api/proposals/'))
+            identifier = url.path.removeprefix('/api/proposals/')
+            # Receipt shape is validated before RPC; existing receipts stay private.
+            validate_receipt_id(identifier)
+            result = await self.env.PROPOSAL_INBOX.getByName('review-inbox-v1').receipt(identifier)
         else:
             raise ProposalError('Proposal lists are private. Use the submission form.', 405)
         result = json.loads(result)
@@ -76,44 +147,34 @@ class Default(WorkerEntrypoint):
         url = urlsplit(request.url)
         if not url.path.startswith('/api/'):
             return await self.env.ASSETS.fetch(request)
-        if url.path == '/api/proposals' or url.path.startswith('/api/proposals/'):
+        proposal_route = url.path == '/api/proposals' or url.path.startswith('/api/proposals/')
+        if len(url.query.encode('utf-8')) > 16384:
+            status, payload = error(414, 'query_too_long', 'Shorten this request.')
+        elif proposal_route:
             try:
                 status, payload = await self.proposals(request, url)
-            except ProposalError as error:
-                status, payload = error.status, {'error': {'message': str(error)}}
+            except ProposalError as exc:
+                status, payload = proposal_error(exc)
             except Exception:
-                status, payload = 503, {'error': {'message': 'The inbox is temporarily unavailable. Your proposal has not been confirmed; retry this form.'}}
+                status, payload = error(503, 'inbox_unavailable', 'The inbox is temporarily unavailable. Your proposal has not been confirmed; retry this form.')
         elif request.method != 'GET':
-            status, payload = 405, {"error": {"code": "method_not_allowed", "message": "This atlas is read-only."}}
-        elif len(url.query) > 16384:
-            status, payload = 414, {"error": {"code": "query_too_long", "message": "Shorten this request."}}
+            status, payload = error(405, 'method_not_allowed', 'This atlas is read-only.')
         else:
             try:
-                query = parse_qs(url.query, keep_blank_values=True, max_num_fields=150)
+                query = parse_qs(url.query, keep_blank_values=True, max_num_fields=150, errors='strict')
                 if url.path.startswith('/api/harvest/') or url.path in ('/api/voice/status', '/api/resolved/status'):
                     status, payload = PUBLIC.request(url.path, query)
                 elif url.path == '/api/evidence':
-                    record = RECORDS.get(query.get('id', [''])[0])
-                    if record is None:
-                        status, payload = 404, {'error': 'Unknown observation or claim'}
-                    else:
-                        spans, seen = [], set()
-                        for s in record['evidence'] + record.get('comparator', {}).get('evidence', []):
-                            key = f"{s['unit_id']}:{s['start']}:{s['end']}"
-                            if key not in seen:
-                                spans.append({**s, 'quote': EXCERPTS.get(key)})
-                                seen.add(key)
-                        status, payload = 200, {'record': record, 'spans': spans,
-                            'notice': 'Published table cells and selected supplement rows are shown below. Longer source passages remain in the reviewed local snapshot; use the paper link and locators to inspect them.'}
+                    status, payload = evidence_response(query)
                 else:
-                    # The dense HGNC projection is discovery context, not reviewed GRIN evidence.
-                    outside = url.path == '/api/ask' and query.get('node', [''])[0] not in API.nodes and bool(query.get('node'))
-                    if outside: query.pop('node', None); query.pop('claim', None)
-                    status, payload = API.request(url.path, query)
-                    if outside and status == 200 and isinstance(payload.get('answer'), str):
-                        payload['answer'] = 'The selected HGNC entity is outside the reviewed GRIN cluster. ' + payload['answer']
+                    status, payload = atlas_response(url.path, query)
             except ValueError:
-                status, payload = 400, {"error": {"code": "invalid_query", "message": "Use fewer query parameters."}}
+                status, payload = error(400, 'invalid_query', 'Use valid UTF-8 text and at most 150 query parameters.')
             except Exception:
-                status, payload = 500, {"error": {"code": "internal_error", "message": "The atlas could not complete that request."}}
-        return Response(json.dumps(payload, ensure_ascii=False, separators=(',', ':')), status=status, headers=HEADERS)
+                status, payload = error(500, 'internal_error', 'The atlas could not complete that request.')
+        headers = dict(HEADERS)
+        if status == 405:
+            headers['Allow'] = 'POST' if url.path == '/api/proposals' else 'GET'
+        if status in (429, 503):
+            headers['Retry-After'] = '60'
+        return Response(json.dumps(payload, ensure_ascii=False, separators=(',', ':')), status=status, headers=headers)

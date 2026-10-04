@@ -18,3 +18,5 @@ node_modules/
 python_modules/
 
 .venv-workers/
+
+/deploy/cloudflare/.atlas-release.lock

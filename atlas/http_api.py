@@ -14,6 +14,31 @@ def error(status: int, code: str, message: str) -> tuple[int, dict[str, Any]]:
     return status, {"error": {"code": code, "message": message}}
 
 
+def query_error(query, *, repeated=()):
+    """Validate parsed query shape before handlers can discard ambiguous context."""
+    if not isinstance(query, dict):
+        return error(400, "invalid_query", "Use named query parameters.")
+    count, size = 0, 0
+    for key, values in query.items():
+        if not isinstance(key, str) or not isinstance(values, list) or not values:
+            return error(400, "invalid_query", "Use a value for each query parameter.")
+        if key not in repeated and len(values) != 1:
+            return error(400, "invalid_query", f"Use {key} only once.")
+        count += len(values)
+        if count > 150:
+            return error(400, "invalid_query", "Use fewer query parameters.")
+        for value in values:
+            if not isinstance(value, str):
+                return error(400, "invalid_query", "Query values must be text.")
+            try:
+                size += len(key.encode("utf-8")) + len(value.encode("utf-8"))
+            except UnicodeEncodeError:
+                return error(400, "invalid_query", "Use valid Unicode text.")
+    if size > 16384:
+        return error(414, "query_too_long", "Shorten this request.")
+    return None
+
+
 def _index_by_id(bundle: dict[str, Any], collection: str) -> dict[str, dict[str, Any]]:
     return {item["id"]: item for item in bundle.get(collection, []) if isinstance(item, dict) and item.get("id")}
 
@@ -51,6 +76,9 @@ class AtlasAPI:
         return value or None
 
     def request(self, path: str, query: dict[str, list[str]]) -> tuple[int, dict[str, Any]]:
+        invalid = query_error(query, repeated=("claim",) if path == "/api/ask" else ())
+        if invalid:
+            return invalid
         bundle, stats, reasoner = self.bundle, self.stats, self.reasoner
         nodes, claims, sources = self.nodes, self.claims, self.sources
         node_terms, evidence_by_claim = self.node_terms, self.evidence_by_claim
@@ -60,12 +88,16 @@ class AtlasAPI:
             claim_context = query.get("claim", [])
             if not question or len(question) > 1000:
                 return error(400, "invalid_question", "Ask a question of 1–1000 characters.")
-            if context and context not in nodes:
-                return error(404, "node_not_found", "That entity is not in this graph.")
+            if "node" in query and context is None:
+                return error(400, "invalid_node_context", "Choose a single entity from this graph.")
             if len(claim_context) > 100 or any(cid not in claims for cid in claim_context):
                 return error(400, "invalid_claim_context", "Use claim references from this graph.")
+            if context and context not in nodes:
+                return error(404, "node_not_found", "That entity is not in this graph.")
+            # A linked-claim follow-up must retain its evidence scope instead
+            # of being replaced by a selected variant's annotation overview.
             if self.cluster:
-                answer = answer_cluster_question(self.cluster, question, context)
+                answer = answer_cluster_question(self.cluster, question, None if claim_context else context)
                 if answer is not None:
                     return response(200, answer)
             return response(200, answer_question(bundle, reasoner, question, context, claim_context))
@@ -81,6 +113,8 @@ class AtlasAPI:
             term = self._one(query, "q")
             if term is None:
                 return error(400, "missing_query", "Enter a name, synonym, or identifier to search the atlas.")
+            if len(term) > 1000:
+                return error(400, "invalid_query", "Search using at most 1000 characters.")
             folded = term.casefold()
             matches: list[tuple[int, dict[str, Any]]] = []
             for node_id, terms in node_terms.items():

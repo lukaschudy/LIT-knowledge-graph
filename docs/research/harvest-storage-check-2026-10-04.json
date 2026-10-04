@@ -1,0 +1,10 @@
+{
+  "database": "local harvest.sqlite",
+  "check": "SQLite quick_check, read-only",
+  "seconds": 38.819,
+  "result": [
+    "ok"
+  ],
+  "all_ok": true,
+  "file_bytes": 4744593408
+}

@@ -42,3 +42,58 @@ class PublicGraphTests(unittest.TestCase):
         self.assertTrue(all(d['key'].startswith('hgnc/') for d in self.api.datasets.values()))
         self.assertTrue(all(n['type'] in ['Gene','Protein'] for n in self.api.harvested['nodes']))
         self.assertFalse(self.api.harvested['dataset']['synthetic'])
+
+    def test_focus_anchor_survives_small_first_page_and_unknown_focus_is_404(self):
+        claim = next(c for c in self.api.harvested['claims']
+                     if c['object'] > c['subject'] and c['object'] not in {n['id'] for n in self.api.reviewed['nodes']})
+        status, data = self.api.request('/api/harvest/graph', {'focus': [claim['object']], 'limit': ['1']})
+        self.assertEqual(status, 200)
+        self.assertIn(claim['object'], {node['id'] for node in data['nodes']})
+        self.assertEqual(data['harvest']['next_offset'], 1)
+        self.assertEqual(self.api.request('/api/harvest/graph', {'focus': ['missing']})[0], 404)
+
+    def test_invalid_and_ambiguous_paging_returns_specific_errors(self):
+        for key in ('limit', 'offset'):
+            for value in ('', 'NaN', '1.5', '9' * 5000, '²'):
+                with self.subTest(key=key, value=value[:30]):
+                    status, data = self.api.request('/api/harvest/graph', {key: [value]})
+                    self.assertEqual(status, 400)
+                    self.assertIn(key, data['error']['message'])
+        for path, query in [('/api/harvest/graph', {'limit': ['1', '2']}),
+                            ('/api/harvest/node', {'id': ['a', 'b']}),
+                            ('/api/harvest/search', {'q': ['a', 'b']})]:
+            self.assertEqual(self.api.request(path, query)[0], 400)
+
+    def test_offset_and_limit_edges_remain_bounded(self):
+        for limit, offset in [('-1', '-1'), ('9999999999', '9999999999'), ('0', '10000')]:
+            status, data = self.api.request('/api/harvest/graph', {'limit': [limit], 'offset': [offset]})
+            self.assertEqual(status, 200)
+            self.assertGreaterEqual(data['harvest']['limit'], 1)
+            self.assertLessEqual(data['harvest']['limit'], 10000)
+            self.assertGreaterEqual(data['harvest']['offset'], 0)
+            self.assertLessEqual(len(data['nodes']), data['harvest']['limit'] + len(self.api.reviewed['nodes']))
+            node_ids = {node['id'] for node in data['nodes']}
+            self.assertTrue(all(c['subject'] in node_ids and c['object'] in node_ids for c in data['claims']))
+
+    def test_record_lookup_preserves_first_projection_and_dataset_scope(self):
+        node = self.api.harvested['nodes'][0]
+        identifier = node['provenance']['id']
+        status, data = self.api.request('/api/harvest/record', {'id': [identifier]})
+        self.assertEqual(status, 200)
+        self.assertEqual(data['node'], next(n for n in self.api.harvested['nodes'] if n['provenance']['id'] == identifier))
+        dataset = node['provenance']['dataset']
+        status, data = self.api.request('/api/harvest/records', {'dataset': [dataset], 'limit': ['1']})
+        self.assertEqual(status, 200)
+        self.assertEqual(len(data['records']), 1)
+        self.assertEqual(data['records'][0]['dataset'], dataset)
+        self.assertEqual(self.api.request('/api/harvest/records', {'dataset': ['missing']})[0], 404)
+
+    def test_search_is_bounded_and_does_not_match_list_serialization(self):
+        status, data = self.api.request('/api/harvest/search', {'q': ['gene']})
+        self.assertEqual(status, 200)
+        self.assertLessEqual(len(data['results']), 40)
+        self.assertGreaterEqual(data['total'], len(data['results']))
+        self.assertEqual(self.api.request('/api/harvest/search', {'q': ['x' * 1001]})[0], 400)
+        empty = PublicGraphAPI({'nodes': [{'id': 'a', 'label': 'a', 'aliases': []}],
+                                'claims': [], 'public_datasets': []}, {'nodes': [], 'claims': []})
+        self.assertEqual(empty.request('/api/harvest/search', {'q': ['[]']})[1]['total'], 0)

@@ -50,6 +50,27 @@ def candidate(result, disease_id):
 
 
 class AtlasReasonerTests(unittest.TestCase):
+    def test_withdrawn_source_does_not_support_a_research_route(self):
+        bundle, _ = fixture()
+        bundle['sources'][0]['status'] = 'retracted'
+        result = AtlasReasoner(bundle).explore('a')
+        self.assertEqual(candidate(result, 'b')['status'], 'rejected')
+        self.assertEqual(result['opportunities'], [])
+        self.assertTrue(candidate(result, 'b')['evidence'])  # Preserve the audit trail.
+
+    def test_stale_source_review_requires_review_in_legacy_explorer(self):
+        bundle, _ = fixture()
+        bundle['sources'][0]['version'] = 'current-snapshot'
+        for row in bundle['evidence']:
+            row['source_version'] = 'previous-snapshot'
+        result = AtlasReasoner(bundle).explore('a')
+        self.assertEqual(candidate(result, 'b')['status'], 'needs_review')
+        self.assertEqual(result['opportunities'], [])
+        for row in bundle['evidence']:
+            row['source_version'] = 'current-snapshot'
+        current = AtlasReasoner(bundle).explore('a')
+        self.assertEqual(candidate(current, 'b')['status'], 'supported_lead')
+
     def test_supported_mechanism_and_evidenced_asset_owner_route(self):
         bundle, _ = fixture()
         result = AtlasReasoner(bundle).explore("a")

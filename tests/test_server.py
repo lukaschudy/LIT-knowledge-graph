@@ -85,7 +85,11 @@ class AtlasServerTests(unittest.TestCase):
             self.assertIn(b"connected-biology.png", response.read())
         with urlopen(self.base + "/explore") as response:
             self.assertEqual(response.status, 200)
-            self.assertIn(b"Follow the evidence", response.read())
+            page = response.read()
+            self.assertIn(b'id="graph-paint"', page)
+            self.assertIn(b'src="/graph-renderer.js"', page)
+            self.assertIn(b'src="/graph.js"', page)
+            self.assertIn(b'id="chat-form"', page)
         with urlopen(self.base + "/app.js") as response:
             self.assertEqual(response.status, 200)
             self.assertIn("javascript", response.headers["Content-Type"])

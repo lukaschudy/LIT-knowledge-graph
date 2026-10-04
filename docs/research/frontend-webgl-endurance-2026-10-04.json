@@ -1,0 +1,101 @@
+{
+  "seconds": 600,
+  "iterations": 961,
+  "nodes": 10000,
+  "claims": 5346,
+  "fixture": "data/curated/hgnc_dense_snapshot.json.gz",
+  "renderer": "webgl",
+  "lifecycleSuspendResume": true,
+  "samples": [
+    {
+      "seconds": 1,
+      "iterations": 1,
+      "heapBytes": 11096996,
+      "targets": 32
+    },
+    {
+      "seconds": 61,
+      "iterations": 92,
+      "heapBytes": 11587236,
+      "targets": 32
+    },
+    {
+      "seconds": 120,
+      "iterations": 183,
+      "heapBytes": 11645696,
+      "targets": 32
+    },
+    {
+      "seconds": 181,
+      "iterations": 279,
+      "heapBytes": 11726068,
+      "targets": 32
+    },
+    {
+      "seconds": 240,
+      "iterations": 374,
+      "heapBytes": 11712380,
+      "targets": 32
+    },
+    {
+      "seconds": 301,
+      "iterations": 471,
+      "heapBytes": 11522264,
+      "targets": 32
+    },
+    {
+      "seconds": 361,
+      "iterations": 569,
+      "heapBytes": 11761692,
+      "targets": 32
+    },
+    {
+      "seconds": 420,
+      "iterations": 664,
+      "heapBytes": 11774320,
+      "targets": 32
+    },
+    {
+      "seconds": 481,
+      "iterations": 764,
+      "heapBytes": 11767456,
+      "targets": 32
+    },
+    {
+      "seconds": 541,
+      "iterations": 864,
+      "heapBytes": 11773520,
+      "targets": 32
+    }
+  ],
+  "finalHeapBytes": 11566684,
+  "heapGrowthBytes": -20552,
+  "method": {
+    "date": "2026-10-04",
+    "browser": "Headless Chromium via Playwright",
+    "mode": "WebGL API; physical GPU backend not characterized",
+    "motion": "prefers-reduced-motion: reduce",
+    "api_requests": "All /api requests intercepted in a local test tab; no live API or model calls and no proposal writes",
+    "graph_fixture": "Checked-in real HGNC snapshot, 10000 nodes and 5346 relationships",
+    "interactions": "Real pointer orbit, wheel zoom, node search, selection, clear selection; periodic recomposition and desktop resize; one CDP frozen/active lifecycle cycle",
+    "viewports": [
+      {
+        "width": 1200,
+        "height": 800
+      },
+      {
+        "width": 1180,
+        "height": 800
+      }
+    ],
+    "invariants": "Exact node world-coordinate equality, 10000 retained nodes, at most 40 mounted node targets, no pageerror exceptions",
+    "heap": "Chrome DevTools Protocol HeapProfiler.collectGarbage before Performance JSHeapUsedSize sampling; growth baseline is the second sample near one minute",
+    "limitations": [
+      "Chromium only",
+      "Mocked API responses",
+      "No physical microphone or production infrastructure exercised",
+      "No mobile viewport phase in this first 10-minute run"
+    ],
+    "command": "NODE_PATH=<playwright node_modules> ATLAS_ENDURANCE_ONLY=1 ATLAS_ENDURANCE_SECONDS=600 ATLAS_ENDURANCE_REPORT=/tmp/atlas-frontend-endurance.json node scripts/check_frontend_reliability.cjs"
+  }
+}

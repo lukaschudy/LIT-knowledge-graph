@@ -1,0 +1,53 @@
+{
+  "question": "What source evidence is available about EPG5 and autophagy?",
+  "scope": "temporary local workspace; live TopK reads and one Codex answer; no production or index writes",
+  "model_status": {
+    "available": true,
+    "provider": "codex",
+    "model": "gpt-6-astra",
+    "mode": "live",
+    "reason": null
+  },
+  "persisted": {
+    "revision": 1,
+    "ask_history_count": 1,
+    "runs": 1
+  },
+  "status": "passed",
+  "duration_seconds": 20.313,
+  "job_status": "completed",
+  "metadata": {
+    "provider": "codex",
+    "model": "gpt-6-astra",
+    "duration_ms": 19497,
+    "usage": null,
+    "mode": "live",
+    "retrieval": {
+      "query": "What source evidence is available about EPG5 and autophagy? EPG5 ectopic P-granules autophagy protein 5",
+      "provider": "topk",
+      "scopes": [
+        {
+          "id": "neuro",
+          "label": "EPG5 / WDR45 / AP4B1 source snapshots",
+          "loaded_passages": 19,
+          "indexed_passages": 19,
+          "index_status": "verified_snapshot",
+          "collection": "lit-neuro-evidence-v1",
+          "verified_at": "2026-10-04T00:47:18.097455+00:00"
+        }
+      ],
+      "latency_ms": 443,
+      "cached": false,
+      "graph_write_performed": false,
+      "note": "Relevance ranks identify passages to inspect, not biological confidence. Full text and table text do not establish graph edges."
+    }
+  },
+  "citation_count": 3,
+  "source_ids": [
+    "epg5-vici-fusion-2018"
+  ],
+  "classifications": [
+    "unreviewed_discovery"
+  ],
+  "validation": "AtlasAssistant checked supplied citation and graph IDs; successful answer and run atomically persisted to the temporary workspace. This checks plumbing and provenance, not scientific entailment or model reliability across questions."
+}

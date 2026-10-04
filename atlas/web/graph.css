@@ -65,6 +65,7 @@
 .edge-target { stroke:transparent; stroke-width:12px; fill:none; cursor:pointer; vector-effect:non-scaling-stroke; pointer-events:none; }
 .show-connections .net-edge { stroke-opacity:.24; stroke-width:.65; }
 .edge-group.highlight .edge-target { pointer-events:stroke; }
+.edge-group:focus-visible .edge-target { stroke:var(--green); stroke-width:3px; }
 .edge-group:focus-visible .net-edge, .edge-group:hover .net-edge { stroke-opacity:1; stroke-width:2; }
 .net-node { cursor:pointer; outline:none; }
 /* Keyboard focus is drawn as the same high-contrast ring as pointer selection. */

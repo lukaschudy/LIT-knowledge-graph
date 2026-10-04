@@ -2,13 +2,16 @@ Atlas on Cloudflare
 
 Build the current frontend and the reviewed real GRIN cluster:
   python3 scripts/build_cloudflare.py
+  python3 scripts/verify_cloudflare_build.py
 
 Run Cloudflare locally (install uv and Node.js first):
   cd deploy/cloudflare
   uv run pywrangler dev --port 8788
 
 Deploy application updates without changing domain routes:
-  uv run pywrangler versions upload --message "Describe the update"
+  # From repository root; --pywrangler may name its installed absolute path.
+  python3 scripts/upload_cloudflare.py --message "Describe the update"
+  cd deploy/cloudflare
   uv run pywrangler versions deploy <returned-version-id>@100% --yes
 
 For first-time setup with route/DNS permissions:
@@ -16,14 +19,44 @@ For first-time setup with route/DNS permissions:
 
 The build verifies the committed annotation receipt, then publishes the real
 35-node graph and all 340 reviewed observation records / 53 annotation claims.
-It refuses synthetic fixtures and preserves the previous graph file unchanged.
+It refuses synthetic fixtures. A failed build preserves the previous complete
+build unchanged. A successful build replaces the entire allowlisted output tree,
+removing obsolete assets/modules that could otherwise leak into an upload.
 The graph's effect assertions and variant summaries use the reviewed reference;
 older scalar functional summaries are removed from the derived deployment.
 The build copies only allowlisted web assets, the shared read-only API, graph
 reasoner, annotation lookup, reviewed metadata and bounded source spans. It does
 not publish local SQLite files, complete harvested papers, environment variables,
-or arbitrary repository contents. Rebuilding requires the matching local frozen
-source snapshot for the cited table cells and short supplement-row excerpts.
+or arbitrary repository contents. A clean checkout uses the committed, bounded
+public excerpt snapshot sealed by cloudflare_public_data_receipt.json. These
+545 spans are the same table cells and short supplement rows already published.
+When the ignored frozen source snapshot exists locally, the builder verifies
+its digest and re-extracts the spans to require an exact match as well.
+
+The manifest records SHA-256 hashes of generated files and build inputs. Verify
+immediately before upload: it rejects changed inputs, changed output, and extra
+files. Concurrent edits detected during packaging abort without replacing the
+previous build. The build, verifier and upload wrapper share a POSIX release
+lock so a concurrent build cannot replace files while uploading. Use the upload
+wrapper instead of plain versions upload; invoking Wrangler directly bypasses
+that guard. The wrapper checks the installed pywrangler version, synchronizes
+its Python dependencies, then verifies both the build and the exact vendor tree.
+The vendor check uses the SDK wheel SHA-256 pinned in pylock.toml, not the
+installed RECORD file: extra files, changed libraries, forged RECORD hashes,
+symlinks and stale sync markers prevent upload. The audited versions are
+workers-py 1.17.6 and workers-runtime-sdk 1.9.2; dependency upgrades require
+reviewing that packaging contract. Use --wheel /absolute/path/to/pinned.whl on
+the upload wrapper to verify offline; it still checks the pinned hash.
+This lock covers packaging only, never production inbox data.
+Do not edit generated files to work around a failure; fix the
+source and rebuild. --committed-assets uses HEAD for frontend assets only; the
+manifest records that choice and the backend/data still use the working tree.
+
+To refresh curated data, first rerun and review the annotation/source audit.
+The cluster/reference receipt, public excerpts, dense snapshot and public data
+receipt must describe the same reviewed revision. Never simply update hashes
+for an unexplained changed data file. The normal build is read-only with respect
+to those inputs and does not silently regenerate or bless data receipts.
 API logic is shared with the local Python server in atlas/http_api.py.
 
 Production pages:

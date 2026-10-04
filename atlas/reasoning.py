@@ -72,12 +72,18 @@ class AtlasReasoner:
         if self._context(claim).get("negated", False):
             return "negated"
         rows = self._evidence(claim)
-        supporting_rows = [row for row in rows if row.get("stance") == "supports" and row.get("source") is not None]
-        has_contradiction = any(row.get("stance") == "contradicts" and row.get("source") is not None for row in rows)
+        active_rows = [row for row in rows if row.get("source") is not None
+                       and row['source'].get('status', 'active') == 'active']
+        supporting_rows = [row for row in active_rows if row.get("stance") == "supports"]
+        has_contradiction = any(row.get("stance") == "contradicts" for row in active_rows)
         if has_contradiction:
             return "contradicted"
-        has_reviewed_support = any(row.get("review_status") in {"machine_checked", "human_reviewed"} for row in supporting_rows)
-        has_unreviewed_support = any(row.get("review_status") == "unreviewed" for row in supporting_rows)
+        def current_review(row):
+            source_version = row['source'].get('version')
+            return (row.get("review_status") in {"machine_checked", "human_reviewed"}
+                    and (not source_version or row.get('source_version') == source_version))
+        has_reviewed_support = any(current_review(row) for row in supporting_rows)
+        has_unreviewed_support = any(not current_review(row) for row in supporting_rows)
         if claim.get("assertion_type") != "reported":
             return "inferred_only" if supporting_rows else "unsupported"
         if has_reviewed_support:

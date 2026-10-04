@@ -1,0 +1,18 @@
+{
+  "excerpts": {
+    "count": 545,
+    "path": "data/curated/grin_public_excerpts_v2.json",
+    "sha256": "a24a85f27de6e407845073b1e8e7a25e33f8f7ca7596e2d639ff20d540f07660"
+  },
+  "hgnc": {
+    "claims": 5346,
+    "dataset_keys": [
+      "hgnc/withdrawn",
+      "hgnc/hgnc_complete_set"
+    ],
+    "nodes": 10000,
+    "path": "data/curated/hgnc_dense_snapshot.json.gz",
+    "sha256": "8673edbc095100db4639a7e5de13831c245f072909ae3abff219498e7d2853c9"
+  },
+  "schema_version": "atlas-public-data-receipt-v1"
+}

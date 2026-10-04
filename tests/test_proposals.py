@@ -4,7 +4,7 @@ import sqlite3
 import unittest
 import uuid
 from pathlib import Path
-from atlas.proposals import SCHEMA, INDEX, ProposalError, submit_proposal, proposal_status
+from atlas.proposals import SCHEMA, INDEX, ProposalError, submit_proposal, proposal_status, parse_proposal
 from atlas.cluster_questions import answer_cluster_question
 
 class ProposalTests(unittest.TestCase):
@@ -60,6 +60,44 @@ class ProposalTests(unittest.TestCase):
         for identifier in ['bad',str(uuid.uuid4())]:
             with self.assertRaises(ProposalError) as error:proposal_status(identifier,self.execute)
             self.assertEqual(error.exception.status,404)
+
+    def test_surrogates_and_hidden_url_whitespace_are_rejected(self):
+        for field, value in [('name', 'Paper\ud800'), ('description', 'Evidence for \udfff'),
+                             ('source_url', 'https://example.org/a\nb'),
+                             ('source_url', 'https://example.org/a\tb'),
+                             ('source_url', 'https://exa mple.org/a'),
+                             ('source_url', 'https://@example.org/')]:
+            with self.subTest(field=field, value=repr(value)), self.assertRaises(ProposalError):
+                submit_proposal({**self.data, field: value}, self.execute)
+        self.assertEqual(self.execute('SELECT COUNT(*) AS n FROM proposals')[0]['n'], 0)
+
+    def test_byte_budget_applies_to_multibyte_content(self):
+        with self.assertRaises(ProposalError) as caught:
+            submit_proposal({**self.data, 'description': '🧬' * 4000}, self.execute)
+        self.assertEqual(caught.exception.status, 413)
+        status, _ = submit_proposal({**self.data, 'description': '🧬' * 2000}, self.execute)
+        self.assertEqual(status, 201)
+
+    def test_json_fields_cannot_be_ambiguous_or_nonfinite(self):
+        valid = json.dumps(self.data)
+        for body in [valid[:-1] + ',"name":"second"}', valid[:-1] + ',"extra":NaN}',
+                     '[' * 1100 + ']' * 1100, 'null', '[]', '{']:
+            with self.subTest(body=body[:40]), self.assertRaises(ProposalError):
+                parse_proposal(body)
+        self.assertEqual(parse_proposal(valid), self.data)
+
+    def test_rate_window_expires_at_exact_hour_boundary(self):
+        for _ in range(120):
+            submit_proposal({**self.data, 'request_id': str(uuid.uuid4())}, self.execute, now=1000)
+        self.assertEqual(submit_proposal(self.data, self.execute, now=4600)[0], 201)
+
+    def test_receipt_validation_handles_nontext_without_querying_storage(self):
+        def unexpected_query(*args):
+            self.fail('Invalid receipt touched storage')
+        for identifier in [None, 123, [], {}, 'x' * 10000]:
+            with self.subTest(identifier=str(identifier)[:40]), self.assertRaises(ProposalError) as caught:
+                proposal_status(identifier, unexpected_query)
+            self.assertEqual(caught.exception.status, 404)
 
 class CoverageGapTests(unittest.TestCase):
     @classmethod
