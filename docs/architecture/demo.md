@@ -1,6 +1,6 @@
-# One-minute walkthrough
+# Historical synthetic walkthrough
 
-All examples in this walkthrough are explicitly fictional software fixtures.
+The submission now follows the real GRIN case: use the [canonical judge walkthrough](../submission.md#judge-walkthrough) and [impact assumptions](../submission.md#impact-case-and-validation). The script below is retained only for software-fixture demonstrations. All examples below are explicitly fictional.
 
 **0–10 seconds:** Search `AS-demo`. Aurora resolves to one stable disease identity. Explain that the demo asks what another community has already built.
 
