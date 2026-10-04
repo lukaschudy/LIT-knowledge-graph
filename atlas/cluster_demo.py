@@ -89,14 +89,16 @@ def build(reference, sources, curated, ledger):
         gene, protein = variant["gene"], variant["reported_protein"]
         rows = [o for o in data["observations"] if (o["gene"], o["protein"]) == (gene, protein)]
         claims = [c for c in data["claims"] if (c["gene"], c["protein"]) == (gene, protein)]
-        issues = [i for i in data["issues"] if (i["gene"], i["protein"]) == (gene, protein)]
+        paper_ids = {r["document_id"] for r in rows} | {c["document_id"] for c in claims}
+        issues = [i for i in data["issues"] if (i["gene"], i["protein"]) == (gene, protein)
+                  or i["gene"] is None and i["document_id"] in paper_ids]
         tier = tier_for(claims, rows)
         data["members"].append({"id": "variant:" + re.sub(r"[^a-z0-9]+", "-", variant["variant_id"].lower()).strip("-"),
                                 "gene": gene, "protein": protein, "tier": tier,
                                 "previous_tier": variant["cohort_tier"], "tier_changed": tier != variant["cohort_tier"],
                                 "author_classifications": sorted({c["category"] for c in claims if c["category"] and c["predicate"] == "author_functional_classification"}),
                                 "observation_count": len(rows), "quantitative_count": sum(r["measurement"]["estimate"] is not None for r in rows),
-                                "paper_count": len({r["document_id"] for r in rows} | {c["document_id"] for c in claims}),
+                                "paper_count": len(paper_ids),
                                 "issue_count": len(issues), "claim_ids": [c["id"] for c in claims],
                                 "identity_scope": "Protein variant and reported assay construct; genomic/transcript conflicts remain explicit"})
     data["counts"] = {**validation, "variants": len(data["members"]), "tiers": dict(Counter(v["tier"] for v in data["members"]))}

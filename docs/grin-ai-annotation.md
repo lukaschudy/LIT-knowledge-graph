@@ -2,6 +2,8 @@
 
 This development exercise prepares real source snapshots and separate-context AI annotations. It does not create human-reviewed gold labels or measure a held-out extraction model's accuracy. The two annotators receive identical source-only packets; a third AI adjudicator checks their drafts against the paper, including facts on which they agree. Model agreement can still contain correlated errors.
 
+The subsequent [seven-paper, ten-variant expansion](grin-cluster-evidence.md) is complete for its declared supplied-source scope: 340 observations, 53 claims and a working small-cluster evidence viewer. The one-table pilot and scalar benchmark described below remain separate historical calibration artifacts.
+
 ## Source snapshots
 
 The local package is `data/processed/benchmarks/grin-development-v1/`. It contains seven original article HTML files, the already acquired Myers supplement PDF and extracted layout text, normalized source units, a table/coverage ledger, a draft manifest and a blank annotation template. The original artifacts are checked against their harvest hashes before use. Rebuilding into an existing directory is refused.

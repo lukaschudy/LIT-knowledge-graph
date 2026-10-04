@@ -2,6 +2,26 @@
 
 This development demo connects the selected ten GRIN2A/GRIN2B protein variants to source-reported functional classifications and experimental observations across seven papers. The categories are source-guided groups, not an unsupervised clustering result, a patient cohort or a treatment recommendation.
 
+## Completed reference
+
+The reconciled reference contains **340 observations, 53 claims and 11 unresolved issues**. It preserves all 152 selected main-table cells: 123 equality values, two censored bounds, 18 qualitative summaries and nine not-reported cells. Another 163 records come from the Myers supplement and 25 from other supplied prose. Quantitative summaries and repeated source values do not represent additional independent experiments.
+
+| Source | Observations |
+|---|---:|
+| Swanger — PMC5142120 | 51 |
+| Platzer — PMC5656050 | 4 |
+| Chen — PMC7554152 | 38 |
+| Myers — PMC10508039 | 163 |
+| Xie — PMC10641759 | 54 |
+| Xu — PMC10973091 | 14 |
+| Han — PMC11046977 | 16 |
+
+The cluster has six core likely-reduced members, one provisional possible-reduced member, two opposing controls and one unresolved control. These memberships agree with the previous curated pilot, now backed by the expanded independently drafted and source-adjudicated records. The six core members are GRIN2A G483R, A716T and D731N, and GRIN2B E413G, S541R and P553T.
+
+The adjudicator checked 472 quantitative observation/comparator records against their raw representations and visually audited Myers supplement pages 5–7. The coordinator verified 10,752 exact evidence-span occurrences across both drafts, the final reference and audit log, checked all main-table coordinates, confirmed unchanged drafts and identical source packets, and reproduced the published bundle exactly. The [receipt](../data/benchmarks/grin-v1/cluster-annotation-receipt-v2.json) binds the files and counts to hashes.
+
+Shared errors were corrected even when both annotators agreed: source provenance of Myers classification analyses, unsupported protocol generalizations, nonsynaptic glutamate conditions and neuronal uncertainty/sample-count details. Additional supported observations missed by one or both annotators were retained. No held-out model accuracy has been measured.
+
 ## Annotation and review
 
 Two fresh-context AI annotators received identical frozen source packets and the [v2 annotation contract](grin-cluster-annotation-contract.md), without the existing graph, prior annotations or expected classifications. Each annotated all 152 in-scope main-table endpoint cells and separately inspected supporting prose and the available Myers supplement. Their initial drafts contain 304 and 333 observations respectively. The difference is largely supplemental/prose coverage, which cannot be assessed by matching main-table coordinates alone.

@@ -132,9 +132,12 @@ class ClusterAnnotationTests(unittest.TestCase):
                   text="30", unit_id=o["evidence"][0]["unit_id"])])]) for o in a["observations"]]}
         with self.assertRaisesRegex(ValueError, "source-audited"): build(a, s, curated, ledger)
         a["review_type"] = "source_audited_ai_reference"
+        a["issues"].append(dict(document_id=a["coverage"][0]["document_id"], gene=None, protein=None,
+                                description="Synthetic paper-wide uncertainty", evidence=[]))
         result = build(a, s, curated, ledger)
         self.assertEqual(result["members"][0]["tier"], "unresolved_control")
         self.assertTrue(result["members"][0]["tier_changed"])
+        self.assertEqual(result["members"][0]["issue_count"], 1)
         self.assertNotIn("quote", result["observations"][0]["evidence"][0])
         self.assertIn("locator", result["observations"][0]["evidence"][0])
 

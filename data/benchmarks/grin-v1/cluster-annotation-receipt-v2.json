@@ -1,0 +1,464 @@
+{
+  "schema_version": "grin-cluster-annotation-receipt-v2",
+  "scope": "Ten selected protein variants across seven development papers; not every GRIN variant or all harvested papers",
+  "provenance": "Two fresh-context AI annotators and one separate source-based AI adjudicator",
+  "isolation": {
+    "fork_turns": "none",
+    "same_source_packets": true,
+    "access_boundary": "Explicit agent instructions, not an OS security sandbox",
+    "prior_graph_supplied": false
+  },
+  "model_configuration": {
+    "override": null,
+    "inherited_model": true,
+    "exact_deployment_id": null,
+    "token_usage": null,
+    "cost_usd": null
+  },
+  "validation": {
+    "drafts_unchanged": true,
+    "table_coverage_preserved": true,
+    "exact_source_span_occurrences": 10752,
+    "bundle_rebuild_equal": true,
+    "annotations": {
+      "a": {
+        "documents": 7,
+        "observations": 304,
+        "claims": 28,
+        "by_document": {
+          "PMC10641759": 54,
+          "PMC10973091": 14,
+          "PMC11046977": 16,
+          "PMC5142120": 41,
+          "PMC5656050": 4,
+          "PMC7554152": 30,
+          "PMC10508039": 145
+        },
+        "verified_table_cells": 152,
+        "prose_supplement_observations": 152
+      },
+      "b": {
+        "documents": 7,
+        "observations": 333,
+        "claims": 35,
+        "by_document": {
+          "PMC10641759": 54,
+          "PMC10973091": 14,
+          "PMC11046977": 16,
+          "PMC5142120": 44,
+          "PMC5656050": 4,
+          "PMC7554152": 38,
+          "PMC10508039": 163
+        },
+        "verified_table_cells": 152,
+        "prose_supplement_observations": 181
+      },
+      "reference": {
+        "documents": 7,
+        "observations": 340,
+        "claims": 53,
+        "by_document": {
+          "PMC10641759": 54,
+          "PMC10973091": 14,
+          "PMC11046977": 16,
+          "PMC5142120": 51,
+          "PMC5656050": 4,
+          "PMC7554152": 38,
+          "PMC10508039": 163
+        },
+        "verified_table_cells": 152,
+        "prose_supplement_observations": 188
+      }
+    }
+  },
+  "initial_agreement": {
+    "schema_version": "grin-cluster-agreement-v2",
+    "reviewers": [
+      "ai-cluster-a",
+      "ai-cluster-b"
+    ],
+    "hashes": {
+      "a": "6f5449227326f78dc7ea8580d114c10701bc58f2edb56e85796df6eb8cf6c311",
+      "b": "ace7bf37b9a4f89b18fdfce2bfa622d52a2a56065c0c8810209d4a4f2c1e5cbb",
+      "sources": "640e249a2f2e77d71504a1e67ed18d6a17764e79af61ccd7c5b0fdbd2d1f3407"
+    },
+    "paired_table_cells": 152,
+    "field_agreement": {
+      "endpoint": 152,
+      "assay": 134,
+      "measurement_type": 152,
+      "sequence_context": 148,
+      "measurement": 145,
+      "comparator": 133
+    },
+    "a_only": [],
+    "b_only": [],
+    "prose_and_claims": "Require source-based adjudication; not automatically paired",
+    "scientifically_validated": false
+  },
+  "reference": {
+    "sha256": "9aae6d8ed8b5f6278ffed2108d393645b4622e706f3d6182b2b0bd10b89e0728",
+    "sources_sha256": "640e249a2f2e77d71504a1e67ed18d6a17764e79af61ccd7c5b0fdbd2d1f3407",
+    "measurement_types": {
+      "measured": 147,
+      "secondary_summary": 117,
+      "author_calculated": 76
+    },
+    "relations": {
+      "eq": 310,
+      "not_reported": 10,
+      "qualitative": 18,
+      "gt": 2
+    },
+    "issues": 11,
+    "coverage": [
+      {
+        "document_id": "PMC10508039",
+        "status": "source_audited_selected_main_table_cells_complete_with_documented_gaps",
+        "scope": "Ten declared protein identities; all 152 matching main-table endpoint cells across the packet, selected-variant functional prose and supplied Myers supplement. Text provenance and selected local-PDF visual checks only; no exhaustive figure extraction or expert validation.",
+        "omissions": [
+          "All nine supplement text pages screened; pages 5–7 independently rendered and visually audited. Figure S1 on page 8 was screened as text only; no plot digitization.",
+          "No A639V row or explicit variant-specific classification found in Myers main or supplemental supplied text. Main Tables 1–6 have no matching focus-variant rows.",
+          "Supplemental tables lack ledger cell IDs; their text-backed observations use null table/row/column, with printed table and cell mapping in supplemental_accounting."
+        ],
+        "reviewed_tables": [
+          "PMC10508039:table:1",
+          "PMC10508039:table:2",
+          "PMC10508039:table:3",
+          "PMC10508039:table:4",
+          "PMC10508039:table:5",
+          "PMC10508039:table:6",
+          "PMC10508039:table:7",
+          "PMC10508039:table:8",
+          "PMC10508039:table:9",
+          "PMC10508039:table:10",
+          "PMC10508039:table:11",
+          "PMC10508039:table:12",
+          "PMC10508039:table:13",
+          "PMC10508039:table:14",
+          "PMC10508039:table:15",
+          "PMC10508039:table:16"
+        ]
+      },
+      {
+        "document_id": "PMC10641759",
+        "status": "source_audited_selected_main_table_cells_complete_with_documented_gaps",
+        "scope": "Ten declared protein identities; all 152 matching main-table endpoint cells across the packet, selected-variant functional prose and supplied Myers supplement. Text provenance and selected local-PDF visual checks only; no exhaustive figure extraction or expert validation.",
+        "omissions": [
+          "Other supplemental tables and original figure images are not supplied locally; no network used and no image-only numeric values inferred."
+        ],
+        "reviewed_tables": [
+          "PMC10641759:table:1",
+          "PMC10641759:table:2",
+          "PMC10641759:table:3",
+          "PMC10641759:table:4",
+          "PMC10641759:table:5",
+          "PMC10641759:table:6",
+          "PMC10641759:table:7",
+          "PMC10641759:table:8",
+          "PMC10641759:table:9",
+          "PMC10641759:table:10",
+          "PMC10641759:table:11"
+        ]
+      },
+      {
+        "document_id": "PMC10973091",
+        "status": "source_audited_selected_main_table_cells_complete_with_documented_gaps",
+        "scope": "Ten declared protein identities; all 152 matching main-table endpoint cells across the packet, selected-variant functional prose and supplied Myers supplement. Text provenance and selected local-PDF visual checks only; no exhaustive figure extraction or expert validation.",
+        "omissions": [
+          "Other supplemental tables and original figure images are not supplied locally; no network used and no image-only numeric values inferred.",
+          "Variant-specific classification in image-only main Figure 5 / unavailable supplement not recovered; no A639V integrated class inferred from endpoint values or paper-wide summaries."
+        ],
+        "reviewed_tables": [
+          "PMC10973091:table:1",
+          "PMC10973091:table:2",
+          "PMC10973091:table:3",
+          "PMC10973091:table:4",
+          "PMC10973091:table:5",
+          "PMC10973091:table:6",
+          "PMC10973091:table:7",
+          "PMC10973091:table:8",
+          "PMC10973091:table:9",
+          "PMC10973091:table:10",
+          "PMC10973091:table:11"
+        ]
+      },
+      {
+        "document_id": "PMC11046977",
+        "status": "source_audited_selected_main_table_cells_complete_with_documented_gaps",
+        "scope": "Ten declared protein identities; all 152 matching main-table endpoint cells across the packet, selected-variant functional prose and supplied Myers supplement. Text provenance and selected local-PDF visual checks only; no exhaustive figure extraction or expert validation.",
+        "omissions": [
+          "Other supplemental tables and original figure images are not supplied locally; no network used and no image-only numeric values inferred.",
+          "Supplemental S2 construct-specific glutamate EC50 for D-APV protocol unavailable; main-table D-APV IC50 retained with named unknown concentration."
+        ],
+        "reviewed_tables": [
+          "PMC11046977:table:1",
+          "PMC11046977:table:2",
+          "PMC11046977:table:3",
+          "PMC11046977:table:4",
+          "PMC11046977:table:5"
+        ]
+      },
+      {
+        "document_id": "PMC5142120",
+        "status": "source_audited_selected_main_table_cells_complete_with_documented_gaps",
+        "scope": "Ten declared protein identities; all 152 matching main-table endpoint cells across the packet, selected-variant functional prose and supplied Myers supplement. Text provenance and selected local-PDF visual checks only; no exhaustive figure extraction or expert validation.",
+        "omissions": [
+          "Other supplemental tables and original figure images are not supplied locally; no network used and no image-only numeric values inferred.",
+          "Supplemental functional, single-channel, surface-expression and modulator tables S6–S15 unavailable; accessible main-table and selected prose data retained. Explicit prose molecular-dynamics outputs are retained separately as author calculations."
+        ],
+        "reviewed_tables": [
+          "PMC5142120:table:1",
+          "PMC5142120:table:2",
+          "PMC5142120:table:3",
+          "PMC5142120:table:4",
+          "PMC5142120:table:5",
+          "PMC5142120:table:6",
+          "PMC5142120:table:7",
+          "PMC5142120:table:8",
+          "PMC5142120:table:9"
+        ]
+      },
+      {
+        "document_id": "PMC5656050",
+        "status": "source_audited_selected_main_table_cells_complete_with_documented_gaps",
+        "scope": "Ten declared protein identities; all 152 matching main-table endpoint cells across the packet, selected-variant functional prose and supplied Myers supplement. Text provenance and selected local-PDF visual checks only; no exhaustive figure extraction or expert validation.",
+        "omissions": [
+          "Other supplemental tables and original figure images are not supplied locally; no network used and no image-only numeric values inferred."
+        ],
+        "reviewed_tables": [
+          "PMC5656050:table:1",
+          "PMC5656050:table:2",
+          "PMC5656050:table:3",
+          "PMC5656050:table:4",
+          "PMC5656050:table:5"
+        ]
+      },
+      {
+        "document_id": "PMC7554152",
+        "status": "source_audited_selected_main_table_cells_complete_with_documented_gaps",
+        "scope": "Ten declared protein identities; all 152 matching main-table endpoint cells across the packet, selected-variant functional prose and supplied Myers supplement. Text provenance and selected local-PDF visual checks only; no exhaustive figure extraction or expert validation.",
+        "omissions": [
+          "Other supplemental tables and original figure images are not supplied locally; no network used and no image-only numeric values inferred.",
+          "Supplemental S1–S4 full Hill-slope, maximal-efficacy and voltage-dependent pharmacology data unavailable; figure-caption numerical prose extracted where explicit."
+        ],
+        "reviewed_tables": [
+          "PMC7554152:table:1",
+          "PMC7554152:table:2",
+          "PMC7554152:table:3",
+          "PMC7554152:table:4",
+          "PMC7554152:table:5",
+          "PMC7554152:table:6"
+        ]
+      }
+    ]
+  },
+  "cluster": {
+    "documents": 7,
+    "observations": 340,
+    "claims": 53,
+    "by_document": {
+      "PMC10641759": 54,
+      "PMC10973091": 14,
+      "PMC11046977": 16,
+      "PMC5142120": 51,
+      "PMC5656050": 4,
+      "PMC7554152": 38,
+      "PMC10508039": 163
+    },
+    "verified_table_cells": 152,
+    "prose_supplement_observations": 188,
+    "variants": 10,
+    "tiers": {
+      "core_likely_reduced": 6,
+      "provisional_possible_reduced": 1,
+      "opposing_control": 2,
+      "unresolved_control": 1
+    }
+  },
+  "files": {
+    "data/curated/grin_cluster_demo_v2.json": {
+      "sha256": "0fd210259d27635dc78a24b0b5f9eaee75ffecd5aa34b6dc33b9741796601480",
+      "bytes": 1655012
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/CONTRACT.md": {
+      "sha256": "6d7497d80a3bd78225f8e1295034e414b9feb46ec9b10ffcc34ee7f51fe17788",
+      "bytes": 6546
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/adjudicated-reference.json": {
+      "sha256": "9f14493e5dcca4d0e04435b1d7ea96dcbc9094af48ab8f38bcf390f57740a39e",
+      "bytes": 3162201
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/adjudication-notes.md": {
+      "sha256": "d8faa6064fa6de7c93ebc7072124e9b13cd8fded454d4e032333317203f46bc3",
+      "bytes": 6765
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/agreement.json": {
+      "sha256": "438f94061d3a11e7fa4d83471f37370cc3a2c98df214904ffa998f3ce6f5c675",
+      "bytes": 184101
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/audit-log.json": {
+      "sha256": "59a8312fefad717b3c68e848c6284d8aeb3c9c2b32aa0f522332ce8ae8a7a023",
+      "bytes": 1265321
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/build_adjudicated_reference.py": {
+      "sha256": "5b8803011e36ede78b44bb20f85a7358665f53b973fe286ed9d238ab4a79ccc7",
+      "bytes": 40499
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/cluster_contract.py": {
+      "sha256": "f586234bd92baf517bf54f4e540fba4461f48a9ca32931b4a1098ecf8e1ca3cb",
+      "bytes": 9327
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/coverage-detail.json": {
+      "sha256": "370eabc33dadb3601fa0c0e040b34b312a5cc8c2062a1f885320d26509d39341",
+      "bytes": 1326563
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/manifest.json": {
+      "sha256": "a55d27f4e0df39583135eadaa5f06839d72832258f160fe4e574e939fe66b15d",
+      "bytes": 2881
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/myers-supplement.pdf": {
+      "sha256": "e5e62338f78e3e97f0bbc75c4ae596018270c9667ae08c397d226698fa7ed7fa",
+      "bytes": 629251
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/reviewer-a-annotations.json": {
+      "sha256": "827ea23cf6f6c46fac58dfadae6ca2fd85c98f4e7b07c6f483bba8d7583605a7",
+      "bytes": 1762813
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/reviewer-a-coverage-detail.json": {
+      "sha256": "be335160f671aa2b6ab3f2d66df6079ca263e3d27e6baa2ba0db7398666cb449",
+      "bytes": 207581
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/reviewer-a-reviewer-notes.md": {
+      "sha256": "34e3d27e990c64e7ab97a400b6b8f641d7a010139ef48c1e32763d73a2fcd971",
+      "bytes": 4255
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/reviewer-b-annotations.json": {
+      "sha256": "18b387d808ca84716baa7db5086d93cbb286968de7d4038c37b674c6ecdad4c8",
+      "bytes": 2499197
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/reviewer-b-coverage-detail.json": {
+      "sha256": "0d94ab316b30547e6516a3e8e3c3f69dfa55345f49b10b2f63bb14b759e68b94",
+      "bytes": 131031
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/reviewer-b-reviewer-notes.md": {
+      "sha256": "fea83f2f009229d93bb1302cdb35f697b04d6e8bcfe154c3ee63b22b1d4845c9",
+      "bytes": 3555
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/source-ledger.json": {
+      "sha256": "810c4758cfae33d762af8f421507fd7cfdd1e3f3c1a957fb8a8c38d039f80b58",
+      "bytes": 4841351
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/source_contract.py": {
+      "sha256": "05b60b373917ab2bfab611184c5c32408b5acccc8a32c10ae1b1d31fa2c704b1",
+      "bytes": 13271
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/adjudicator/sources.json": {
+      "sha256": "95274a3bae23edabc290365c3b6a8a5602a44d8bf3d2412905cf1f5dd6a4818b",
+      "bytes": 2799259
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/agreement.json": {
+      "sha256": "438f94061d3a11e7fa4d83471f37370cc3a2c98df214904ffa998f3ce6f5c675",
+      "bytes": 184101
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/CONTRACT.md": {
+      "sha256": "6d7497d80a3bd78225f8e1295034e414b9feb46ec9b10ffcc34ee7f51fe17788",
+      "bytes": 6546
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/annotations.json": {
+      "sha256": "827ea23cf6f6c46fac58dfadae6ca2fd85c98f4e7b07c6f483bba8d7583605a7",
+      "bytes": 1762813
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/build_annotations.py": {
+      "sha256": "f8016995491558173e57a5a702bffbe85968e36e1ad9b2d19f863758346b70e0",
+      "bytes": 35092
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/cluster_contract.py": {
+      "sha256": "f586234bd92baf517bf54f4e540fba4461f48a9ca32931b4a1098ecf8e1ca3cb",
+      "bytes": 9327
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/coverage-detail.json": {
+      "sha256": "be335160f671aa2b6ab3f2d66df6079ca263e3d27e6baa2ba0db7398666cb449",
+      "bytes": 207581
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/manifest.json": {
+      "sha256": "a55d27f4e0df39583135eadaa5f06839d72832258f160fe4e574e939fe66b15d",
+      "bytes": 2881
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/myers-supplement.pdf": {
+      "sha256": "e5e62338f78e3e97f0bbc75c4ae596018270c9667ae08c397d226698fa7ed7fa",
+      "bytes": 629251
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/reviewer-notes.md": {
+      "sha256": "34e3d27e990c64e7ab97a400b6b8f641d7a010139ef48c1e32763d73a2fcd971",
+      "bytes": 4255
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/source-ledger.json": {
+      "sha256": "810c4758cfae33d762af8f421507fd7cfdd1e3f3c1a957fb8a8c38d039f80b58",
+      "bytes": 4841351
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/source_contract.py": {
+      "sha256": "05b60b373917ab2bfab611184c5c32408b5acccc8a32c10ae1b1d31fa2c704b1",
+      "bytes": 13271
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-a/sources.json": {
+      "sha256": "95274a3bae23edabc290365c3b6a8a5602a44d8bf3d2412905cf1f5dd6a4818b",
+      "bytes": 2799259
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/CONTRACT.md": {
+      "sha256": "6d7497d80a3bd78225f8e1295034e414b9feb46ec9b10ffcc34ee7f51fe17788",
+      "bytes": 6546
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/annotations.json": {
+      "sha256": "18b387d808ca84716baa7db5086d93cbb286968de7d4038c37b674c6ecdad4c8",
+      "bytes": 2499197
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/build_annotations.py": {
+      "sha256": "f8d3a8b22154980b212d4dc741e863532bdd9d30d9eebd0c23c7d89a6c42be8e",
+      "bytes": 33290
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/cluster_contract.py": {
+      "sha256": "f586234bd92baf517bf54f4e540fba4461f48a9ca32931b4a1098ecf8e1ca3cb",
+      "bytes": 9327
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/coverage-detail.json": {
+      "sha256": "0d94ab316b30547e6516a3e8e3c3f69dfa55345f49b10b2f63bb14b759e68b94",
+      "bytes": 131031
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/manifest.json": {
+      "sha256": "a55d27f4e0df39583135eadaa5f06839d72832258f160fe4e574e939fe66b15d",
+      "bytes": 2881
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/myers-supplement.pdf": {
+      "sha256": "e5e62338f78e3e97f0bbc75c4ae596018270c9667ae08c397d226698fa7ed7fa",
+      "bytes": 629251
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/reviewer-notes.md": {
+      "sha256": "fea83f2f009229d93bb1302cdb35f697b04d6e8bcfe154c3ee63b22b1d4845c9",
+      "bytes": 3555
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/source-ledger.json": {
+      "sha256": "810c4758cfae33d762af8f421507fd7cfdd1e3f3c1a957fb8a8c38d039f80b58",
+      "bytes": 4841351
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/source_contract.py": {
+      "sha256": "05b60b373917ab2bfab611184c5c32408b5acccc8a32c10ae1b1d31fa2c704b1",
+      "bytes": 13271
+    },
+    "data/processed/benchmarks/grin-cluster-annotation-v2/reviewer-b/sources.json": {
+      "sha256": "95274a3bae23edabc290365c3b6a8a5602a44d8bf3d2412905cf1f5dd6a4818b",
+      "bytes": 2799259
+    }
+  },
+  "expert_reviewed": false,
+  "scientifically_validated": false,
+  "held_out_model_accuracy_measured": false,
+  "limitations": [
+    "This is the selected ten-variant cluster, not all GRIN variants or a patient cohort.",
+    "Intervals, censored values, treatments, receptor compositions and source conflicts remain separate.",
+    "No numerical averaging across studies, uncertainty propagation or treatment recommendation.",
+    "Drug response observations do not establish intrinsic functional direction.",
+    "Counts describe annotated source records, not independent experiments; later papers can reuse earlier measurements.",
+    "AI annotation agreement and source checks are not expert scientific validation."
+  ]
+}
