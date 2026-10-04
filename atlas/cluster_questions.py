@@ -5,7 +5,7 @@ from urllib.parse import quote
 TIERS = {"core_likely_reduced": "core likely reduced function",
          "provisional_possible_reduced": "provisional possible reduced function",
          "opposing_control": "opposing-function control", "unresolved_control": "unresolved control"}
-AMINO = dict(Ala="A", Arg="R", Asn="N", Asp="D", Cys="C", Glu="E", Gly="G", His="H", Phe="F", Pro="P", Ser="S", Thr="T", Val="V")
+AMINO = dict(Ala="A", Arg="R", Asn="N", Asp="D", Cys="C", Gln="Q", Glu="E", Gly="G", His="H", Ile="I", Leu="L", Lys="K", Met="M", Phe="F", Pro="P", Ser="S", Thr="T", Trp="W", Tyr="Y", Val="V")
 ENDPOINTS = {"glutamate_ec50", "glycine_ec50", "open_probability", "weighted_deactivation_tau", "peak_current_density"}
 
 
@@ -21,6 +21,14 @@ def answer_cluster_question(cluster, question, context=None):
     members = [v for v in cluster["members"] if (not genes or v["gene"] in genes)
                and any(re.search(r"(?<!\w)" + re.escape(t.casefold()) + r"(?!\w)", q)
                        for t in (v["protein"], v["protein"].removeprefix("p."), short_protein(v["protein"])))]
+    requested = re.findall(r"(?<!\w)(?:p\.)?(?:[A-Z][a-z]{2}\d+[A-Z][a-z]{2}|[A-Z]\d+[A-Z])(?!\w)", question, re.I)
+    known = {t.casefold() for v in members for t in (v['protein'], v['protein'].removeprefix('p.'), short_protein(v['protein']))}
+    missing = [t for t in requested if t.casefold().removeprefix('p.') not in known]
+    if missing:
+        return {'answer': 'This reviewed cluster has no record for ' + ', '.join(missing) +
+                '. This is a coverage gap, not evidence that the variant has no effect. You can propose an addition with a published source for review.',
+                'mode': 'source_annotation_lookup', 'synthetic': False, 'claim_ids': [],
+                'node_ids': [], 'suggestions': [], 'proposal': {'query': question, 'entry': 'chat'}}
     if not members and context:
         members = [v for v in cluster["members"] if v["id"] == context]
     overview = re.search(r"\b(cluster|variants|annotations|observations)\b", q)

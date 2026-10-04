@@ -222,6 +222,9 @@
     if (!response.results.length) {
       const empty = el("div", "empty-state");
       append(empty, el("span", "empty-icon", "⌕"), el("h3", "", "No matching entity"), el("p", "", "Try a shorter name, a known synonym, or part of an identifier."));
+      const proposal = el("a", "proposal-link", "Propose an addition →");
+      proposal.href = "/propose?" + new URLSearchParams({q:response.query,entry:"search"});
+      empty.append(proposal);
       results.append(empty);
     } else {
       response.results.forEach((node) => {
@@ -703,6 +706,9 @@
       searchResults.append(el("div", "search-empty", error));
     } else if (!results.length) {
       searchResults.append(el("div", "search-empty", "No match yet. Try another name or synonym."));
+      const proposal = el("a", "proposal-link", "Propose an addition →");
+      proposal.href = "/propose?" + new URLSearchParams({q:input.value,entry:"search"});
+      searchResults.append(proposal);
     } else {
       results.slice(0, 6).forEach((node, index) => {
         const button = el("button", "suggestion");

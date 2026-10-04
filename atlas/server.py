@@ -15,6 +15,9 @@ from .http_api import AtlasAPI
 
 WEB_DIR = Path(__file__).with_name("web")
 _ASSETS = {
+    "/propose": ("propose.html", "text/html; charset=utf-8"),
+    "/proposal.css": ("proposal.css", "text/css; charset=utf-8"),
+    "/proposal.js": ("proposal.js", "text/javascript; charset=utf-8"),
     "/": ("index.html", "text/html; charset=utf-8"),
     "/index.html": ("index.html", "text/html; charset=utf-8"),
     "/explore": ("explore.html", "text/html; charset=utf-8"),

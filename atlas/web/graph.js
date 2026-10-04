@@ -400,7 +400,7 @@
       b.addEventListener('click',()=>{select(n.id,true);n.el.focus();});
       b.addEventListener('focus',()=>{searchLead=n.id;highlight();});results.append(b);
     });
-    if(!matches.length)results.append(make('p','','No matching nodes.'));
+    if(!matches.length){results.append(make('p','','No matching nodes.'));const add=make('a','proposal-link','Propose an addition →');add.href='/propose?'+new URLSearchParams({q:$('node-search').value,entry:'search'});results.append(add);}
     results.hidden=false;$('node-search').setAttribute('aria-expanded','true');
   }
   $('node-search').addEventListener('input',searchNodes);
@@ -507,6 +507,7 @@
       const response=await fetch(`/api/ask?${params}`),data=await response.json();if(!response.ok)throw new Error(data.error?.message||'The graph could not answer just now.');
       lastAnswer=data;
       reply.replaceChildren(make('div','answer-label',data.synthetic?'Atlas · fictional demo records':data.mode==='source_annotation_lookup'?'Atlas · source-audited annotation lookup':'Atlas · graph records'),make('p','',data.answer));
+      if(data.proposal){const add=make('a','proposal-link','Propose an addition →');add.href='/propose?'+new URLSearchParams({q:question,entry:'chat'});reply.append(add);}
       if(data.citations?.length||data.evidence_links?.length){const refs=make('div','chat-citations');[...(data.citations||[]).map(s=>({label:s.document_id,url:s.url,title:s.title})),...(data.evidence_links||[])].forEach(s=>{const a=make('a','',s.label);a.href=s.url;a.title=s.title||s.label;a.target='_blank';a.rel='noopener noreferrer';refs.append(a);});reply.append(refs);}
       if(data.claim_ids?.length){const refs=make('div','chat-citations');data.claim_ids.forEach((id,i)=>{const claim=bundle.claims.find(c=>c.id===id);if(!claim)return;const b=make('button','',`[${i+1}] ${claim.predicate.replaceAll('_',' ').toLowerCase()}`);b.type='button';b.title=`${byId.get(claim.subject)?.label} → ${byId.get(claim.object)?.label}`;b.onclick=()=>openClaim(id);refs.append(b);});reply.append(refs);}
     }catch(error){reply.replaceChildren(make('p','',error.message||'The answer could not be loaded. Try again.'));}
