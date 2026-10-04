@@ -14,7 +14,7 @@ The [challenge brief](../data/source/challenge-brief.txt) requests a working pro
 | One-minute product walkthrough | “The idea” video linked at the top of the README |
 | Technical explanation | Additional “How it works” video linked at the top of the README; includes local implementation beyond the public runtime |
 | Team video | Uploaded separately, as confirmed by the submitter; GitHub hosting is not required |
-| OpenAI contribution | Codex-supported source annotation/reconciliation, plus the separate local Codex/OpenAI model adapter; see [annotation method](grin-ai-annotation.md) and local implementation below |
+| OpenAI contribution | Hosted OpenAI Whisper dictation, Codex-supported source annotation/reconciliation, plus the separate local Codex/OpenAI model adapter; see [annotation method](grin-ai-annotation.md) and local implementation below |
 
 This record tracks the supplied brief. It is not a receipt from the competition portal and does not independently confirm any additional portal fields, deadlines or acceptance decisions.
 
@@ -22,17 +22,19 @@ This record tracks the supplied brief. It is not a receipt from the competition 
 
 | Reference | Version |
 | --- | --- |
-| Deployed application source | `25158ce` |
-| Source plus verified release receipt | [6d3ccd18ee55023b083b1a46ac10acba70111d98](https://github.com/lukaschudy/LIT-knowledge-graph/tree/6d3ccd18ee55023b083b1a46ac10acba70111d98) |
+| Deployed application source | `0714348` |
+| Source plus verified release receipt | [3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7](https://github.com/lukaschudy/LIT-knowledge-graph/tree/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7) |
 | Source branch | `feat/atlas-production-performance` |
-| Cloudflare Worker version | `ea3f905c-36cb-45c9-adb9-8af3505fbbd3` |
+| Cloudflare Worker version | `d1c8d500-40cf-49c6-985a-c26ee10d4106` |
 | Recorded deployment | 4 October 2026, 100% traffic, Worker `varentik-atlas` |
-| Release provenance | [Dense release receipt](https://github.com/lukaschudy/LIT-knowledge-graph/blob/6d3ccd18ee55023b083b1a46ac10acba70111d98/deploy/cloudflare/dense-release.json), [gene identity release](https://github.com/lukaschudy/LIT-knowledge-graph/blob/6d3ccd18ee55023b083b1a46ac10acba70111d98/deploy/cloudflare/gene-identity-release.json), [sealed build manifest](https://github.com/lukaschudy/LIT-knowledge-graph/blob/6d3ccd18ee55023b083b1a46ac10acba70111d98/deploy/cloudflare/gene-identity-build-manifest.json) |
+| Release provenance | [Dense release receipt](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/deploy/cloudflare/dense-release.json), [voice release](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/deploy/cloudflare/voice-release.json), [sealed build manifest](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/deploy/cloudflare/voice-build-manifest.json) |
 | Documentation entry point | `main`, README and this submission record |
 
 These are immutable source references for the documented release, not a promise that the mutable website will never change. Later releases should update this table, the README, the walkthrough and the release receipt together. Historical receipts and benchmark reports retain their original scope and dates.
 
-The public Worker provides snapshot-backed graph search, neighborhoods, raw source-record inspection, fixed-scope annotation answers, the GRIN2B support overview, and durable pending proposals. It does not call TopK, a live language model, or local Whisper. The 10,033-node display is a bounded HGNC projection with a curated GRIN overlay; most nodes do not have the depth of the GRIN evidence path.
+The public Worker provides snapshot-backed graph search, neighborhoods, raw source-record inspection, fixed-scope annotation answers, the GRIN2B support overview, durable pending proposals, and hosted microphone dictation. It does not call TopK or a live language model for answers. Microphone dictation now calls Cloudflare-hosted OpenAI Whisper through the Worker AI binding; local faster-whisper remains separate. The 10,033-node display is a bounded HGNC projection with a curated GRIN overlay; most nodes do not have the depth of the GRIN evidence path.
+
+Microphone capture sends audio to Cloudflare for transcription and returns editable text; it does not automatically submit a question. Atlas does not retain recordings. The [dictation guide](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/docs/hosted-dictation.md) records privacy, limits, cancellation behavior and verification.
 
 ### Local research implementation
 
@@ -82,7 +84,7 @@ Core inclusion requires a source-reported Likely LoF classification and an eligi
 | Opposing-function controls | GRIN2B S541G, A639V |
 | Unresolved control | GRIN2B R540H |
 
-This is a source-defined cohort with explicit gates, not a newly discovered unsupervised cluster. Gene identity merging uses exact unambiguous HGNC IDs; it does not add biological edges. See the [cluster evidence](grin-cluster-evidence.md), [annotation receipt](../data/benchmarks/grin-v1/cluster-annotation-receipt-v2.json) and [public identity rules](https://github.com/lukaschudy/LIT-knowledge-graph/blob/6d3ccd18ee55023b083b1a46ac10acba70111d98/docs/demo-answer-scope.md).
+This is a source-defined cohort with explicit gates, not a newly discovered unsupervised cluster. Gene identity merging uses exact unambiguous HGNC IDs; it does not add biological edges. See the [cluster evidence](grin-cluster-evidence.md), [annotation receipt](../data/benchmarks/grin-v1/cluster-annotation-receipt-v2.json) and [public identity rules](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/docs/demo-answer-scope.md).
 
 Two separate AI drafts and a third source-based audit preserve reported measurements, units, bounds, WT references and contradictions. Expert human review is pending. Source-span checks prove provenance, not that every interpretation is scientifically correct. The seven development papers are exposed examples and cannot double as a held-out accuracy evaluation.
 
@@ -128,11 +130,11 @@ Full raw sources, normalized harvest files and complete source packets are not c
 
 ### 3. Verify software separately from scientific performance
 
-The release receipt records **168 application tests**, a sealed **37-file build with 71 inputs**, and live checks of the unique GRIN2B result, eight incident relationships and curated answer. Earlier [reliability reports](https://github.com/lukaschudy/LIT-knowledge-graph/blob/6d3ccd18ee55023b083b1a46ac10acba70111d98/docs/research/reliability-review-2026-10-04.md) include Python/browser matrices and endurance checks at their own revisions. Those historical totals should not be presented as a fresh test run of every later commit.
+The release receipt records **176 application tests**, **nine microphone-flow scenarios**, **29 graph/chat browser scenarios**, and a sealed **38-file build with 72 inputs**. The [voice release receipt](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/deploy/cloudflare/voice-release.json) records live synthetic WAV/WebM transcription and the enabled public microphone. Earlier gene-identity checks verified the unique GRIN2B result, eight incident relationships and curated answer. Earlier [reliability reports](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/docs/research/reliability-review-2026-10-04.md) include Python/browser matrices and endurance checks at their own revisions. Those historical totals should not be presented as a fresh test run of every later commit.
 
-Run the README's application tests and build verification in the pinned checkout. For the wider offline suites and browser checks, follow [check-reliability.sh](https://github.com/lukaschudy/LIT-knowledge-graph/blob/6d3ccd18ee55023b083b1a46ac10acba70111d98/scripts/check-reliability.sh), which lists the additional Python/Playwright dependencies. Public data receipts validate packaging; [TopK's known-case regression](topk-search.md) validates retrieval on ten known variants. Neither measures held-out scientific extraction accuracy or patient outcomes.
+Run the README's application tests and build verification in the pinned checkout. For the wider offline suites and browser checks, follow [check-reliability.sh](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/scripts/check-reliability.sh), which lists the additional Python/Playwright dependencies. Public data receipts validate packaging; [TopK's known-case regression](topk-search.md) validates retrieval on ten known variants. Neither measures held-out scientific extraction accuracy or patient outcomes.
 
-Documentation verification on 4 October 2026: a clean Git archive of `6d3ccd1`, without ignored harvest/source files, successfully built and passed the build verifier and all **168 application tests**. Repository file/anchor checks passed for **57 links** across the updated guides. This check did not rerun Cloudflare runtime setup, model calls or the full scientific annotation process.
+Documentation verification on 4 October 2026: a clean Git archive of the preceding release `6d3ccd1`, without ignored harvest/source files, successfully built and passed the build verifier and all **168 application tests**. Repository file/anchor checks passed for **57 links** across the updated guides. This check did not rerun Cloudflare runtime setup, model calls or the full scientific annotation process.
 
 ## Requirement-to-evidence map
 

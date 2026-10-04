@@ -28,11 +28,13 @@ Ask Atlas also opens with a ready-to-send evidence comparison:
 
 > Why is GRIN2B p.Ser541Arg core while p.Cys461Phe is provisional? Compare the WT measurements and conflicting evidence.
 
+**Dictate instead of typing:** tap the microphone in Ask Atlas, allow microphone access, speak, and tap again to stop. The transcript replaces the untouched demo suggestion or appends to your own draft. Review it, then send. Audio is processed by Cloudflare-hosted Whisper; Atlas does not save recordings. See the [dictation guide](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/docs/hosted-dictation.md).
+
 Search covers the **published graph**, including entities outside GRIN. Ask Atlas keeps its detailed answers inside the GRIN demo. Outside that scope, it may acknowledge an entity recorded in the graph and explain the evidence gap; presence alone does not imply a researched disease overview. Missing items can be [proposed for review](https://atlas.varentik.com/propose).
 
 ## Which version am I reviewing?
 
-**The canonical demo for this documentation is the Cloudflare release recorded on 4 October 2026:** application commit `25158ce`, packaged release record `6d3ccd1`, Worker version `ea3f905c-36cb-45c9-adb9-8af3505fbbd3`. See the [release receipt](https://github.com/lukaschudy/LIT-knowledge-graph/blob/6d3ccd18ee55023b083b1a46ac10acba70111d98/deploy/cloudflare/dense-release.json) and [exact source tree](https://github.com/lukaschudy/LIT-knowledge-graph/tree/6d3ccd18ee55023b083b1a46ac10acba70111d98).
+**The canonical demo for this documentation is the Cloudflare release recorded on 4 October 2026:** application commit `0714348`, packaged release record `3ddcee9`, Worker version `d1c8d500-40cf-49c6-985a-c26ee10d4106`. See the [release receipt](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/deploy/cloudflare/dense-release.json) and [exact source tree](https://github.com/lukaschudy/LIT-knowledge-graph/tree/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7).
 
 The default branch carries this submission guide and video links. The deployed application source is on `feat/atlas-production-performance`; the broader local model workflow is on `feat/research-recommendations`. The walkthrough and rebuild instructions below pin the deployed version so readers do not have to combine branches.
 
@@ -42,7 +44,7 @@ The default branch carries this submission guide and video links. The deployed a
 | Ask Atlas | Deterministic GRIN annotation lookup, cited comparisons and curated GRIN2B help | TopK retrieval and model-assisted answers through Codex or the OpenAI API |
 | Research actions | Existing sourced registry/partner connections and a committed discussion brief | Evidence extraction, review, action-specific gates, bounded investigation and saved briefs |
 | Feedback | Private pending-proposal inbox with durable receipts | Versioned workspace review and reassessment |
-| Voice | Local Whisper backend is not deployed | Local dictation implementation |
+| Voice | Microphone capture → Cloudflare-hosted Whisper → editable draft | Separate local faster-whisper implementation |
 
 The local implementation is real but **is not the backend of the hosted chat**. Its setup and limits are linked in the [submission record](docs/submission.md#local-research-implementation). Autonomous evidence watching, public approval-to-graph publishing, held-out scientific evaluation and demonstrated 10× impact remain future work.
 
@@ -56,7 +58,7 @@ The local implementation is real but **is not the backend of the hosted chat**. 
 | TopK pilot | **15,502 documents**, including passages from **355 licensed full-text articles** | A separate search index; not used by hosted Ask Atlas |
 | Source archive | **21,746,825 normalized records across 40 collections** | Recorded local harvest scope; neither the deployed graph nor a count of validated findings |
 
-The HGNC projection carries **5,346 source relationships**; these are not all biological connections or expert-reviewed findings. Node positions form a visual globe and do not encode biological similarity. Read the [coverage report](docs/harvest-coverage.md) and [public data receipt](https://github.com/lukaschudy/LIT-knowledge-graph/blob/6d3ccd18ee55023b083b1a46ac10acba70111d98/data/curated/cloudflare_public_data_receipt.json) before comparing counts.
+The HGNC projection carries **5,346 source relationships**; these are not all biological connections or expert-reviewed findings. Node positions form a visual globe and do not encode biological similarity. Read the [coverage report](docs/harvest-coverage.md) and [public data receipt](https://github.com/lukaschudy/LIT-knowledge-graph/blob/3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7/data/curated/cloudflare_public_data_receipt.json) before comparing counts.
 
 ## Why this architecture
 
@@ -70,7 +72,7 @@ flowchart LR
     D --> E[Versioned GRIN bundle]
 ```
 
-OpenAI Codex tools supported the source annotation and reconciliation workflow. Two fresh-context AI annotators used identical source packets; a third audited agreements and disagreements against the sources. The [annotation method](docs/grin-ai-annotation.md) and [receipt](data/benchmarks/grin-v1/cluster-annotation-receipt-v2.json) retain the scope and limitations. Exact underlying model identifiers were not exposed for those annotation runs and are not asserted here. **AI source auditing is not human expert review.**
+The public microphone uses OpenAI Whisper hosted by Cloudflare. OpenAI Codex tools supported the source annotation and reconciliation workflow. Two fresh-context AI annotators used identical source packets; a third audited agreements and disagreements against the sources. The [annotation method](docs/grin-ai-annotation.md) and [receipt](data/benchmarks/grin-v1/cluster-annotation-receipt-v2.json) retain the scope and limitations. Exact underlying model identifiers were not exposed for those annotation runs and are not asserted here. **AI source auditing is not human expert review.**
 
 Measurements, author classifications and proposed research actions remain separate. A low value in one assay cannot silently become an overall loss-of-function conclusion.
 
@@ -111,7 +113,7 @@ Use a new directory, Python 3.11+ for packaging, and Git. The committed public s
 ```bash
 git clone --branch feat/atlas-production-performance https://github.com/lukaschudy/LIT-knowledge-graph.git atlas-submission
 cd atlas-submission
-git checkout --detach 6d3ccd18ee55023b083b1a46ac10acba70111d98
+git checkout --detach 3ddcee9763d12f70fb7ff51bf94f0f54f8d3c3f7
 python3 scripts/build_cloudflare.py
 python3 scripts/verify_cloudflare_build.py
 python3 -m unittest discover -s tests
