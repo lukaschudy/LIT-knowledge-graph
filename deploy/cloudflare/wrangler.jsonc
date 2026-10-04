@@ -35,5 +35,18 @@
         "ProposalInbox"
       ]
     }
+  ],
+  "ai": {
+    "binding": "AI"
+  },
+  "ratelimits": [
+    {
+      "name": "VOICE_LIMITER",
+      "namespace_id": "8767001",
+      "simple": {
+        "limit": 10,
+        "period": 60
+      }
+    }
   ]
 }

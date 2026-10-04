@@ -20,7 +20,7 @@ from atlas.model import validate_bundle
 from atlas.server import _ASSETS
 from atlas.store import GraphStore
 
-PACKAGE_FILES = ['__init__.py', 'http_api.py', 'reasoning.py', 'questions.py', 'cluster_questions.py', 'demo_scope.py', 'public_graph.py', 'proposals.py']
+PACKAGE_FILES = ['cloud_voice.py', '__init__.py', 'http_api.py', 'reasoning.py', 'questions.py', 'cluster_questions.py', 'demo_scope.py', 'public_graph.py', 'proposals.py']
 OPTIONAL_SOURCES = Path('data/processed/benchmarks/grin-development-v1/sources.json')
 
 

@@ -31,6 +31,7 @@ case "$mode" in
     ;;
   browser)
     node -e "require('playwright')"
+    run_check voice-capture node scripts/check_voice_capture.cjs
     run_check frontend-webgl node scripts/check_frontend_reliability.cjs
     run_check frontend-canvas env ATLAS_DISABLE_WEBGL=1 node scripts/check_frontend_reliability.cjs
     if [[ -f scripts/check_proposal_browser.cjs ]]; then

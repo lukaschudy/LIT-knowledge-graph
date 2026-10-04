@@ -1,10 +1,11 @@
-/* Microphone -> local transcription -> editable Ask Atlas draft. */
+/* Microphone -> configured transcription service -> editable Ask Atlas draft. */
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
   const button=$('voice-button'),status=$('voice-status'),cancel=$('cancel-recording'),input=$('question');
   let token='',phase='idle',generation=0,stream=null,recorder=null,controller=null,timer=null,tick=null;
-  let available=false;
+  let available=false,requiresToken=true,hosted=false,startingDraft='';
+  const initialDraft=input.defaultValue;
   const types=['audio/webm;codecs=opus','audio/ogg;codecs=opus','audio/mp4','audio/webm'];
   window.addEventListener('atlas:workspace-updated',e=>{token=e.detail?.state?.csrf_token||'';});
   function state(next,message){
@@ -26,19 +27,21 @@
   }
   async function transcribe(blob,id){
     if(id!==generation)return;
-    release();state('transcribing','Transcribing on this computer…');
+    release();state('transcribing',hosted?'Transcribing your recording…':'Transcribing on this computer…');
     const requestController=new AbortController();controller=requestController;
     const timeout=setTimeout(()=>requestController.abort(),120000);
     try{
       if(!blob.size)throw new Error('No audio was recorded. Please try again.');
       const response=await fetch('/api/voice/transcribe',{method:'POST',credentials:'same-origin',
-        headers:{'Content-Type':blob.type,'X-Atlas-Token':token},body:blob,signal:requestController.signal});
+        headers:{'Content-Type':blob.type,...(requiresToken?{'X-Atlas-Token':token}:{})},body:blob,signal:requestController.signal});
       const result=await response.json();
       if(!response.ok)throw new Error(result.error?.message||'Transcription failed. Try again.');
       if(id!==generation)return;
       const words=typeof result.text==='string'?result.text.trim():'';
       if(!words){state('idle','No speech detected. Try again closer to the microphone.');return;}
-      const draft=input.value.trimEnd(),combined=draft+(draft?' ':'')+words;
+      // Replace the untouched demo suggestion; preserve any user-written draft.
+      const untouchedDemo=startingDraft===initialDraft&&input.value===initialDraft;
+      const draft=untouchedDemo?'':input.value.trimEnd(),combined=draft+(draft?' ':'')+words;
       input.value=combined.slice(0,input.maxLength>0?input.maxLength:1000);
       input.dispatchEvent(new Event('input',{bubbles:true}));
       state('idle',combined.length>input.value.length?'Draft limit reached. Review your question before sending.':'Review your words, then send to Atlas.');
@@ -55,9 +58,10 @@
   }
   async function start(){
     if(phase!=='idle'||!available)return;
+    startingDraft=input.value;
     const id=++generation;state('requesting','Allow microphone access to dictate.');
     try{
-      if(!token){const response=await fetch('/api/research/state');if(!response.ok)throw new Error('Reload Atlas to reconnect voice.');token=(await response.json()).csrf_token;}
+      if(requiresToken&&!token){const response=await fetch('/api/research/state');if(!response.ok)throw new Error('Reload Atlas to reconnect voice.');token=(await response.json()).csrf_token;if(!token)throw new Error('Reload Atlas to reconnect voice.');}
       if(id!==generation)return;
       const capture=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true},video:false});
       if(id!==generation){capture.getTracks().forEach(track=>track.stop());return;}
@@ -103,8 +107,9 @@
     try{
       const response=await fetch('/api/voice/status');const data=await response.json();
       available=response.ok&&data.available;
-      state('idle',available?'Tap to dictate':data.message||'Voice is unavailable on this server.');
-      button.title=available?'Record up to 60 seconds, then review the transcript.':status.textContent;
+      requiresToken=data.requires_token!==false;hosted=data.provider==='cloudflare_workers_ai';
+      state('idle',available?(hosted?data.message:'Tap to dictate'):data.message||'Voice is unavailable on this server.');
+      button.title=available?'Record up to 60 seconds, then review the transcript. '+(data.privacy||data.message||''):status.textContent;
     }catch(_){state('idle','Voice could not connect. Reload Atlas to retry.');}
   })();
 })();

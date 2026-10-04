@@ -129,6 +129,23 @@ class WorkerTests(unittest.IsolatedAsyncioTestCase):
         base.update(headers or {})
         return await self.app.fetch(request('/api/proposals', method='POST', body=body, headers=base))
 
+    async def test_hosted_voice_routes_and_methods(self):
+        from unittest.mock import AsyncMock
+        self.app.env.AI = SimpleNamespace(run=AsyncMock(return_value={'text': 'What is known about GRIN2B?'}))
+        self.app.env.VOICE_LIMITER = SimpleNamespace(limit=AsyncMock(return_value={'success': True}))
+        status = await self.app.fetch(request('/api/voice/status'))
+        self.assertTrue(status.json()['available'])
+        self.assertFalse(status.json()['requires_token'])
+        with patch('atlas.cloud_voice._js', lambda value: value):
+            response = await self.app.fetch(request('/api/voice/transcribe', method='POST', body=b'audio',
+                headers={'Origin': 'https://atlas.example', 'Content-Type': 'audio/mp4'}))
+        self.assertEqual(response.status, 200)
+        self.assertEqual(response.json()['text'], 'What is known about GRIN2B?')
+        self.assertEqual(response.headers['Cache-Control'], 'no-store')
+        wrong = await self.app.fetch(request('/api/voice/transcribe'))
+        self.assertEqual(wrong.status, 405)
+        self.assertEqual(wrong.headers['Allow'], 'POST')
+
     async def test_submit_retry_and_receipt_keep_payload_private(self):
         first, retry = await self.submit(), await self.submit()
         self.assertEqual((first.status, retry.status), (201, 200))

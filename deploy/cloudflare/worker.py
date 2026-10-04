@@ -3,6 +3,7 @@ import json
 from urllib.parse import parse_qs, urlsplit
 from workers import WorkerEntrypoint, Response, DurableObject
 from atlas.http_api import AtlasAPI, error, query_error
+from atlas.cloud_voice import VoiceError, voice_status, transcribe
 from atlas.proposals import SCHEMA, INDEX, MAX_BYTES, ProposalError, parse_proposal, submit_proposal, proposal_status, validate_receipt_id
 from snapshot import BUNDLE, STATS
 from dense_snapshot import BUNDLE as DENSE
@@ -160,6 +161,20 @@ class Default(WorkerEntrypoint):
         proposal_route = url.path == '/api/proposals' or url.path.startswith('/api/proposals/')
         if len(url.query.encode('utf-8')) > 16384:
             status, payload = error(414, 'query_too_long', 'Shorten this request.')
+        elif url.path in ('/api/voice/status', '/api/voice/transcribe'):
+            expected = 'GET' if url.path.endswith('/status') else 'POST'
+            if request.method != expected:
+                status, payload = error(405, 'method_not_allowed', 'Use the microphone control to dictate.')
+            else:
+                try:
+                    if expected == 'GET':
+                        status, payload = 200, voice_status(self.env)
+                    else:
+                        status, payload = 200, await transcribe(request, url, self.env)
+                except VoiceError as exc:
+                    status, payload = error(exc.status, exc.code, str(exc))
+                except Exception:
+                    status, payload = error(503, 'voice_unavailable', 'Dictation is temporarily unavailable. Please try again.')
         elif proposal_route:
             try:
                 status, payload = await self.proposals(request, url)
@@ -172,7 +187,7 @@ class Default(WorkerEntrypoint):
         else:
             try:
                 query = parse_qs(url.query, keep_blank_values=True, max_num_fields=150, errors='strict')
-                if url.path.startswith('/api/harvest/') or url.path in ('/api/voice/status', '/api/resolved/status'):
+                if url.path.startswith('/api/harvest/') or url.path in ('/api/resolved/status',):
                     status, payload = PUBLIC.request(url.path, query)
                 elif url.path == '/api/evidence':
                     status, payload = evidence_response(query)
@@ -184,7 +199,7 @@ class Default(WorkerEntrypoint):
                 status, payload = error(500, 'internal_error', 'The atlas could not complete that request.')
         headers = dict(HEADERS)
         if status == 405:
-            headers['Allow'] = 'POST' if url.path == '/api/proposals' else 'GET'
+            headers['Allow'] = 'POST' if url.path in ('/api/proposals', '/api/voice/transcribe') else 'GET'
         if status in (429, 503):
             headers['Retry-After'] = '60'
         return Response(json.dumps(payload, ensure_ascii=False, separators=(',', ':')), status=status, headers=headers)
