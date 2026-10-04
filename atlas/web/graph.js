@@ -13,6 +13,18 @@
     glow.addColorStop(0,color+'66');glow.addColorStop(.32,color+'28');glow.addColorStop(1,color+'00');
     brush.fillStyle=glow;brush.fillRect(0,0,64,64);return [key,sprite];
   }));
+  // Lit sphere sprites are painted once; rotation never uses per-node blur.
+  const cores=Object.fromEntries(Object.entries(colors).map(([key,color])=>{
+    const sprite=document.createElement('canvas');sprite.width=32;sprite.height=32;
+    const brush=sprite.getContext('2d');
+    const halo=brush.createRadialGradient(16,16,5,16,16,16);
+    halo.addColorStop(0,color+'70');halo.addColorStop(.5,color+'22');halo.addColorStop(1,color+'00');
+    brush.fillStyle=halo;brush.fillRect(0,0,32,32);
+    const light=brush.createRadialGradient(13,12,0,16,16,8);
+    light.addColorStop(0,'#edffff');light.addColorStop(.28,color);light.addColorStop(1,color+'55');
+    brush.fillStyle=light;brush.beginPath();brush.arc(16,16,8,0,Math.PI*2);brush.fill();
+    return [key,sprite];
+  }));
   const NS = 'http://www.w3.org/2000/svg';
   const make = (tag, cls, text) => { const el = document.createElement(tag); if (cls) el.className = cls; if (text !== undefined) el.textContent = text; return el; };
   const shape = (tag, attrs = {}) => { const el = document.createElementNS(NS, tag); for (const [k,v] of Object.entries(attrs)) el.setAttribute(k,v); return el; };
@@ -101,7 +113,7 @@
   sizeCanvas();
   const pointers = new Map(); let gesture = null, pinchDistance = 0;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  let yaw = -.24, pitch = .12, idleAfter = 0, previousFrame = 0, lastPaint = 0;
+  let yaw = -.48, pitch = .27, idleAfter = 0, previousFrame = 0, lastPaint = 0;
   const pauseMotion = () => { idleAfter = performance.now() + 7000; };
   $('ambient-motion').checked = !reducedMotion.matches;
   reducedMotion.addEventListener('change', e => { $('ambient-motion').checked = !e.matches; });
@@ -111,7 +123,7 @@
     const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
     const x=n.wx*cy+n.wz*sy, z=-n.wx*sy+n.wz*cy;
     n.depth=n.wy*sp+z*cp;
-    n.perspective=1100/(1100+n.depth);
+    n.perspective=1800/Math.max(600,1800+n.depth);
     n.x=x*n.perspective; n.y=(n.wy*cp-z*sp)*n.perspective;
   }
   function moveNode(n,dx,dy) {
@@ -126,13 +138,13 @@
     advanceTransitions(time);
     const editing=['INPUT','TEXTAREA'].includes(document.activeElement?.tagName);
     const idle=!document.hidden&&time>idleAfter&&$('ambient-motion').checked&&!gesture&&!cameraTransition&&!sceneTransition&&!selected&&!hovered&&!searchTerm&&!editing&&$('chat-panel').hidden&&$('graph-options').hidden&&!document.querySelector('dialog[open]');
-    if(idle){yaw+=elapsed*.000023;needsProjection=true;}
+    if(idle){yaw+=elapsed*.000035;needsProjection=true;}
     if(!document.hidden&&(needsPaint||needsProjection)&&(!idle||time-lastPaint>32)){
       if(needsProjection){
         const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
         nodes.forEach(n=>{
           const x=n.wx*cy+n.wz*sy,z=-n.wx*sy+n.wz*cy;
-          n.depth=n.wy*sp+z*cp;n.perspective=1100/(1100+n.depth);
+          n.depth=n.wy*sp+z*cp;n.perspective=1800/Math.max(600,1800+n.depth);
           n.x=x*n.perspective;n.y=(n.wy*cp-z*sp)*n.perspective;
         });
         depthOrder=[...nodes].sort((a,b)=>b.depth-a.depth);
@@ -150,7 +162,7 @@
     const sqrtZoom=Math.sqrt(view.k);
     hitGrid.clear();
     nodes.forEach(n=>{
-      n.screenX=view.x+n.x*view.k;n.screenY=view.y+n.y*view.k;n.screenR=Math.max(1.5,n.radius*n.perspective*sqrtZoom);
+      n.screenX=view.x+n.x*view.k;n.screenY=view.y+n.y*view.k;n.screenR=Math.max(.65,n.radius*n.perspective*sqrtZoom);
       n.inViewport=n.screenX>-32&&n.screenX<width+32&&n.screenY>-32&&n.screenY<height+32;
       if(n.inViewport&&!n.hidden){const key=`${Math.floor(n.screenX/HIT_CELL)}:${Math.floor(n.screenY/HIT_CELL)}`;if(!hitGrid.has(key))hitGrid.set(key,[]);hitGrid.get(key).push(n);}
     });
@@ -159,7 +171,7 @@
       const buckets=new Map();
       for(const e of batch.edges){
         if((e.a.screenX<0&&e.b.screenX<0)||(e.a.screenX>width&&e.b.screenX>width)||(e.a.screenY<0&&e.b.screenY<0)||(e.a.screenY>height&&e.b.screenY>height))continue;
-        const front=e.a.depth+e.b.depth<0,base=front?.23:.115;
+        const front=e.a.depth+e.b.depth<0,base=front?.16:.045;
         const alpha=Math.round((e.weight??1)*(base+(.68-base)*(e.emphasis??0))*48)/48;
         if(alpha<=0)continue;
         const lineWidth=(front?.8:.65)+(1.2-(front?.8:.65))*(e.emphasis??0);
@@ -178,15 +190,15 @@
     ctx.setLineDash([]);
     // Cached colour sprites keep the soft halos cheap while rotating or dragging.
     for(const n of depthOrder){
-      if(!n.inViewport||n.weight<.01||(!n.ring&&n.degree<6))continue;
+      if(!n.inViewport||n.weight<.01||(!n.ring&&(n.degree<4||n.depth>0)))continue;
       const r=n.screenR,extent=r*(2.8+n.ring);
-      ctx.globalAlpha=(.3+n.ring*.35)*n.weight;
+      ctx.globalAlpha=(.26+n.ring*.35)*n.weight;
       ctx.drawImage(glows[n.colorKey],n.screenX-extent,n.screenY-extent,extent*2,extent*2);
     }
     for(const n of depthOrder){
       if(!n.inViewport||n.weight<.01)continue;
       const r=n.screenR,x=n.screenX,y=n.screenY;
-      const color=colors[n.colorKey],depthAlpha=Math.max(.66,Math.min(1,.9-n.depth/1000));
+      const color=colors[n.colorKey],depthAlpha=Math.max(.12,Math.min(1,.66-n.depth/1050));
       if(n.ring>.01){
         ctx.globalAlpha=n.ring;ctx.strokeStyle=graphPaper;ctx.lineWidth=3;
         ctx.beginPath();ctx.arc(x,y,r+3,0,Math.PI*2);ctx.stroke();
@@ -194,9 +206,10 @@
         ctx.beginPath();ctx.arc(x,y,r+4,0,Math.PI*2);ctx.stroke();
       }
       ctx.globalAlpha=n.weight*(depthAlpha+(1-depthAlpha)*n.ring);
-      ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
-      // A fine paper rim separates overlapping foreground points.
-      if(r>2.3){ctx.strokeStyle=graphPaper;ctx.lineWidth=.65;ctx.stroke();}
+      // Subpixel highlights are indistinguishable at a distance; reserve shaded
+      // sprites for foreground spheres and paint small distant points directly.
+      if(r<3){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();}
+      else ctx.drawImage(cores[n.colorKey],x-r*2,y-r*2,r*4,r*4);
     }
     ctx.globalAlpha=1;
   }
@@ -234,7 +247,7 @@
       nodes.forEach(n=>{
         const random=randomFor(n.id),center=centers.get(groupOf(n)),spread=24+Math.sqrt(counts.get(groupOf(n)))*9;
         const angle=random()*Math.PI*2,radius=Math.sqrt(random())*spread;
-        n.wx=center.x+Math.cos(angle)*radius;n.wy=center.y+Math.sin(angle)*radius;n.wz=normal(random)*spread*.18;
+        n.wx=center.x+Math.cos(angle)*radius;n.wy=center.y+Math.sin(angle)*radius;n.wz=Math.max(-spread,Math.min(spread,normal(random)*spread*.65));
         n.vx=0;n.vy=0;n.vz=0;
       });
       nodes.forEach(n=>{n.degree=0;});edges.forEach(e=>{e.a.degree++;e.b.degree++;});
