@@ -104,9 +104,9 @@ remain available, and the chat retains its paper and evidence links.
 Dense rendering uses a 1x pixel budget, GPU buffer reuse and lazy pointer indexing;
 SVG labels and controls remain at native display resolution.
 
-Active dense-graph version: 0b393da6-08c4-4983-ba6b-f23110a3db9c (100% traffic).
+Active dense-graph version: ea3f905c-36cb-45c9-adb9-8af3505fbbd3 (100% traffic).
 Verified release: deploy/cloudflare/dense-release.json
-Rollback: uv run pywrangler versions deploy 030e29bd-30fc-410d-b79a-c68643e94963@100% --yes
+Rollback: uv run pywrangler versions deploy 0b393da6-08c4-4983-ba6b-f23110a3db9c@100% --yes
 
 Nodes keep fixed world positions during pointer gestures; dragging orbits the camera.
 The current theme uses a white background, dark lotus-green branding and the original
@@ -130,3 +130,7 @@ demo-draft-build-manifest.json. HGVS protein prefixes remain inside the demo sco
 Selected GRIN2B knowledge/help questions now return a concise curated graph
 overview and external support signposts. Verified release: grin2b-help-release.json;
 exact deployed manifest: grin2b-help-build-manifest.json.
+
+The public view resolves two HGNC/curated gene duplicates into 10,033 unique
+nodes. GRIN2B now has eight incident source and variant claims on one node.
+Release: gene-identity-release.json; manifest: gene-identity-build-manifest.json.
