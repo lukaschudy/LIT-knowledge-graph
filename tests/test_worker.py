@@ -287,6 +287,19 @@ class WorkerTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn('9.1 (7.2, 11)', answer.json()['answer'])
         self.assertEqual(answer.json()['answer_scope']['id'], 'grin-reduced-function-v1')
 
+    async def test_prefilled_demo_question_returns_annotation_evidence(self):
+        from html import unescape
+        import re
+        from urllib.parse import urlencode
+        page = (ROOT / 'atlas/web/explore.html').read_text()
+        question = unescape(re.search(r'<textarea id="question"[^>]*>(.*?)</textarea>', page).group(1))
+        self.assertTrue(question)
+        response = await self.app.fetch(request('/api/ask?' + urlencode({'q': question})))
+        self.assertEqual(response.status, 200)
+        self.assertEqual(response.json()['mode'], 'source_annotation_lookup')
+        self.assertIn('9.1 (7.2, 11)', response.json()['answer'])
+        self.assertIn('Cys461Phe', response.json()['answer'])
+
     async def test_public_gene_identity_maps_to_its_demo_gene(self):
         public = next(n for n in self.worker.PUBLIC.nodes.values() if n['id'].startswith('HGNC:') and n['label'] == 'GRIN2B')
         response = await self.app.fetch(request('/api/ask?q=What+evidence+is+available&node=' + public['id']))
