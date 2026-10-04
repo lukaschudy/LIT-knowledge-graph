@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-04",
+  "scope": "Local integrated Atlas graph, model and verified TopK catalog",
+  "provider": "codex",
+  "model": "gpt-6-astra",
+  "initial_graph": {
+    "nodes": 45,
+    "claims": 53,
+    "sources": 16
+  },
+  "catalog": {
+    "provider": "topk",
+    "configured": true,
+    "scopes": [
+      {
+        "id": "neuro",
+        "label": "EPG5 / WDR45 / AP4B1 source snapshots",
+        "loaded_passages": 19,
+        "indexed_passages": 19,
+        "index_status": "verified_snapshot",
+        "collection": "lit-neuro-evidence-v1",
+        "verified_at": "2026-10-04T00:47:18.097455+00:00"
+      },
+      {
+        "id": "grin",
+        "label": "GRIN published evidence and licensed literature",
+        "loaded_passages": 15502,
+        "indexed_passages": 15502,
+        "index_status": "verified_snapshot",
+        "collection": "lit-grin-evidence-v1",
+        "verified_at": "2026-10-04T00:14:21.631916+00:00"
+      }
+    ],
+    "loaded_passages": 15521,
+    "full_harvest_indexed": false,
+    "note": "Graph assertions, indexed passages and harvested records are different counts. Index receipts describe verified snapshots, not current scientific approval."
+  },
+  "live_checks": [
+    {
+      "action": "ask",
+      "question": "What does the evidence say about GRIN2B S541R, and what remains uncertain?",
+      "status": "completed",
+      "model_duration_ms": 18398,
+      "retrieval_duration_ms": 1573,
+      "cited_passages": 6,
+      "graph_claim_ids": [
+        "claim:017",
+        "claim:018",
+        "claim:016"
+      ]
+    },
+    {
+      "action": "TopK search \u2192 canonical passage import \u2192 Astra extraction \u2192 graph refresh",
+      "status": "completed",
+      "model_duration_ms": 12639,
+      "new_claims": 1,
+      "new_claim_in_graph": true,
+      "review_status": "unreviewed"
+    },
+    {
+      "action": "catalog-backed gap investigation",
+      "status": "completed",
+      "model_duration_ms": 3873,
+      "retrieval": "topk",
+      "model_calls": 1,
+      "followup_rounds": 1,
+      "new_claims": 0
+    },
+    {
+      "action": "cited AI brief",
+      "status": "completed",
+      "model_duration_ms": 23408,
+      "draft_saved": true
+    }
+  ],
+  "limits": [
+    "Single local development run, not a latency or scientific accuracy benchmark.",
+    "No scientific review was recorded for real extracted claims.",
+    "Only focused GRIN and neuro passage collections are connected; full harvest is not indexed.",
+    "Hosted deployment was not changed."
+  ],
+  "verification": {
+    "application_tests": 157,
+    "harvest_tests": 51,
+    "search_tests_with_sdk": 15,
+    "browser": {
+      "research_redirect": "/explore",
+      "widths": [
+        1440,
+        390
+      ],
+      "horizontal_overflow": false,
+      "javascript_errors": 0,
+      "evidence_dialog": true,
+      "brief_populated": true,
+      "send_button_unobscured_at_both_widths": true
+    },
+    "source_guide_check": "passed",
+    "live_browser_chat": {
+      "status": "completed",
+      "model": "gpt-6-astra",
+      "provider": "codex",
+      "retrieval": "topk",
+      "source_cards": 3,
+      "request_count": 1,
+      "busy_state_verified": true,
+      "javascript_errors": []
+    }
+  },
+  "development_issues_resolved": [
+    "Indexed-only reads on the newly written neuro collection returned no hits; strongly consistent queries returned exact-verified passages.",
+    "A live neuro answer tried to cite an inferred edge without evidence; prompt context and output-schema claim IDs now exclude unsupported edges.",
+    "Browser testing caught the research toggle covering chat Send; controls now sit side by side and have a regression check."
+  ]
+}

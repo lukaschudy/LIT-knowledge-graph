@@ -244,12 +244,14 @@ class TopKRetriever:
             raise TopKError("TopK query helpers are required for search.") from exc
         client = self._get_client()
         try:
+            # Strong consistency includes fresh corpus writes; indexed-only reads
+            # can return an empty snapshot while a small new collection catches up.
             rows = client.collection(self.collection_name).query(
                 select("_id", "source_id", "source_version", "title", "passage", "start", "end", "corpus_id",
                        score=fn.semantic_similarity("passage", query))
                 .filter(field("corpus_id") == self._corpus_id)
                 .sort(field("score"), asc=False).limit(top_k),
-                **({"lsn": self._lsn} if self._lsn else {}), consistency="indexed")
+                **({"lsn": self._lsn} if self._lsn else {}), consistency="strong")
         except Exception as exc:
             raise TopKError("TopK semantic search failed.") from None
         if not isinstance(rows, list):

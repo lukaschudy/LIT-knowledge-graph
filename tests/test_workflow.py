@@ -321,7 +321,11 @@ class WorkflowHTTPTests(unittest.TestCase):
                 headers={'Content-Type':'application/json','X-Atlas-Token':self.workspace.token, **(headers or {})}), timeout=2)
     def test_page_and_api_integrate_without_mutating_legacy_store(self):
         with urlopen(self.base+'/research') as response:
-            self.assertIn(b'research.js', response.read())
+            self.assertEqual(response.url, self.base+'/explore')
+            self.assertIn(b'graph.js', response.read())
+        with self.assertRaises(HTTPError) as retired:
+            urlopen(self.base+'/research.js')
+        self.assertEqual(retired.exception.code, 404)
         with urlopen(self.base+'/api/research/state') as response: state = json.load(response)
         with self.post('/api/research/brief', {'revision':state['revision'], 'markdown':'Edited text'}) as response:
             saved = json.load(response)

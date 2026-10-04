@@ -1,0 +1,13 @@
+{
+  "status": "verified",
+  "collection": "lit-neuro-evidence-v1",
+  "region": "aws-us-east-1-elastica",
+  "corpus_id": "9b62ad95ef5886863782e362d90a507b57420c432cba27e17156c6aea10c710a",
+  "verified_documents": 19,
+  "source_documents": 4,
+  "verified_at": "2026-10-04T00:47:18.097455+00:00",
+  "verification": "Every chunk ID and field compared to the local manifest using a strongly consistent read; semantic query returned source-validated passages.",
+  "full_harvest_indexed": false,
+  "scope": "Selected EPG5/Vici, WDR45/BPAN and AP4B1/SPG47 primary-source excerpts",
+  "documents_sha256": "f17f1f7fe5b13a0389174093621c5d692738b3f0356b8fa981c3dd405697a685"
+}

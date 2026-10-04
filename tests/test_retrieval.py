@@ -112,7 +112,7 @@ class TopKRetrieverTests(unittest.TestCase):
             "text": self.documents[0]["text"], "score": 0.91, "start": 0,
             "end": len(self.documents[0]["text"]), "source_version": chunk["source_version"]}])
         self.assertEqual(self.retriever.last_metadata["mode"], "live")
-        self.assertEqual(self.client.query_kwargs, {"lsn": "lsn-1", "consistency": "indexed"})
+        self.assertEqual(self.client.query_kwargs, {"lsn": "lsn-1", "consistency": "strong"})
         self.assertEqual(self.client.query_obj.filter_condition, ("eq", "corpus_id", self.retriever._corpus_id))
 
     def test_fresh_retriever_queries_existing_snapshot_without_upserting(self):

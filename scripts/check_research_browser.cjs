@@ -1,29 +1,61 @@
-/* Optional read-only browser smoke check. Install playwright separately, start
- * `python3 -m atlas research`, then run with NODE_PATH pointing to its node_modules.
- * ATLAS_URL may select another local research server. No model calls or reviews.
+/* Read-only smoke check for the graph-integrated research workspace.
+ * Start the local Atlas server, then run with NODE_PATH pointing at Playwright.
+ * It does not submit forms, search, review claims, or call a model.
  */
 const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
+
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-    const errors = [];
+    const errors = [], writes = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto(process.env.ATLAS_URL || 'http://127.0.0.1:8767/research');
-    await page.locator('#app').waitFor({ state: 'visible' });
-    await page.locator('.claim-card').first().waitFor();
-    assert.ok((await page.locator('#brief-editor').inputValue()).length);
-    await page.locator('.citation-link').first().click();
-    await page.locator('#evidence-dialog').waitFor({ state: 'visible' });
-    assert.match(await page.locator('#evidence-detail').innerText(), /Claim review status/);
-    await page.locator('#close-evidence').click();
+    page.on('request', request => { if (request.method() !== 'GET' && request.url().includes('/api/')) writes.push(`${request.method()} ${request.url()}`); });
+
+    const response = await page.goto(process.env.ATLAS_URL || 'http://127.0.0.1:8767/research');
+    assert.ok(response && response.ok(), 'research route should load or redirect successfully');
+    await page.waitForURL(/\/explore(?:\?|$)/);
+    await page.locator('#network').waitFor({ state: 'visible' });
+    await page.locator('#workspace-toggle').click();
+    await page.locator('#workspace-panel:not([hidden])').waitFor();
+    await page.getByRole('tab', { name: 'Literature' }).waitFor();
+    await page.getByRole('tab', { name: 'Evidence / review' }).click();
+    await page.locator('#workspace-claims').waitFor();
+    await page.getByRole('tab', { name: 'Plan' }).click();
+    await page.locator('#workspace-request-form').waitFor();
+    await page.getByRole('tab', { name: 'Brief' }).click();
+    const brief = page.locator('#workspace-brief');
+    await brief.waitFor();
+    assert.ok((await brief.inputValue()).length > 0, 'brief should be populated');
+
+    await page.getByRole('tab', { name: 'Evidence / review' }).click();
+    const cite = page.locator('#workspace-claims .workspace-link-button').first();
+    await cite.waitFor({ state: 'visible' });
+    await cite.click();
+    await page.locator('#record-dialog[open]').waitFor();
+    assert.ok((await page.locator('#record-content').innerText()).length > 0, 'source dialog should show evidence details');
+    await page.locator('#record-close').click();
+
+    await page.screenshot({ path: '/tmp/atlas-integrated-desktop.png', fullPage: true });
+    const widths = {};
     for (const width of [1440, 390]) {
-      await page.setViewportSize({ width, height: 1000 });
-      const overflow = await page.evaluate(() => document.body.scrollWidth > innerWidth);
-      assert.equal(overflow, false, `Horizontal overflow at width ${width}`);
+      await page.setViewportSize({ width, height: 900 });
+      widths[width] = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth, body: document.body.scrollWidth }));
+      assert.ok(widths[width].document <= width, `document overflows at ${width}px: ${JSON.stringify(widths[width])}`);
+      assert.ok(widths[width].body <= width, `body overflows at ${width}px: ${JSON.stringify(widths[width])}`);
+      await page.locator('#chat-toggle').click();
+      assert.equal(await page.locator('#workspace-panel').isVisible(), false, 'chat closes the research drawer');
+      const sendIsUncovered = await page.locator('#send-question').evaluate(button => {
+        const box = button.getBoundingClientRect();
+        return !!document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)?.closest('#send-question');
+      });
+      assert.equal(sendIsUncovered, true, `Send button is obscured at ${width}px`);
+      await page.locator('#chat-close').click();
+      await page.locator('#workspace-toggle').click();
     }
-    assert.deepEqual(errors, []);
-    console.log('PASS: research render, source dialog, populated brief, desktop/mobile widths; no mutations or model calls.');
+    assert.deepEqual(writes, [], 'QA must not submit any API writes');
+    assert.deepEqual(errors, [], 'no JavaScript runtime errors');
+    console.log(JSON.stringify({ pass: true, route: page.url(), widths, runtimeErrors: errors, writes }, null, 2));
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

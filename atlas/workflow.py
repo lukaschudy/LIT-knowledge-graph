@@ -14,6 +14,7 @@ import threading
 from time import perf_counter
 from typing import Any
 from urllib.parse import urlsplit
+from datetime import date
 
 from .discovery import discover
 from .model import require_valid_bundle
@@ -51,7 +52,8 @@ class ResearchWorkspace:
     a rejected extraction into negative biological evidence.
     """
     def __init__(self, bundle: dict, documents: list[dict], request: dict,
-                 *, path: str | Path | None = None, client=None, retrieval: str = 'local', retriever=None):
+                 *, path: str | Path | None = None, client=None, retrieval: str = 'local', retriever=None,
+                 assistant=None, catalog=None):
         from .ai import ModelClient
         from .retrieval import SourceRetriever, TopKRetriever
         if retrieval not in ('local', 'topk'):
@@ -65,6 +67,7 @@ class ResearchWorkspace:
         self._analysis_cache = None
         self._retrieval_cache = {}
         self.retrieval_mode = retrieval
+        self.assistant, self.catalog = assistant, catalog
         require_valid_bundle(bundle)
         ResearchRequest.from_dict(request)
         self._validate_documents(bundle, documents)
@@ -72,7 +75,7 @@ class ResearchWorkspace:
         self.data = {'format': 'atlas-research-v1', 'workspace_id': secrets.token_hex(8),
                      'revision': 0, 'seed_id': seed, 'bundle': deepcopy(bundle),
                      'documents': deepcopy(documents), 'request': deepcopy(request),
-                     'reviews': [], 'runs': [], 'brief': None}
+                     'reviews': [], 'runs': [], 'brief': None, 'ask_history': []}
         if self.path and self.path.exists():
             saved = json.loads(self.path.read_text(encoding='utf-8'))
             if saved.get('format') != 'atlas-research-v1' or saved.get('seed_id') != seed:
@@ -81,6 +84,7 @@ class ResearchWorkspace:
             self._validate_documents(saved['bundle'], saved['documents'])
             ResearchRequest.from_dict(saved['request'])
             self.data = saved
+            self.data.setdefault('ask_history', [])
         self.retriever = retriever or (TopKRetriever(self.data['documents']) if retrieval == 'topk' else SourceRetriever(self.data['documents']))
         self._persist()
 
@@ -258,12 +262,14 @@ class ResearchWorkspace:
                               or brief.get('policy_version') != analysis['policy_version'])
             return deepcopy({'workspace_id': self.data['workspace_id'], 'revision': self.data['revision'],
                              'dataset': bundle['dataset'], 'request': self.data['request'], 'nodes': bundle['nodes'],
-                             'documents': self.data['documents'], 'model': self.model_status,
+                             'sources': bundle['sources'], 'documents': self.data['documents'], 'model': self.model_status,
+                             'catalog': self.catalog.status() if self.catalog is not None and callable(getattr(self.catalog, 'status', None)) else None,
                              'coverage': {'acquired_records': None, 'loaded_documents': len(self.data['documents']),
                                           'indexed_documents': len(self.data['documents']) if self.retrieval_mode == 'local' else None,
                                           'total_claims': len(claims), 'reviewed_claims': sum(c['review_status'] == 'human_reviewed' for c in claims),
                                           'note': 'Counts describe this loaded evidence slice. Harvested records elsewhere are not claimed as indexed or searched.'},
                              'claims': claims, 'analysis': analysis, 'brief': brief,
+                             'ask_history': self.data.get('ask_history', []),
                              'csrf_token': self.token, 'jobs': list(self.jobs.values()), 'runs': self.data['runs'],
                              'review_scope': 'Local reviewer attestations; qualifications are not independently verified.'})
 
@@ -337,6 +343,90 @@ class ResearchWorkspace:
             self._commit(update)
             return self.state()
 
+    def import_source(self, *, revision: int, hit_id: str) -> dict:
+        """Import one verified, catalog-owned indexed passage as a source snapshot."""
+        with self.lock:
+            self._check_revision(revision)
+            hit_id = _text(hit_id, 'Search result ID', 300)
+            if self.catalog is None or not callable(getattr(self.catalog, 'get', None)):
+                raise WorkflowError('The verified literature catalog is not configured.', status=503, code='catalog_unavailable')
+            try:
+                hit = self.catalog.get(hit_id)
+            except (KeyError, LookupError):
+                raise WorkflowError('That search result is not available in the verified catalog.', status=404, code='source_not_found') from None
+            except ValueError as exc:
+                raise WorkflowError(str(exc)[:300] or 'That search result is not available in the verified catalog.',
+                                    status=404, code='source_not_found') from None
+            except Exception:
+                raise WorkflowError('The verified catalog could not load that search result.', status=502, code='catalog_lookup_failed') from None
+            if not isinstance(hit, dict) or str(hit.get('id')) != hit_id:
+                raise WorkflowError('The catalog returned an invalid search result.', status=502, code='invalid_catalog_record')
+            source, document = self._catalog_snapshot(hit)
+            source_id = source['id']
+            existing = next((s for s in self.data['bundle']['sources'] if s['id'] == source_id), None)
+            if existing:
+                doc = next((d for d in self.data['documents'] if d['source_id'] == source_id), None)
+                if existing.get('version') != source['version'] or doc is None or doc.get('text') != document['text']:
+                    raise WorkflowError('A catalog passage ID conflicts with an existing source snapshot.', status=409, code='source_id_conflict')
+                return self.state()
+            if len(self.data['documents']) >= 50:
+                raise WorkflowError('The workspace already has the maximum of 50 source snapshots.', status=409, code='document_limit')
+            update = deepcopy(self.data)
+            update['bundle']['sources'].append(source)
+            update['documents'].append(document)
+            require_valid_bundle(update['bundle'])
+            self._validate_documents(update['bundle'], update['documents'])
+            self._commit(update)
+            return self.state()
+
+    @staticmethod
+    def _catalog_snapshot(hit: dict) -> tuple[dict, dict]:
+        hit_id = hit['id']
+        if not isinstance(hit_id, str) or not 1 <= len(hit_id) <= 300:
+            raise WorkflowError('The catalog passage has an invalid identifier.', status=502, code='invalid_catalog_record')
+        record_kind = hit.get('kind')
+        if record_kind == 'curated_evidence':
+            raise WorkflowError('This is already a graph evidence card; select an original source passage to extract.',
+                                status=400, code='not_original_source_text')
+        scopes = {'source_passage': 'Indexed source passage excerpt; not a complete article',
+                  'article_text': 'Indexed article text snapshot; completeness is catalog-dependent',
+                  'table_text_uninterpreted': 'Indexed table text; values have not been interpreted'}
+        if not isinstance(record_kind, str) or record_kind not in scopes:
+            raise WorkflowError('Only verified source passages, article text, or uninterpreted table text can be imported.',
+                                status=400, code='unsupported_catalog_record')
+        text = hit.get('text')
+        title = hit.get('title')
+        url = hit.get('url')
+        if not isinstance(text, str) or not text.strip() or len(text) > 100000:
+            raise WorkflowError('The catalog passage is empty or exceeds the source snapshot limit.', status=502, code='invalid_catalog_record')
+        if not isinstance(title, str) or not title.strip() or not isinstance(url, str) or not _safe_url(url):
+            raise WorkflowError('The catalog passage needs a verified title and HTTP(S) source URL.', status=502, code='invalid_catalog_record')
+        source_id = 'source:passage:' + hit_id
+        version = sha256(text.encode('utf-8')).hexdigest()
+        original_locator = hit.get('original_locator') or hit.get('locator') or 'Locator unavailable in catalog record'
+        if not isinstance(original_locator, str):
+            original_locator = str(original_locator)
+        original_locator = original_locator[:2000]
+        license_name = hit.get('license')
+        if not isinstance(license_name, str) or not license_name.strip():
+            license_name = 'Not specified by catalog record'
+        source = {'id': source_id, 'title': title.strip(), 'url': url,
+                  'kind': 'paper', 'published_at': hit.get('published_at'),
+                  'retrieved_at': date.today().isoformat(), 'license': license_name,
+                  'synthetic': False, 'version': version, 'status': 'active',
+                  'catalog_record_kind': record_kind, 'snapshot_scope': scopes[record_kind],
+                  'original_locator': str(original_locator),
+                  'catalog_passage_id': hit_id,
+                  'original_source_id': hit.get('source_id'),
+                  'original_source_version': hit.get('version') or hit.get('snapshot_id')}
+        document = {'source_id': source_id, 'title': title.strip(), 'url': url,
+                    'license': license_name, 'version': version, 'text': text,
+                    'original_locator': str(original_locator), 'snapshot_kind': record_kind,
+                    'catalog_passage_id': hit_id,
+                    'original_source_id': hit.get('source_id'),
+                    'original_source_version': hit.get('version') or hit.get('snapshot_id')}
+        return source, document
+
     def reset_brief(self, *, revision: int) -> dict:
         with self.lock:
             self._check_revision(revision)
@@ -351,16 +441,33 @@ class ResearchWorkspace:
                 raise WorkflowError('Job not found.', status=404)
             return deepcopy(self.jobs[job_id])
 
-    def start_job(self, kind: str, *, revision: int, source_id: str | None = None) -> dict:
+    def start_job(self, kind: str, *, revision: int, source_id: str | None = None,
+                  question: str | None = None, node_id: str | None = None,
+                  claim_ids: list[str] | None = None) -> dict:
         with self.lock:
             self._check_revision(revision)
-            if kind not in ('extract', 'explain', 'investigate'):
+            if kind not in ('extract', 'explain', 'investigate', 'ask'):
                 raise WorkflowError('Unsupported job type.')
             if any(j['status'] == 'running' for j in self.jobs.values()):
                 raise WorkflowError('A model task is already running. Wait for it to finish.', status=409, code='job_running')
-            if not self.model_status.get('available'):
+            if not self.model_status.get('available') and not (kind == 'investigate' and self.catalog is not None):
                 raise WorkflowError('No model backend is configured. Sign in with the local Codex CLI or configure OPENAI_API_KEY before starting the server.', status=503, code='model_unavailable')
             document = None
+            ask_input = None
+            if kind == 'ask':
+                if self.assistant is None:
+                    raise WorkflowError('The atlas answer model is not configured.', status=503, code='assistant_unavailable')
+                question = _text(question, 'Question', 1000)
+                active = self._active_bundle()
+                node_ids = {n['id'] for n in active['nodes']}
+                claim_index = {c['id']: c for c in active['claims']}
+                if node_id is not None and (not isinstance(node_id, str) or node_id not in node_ids):
+                    raise WorkflowError('The selected node is not present in the current active graph.', status=404, code='node_not_found')
+                if claim_ids is None:
+                    claim_ids = []
+                if not isinstance(claim_ids, list) or len(claim_ids) > 100 or any(not isinstance(cid, str) or cid not in claim_index for cid in claim_ids):
+                    raise WorkflowError('Claim context must contain up to 100 IDs from the current active graph.', code='invalid_claim_context')
+                ask_input = {'question': question, 'node_id': node_id, 'claim_ids': list(dict.fromkeys(claim_ids))}
             if kind == 'extract':
                 document = next((d for d in self.data['documents'] if d['source_id'] == source_id), None)
                 if document is None:
@@ -370,17 +477,23 @@ class ResearchWorkspace:
                 questions = analysis['followup']['queries']
                 if not questions:
                     raise WorkflowError('There is no unresolved candidate gate to investigate under the current request.')
-                hits = analysis['retrieval']['hits']
-                if not hits:
-                    raise WorkflowError('No relevant source passage was found in the loaded corpus. Add further evidence through ingestion.')
-                document = next(d for d in self.data['documents'] if d['source_id'] == hits[0]['source_id'])
-                source_id = document['source_id']
+                if self.catalog is None:
+                    hits = analysis['retrieval']['hits']
+                    if not hits:
+                        raise WorkflowError('No relevant source passage was found in the loaded corpus. Add further evidence through ingestion.')
+                    document = next(d for d in self.data['documents'] if d['source_id'] == hits[0]['source_id'])
+                    source_id = document['source_id']
             jid = secrets.token_hex(12)
             job = {'id': jid, 'kind': kind, 'source_id': source_id, 'status': 'running',
-                   'message': 'Drafting a cited research brief.' if kind == 'explain' else 'Extracting source-grounded claims.',
+                   'message': ('Drafting a cited research brief.' if kind == 'explain' else
+                               'Preparing a cited answer from the active graph.' if kind == 'ask' else
+                               'Extracting source-grounded claims.'),
                    'started_at': _now(), 'metadata': {}}
             self.jobs[jid] = job
             captured = deepcopy(self.data)
+            if ask_input is not None:
+                captured['_ask_input'] = ask_input
+                captured['bundle'] = active
             analysis = self._analysis()
             threading.Thread(target=self._run_job, args=(jid, kind, captured, deepcopy(document), analysis), daemon=True).start()
             return deepcopy(job)
@@ -391,18 +504,108 @@ class ResearchWorkspace:
         metadata = {}
         try:
             if kind in ('extract', 'investigate'):
-                result = extract_source(captured['bundle'], document['source_id'], document['text'], self.client,
-                                        questions=analysis['followup']['queries'] if kind == 'investigate' else None)
-                metadata = result['metadata']
-                if kind == 'investigate':
-                    metadata = {**metadata, 'followup_rounds': 1, 'model_calls': 1, 'selected_source_id': document['source_id'],
-                                'questions': analysis['followup']['queries'], 'retrieval': analysis['retrieval']['provider']}
-                new_bundle = result['bundle']
-                require_valid_bundle(new_bundle)
-                self._validate_documents(new_bundle, captured['documents'])
-                old_ids = {c['id'] for c in captured['bundle']['claims']}
-                new_claims = [c['id'] for c in new_bundle['claims'] if c['id'] not in old_ids]
-                outcome = {'new_claim_ids': new_claims, 'source_id': document['source_id']}
+                source_bundle = captured['bundle']
+                source_documents = captured['documents']
+                if kind == 'investigate' and self.catalog is not None:
+                    request = analysis['request']
+                    nodes = {n['id']: n for n in captured['bundle']['nodes']}
+                    query_terms = [str(nodes.get(request.get(key), {}).get('label', ''))
+                                   for key in ('disease_id', 'mechanism_id')]
+                    query_terms.extend(request[key].strip() for key in
+                                       ('mechanism_step', 'readout', 'species', 'tissue', 'stage')
+                                       if isinstance(request.get(key), str) and request[key].strip())
+                    query = ' '.join(term for term in query_terms if term)
+                    query += ' ' + ' '.join(q.get('question', '') for q in analysis['followup']['queries'][:3])
+                    try:
+                        retrieval = self.catalog.search(query.strip()[:2000], top_k=8)
+                    except ValueError as exc:
+                        raise WorkflowError(str(exc)[:300] or 'The evidence catalog search failed.',
+                                            status=502, code='catalog_search_failed') from None
+                    except Exception:
+                        raise WorkflowError('The evidence catalog search failed. No local fallback was used.',
+                                            status=502, code='catalog_search_failed') from None
+                    hits = retrieval.get('hits', []) if isinstance(retrieval, dict) else retrieval
+                    selected = next((h for h in hits if isinstance(h, dict)
+                                     and h.get('kind') in ('source_passage', 'article_text', 'table_text_uninterpreted')
+                                     and isinstance(h.get('id'), str)), None) if isinstance(hits, list) else None
+                    if selected is None:
+                        new_bundle = source_bundle
+                        new_documents = source_documents
+                        new_claims = []
+                        outcome = {'new_claim_ids': [], 'source_id': None}
+                        metadata = {'followup_rounds': 1, 'model_calls': 0, 'selected_source_id': None,
+                                    'questions': analysis['followup']['queries'],
+                                    'retrieval': retrieval.get('provider') if isinstance(retrieval, dict) else 'catalog',
+                                    'catalog_search': {k: retrieval[k] for k in ('provider', 'scopes', 'cached')
+                                                       if isinstance(retrieval, dict) and k in retrieval},
+                                    'eligible_passage_found': False}
+                        result = None
+                    else:
+                        try:
+                            canonical_hit = self.catalog.get(selected['id'])
+                        except (KeyError, ValueError) as exc:
+                            raise WorkflowError(str(exc)[:300] or 'Verified catalog passage is unavailable.',
+                                                status=404, code='source_not_found') from None
+                        if not isinstance(canonical_hit, dict) or canonical_hit.get('id') != selected['id']:
+                            raise WorkflowError('The catalog returned an invalid passage record.',
+                                                status=502, code='invalid_catalog_record')
+                        source, imported_document = self._catalog_snapshot(canonical_hit)
+                        source_id = source['id']
+                        source_bundle = deepcopy(captured['bundle'])
+                        source_documents = deepcopy(captured['documents'])
+                        existing = next((s for s in source_bundle['sources'] if s['id'] == source_id), None)
+                        if existing:
+                            prior = next((d for d in source_documents if d['source_id'] == source_id), None)
+                            if existing.get('version') != source['version'] or prior is None or prior.get('text') != imported_document['text']:
+                                raise WorkflowError('A catalog passage ID conflicts with an existing source snapshot.',
+                                                    status=409, code='source_id_conflict')
+                            document = prior
+                        else:
+                            if len(source_documents) >= 50:
+                                raise WorkflowError('The workspace already has the maximum of 50 source snapshots.',
+                                                    status=409, code='document_limit')
+                            source_bundle['sources'].append(source)
+                            source_documents.append(imported_document)
+                            document = imported_document
+                        require_valid_bundle(source_bundle)
+                        self._validate_documents(source_bundle, source_documents)
+                        result = extract_source(source_bundle, source_id, document['text'], self.client,
+                                                questions=analysis['followup']['queries'][:3])
+                        metadata = {**result['metadata'], 'followup_rounds': 1, 'model_calls': 1,
+                                    'selected_source_id': source_id,
+                                    'questions': analysis['followup']['queries'][:3],
+                                    'retrieval': retrieval.get('provider') if isinstance(retrieval, dict) else 'catalog',
+                                    'catalog_search': {k: retrieval[k] for k in ('provider', 'scopes', 'cached')
+                                                       if isinstance(retrieval, dict) and k in retrieval},
+                                    'eligible_passage_found': True}
+                        if result is not None:
+                            new_bundle = result['bundle']
+                            new_documents = source_documents
+                            require_valid_bundle(new_bundle)
+                            self._validate_documents(new_bundle, new_documents)
+                            old_ids = {c['id'] for c in captured['bundle']['claims']}
+                            new_claims = [c['id'] for c in new_bundle['claims'] if c['id'] not in old_ids]
+                            outcome = {'new_claim_ids': new_claims, 'source_id': source_id}
+                else:
+                    result = extract_source(source_bundle, document['source_id'], document['text'], self.client,
+                                            questions=analysis['followup']['queries'][:3] if kind == 'investigate' else None)
+                    metadata = result['metadata']
+                    if kind == 'investigate':
+                        metadata = {**metadata, 'followup_rounds': 1, 'model_calls': 1, 'selected_source_id': document['source_id'],
+                                    'questions': analysis['followup']['queries'][:3], 'retrieval': analysis['retrieval']['provider']}
+                    new_bundle = result['bundle']
+                    new_documents = source_documents
+                    require_valid_bundle(new_bundle)
+                    self._validate_documents(new_bundle, new_documents)
+                    old_ids = {c['id'] for c in captured['bundle']['claims']}
+                    new_claims = [c['id'] for c in new_bundle['claims'] if c['id'] not in old_ids]
+                    outcome = {'new_claim_ids': new_claims, 'source_id': document['source_id']}
+            elif kind == 'ask':
+                answer = self.assistant.answer(captured['bundle'], captured['_ask_input']['question'],
+                                               captured['_ask_input']['node_id'],
+                                               captured['_ask_input']['claim_ids'], analysis)
+                metadata = answer.get('metadata', {}) if isinstance(answer, dict) else {}
+                outcome = {'answer': answer}
             else:
                 result = self._explain(captured, analysis)
                 metadata, outcome = result['metadata'], {'brief': result['brief']}
@@ -411,6 +614,13 @@ class ResearchWorkspace:
                 update = deepcopy(self.data)
                 if kind in ('extract', 'investigate'):
                     update['bundle'] = new_bundle
+                    if kind == 'investigate' and self.catalog is not None:
+                        update['documents'] = new_documents
+                elif kind == 'ask':
+                    history = update.setdefault('ask_history', [])
+                    history.append({'question': captured['_ask_input']['question'],
+                                    'answer': outcome['answer'], 'timestamp': _now(), 'job_id': jid})
+                    update['ask_history'] = history[-12:]
                 else:
                     update['brief'] = outcome['brief']
                 run = {'id': jid, 'kind': kind, 'timestamp': _now(), 'metadata': metadata,
@@ -420,7 +630,9 @@ class ResearchWorkspace:
                 update['runs'].append(run)
                 self._commit(update)
                 message = 'Cited AI draft saved; interpretation still needs review.'
-                if kind != 'explain':
+                if kind == 'ask':
+                    message = 'Cited answer is ready; review its sources and limits.'
+                elif kind != 'explain':
                     message = (f'Extracted {len(new_claims)} new claims; scientific review is pending.' if new_claims
                                else 'No new source-grounded claims found. Existing evidence gaps remain unresolved.')
                 self.jobs[jid].update(status='completed', message=message, metadata=metadata, outcome=outcome, finished_at=_now())

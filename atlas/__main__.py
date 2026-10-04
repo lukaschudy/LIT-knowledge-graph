@@ -29,11 +29,13 @@ def main(argv=None):
     sub = parser.add_subparsers(dest='command', required=True)
     p = sub.add_parser('validate', help='Validate a normalized bundle without changing a database')
     p.add_argument('bundle')
-    p = sub.add_parser('research', help='Run the complete local neuro research workspace')
-    p.add_argument('--bundle', default=str(ROOT / 'data/curated/neuro_bundle.json'))
+    p = sub.add_parser('app', aliases=['research'], help='Run the connected Atlas graph, literature search, models and evidence workflow')
+    p.add_argument('--bundle', help='Optional graph bundle; defaults to the combined real neuro and GRIN graph')
     p.add_argument('--documents', default=str(ROOT / 'data/curated/neuro_documents.json'))
     p.add_argument('--request', default=str(ROOT / 'data/curated/neuro_request.json'))
-    p.add_argument('--workspace', default=str(ROOT / 'data/research/session.json'))
+    p.add_argument('--workspace', default=str(ROOT / 'data/workspaces/atlas.json'))
+    p.add_argument('--env-file', type=Path, default=ROOT / '.env' if (ROOT / '.env').exists() else None)
+    p.add_argument('--search', choices=('auto', 'local', 'topk'), default='auto', help='Literature catalog provider; auto uses configured TopK credentials')
     p.add_argument('--provider', choices=('auto', 'openai', 'codex'), default='auto')
     p.add_argument('--model')
     p.add_argument('--model-timeout', type=int, default=120)
@@ -42,6 +44,8 @@ def main(argv=None):
     p.add_argument('--port', type=int, default=8767)
     p = sub.add_parser('index-research', help='Explicitly upload the loaded source slice to the configured TopK semantic collection')
     p.add_argument('--documents', default=str(ROOT / 'data/curated/neuro_documents.json'))
+    p = sub.add_parser('index-neuro', help='Index and verify the neuro source excerpts in their separate TopK collection')
+    p.add_argument('--env-file', type=Path, default=ROOT / '.env' if (ROOT / '.env').exists() else None)
     for name in ('demo','ingest','stats','search','explore','recommend','reassess','export','serve'):
         p = sub.add_parser(name)
         p.add_argument('--db', default=str(DEFAULT_DB))
@@ -72,6 +76,14 @@ def main(argv=None):
     p.add_argument('--output', required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command == 'index-neuro':
+            from atlas.catalog import index_neuro
+            try:
+                dump(index_neuro(ROOT, env_file=args.env_file))
+            except Exception:
+                print('Atlas error: neuro indexing or verification failed; no verified receipt was issued for this run.', file=sys.stderr)
+                return 1
+            return 0
         if args.command == 'index-research':
             from atlas.retrieval import TopKRetriever, TopKError
             documents = json.loads(Path(args.documents).read_text(encoding='utf-8'))
@@ -81,18 +93,31 @@ def main(argv=None):
                 print(f'Atlas error: {exc}', file=sys.stderr)
                 return 1
             return 0
-        if args.command == 'research':
+        if args.command in ('app', 'research'):
             from atlas.ai import ModelClient
+            from atlas.assistant import AtlasAssistant
+            from atlas.catalog import EvidenceCatalog, combined_bundle
             from atlas.workflow import ResearchWorkspace
             from atlas.server import serve
-            bundle = json.loads(Path(args.bundle).read_text(encoding='utf-8'))
+            bundle = json.loads(Path(args.bundle).read_text(encoding='utf-8')) if args.bundle else combined_bundle(ROOT)
             documents = json.loads(Path(args.documents).read_text(encoding='utf-8'))
             request = json.loads(Path(args.request).read_text(encoding='utf-8'))
-            workspace = ResearchWorkspace(bundle, documents, request, path=args.workspace,
-                client=ModelClient(args.provider, args.model, args.model_timeout), retrieval=args.retrieval)
+            # A secret file is parsed as literal assignments, never executed.
+            # API secrets remain in this server process, not the browser state.
+            if args.env_file:
+                import os
+                for line in args.env_file.read_text().splitlines():
+                    name, separator, value = line.partition('=')
+                    name = name.strip().removeprefix('export ')
+                    if separator and name in ('OPENAI_API_KEY',) and not os.environ.get(name):
+                        os.environ[name] = value.strip().strip('\"\'')
+            client = ModelClient(args.provider, args.model, args.model_timeout)
+            catalog = EvidenceCatalog(ROOT, env_file=args.env_file, mode=args.search)
+            workspace = ResearchWorkspace(bundle, documents, request, path=args.workspace, client=client,
+                retrieval=args.retrieval, catalog=catalog, assistant=AtlasAssistant(client, catalog))
             with GraphStore() as store:
                 store.load_bundle(workspace._active_bundle())
-                print(f'Research workspace: http://{args.host}:{args.port}/research', flush=True)
+                print(f'Atlas: http://{args.host}:{args.port}/explore', flush=True)
                 serve(store, args.host, args.port, workspace=workspace)
             return 0
         if args.command == 'validate':
@@ -115,6 +140,9 @@ def main(argv=None):
             parser.error('Database does not exist. Run `python -m atlas demo` or ingest a validated bundle first.')
         if args.command in ('demo','ingest'):
             bundle = json.loads((FIXTURE if args.command == 'demo' else Path(args.bundle)).read_text(encoding='utf-8'))
+            if args.command == 'demo':
+                from atlas.demo import expand_demo
+                bundle = expand_demo(bundle)
             errors = validate_bundle(bundle)
             if errors:
                 dump({'valid':False,'errors':errors})

@@ -1,15 +1,16 @@
 # LIT rare-disease knowledge graph
 
-> **Integrated workflow in progress:** see [ATLAS.md](ATLAS.md) and the [workspace guide](docs/research-workspace.md).
+The main graph now connects **TopK search → Astra answers and extraction → evidence review → deterministic recommendations → editable brief**. Open `/explore`; the former `/research` page redirects there. See [setup and demo instructions](docs/research-workspace.md).
 
-**Current data and search:** the accessible harvest contains 21,746,825 normalized records across 40 collections; see the [coverage report](docs/harvest-coverage.md). The verified [TopK pilot](docs/topk-search.md) indexes 15,502 GRIN evidence passages; this focused index is separate from the full harvest.
+```bash
+python3 -m atlas app --env-file .env --search topk --provider codex
+```
 
+Install the `topk` extra and prepare the verified local passage export first, as described in the setup guide. This local app uses the signed-in Codex CLI or an OpenAI API key; credentials stay on the server.
 
-Research and extraction planning for the **AI Atlas for the World’s Rare Diseases** challenge. The interactive workspace defaults to a small curated slice of real EPG5/Vici and assay literature. Synthetic acceptance and visual demos are explicitly fictional; the earlier curated GRIN evidence slice is retained separately.
+**Connected data:** 45 real entities and 53 curated assertions, plus **15,502 GRIN passages and 19 neuro passages** in separate verified TopK collections. Search results retain source URLs, exact text, locators and review status. The wider harvest contains 21,746,825 normalized records across 40 collections; [harvest coverage](docs/harvest-coverage.md) is distinct from the focused [TopK pilot](docs/topk-search.md).
 
-**Current workflow:** the local server and research UI use the deterministic assay-reuse decision engine and local lexical search by default, with optional TopK search. AI extraction, cited AI brief drafting and one bounded follow-up source pass are available through explicit user actions when the Codex CLI or OpenAI API provider is configured. Model-extracted claims remain unreviewed until a person records a review. Search relevance and generated text do not establish scientific validity.
-
-Optional TopK selection and the explicit `index-research` command are implemented, but have not been verified against a live TopK account. Indexing is a separate remote write that may incur provider charges; the default local workspace does not create or populate an index. See the [decision-engine guide](docs/architecture/decision-engine.md) for its deterministic four-case fictional acceptance example and the [local workspace guide](docs/research-workspace.md) for setup and the current research loop. The selected research scope is EPG5 / Vici syndrome with WDR45 / BPAN and AP4B1 / SPG47 as candidate comparators, subject to evidence review.
+The planning scope is **EPG5 / Vici syndrome**, with WDR45 / BPAN and AP4B1 / SPG47 as candidate comparators. New extracted claims stay unreviewed; unresolved scientific, maintainer and access gates remain visible. No real candidate is made ready by an AI-generated answer alone.
 
 The original six-page PDF is [`Knowledge graph`](Knowledge%20graph) (its filename has no extension). Its text is preserved in [`data/source/challenge-brief.txt`](data/source/challenge-brief.txt).
 
@@ -17,7 +18,7 @@ The original six-page PDF is [`Knowledge graph`](Knowledge%20graph) (its filenam
 
 The challenge asks for a journey from diagnosis to a justified connection, reusable asset, partner and practical next step. Read the architecture in three stages: **prepare evidence → find opportunities → recommend an action**. Feedback, source updates and evaluation keep those stages useful over time.
 
-These diagrams describe the target architecture. The live local slice described above has a research UI, a deterministic decision core, local retrieval, optional TopK retrieval and explicit remote indexing, plus optional model actions. Live TopK account behavior and comparative scientific evaluation remain unverified.
+The preparation, discovery and decision loop runs in the local graph interface. Source maintenance and comparative evaluation below remain target workflows. Live TopK retrieval and Astra calls have been exercised; comparative scientific performance is not yet measured.
 
 ### 1. Prepare the evidence once
 
@@ -35,7 +36,7 @@ flowchart LR
 
 ### 2. Find relevant opportunities
 
-Resolve the exact variant and the user's research goal. Search TopK and a small graph neighborhood in parallel, then combine their evidence into candidate assets, partners and actions.
+Resolve the exact variant and the user's research goal. Retrieve TopK passages and a small graph neighborhood, then combine their evidence into candidate assets, partners and actions.
 
 ```mermaid
 flowchart LR
@@ -60,7 +61,7 @@ flowchart TD
     Gap -->|No, or budget reached| Action[Action + partner + evidence + blockers]
 ```
 
-**Why it matters:** the system can recommend a feasibility discussion, ask for clarification or reject a candidate. It does not have to produce a positive recommendation. Precomputed evidence, parallel retrieval and a bounded follow-up keep live work limited.
+**Why it matters:** the system can recommend a feasibility discussion, ask for clarification or reject a candidate. It does not have to produce a positive recommendation. Precomputed evidence, cached retrieval and a bounded follow-up keep live work limited.
 
 ### 4. Refine the result with user and expert feedback
 
