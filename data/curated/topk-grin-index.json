@@ -1,0 +1,51 @@
+{
+  "version": "grin-passages-v1",
+  "snapshot_id": "59a91ad391350ab590b232a4",
+  "input_sha256": {
+    "data/curated/grin_atlas_bundle.json": "9847550f41712e5fe0fcb6c5d9af0fe63587ef62d35114959ea316b046524716",
+    "data/processed/harvest/pmc_grin_oa/grin_licensed_full_text.jsonl.gz": "0443ce49226ab96801344eeb51dede1aa4ae40e8da4ef78e7dc7aed2a086af00",
+    "data/processed/harvest/pmc_grin_oa/grin_html_full_text.jsonl.gz": "d1412be053ac5023b6990bcc54140c74b6caed9b5f30a22104052e52e24491e5"
+  },
+  "documents": 15502,
+  "by_kind": {
+    "curated_evidence": 56,
+    "article_text": 15132,
+    "table_text_uninterpreted": 314
+  },
+  "distinct_sources": 367,
+  "licenses": {
+    "Source-specific rights; factual metadata and paraphrases only": 56,
+    "cc by-nc-sa": 927,
+    "cc by": 13270,
+    "cc0": 79,
+    "cc by-nc": 1170
+  },
+  "uncompressed_bytes": 32574913,
+  "max_document_bytes": 5210,
+  "export_sha256": "2088a210996911cbab755b21142296526519ecdd3d553a7139a13582bbb4b2db",
+  "export_bytes": 6572385,
+  "live_topk_status": "verified",
+  "scope": "GRIN curated evidence and locally harvested licensed full texts",
+  "limitations": [
+    "Full text is unreviewed discovery evidence, not extracted graph claims.",
+    "Text co-occurrence does not resolve gene/variant or transcript identity.",
+    "Tables retain source locators but layout and images are not interpreted.",
+    "NC licenses limit reuse; retain source attribution and license per passage."
+  ],
+  "collection": "lit-grin-evidence-v1",
+  "region": "aws-us-east-1-elastica",
+  "verified_documents": 15502,
+  "collection_document_count": 15502,
+  "verified_at": "2026-10-04T00:14:21.631916+00:00",
+  "verification": "Every exported ID and field compared via batched ID-filtered queries after final write barrier.",
+  "local_browser_url": "http://127.0.0.1:18767/",
+  "evaluation_report": "data/curated/topk-grin-evaluation.json",
+  "full_harvest_indexed": false,
+  "browser_checks": [
+    "S541R reduced-function evidence and exact graph claim visible",
+    "S541G opposing control retained",
+    "Full-text discovery scope returns zero graph claims",
+    "Source URLs, table locators and graph provenance displayed"
+  ],
+  "screenshot": "docs/demo-screenshots/grin-topk-search.jpg"
+}

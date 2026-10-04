@@ -4,6 +4,16 @@ TopK is the retrieval layer. Source records remain the canonical evidence archiv
 
 The first index contains **15,502 documents**: **56 curated evidence cards**, **15,132 article passages**, and **314 table-text passages**, drawn from the selected GRIN evidence bundle and **355 harvested licensed full texts**. This is a focused pilot, not an upload of the complete 21,746,825-record harvest. Search records are different from source records and from unique scientific facts.
 
+**Verified live on 2026-10-04:** all 15,502 IDs and fields matched the local export, and the collection count was exactly 15,502. See the [index receipt](../data/curated/topk-grin-index.json) and [live evaluation](../data/curated/topk-grin-evaluation.json).
+
+| Retrieval mode | Expected classified evidence in top 5 | Mean reciprocal rank at 5 |
+| --- | --- | --- |
+| Keyword | 10/10 cases | 0.867 |
+| Semantic | 10/10 cases | 1.000 |
+| Hybrid | 10/10 cases | 0.950 |
+
+All exact-variant and citation checks passed. Full-text discovery returned no graph claims. These results are from the small known-case regression described below; they favor semantic ranking on this set and do not establish a winner for the full corpus. Median observed latency was about one second for single-channel search and two seconds for hybrid, including deliberate account-quota pacing.
+
 ## How relationships become graph connections
 
 ```mermaid
