@@ -4,7 +4,7 @@ Atlas helps researchers and patient organizations explore how rare diseases, gen
 
 Our first working case focuses on **GRIN2A- and GRIN2B-related neurodevelopmental disorders**, with particular attention to variants with published evidence of reduced NMDA-receptor function. The demo includes uncertain and opposing cases so that users can inspect the limits of that grouping.
 
-Ask Atlas stays focused on this one cluster. The top search explores the wider published graph without changing the answer scope. See the [demo scope contract](docs/demo-answer-scope.md).
+Ask Atlas stays focused on this one cluster. The top search explores the wider published graph without changing the answer scope. For a disease outside the demo cluster, a matching graph record is enough to acknowledge: **“We have recorded this disease in the knowledge graph.”** This is a record-presence statement only; it does not imply that Atlas has reviewed its disease mechanisms, validated its relationships, or can recommend research actions for it. Only acknowledge a record when a lookup actually finds it; otherwise report a coverage gap. Detailed evidence answers and recommendations remain focused on GRIN2A/GRIN2B. See the [demo scope contract](docs/demo-answer-scope.md).
 
 **[Open Atlas](https://atlas.varentik.com/explore) · [Explore the GRIN evidence](https://atlas.varentik.com/cluster) · [Propose an addition](https://atlas.varentik.com/propose)**
 
