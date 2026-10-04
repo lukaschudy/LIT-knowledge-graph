@@ -2,7 +2,7 @@
 
 **The idea · 1 minute**
 
-https://github.com/user-attachments/assets/7534ebee-fa34-4401-b7e6-6fa9362435ab
+https://github.com/user-attachments/assets/bdb998cd-c407-4559-9f88-cc657b84ff92
 
 **How it works · 1 minute**
 
