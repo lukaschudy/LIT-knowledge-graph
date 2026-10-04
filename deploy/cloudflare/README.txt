@@ -71,6 +71,9 @@ remain available, and the chat retains its paper and evidence links.
 Dense rendering uses a 1x pixel budget, GPU buffer reuse and lazy pointer indexing;
 SVG labels and controls remain at native display resolution.
 
-Active dense-graph version: 16284df3-d5e5-45d2-b7a8-9534270c5673 (100% traffic).
+Active dense-graph version: ed22a9b7-028b-4cb7-b734-d69b8f8b6b3c (100% traffic).
 Verified release: deploy/cloudflare/dense-release.json
-Rollback: uv run pywrangler versions deploy 7337a382-13f2-4951-a2b9-4a24bc9ecaa3@100% --yes
+Rollback: uv run pywrangler versions deploy 16284df3-d5e5-45d2-b7a8-9534270c5673@100% --yes
+
+Nodes keep fixed world positions during pointer gestures; dragging orbits the camera.
+The palette uses muted starfield colours and softer highlights instead of neon.
