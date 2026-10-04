@@ -13,7 +13,7 @@ const { chromium } = require('playwright');
       const response = await route.fetch();
       const code = (await response.text()).replace('  init();', `
         window.__graphTest = {
-          snapshot:()=>({view:{...view},wheeling:!!wheelZoom,nodes:nodes.map(n=>({id:n.id,label:n.label,x:n.screenX,y:n.screenY,r:n.screenR,hidden:n.hidden,mounted:!!n.el})),hovered,selected}),
+          snapshot:()=>({yaw,pitch,world:nodes.map(n=>[n.id,n.wx,n.wy,n.wz]),view:{...view},wheeling:!!wheelZoom,nodes:nodes.map(n=>({id:n.id,label:n.label,x:n.screenX,y:n.screenY,r:n.screenR,hidden:n.hidden,mounted:!!n.el})),hovered,selected}),
           edge:()=>({id:edges[0].claim.id,subject:edges[0].a.id}),
           pick:(x,y,touch=false)=>nodeAt({clientX:x,clientY:y,pointerType:touch?'touch':'mouse'})
         };
@@ -25,6 +25,15 @@ const { chromium } = require('playwright');
     await page.waitForFunction(()=>document.body.dataset.workspaceReady==='true');
     await page.waitForTimeout(400);
     const originalCount = Number(await page.locator('#network').getAttribute('data-node-count'));
+    // Dragging directly on a node must orbit the camera, never alter layout.
+    const beforeDrag=await page.evaluate(()=>window.__graphTest.snapshot());
+    const dragNode=beforeDrag.nodes.find(n=>n.x>350&&n.x<900&&n.y>250&&n.y<550);
+    assert.ok(dragNode);
+    await page.mouse.move(dragNode.x,dragNode.y);await page.mouse.down();
+    await page.mouse.move(dragNode.x+80,dragNode.y+40,{steps:8});await page.mouse.up();
+    const afterDrag=await page.evaluate(()=>window.__graphTest.snapshot());
+    assert.deepEqual(afterDrag.world,beforeDrag.world,'node dragging must keep all world positions fixed');
+    assert.notEqual(afterDrag.yaw,beforeDrag.yaw,'node dragging should orbit the graph');
     const renderer=await page.locator('#graph-paint').getAttribute('data-renderer');
     assert.ok(['webgl','canvas'].includes(renderer));
     if(renderer==='webgl')assert.equal(await page.evaluate(()=>document.querySelector('#graph-paint').getContext('webgl').getError()),0,'GPU shaders and buffers must render without errors');

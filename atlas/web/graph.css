@@ -1,12 +1,12 @@
 :root { background:#050b15; color-scheme:dark; }
 .graph-page {
  --graph-paper:#050b15;
- --paper:#050b15; --teal:#69e6da; --coral:#cf91ff;
- --green:#91eee1; --green-soft:#102d34; --green-light:#173945;
- --graph-disease:#6daeff; --graph-variant:#ffc877; --graph-gene:#57e4c3;
- --graph-biology:#b195ff; --graph-research:#f493d4;
- --graph-group-teal:#4de4d3; --graph-group-blue:#64a9ff; --graph-group-purple:#b293ff;
- --graph-group-coral:#ff977b; --graph-group-gold:#f8cc76; --graph-group-pink:#ee8dd8;
+ --paper:#050b15; --teal:#a4b9c5; --coral:#b6a894;
+ --green:#aec0c9; --green-soft:#102d34; --green-light:#173945;
+ --graph-disease:#8ea4bb; --graph-variant:#baaa8d; --graph-gene:#90aaa4;
+ --graph-biology:#a29daf; --graph-research:#af98a4;
+ --graph-group-teal:#8fa9ae; --graph-group-blue:#829bb5; --graph-group-purple:#a39eaf;
+ --graph-group-coral:#b29b8c; --graph-group-gold:#b6ad92; --graph-group-pink:#ac97a4;
  color-scheme:dark;
  min-width:320px; margin:0; height:100dvh; overflow:hidden; background:#050b15; color:#d7e9f2; }
 .graph-stage { position:fixed; inset:0; padding:0; margin:0; max-width:none; overflow:hidden; background:radial-gradient(ellipse at 45% 48%,#102a3d 0%,#091321 46%,#040912 85%); }
@@ -32,7 +32,7 @@
 .node-results small { display:block; color:#96adbf; font-size:10px; margin-top:4px; }
 .node-results p { padding:10px; margin:0; font-size:12px; }
 .graph-icon { display:grid; place-items:center; width:38px; height:38px; flex-shrink:0; padding:0; border:0; background:transparent; color:#a2c3d0; border-radius:50%; font-size:24px; line-height:1; }
-.graph-icon:hover { background:#173443; color:#c7fdf5; }
+.graph-icon:hover { background:#173443; color:#d6e1e6; }
 .graph-icon svg, .chat-toggle svg, .workspace-toggle svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
 #options-toggle { background:#0a1824d9; border:1px solid #29404f; }
 #options-toggle circle { fill:#0c1a29; }
@@ -42,7 +42,7 @@
 .graph-options label { display:flex; align-items:center; gap:12px; min-height:42px; font-size:14px; font-weight:450; line-height:1.3; margin:0; cursor:pointer; color:#c6dee9; }
 .graph-options input { appearance:none; -webkit-appearance:none; display:grid; place-content:center; width:18px; height:18px; flex:0 0 18px; margin:0; border:1.5px solid #3b586a; border-radius:5px; background:#101e2d; cursor:pointer; }
 .graph-options input::after { content:""; width:8px; height:4px; border-left:1.8px solid #101e2d; border-bottom:1.8px solid #101e2d; transform:translateY(-1px) rotate(-45deg); opacity:0; }
-.graph-options input:checked { border-color:#80e6d8; background:#80e6d8; }
+.graph-options input:checked { border-color:#aec0c9; background:#aec0c9; }
 .graph-options input:checked::after { opacity:1; }
 .graph-options input:focus-visible { outline:2px solid var(--green); outline-offset:3px; }
 .graph-options label:hover input:not(:checked) { border-color:var(--green); }
@@ -92,7 +92,7 @@
 .selection #selection-type { font-size:10px; color:#96adbf; }
 .selection .graph-text-button { white-space:nowrap; }
 .selection .graph-icon { width:27px; height:27px; font-size:20px; }
-.chat-toggle { position:fixed; right:32px; bottom:22px; display:flex; align-items:center; gap:11px; padding:14px 23px; border:2px solid #80e6d8; border-radius:28px; background:#0c202c; color:#80e6d8; font-size:13px; font-weight:500; box-shadow:0 4px 18px #384c2710; }
+.chat-toggle { position:fixed; right:32px; bottom:22px; display:flex; align-items:center; gap:11px; padding:14px 23px; border:2px solid #aec0c9; border-radius:28px; background:#0c202c; color:#aec0c9; font-size:13px; font-weight:500; box-shadow:0 4px 18px #384c2710; }
 .chat-toggle:hover { background:#143342; }
 .chat-toggle svg, .workspace-toggle svg { stroke:currentColor; stroke-width:2; }
 .chat-panel { position:fixed; right:26px; bottom:83px; width:370px; max-height:min(610px,calc(100dvh - 112px)); display:flex; flex-direction:column; background:#091622f5; backdrop-filter:blur(15px); border:1px solid #2c4657; border-radius:20px; box-shadow:0 18px 65px #2a40221a; z-index:6; overflow:hidden; }
@@ -114,9 +114,9 @@
 .chat-actions { display:flex; align-items:center; gap:8px; }
 .chat-actions .graph-icon { width:32px; height:32px; }
 #voice-status { font-size:11px; line-height:1.4; color:#91acbe; flex:1; }
-.send-question { display:grid; place-items:center; flex-shrink:0; width:32px; height:32px; border:0; padding:0; background:#80e6d8; color:#101e2d; border-radius:50%; }
+.send-question { display:grid; place-items:center; flex-shrink:0; width:32px; height:32px; border:0; padding:0; background:#aec0c9; color:#101e2d; border-radius:50%; }
 .send-question svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
-.send-question:hover { background:#aaf8e8; }
+.send-question:hover { background:#c5d2d8; }
 .send-question:disabled { opacity:.5; }
 #voice-button.listening { background:#48243d; color:#ffb2d8; }
 .record-dialog, .graph-help { border:1px solid #29404f; border-radius:18px; background:#0c1a29; color:#d0e5ef; padding:26px; width:min(540px,calc(100vw - 30px)); max-height:85dvh; }
@@ -177,10 +177,10 @@
 .chat-source[open] { padding-bottom:10px; }
 
 /* Quiet glass controls keep the constellation dominant. */
-.graph-page .brand { color:#e1f5fa; text-shadow:0 0 22px #6ae2e54a; }
-.graph-page .brand-mark { filter:drop-shadow(0 0 5px #6ee8df88); }
+.graph-page .brand { color:#e1f5fa; text-shadow:0 0 22px #9bafbf20; }
+.graph-page .brand-mark { filter:drop-shadow(0 0 5px #9bafbf30); }
 .graph-search, .graph-options, .selection, .chat-panel { backdrop-filter:none; box-shadow:0 16px 50px #0005,inset 0 1px #b8eff00c; }
-.chat-toggle { border:1px solid #70d9d1; background:#0a222de8; color:#b8fff0; box-shadow:0 0 26px #3df3d321,inset 0 0 16px #4dfde00a; }
+.chat-toggle { border:1px solid #7e939f; background:#0a222de8; color:#d0dce1; box-shadow:0 0 26px #9badbd10,inset 0 0 16px #9badbd06; }
 .send-question { color:#061620; }
 .node-label { stroke:#08111f; }
 .graph-page .workspace-link-button { color:#8bdfed; }

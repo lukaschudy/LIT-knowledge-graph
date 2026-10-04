@@ -18,7 +18,7 @@
   const glows=Object.fromEntries(Object.entries(colors).map(([key,color])=>{
     const sprite=document.createElement('canvas');sprite.width=64;sprite.height=64;
     const brush=sprite.getContext('2d'),glow=brush.createRadialGradient(32,32,1,32,32,32);
-    glow.addColorStop(0,color+'66');glow.addColorStop(.32,color+'28');glow.addColorStop(1,color+'00');
+    glow.addColorStop(0,color+'38');glow.addColorStop(.32,color+'18');glow.addColorStop(1,color+'00');
     brush.fillStyle=glow;brush.fillRect(0,0,64,64);return [key,sprite];
   }));
   // Lit sphere sprites are painted once; rotation never uses per-node blur.
@@ -26,10 +26,10 @@
     const sprite=document.createElement('canvas');sprite.width=32;sprite.height=32;
     const brush=sprite.getContext('2d');
     const halo=brush.createRadialGradient(16,16,5,16,16,16);
-    halo.addColorStop(0,color+'70');halo.addColorStop(.5,color+'22');halo.addColorStop(1,color+'00');
+    halo.addColorStop(0,color+'32');halo.addColorStop(.5,color+'12');halo.addColorStop(1,color+'00');
     brush.fillStyle=halo;brush.fillRect(0,0,32,32);
     const light=brush.createRadialGradient(13,12,0,16,16,8);
-    light.addColorStop(0,'#edffff');light.addColorStop(.28,color);light.addColorStop(1,color+'55');
+    light.addColorStop(0,'#c4cbd0');light.addColorStop(.28,color);light.addColorStop(1,color+'55');
     brush.fillStyle=light;brush.beginPath();brush.arc(16,16,8,0,Math.PI*2);brush.fill();
     return [key,sprite];
   }));
@@ -141,13 +141,6 @@
     n.depth=n.wy*sp+z*cp;
     n.perspective=1800/Math.max(600,1800+n.depth);
     n.x=x*n.perspective; n.y=(n.wy*cp-z*sp)*n.perspective;
-  }
-  function moveNode(n,dx,dy) {
-    const x=dx/view.k/n.perspective, y=dy/view.k/n.perspective;
-    // Inverse camera rotation, keeping the point on its current screen-depth plane.
-    n.wx+=x*Math.cos(yaw)+y*Math.sin(pitch)*Math.sin(yaw);
-    n.wy+=y*Math.cos(pitch);
-    n.wz+=x*Math.sin(yaw)-y*Math.sin(pitch)*Math.cos(yaw);
   }
   function animate(time) {
     const elapsed=Math.min(50,time-(previousFrame||time));previousFrame=time;
@@ -922,7 +915,7 @@
     if(pointers.size===2){const p=[...pointers.values()],d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);if(pinchDistance)zoom(d/pinchDistance,(p[0].x+p[1].x)/2,(p[0].y+p[1].y)/2);pinchDistance=d;return;}
     const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;
     if(Math.hypot(e.clientX-gesture.startX,e.clientY-gesture.startY)>(e.pointerType==='touch'?9:6))gesture.moved=true;
-    if(gesture.moved){const node=byId.get(gesture.id);if(node){moveNode(node,dx,dy);paintPositions();}else if(gesture.pan){view.x+=dx;view.y+=dy;applyCamera();}else{yaw+=dx*.005;pitch=Math.max(-1.2,Math.min(1.2,pitch+dy*.005));paintPositions();}}
+    if(gesture.moved){if(gesture.pan){view.x+=dx;view.y+=dy;applyCamera();}else{yaw+=dx*.005;pitch=Math.max(-1.2,Math.min(1.2,pitch+dy*.005));paintPositions();}}
     gesture.x=e.clientX;gesture.y=e.clientY;
   });
   svg.addEventListener('pointerleave',()=>queueHover(null));

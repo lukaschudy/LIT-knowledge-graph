@@ -48,8 +48,8 @@
           float core=1.-smoothstep(r-.6,r+.4,d);
           float light=1.-smoothstep(0.,1.4,length(p/max(r,.65)+vec2(.35,.4)));
           vec3 color=mix(tint.rgb*.72,tint.rgb,light);
-          color=mix(color,vec3(.93,1.,1.),pow(light,6.)*.8);
-          float halo=exp(-d*d/max(1.,r*r*2.))*sphere.z*.22;
+          color=mix(color,vec3(.80,.83,.86),pow(light,6.)*.35);
+          float halo=exp(-d*d/max(1.,r*r*2.))*sphere.z*.10;
           float ring=(1.-smoothstep(.6,1.5,abs(d-r-4.)))*sphere.y;
           float alpha=max(core*tint.a,max(halo*tint.a,ring));
           if(alpha<.003)discard;
